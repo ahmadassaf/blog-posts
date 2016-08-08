@@ -16,7 +16,7 @@ However, setting everything the way you **want** it can be time consuming, so i 
 ## Customizing the UI
 
 {% capture images %}
-    /images/mac_osx_desktop.png
+    /images/mac-osx-desktop.png
 {% endcapture %}
 {% include partials/post/gallery.html images=images caption="MacOSX Custom layout and widgets" cols=1 %}
 
