@@ -1,11 +1,13 @@
 ---
 layout: post
 title:  "Introduction to Semantic Web"
-excerpt: "In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application."
+excerpt: "In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application"
 tag:
 - Semantic Web
 - Knowledge Representation
+- Linked Data
 category: Semantic Web
+featured: true
 ---
 
 The model behind the Web could be roughly summarized as a way to publish documents represented in a standard way (HTML), containing links to other documents and accessible through the Internet using standard protocols ([TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)/[IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) and [HTTP](https://en.wikipedia.org/wiki/HTTP)). The result could be seen as a worldwide, distributed file system of interconnected documents that humans can read, exchange and discuss.

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Cleaning up Wordpress tags .. the right way !"
+title:  "Cleaning up Wordpress tags"
 date:   2014-02-18
 excerpt: "I have decided to write a small PHP script that will scan my WordPress database and posts to determine the unique tags that i should ONLY have"
 tag:
@@ -9,7 +9,7 @@ tag:
 category: web development
 ---
 
-During the process of designing my blog (which i considered as a learning playground mostly), i had to import/export the database multiple times, delete and review posts and do lots of changes in my posts. In the end, i have noticed that although i have cleaned my posts, the number of tags is still unrealistic. After some digging, i discovered that at some point, WordPress was not cleaning my tags for unknown reasons to me up to now. I have decided to write a small PHP script that will scan my WordPress database and posts to determine the unique tags that i should ONLY have. The code below will do the following steps:
+During the process of designing my blog (which i considered as a learning playground mostly) i had to import/export the database multiple times, delete and review posts and do lots of changes in my posts. In the end, i have noticed that although i have cleaned my posts, the number of tags is still unrealistic. After some digging, i discovered that at some point, WordPress was not cleaning my tags for unknown reasons to me up to now. I have decided to write a small PHP script that will scan my WordPress database and posts to determine the unique tags that i should ONLY have. The code below will do the following steps:
 
 *   Retrieve all **published** posts (the status can be changed easily in the passed param array)
 *   Get all the tags in WordPress database
@@ -99,5 +99,5 @@ Total of: 788 REAL & UNIQUE Tags in Wordpress Posts
 
 There are: 0 Extra Tags Found
 ```
-a
+
 I hope you found this post useful, and please don't hesitate to write a comment if you have any question.

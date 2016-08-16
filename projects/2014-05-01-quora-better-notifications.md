@@ -9,7 +9,7 @@ category: projects
 ---
 
 <figure style="width: 300px" class="align-right">
-  <img src="/images/quora.svg" alt="">
+  <img src="/images/posts/quora.svg" alt="">
 </figure>
 
 I have been really frustrated with the default [Quora](http://www.quora.com/ "Quora is your best source for knowledge.") notifications page. Hundreds of new notifications everyday, lots of them are redundant (i.e. the same question added to several topics i follow or x number of people added an answer to a question i follow). And its not only me, i have recently read [A typical day on Quora for me, or why notifications need to be burned before they lay eggs](http://neverbefore.quora.com/A-typical-day-on-Quora-for-me-or-why-notifications-need-to-be-burned-before-they-lay-eggs) and that actually what sparked the urge in me to develop something in the weekend to solve not only what i thought my problem, but apparently a wide agreed upon one.  I have only found [one attempt](http://quantitativelabs.blogspot.com/2012/07/quora-notifications.html) to fix this which is a bookmarklet that at the moment of writing this post was not functioning properly. However, some guy apparently ported that with some fixes into a Chrome extension called [Quora Extender](https://chrome.google.com/webstore/detail/quora-extender/ljefnhagdgpochbjiiknhflemdnnlebh?hl=en). Although it does a good job in combining the notifications, my comments are:
@@ -19,7 +19,7 @@ I have been really frustrated with the default [Quora](http://www.quora.com/ "Qu
 *   They don't provide any clustering for notifications
 *   I cannot easily navigate through topics by any kind of filters
 
-<div class="download-link"> <a href="https://chrome.google.com/webstore/detail/doeadnmeadgfgcgplbnibocnkkngddeb">Download</a></div>
+<a class="btn btn_success" href="https://chrome.google.com/webstore/detail/doeadnmeadgfgcgplbnibocnkkngddeb">Download</a>
 
 ### Discussions about the issue
 
@@ -31,7 +31,7 @@ I have been really frustrated with the default [Quora](http://www.quora.com/ "Qu
 I have decided that this has to end, i want to better view my notifications. This extension is a simple one. It can identify several actions in the notifications feed:
 
 {% capture images %}
-    /images/quora-better-notification.png
+    /images/posts/quora-better-notification.png
 {% endcapture %}
 {% include partials/post/gallery.html images=images caption="Quora Better Notifications (QBN) Chrome Extension" cols=1 %}
 
@@ -77,4 +77,4 @@ If you are following lots of topics, you might be interested at some point to br
 *   This is a very early prototype that was during a weekend, so please try it out and i will appreciate any feedback
 *   I will be keen on porting this plugin into a Bookmarklet if requested
 
-<div class="download-link"> <a href="https://chrome.google.com/webstore/detail/doeadnmeadgfgcgplbnibocnkkngddeb">Download</a></div>
+<a class="btn btn_success" href="https://chrome.google.com/webstore/detail/doeadnmeadgfgcgplbnibocnkkngddeb">Download</a>
