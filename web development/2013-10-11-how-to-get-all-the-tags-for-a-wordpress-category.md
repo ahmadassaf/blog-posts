@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to get all the tags for a WordPress Category ?"
+title:  "How to get all the tags for a WordPress Category"
 excerpt: "For various reasons, one might want to get all the categories that are assigned for the posts in a certain category. In this post, you will get to know a code snippet that will do just that"
 tag:
 - Wordpress

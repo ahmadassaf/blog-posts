@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Stepping up your dev game !"
+title:  "Stepping up your dev game"
 subtitle: "Setting-up a superhero development environment"
 date:   2015-05-23
 excerpt: "Setting up a proper development environment can be a tedious task. This post walks you through various configuration and automatic bash scripts that i have created to help automate setting up your development environment"
