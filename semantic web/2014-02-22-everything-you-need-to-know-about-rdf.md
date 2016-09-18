@@ -55,7 +55,14 @@ Simple Strings that describe data values that do not have a separate existence. 
 
     "Semantics"^^<http://www.w3.org/2001/XMLSchema#String>
 
-We should note that literals are wrapped with quotations marks. The hash after the [highlight text="XMLSchema "] URI denotes the fragment identifier that points to String. In addition to these i can specify a language tag the describes the "natural" language of the text. For example, `"Semantic"@en` which means that this literal is an English world. Literals are written either using double-quotes when they do not contain linebreaks like `"simple literal"` or `"""long literal"""` when they may contain linebreaks. Datatypes are a bit tricky. Let's think of the datatype for [floating-point numbers](http://en.wikipedia.org/wiki/Floating_point "Floating point"). At an abstract level, the floating-point numbers themselves are different from the text we use to represent them on paper. For instance, the text “5.1” represents the number 5.1, but so does “5.1000” and “05.10”. Here there are multiple textual representations — what are called lexical representations — for the same value. A datatype tells us how to map lexical representations to values, and vice versa. RDF reuses the  [highlight text="XML Schema (W3C)"] datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date` RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. If you omit a datatype declaration it be considered as a plain literal by many RDF tools, **which is not the same thing as a string**. However, as of RDF 1.1 (still in development at the time of writing) this distinction is going away, so going forward you should be able to treat `"Rob Gonzalez"` and `"Rob Gonzalez^^xsd:string` as equivalent, and many tools already do. The semantics of RDF takes language tags and datatypes into account. This means two things. First, a literal value without either a language tag or datatype is different from a literal with a language tag and is different from a literal with a datatype. These four statements say four different things and none can be inferred from the others:
+We should note that literals are wrapped with quotations marks. The hash after the `XMLSchema` URI denotes the fragment identifier that points to String. In addition to these i can specify a language tag the describes the "natural" language of the text. For example, `"Semantic"@en` which means that this literal is an English world.
+
+Literals are written either using double-quotes when they do not contain linebreaks like `"simple literal"` or `"long literal"` when they may contain linebreaks. Datatypes are a bit tricky. Let's think of the datatype for [floating-point numbers](http://en.wikipedia.org/wiki/Floating_point "Floating point"). At an abstract level, the floating-point numbers themselves are different from the text we use to represent them on paper. For instance, the text “5.1” represents the number 5.1, but so does “5.1000” and “05.10”. Here there are multiple textual representations — what are called lexical representations — for the same value.
+
+A datatype tells us how to map lexical representations to values, and vice versa. RDF reuses the `XML Schema (W3C)"` datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date` RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. If you omit a datatype declaration it be considered as a plain literal by many RDF tools, **which is not the same thing as a string**. However, as of RDF 1.1 (still in development at the time of writing) this distinction is going away, so going forward you should be able to treat `"Rob Gonzalez"` and `"Rob Gonzalez^^xsd:string` as equivalent, and many tools already do.
+
+The semantics of RDF takes language tags and datatypes into account. This means two things. First, a literal value without either a language tag or datatype is different from a literal with a language tag and is different from a literal with a datatype. These four statements say four different things and none can be inferred from the others:
+
 
     #ahmad foaf:name "ahmad assaf"                   ahmad's name is a lanaguage-less,datatype-less raw text value.
     #ahmad foaf:name "ahmad assaf"@en                ahmad's name, in English, is ahmad assaf.
@@ -67,7 +74,7 @@ So, an untyped literal with or without a language tag is not the same as a typed
     #ahmad ex:age "20"^^xsd:float
     #ahmad ex:age "20.000"^^xsd:float
 
-These mean ahmad age is 20\. That is, the textual representation of the number is besides the point and is not part of the meaning encoded by the triples. Note that if the float datatype were not specified, the triples would not be inherently equivalent, and the textual representation of the 20 would be maintained as part of the information content. Sometimes the value of a property needs to be a fragment of XML, or text that might contain XML markup. RDF/XML provides a special notation to make it easy to write literals of this kind. This is done using a third value of the `rdf:parseType` attribute. Giving an element the attribute `rdf:parseType="Literal"` indicates that the contents of the element are to be interpreted as an XML fragment
+These mean ahmad age is 20. That is, the textual representation of the number is besides the point and is not part of the meaning encoded by the triples. Note that if the float datatype were not specified, the triples would not be inherently equivalent, and the textual representation of the 20 would be maintained as part of the information content. Sometimes the value of a property needs to be a fragment of XML, or text that might contain XML markup. RDF/XML provides a special notation to make it easy to write literals of this kind. This is done using a third value of the `rdf:parseType` attribute. Giving an element the attribute `rdf:parseType="Literal"` indicates that the contents of the element are to be interpreted as an XML fragment
 
     <rdf:Description rdf:ID="ahmadassaf">
          <foaf:name rdf:parseType="Literal">
@@ -124,11 +131,15 @@ In an **RDF/XML** document there are two types of XML nodes: 1) **resource XM
 
 and i have changed my URI from `http://ahmadassaf.com` to `http://ahmadassaf.com/Administrators#AhmadAssaf` then in the XML RDF i point out to that as:
 
-    <rdf:Description rdf:about="#AhmadAssaf" aa:hasEmail="...... ></rdf:Description>
+```xml
+<rdf:Description rdf:about="#AhmadAssaf" aa:hasEmail="...... ></rdf:Description>
+```
 
 instead of using `rdf:about` and then put the hash # in front of the fragment URI, i can use the `rdf:ID` which has the hash tag complemented in it so that i can write:
 
-    <rdf:Description rdf:ID="AhmadAssaf" aa:hasEmail="...... ></rdf:Description>
+```xml
+<rdf:Description rdf:ID="AhmadAssaf" aa:hasEmail="...... ></rdf:Description>
+```
 
 However, despite the fact that **XML RDF** is difficult to read and a bit expensive and not flexible, it is the standard for web documents as we can embed it simply as XML is supported by most browsers and parsers.
 
@@ -136,23 +147,31 @@ However, despite the fact that **XML RDF** is difficult to read and a bit expe
 
 Simple listing of triples. It is a shorthand non-XML serialization of RDF models designed with Human readability in mind. It is more compact than RDF XML but for complex and large models it can become very expensive.
 
-    <http://ahmadassaf.com> <http://ahmadassaf.com/Personal#hasBlog> <http://ahmadassaf.com/blog>.
+```xml
+<http://ahmadassaf.com> <http://ahmadassaf.com/Personal#hasBlog> <http://ahmadassaf.com/blog>.
+```
 
 **N3** has some syntactic sugar that allows further abbreviations. If many statements repeat the same subject and predicate, just separate the objects with commas:
 
-    <http://ahmadassaf.com> <http://ahmadassaf.com/Personal#hasBlog> <http://ahmadassaf.com/blog>, <http://MySecondBlog.com/>, <http://MyThirdBlog.com/> . 
+```xml
+<http://ahmadassaf.com> <http://ahmadassaf.com/Personal#hasBlog> <http://ahmadassaf.com/blog>, <http://MySecondBlog.com/>, <http://MyThirdBlog.com/> . 
+```
 
 And if the same subject is repeated, but with different predicates, one may use semicolons as in the example:
 
-    <http://ahmadassaf.com> <http://ahmadassaf.com/Personal#hasBlog> <http://ahmadassaf.com/blog>; foaf:name "Ahmad Assaf" .
+```xml
+<http://ahmadassaf.com> <http://ahmadassaf.com/Personal#hasBlog> <http://ahmadassaf.com/blog>; foaf:name "Ahmad Assaf" .
+```
 
 ### Turtle (Terse RDF Triple Language)
 
 A simplified of the N3 notation. URIs are wrapped in angle brackets and Literals in quotations marks. Every triple ends up with a period and whitespaces or indentation will be ignored.
 
+```xml
     <http://ahmadassaf.com>
     <http://ahmadassaf.com/Personal#hasBlog>
     <http://ahmadassaf.com/blog> . 
+```
 
 We have talked about namespaces and base URIs in XML. The same concepts are transfered into the turtle notation:
 
