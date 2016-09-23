@@ -13,6 +13,13 @@ featured: true
 
 Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. Lets take for example the fact that **I (Ahmad) have (owner of ) a blog (http://ahmadassaf.com/blog)**. In natural language i can easily express that. If i want to convert this into [XML](http://en.wikipedia.org/wiki/XML "XML") which is one of the most popular data representation (markup) language, i can have the following representations:
 
+However, this doesn't come intuitively to humans as they are used to present statements generally in a systematic fashion of `Subject - Verb/Predicate/Action - Object `From this thought, the idea of presenting knowledge in a three parts form was the basis of the [Resource Description Framework (RDF)](http://en.wikipedia.org/wiki/Resource_Description_Framework), where i can represent the following example saying that:
+
+{% capture images %}
+    /images/posts/everything-you-need-to-know-about-rdf-1.png
+{% endcapture %}
+{% include partials/post/gallery.html images=images cols=1 %}
+
 ```xml
 <!-- Presentation Method (1) -->
 <blog>
@@ -26,13 +33,6 @@ Humans share, consume and produce knowledge using natural language; however pres
 <!-- Presentation Method  (3)-->
 <person name="Ahmad" blog="http://ahmadassaf.com/blog" />
 ```
-
-However, this doesn't come intuitively to humans as they are used to present statements generally in a systematic fashion of `Subject - Verb/Predicate/Action - Object `From this thought, the idea of presenting knowledge in a three parts form was the basis of the [Resource Description Framework (RDF)](http://en.wikipedia.org/wiki/Resource_Description_Framework), where i can represent the following example saying that:
-
-{% capture images %}
-    /images/posts/everything-you-need-to-know-about-rdf-1.png
-{% endcapture %}
-{% include partials/post/gallery.html images=images cols=1 %}
 
 This is an intuitive knowledge representation using directed graphs, where the subjects and objects are the nodes and the predicates are the edges of that graph. This statement that comprises of these three parts is called RDF-Triple where the resource is a URI or a blank (empty) node, the property is a URI and the object can be a URI, literal or a [Blank Node](http://en.wikipedia.org/wiki/Blank_node "Blank node"). If we wish to transform this knowledge into the traditional relational model (tables) it will look like:
 

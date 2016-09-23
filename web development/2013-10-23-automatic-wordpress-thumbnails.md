@@ -9,6 +9,10 @@ tag:
 category: web development
 ---
 
+<figure style="display:none">
+  <img src="/images/posts/wordpress.jpg" alt="quora-logo">
+</figure>
+
 It happens very often that you design your WordPress theme without a need to utilize thumbnails. But, what happens if you eventually need them?! The effort of manually assigning posts thumbnails is huge. In this post, we will examine how we can extract the first image of a post, add that image to the WordPress media library and finally assign that image to be the default thumbnail. I did run this code in a separate PHP file in the root of my domain. [You need to provide access to your WordPress installation though](http://wordpress.stackexchange.com/questions/47049/what-is-the-correct-way-to-use-wordpress-functions-outside-wordpress-files). In the first step, we first need to fetch all the posts that wee need to inspect. In my snippet i specified that i need to search for **posts** that have been **p****ublished. **You can change these parameters to include drafts, pending posts, pages and so on.
 
 ```php

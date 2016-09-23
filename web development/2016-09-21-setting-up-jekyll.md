@@ -6,9 +6,10 @@ excerpt: "Having had my blog on WordPress for a while now, i thought i need a li
 tag:
 - Jekyll
 category: web development
+featured: true
 ---
 
-Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on [Jekyll](https**://jekyllrb.com/) for its simplicity and extensibility.
+Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on [Jekyll](https://jekyllrb.com/) for its simplicity and extensibility.
 
 Jekyll takes your content written in Markdown, passes it through your templates and spits it out as a complete static website, ready to be served.
 
@@ -391,7 +392,7 @@ ssh -p $SSH-PORT-NUMBER root@SERVER-ADDRESS 'cd /www/blog; git pull origin maste
 
 Where as you substitute the location of your github repo in the server to point correctly, e.g., `/www/blog`.
 
-Now, after that you can have a git `post-receive` hook that will run the appropriate grunt task e.g., `grunt serve` or if you running using [tmux](tmux.sourceforge.net) for example and a jekyll serve process is already running, then it will pick up the change automatically and your changes will be reflected automatically.
+Now, after that you can have a git `post-receive` hook that will run the appropriate grunt task e.g., `grunt serve` or if you running using [tmux](http://tmux.sourceforge.net) for example and a jekyll serve process is already running, then it will pick up the change automatically and your changes will be reflected automatically.
 
 The only thing i'd like to note if you are using the `jekyll serve` approach is that you will need to tell your webserver to proxy requests to jekyll's instance. To do that, you will need to edit `/etc/apache2/sites-available/000-default.conf` file as follows:
 
