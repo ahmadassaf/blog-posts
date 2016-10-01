@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Auditing NPM mModules in Microservices"
-subtitle: "Clean-up soem of the mess across your repositories"
+title:  "Auditing NPM Modules in Microservices"
+subtitle: "Clean-up some of the mess across your repositories"
 excerpt: "Where i work at [Beamery](http://beamery.com) we follow [Microservices Architecture](https://en.wikipedia.org/wiki/Microservices) and have a good 20+ git repositories. With time, these repos become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to easily audit and clean this mess."
 tag:
 - Node.js
