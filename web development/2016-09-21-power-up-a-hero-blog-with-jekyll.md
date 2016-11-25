@@ -47,11 +47,10 @@ Liquid template tags are used to execute loops and conditional statements and to
 │   └── js
 ├── images
 ├── posts # This is an extra page defined with a permalink and will act as my paginated archive
-├── _site # This is the destination of Jekyll build process | The static website
+└── _site # This is the destination of Jekyll build process | The static website
 ```
 
 ## Files you need to know about !
-
 
  - **_config.dev.yml**: Jekyll configuration overrides for local dev environment
  - **_config.yml**: The default jekyll configuration file
