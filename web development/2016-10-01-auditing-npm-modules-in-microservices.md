@@ -50,7 +50,7 @@ command_exists () {
 }
 ```
 
-This script is executed at the root folder that contains all of your repos, will execute the `npm-check` command and aggregate the results in the `npm-report.txt` at the root directory where you executed your script.
+This script is executed at the root folder that contains all of your repositories, will execute the `npm-check` command and aggregate the results in the `npm-report.txt` at the root directory where you executed your script.
 The script also checks first if the `npm-check` command exists or we need to install it via an `npm install -g npm-check`.
 
 To go step by step inside of the main function:
@@ -71,7 +71,7 @@ The previous function is good at giving us an idea of what modules are being use
 We can easily clean out those modules by taking advantage of the [npm-clean](https://github.com/afc163/npm-clean) and plug that in a similar wrapper as the function above:
 
 ```bash
-# Clean unused NPM modules from each repo
+# Clean unused NPM modules from each repository
 # The function will check if npm-clean is installed and install it otherwise
 
 clean_npm_modules() {
@@ -91,4 +91,4 @@ command_exists () {
 }
 ```
 
-I hope this helps you in cleaning out your repos as well.
+I hope this helps you in cleaning out your repositories as well.
