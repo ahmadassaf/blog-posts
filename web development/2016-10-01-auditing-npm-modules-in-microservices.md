@@ -27,28 +27,68 @@ I came across the great [npm-check](https://github.com/dylang/npm-check) that:
 * Emoji in a command-line app, because command-line apps can be fun too.
 * Works with `npm@2` and `npm@3`, as well as newer alternative installers like `ied` and `pnpm`.
 
-To automate running `npm-check` across all of our repos and generate one coherent report, i created a simple [bash-it](https://github.com/ahmadassaf/bash-it/tree/master) function:
+To automate running `npm-check` across all of our repos and generate one coherent report, i created a simple [bash-it](https://github.com/ahmadassaf/bash-it/tree/master) plugin. The plugin in its core does:
 
 ```bash
 # Generate NPM report using the npm-check module to inspect the state of our npm modules
 # The function will check if npm-check is installed and install it otherwise
 # The report will be generated in the root directory and will be called npm-report.txt
 
-bmr_generate_npm_report() {
+generate_npm_report() {
     if command_exists npm-check ; then
-        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for ${magenta}'{}'${NC}' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for '{}'' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
     else
         printf 'npm-check module was not found. Installing now:';
         npm install -g npm-check
-        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for ${magenta}'{}'${NC}' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for '{}'' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
     fi
+}
+
+# Some helper functions to check if a certain command exists
+command_exists () {
+    type "$1" &> /dev/null ;
 }
 ```
 
 This script is executed at the root folder that contains all of your repos, will execute the `npm-check` command and aggregate the results in the `npm-report.txt` at the root directory where you executed your script.
+The script also checks first if the `npm-check` command exists or we need to install it via an `npm install -g npm-check`.
+
+To go step by step inside of the main function:
+
+ - `find . -maxdepth 1 -type d \( ! -name . \)`: Will find all the directories within one level down of the current folder
+ - `printf 'Examining NPM modules for '{}''` will just print out a message indicating which folder we are currently examining
+ - `echo '{}' >> ../npm-report.txt` will print out the folder name examined in the output file `npm-report.txt`
+ - `npm-check >> ../npm-report.txt` this will execute the `npm-check` command and pipe out the result into the output file
 
 ## Auditing NPM Modules
 
 After knowing the various modules used, i cleaned a bit my file, pasted the results in an Excel sheet, sorted the cells and created a subTotal on the count. This generated a list of all my NPM modules used and their respective count.
+
+## Cleaning out unused NPM modules
+
+The previous function is good at giving us an idea of what modules are being used and in what frequency. However, we might have a bunch of unused modules that were left over old code and will just increase the size of our containers with no actual use.
+
+We can easily clean out those modules by taking advantage of the [npm-clean](https://github.com/afc163/npm-clean) and plug that in a similar wrapper as the function above:
+
+```bash
+# Clean unused NPM modules from each repo
+# The function will check if npm-clean is installed and install it otherwise
+
+clean_npm_modules() {
+
+    if command_exists npm-clean ; then
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Cleaning NPM modules for '{}'' && echo '{}' >> ../npm-clean-report.txt && npm-clean >> ../npm-clean-report.txt" \;
+    else
+        printf 'npm-check module was not found. Installing now:';
+        npm install -g npm-clean
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Cleaning NPM modules for '{}'' && echo '{}' >> ../npm-clean-report.txt && npm-clean >> ../npm-clean-report.txt" \;
+    fi
+}
+
+# Some helper functions to check if a certain command exists
+command_exists () {
+    type "$1" &> /dev/null ;
+}
+```
 
 I hope this helps you in cleaning out your repos as well.

@@ -312,11 +312,11 @@ To wrap up all these features together i have created a little build script usin
 
  > note that the `--incremental` is a defualt optional flag to optimize the build and serve process by rebuilding changed files only and not the whole site
 
- ## Using Jekyll, Grunt and Browserify
+## Using Jekyll, Grunt and Browserify
 
- I use [Browserify](http://browserify.org/) in my `main.js` to easily bundle up all of my front-end dependencies. Now, if i am serving my site and want to test my JavaScript changes, it is painful to build everytime the site for that. The jekyll watch feature will not run browserify for me, so instead i use the [grunt-concurrent](https://github.com/sindresorhus/grunt-concurrent) with a `watch` task defined to monitor and fire a browserify build whenever a change is detected and a background shell process using [grunt-bg-shell](https://github.com/rma4ok/grunt-bg-shell) to serve. The all come together like:
+I use [Browserify](http://browserify.org/) in my `main.js` to easily bundle up all of my front-end dependencies. Now, if i am serving my site and want to test my JavaScript changes, it is painful to build everytime the site for that. The jekyll watch feature will not run browserify for me, so instead i use the [grunt-concurrent](https://github.com/sindresorhus/grunt-concurrent) with a `watch` task defined to monitor and fire a browserify build whenever a change is detected and a background shell process using [grunt-bg-shell](https://github.com/rma4ok/grunt-bg-shell) to serve. The all come together like:
 
- ```javascript
+```javascript
 browserify: {
      dist: {
          files: {
