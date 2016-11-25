@@ -431,8 +431,6 @@ The only thing i'd like to note if you are using the `jekyll serve` approach is 
     # after it has been globally disabled with "a2disconf".
     #Include conf-available/serve-cgi-bin.conf
 </VirtualHost>
-
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
 ```
 # Relevant References:
  - [jekyll-now - Build a Jekyll blog in minutes, without touching the command line](https://github.com/barryclark/jekyll-now)
