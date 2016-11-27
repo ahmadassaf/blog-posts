@@ -10,7 +10,12 @@ category: Semantic Web
 featured: true
 ---
 
+<figure style="width: 300px" class="align-right">
+  <img src="/images/posts/semantic-web.svg" alt="quora-logo">
+</figure>
+
 The model behind the Web could be roughly summarized as a way to publish documents represented in a standard way (HTML), containing links to other documents and accessible through the Internet using standard protocols ([TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)/[IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) and [HTTP](https://en.wikipedia.org/wiki/HTTP)). The result could be seen as a worldwide, distributed file system of interconnected documents that humans can read, exchange and discuss.
+
 
 *   Before the web, people used to write documents, cite references and then check the reference and go and look search for it, in the library or look in the library ... etc.
 *   The great invention of the web is the hyperlink; click on that link and you get to the next document in the chain .. you can easily go to the reference !! so the **web 1.0** was the web of documents
