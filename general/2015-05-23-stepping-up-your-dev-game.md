@@ -4,11 +4,11 @@ title:  "Stepping up your dev game"
 subtitle: "Setting-up a superhero development environment"
 date:   2015-05-23
 excerpt: "Setting up a proper development environment can be a tedious task. This post walks you through various configuration and automatic bash scripts that i have created to help automate setting up your development environment"
-image: /images/mac_osx_desktop.png
 tag:
 - bash
 - productivity
 category: general
+image: /images/posts/mac_osx_desktop.png
 ---
 In every developer time, there comes a time when he has to set-up his new working environment. For me, the transition from Windows powered PC to a Mac OSX powered laptop was one of the best things I did in my career. I found the openness of things you can do on a Unix based system accompanied with a solid appealing set of software.
 However, setting everything the way you **want** it can be time consuming, so i decided after few trials and errors to share my experience in customizing my machine and how it can be easily transferred into other machines as well.

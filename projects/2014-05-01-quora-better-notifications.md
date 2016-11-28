@@ -6,6 +6,7 @@ excerpt: "I have been really frustrated with the default Quora notifications pag
 tag:
 - Chrome Extension
 category: projects
+image: "/images/posts/quora.jpg"
 ---
 
 <figure style="width: 300px" class="align-right">

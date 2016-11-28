@@ -8,6 +8,7 @@ tag:
 - Linked Data
 category: Semantic Web
 featured: true
+image: /images/posts/semantic-web.png
 ---
 
 <figure style="width: 300px" class="align-right">

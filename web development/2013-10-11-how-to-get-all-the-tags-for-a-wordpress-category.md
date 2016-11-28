@@ -6,6 +6,7 @@ tag:
 - Wordpress
 - PHP
 category: web development
+image: /images/posts/wordpress.jpg
 ---
 
 <figure style="display:none">

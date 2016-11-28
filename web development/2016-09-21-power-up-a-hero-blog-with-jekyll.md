@@ -7,6 +7,7 @@ tag:
 - Jekyll
 category: web development
 featured: true
+image: /images/posts/jekyll.png
 ---
 
 Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on [Jekyll](https://jekyllrb.com/) for its simplicity and extensibility.

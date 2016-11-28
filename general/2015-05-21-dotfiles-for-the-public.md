@@ -8,6 +8,7 @@ tag:
 - bash
 - productivity
 category: general
+image: images/posts/shell.jpg
 ---
 
 # What are Dotfiles?

@@ -9,6 +9,7 @@ tag:
 - Linked Data
 category: Semantic Web
 featured: true
+image: /images/posts/rdf.png
 ---
 
 Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. Lets take for example the fact that **I (Ahmad) have (owner of ) a blog (http://ahmadassaf.com/blog)**. In natural language i can easily express that. If i want to convert this into [XML](http://en.wikipedia.org/wiki/XML "XML") which is one of the most popular data representation (markup) language, i can have the following representations:
