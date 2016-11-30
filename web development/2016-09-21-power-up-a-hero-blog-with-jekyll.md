@@ -392,7 +392,7 @@ ssh -p $SSH-PORT-NUMBER root@SERVER-ADDRESS 'cd /www/blog; git pull origin maste
 
 Where as you substitute the location of your github repo in the server to point correctly, e.g., `/www/blog`.
 
-Now, after that you can have a git `post-receive` or `post-merge` hook that will run the appropriate grunt task e.g., `grunt serve` or if you running using [tmux](http://tmux.sourceforge.net) for example and a jekyll serve process is already running, then it will pick up the change automatically and your changes will be reflected automatically.
+Now, after that you can have a git `post-receive` or `post-merge` hook that will run the appropriate grunt task e.g., `grunt serve` or if you running using [tmux](https://tmux.github.io/) for example and a jekyll serve process is already running, then it will pick up the change automatically and your changes will be reflected automatically.
 
 The only thing i'd like to note if you are using the `jekyll serve` approach is that you will need to tell your webserver to proxy requests to jekyll's instance. To do that, you will need to edit `/etc/apache2/sites-available/000-default.conf` file as follows:
 
