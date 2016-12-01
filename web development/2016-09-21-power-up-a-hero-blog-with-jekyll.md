@@ -256,6 +256,16 @@ When using Kramdown `{: .notice}` can be added after a sentence to assign the `.
 {: .notice_success}
 ```
 
+## Code Formatting
+
+I use rouge syntax highlighter that comes with jekyll. Rouge can be installed if not already via `gem install rouge` then enabled in `configs.yml` with `highlighter: rouge`. I am using a custom theme that is defined in `/assets/_sass/_syntax.scss`. For various themes and presets you can check:
+
+ - [Obsidian theme for rouge syntax highlighter](http://vgaidarji.github.io/blog/2016/02/27/obsidian-theme-for-rouge-syntax-highlighter/)
+ - [Darkly Pygments CSS Theme](http://sourcey.com/darkly-pygments-css-theme/)
+ - [jekyll-pygments-themes](https://github.com/jwarby/jekyll-pygments-themes)
+
+ For any of the later, you can simply copy and replace the code in `/assets/_sass/_syntax.scss` and you should be good to go.
+
 ## Enabling Search
 
 One thing i wanted to add is the ability to perform full text search on the posts. To do so, i first wanted to be able to grab the posts data and have them saved. I managed to o that by creating the `/posts.json`:
