@@ -12,14 +12,25 @@ image: /images/posts/jekyll.png
 
 Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on [Jekyll](https://jekyllrb.com/) for its simplicity and extensibility.
 
-Jekyll takes your content written in Markdown, passes it through your templates and spits it out as a complete static website, ready to be served.
+Jekyll takes your content written in Markdown, passes it through your templates and spits it out as a complete static website, ready to be served. Jekyll is a static site generator in contrast to Wordpress.
+
+In Dynamic websites, When a visitor gets to a website, a server-side script will query one or multiple databases to get the content for the requested page. The server-side script will then pass the results to a templating engine that will format and arrange everything properly and generate an HTML file for the user to consume. This is a heavy task, although you can optimize that with various caching mechanisms.
+
+The proposition of a static site is to shift the heavy load from the moment visitors request the content to the moment content actually changes. When a visitor requests a page, the content is already rendered and ready to be served instantly as the build process had been already executed at the build stage offline. To sum up the advantages of static site generators:
+
+#### Advantages
+
+ - **Speed**: As there are no database queries to run, no templating and no processing whatsoever on every request, the content is served very fast
+ - **Content Version Control**: In a static site, the content is typically stored in flat files and treated as any other component of the codebase
+ - **Security**: Static sites keep it simple, since there's not much to mess up when there's only a web server serving plain HTML pages
+ - **Ease-of-use**: The site generation process, that can be done from an environment that you control locally and not necessarily on the web server that will run the site which means that there is very little hassle to set up the server and maintain it
+ - **Scalability**: A static site is generally better prepared for unexpected traffic peaks, as serving static HTML pages consumes a very small amount of server resources
 
 Jekyll uses the Liquid templating language to process templates. There are two important things to know about using Liquid.
 First, a YAML front-matter block is at the beginning of every content file. It specifies the layout of the page and other variables, like title, date and tags. It may include custom page variables that you’ve created, too.
 Liquid template tags are used to execute loops and conditional statements and to output content.
 
 ## Directory Structure
-
 
  - **_data**: In addition to the built-in variables in the main config, you can specify your own custom data that can be accessed from here
  - **_includes**: Snippets of code that can be used throughout your templates
