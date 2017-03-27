@@ -50,29 +50,29 @@ Some of these bookmarks are:
 
 ### Journals and Research Portals
 
- - [ACM Digital Library](http://dl.acm.org/)
- - [IEEE Xplore Digital Library](http://ieeexplore.ieee.org/Xplore/home.jsp)
- - [DBLP Bibliography](http://www.informatik.uni-trier.de/~ley/db/)
- - [Springer](http://link.springer.com/)
- - [Google Scholar](http://scholar.google.com/)
- - [ResearchGate](http://www.researchgate.net/)
- - [Academia](http://www.academia.edu/)
- - [EasyChair Conference System](http://www.easychair.org/)
- - [WikiCFP : Call For Papers of Conferences, Workshops and Journals](http://www.wikicfp.com/cfp/)
- - [DBWorld](https://research.cs.wisc.edu/dbworld/)
+- [ACM Digital Library](http://dl.acm.org/)
+- [IEEE Xplore Digital Library](http://ieeexplore.ieee.org/Xplore/home.jsp)
+- [DBLP Bibliography](http://www.informatik.uni-trier.de/~ley/db/)
+- [Springer](http://link.springer.com/)
+- [Google Scholar](http://scholar.google.com/)
+- [ResearchGate](http://www.researchgate.net/)
+- [Academia](http://www.academia.edu/)
+- [EasyChair Conference System](http://www.easychair.org/)
+- [WikiCFP : Call For Papers of Conferences, Workshops and Journals](http://www.wikicfp.com/cfp/)
+- [DBWorld](https://research.cs.wisc.edu/dbworld/)
 
- ### Tools
+### Tools
 
- - [Mendeley | Free reference manager and PDF organizer](http://www.mendeley.com)
- - [Qiqqa | Free reference manager and research manager](http://www.qiqqa.com)
- - [Figshare - credit for all your research](http://figshare.com/)
- - [Protocols.io | Bringing science communication into the 21st century](https://www.protocols.io/)
- - [Zotero](https://www.zotero.org)
- - [crossref.org : : free DOI guest search](http://www.crossref.org/guestquery)
- - [CiteSeerX](http://citeseerx.ist.psu.edu/inde)
- - [BibSonomy - The easy way to manage scientific publications and bookmarks](http://www.bibsonomy.org)
- - [ShareLaTeX, the Online LaTeX Editor](https://www.sharelatex.com/templates)
- - [AMiner - Mining  Deep Knowledge  From Scientific Networks](https://aminer.org/)
+- [Mendeley - Free reference manager and PDF organizer](http://www.mendeley.com)
+- [Qiqqa - Free reference manager and research manager](http://www.qiqqa.com)
+- [Figshare - credit for all your research](http://figshare.com/)
+- [Protocols.io - Bringing science communication into the 21st century](https://www.protocols.io/)
+- [Zotero](https://www.zotero.org)
+- [crossref.org - Free DOI guest search](http://www.crossref.org/guestquery)
+- [CiteSeerX](http://citeseerx.ist.psu.edu/inde)
+- [BibSonomy - The easy way to manage scientific publications and bookmarks](http://www.bibsonomy.org)
+- [ShareLaTeX, the Online LaTeX Editor](https://www.sharelatex.com/templates)
+- [AMiner - Mining  Deep Knowledge  From Scientific Networks](https://aminer.org/)
 
 ## General Organisations
 
@@ -193,7 +193,7 @@ I used to copy/paste BibTex citations from the Internet and though that i am goo
 
 - Escape the accents and special characters in people names
 - Try to always write "firstName lastName" and not "lastName, firstName" or an initial for the firstName or whatever ... all this is decided by the bib style (e.g. a .bst file). Use the "and" operator between authors and not the comma.
-- Include the `title` between double curly braces e.g. `{{The best way to write .bib files}}`  This way the capitalisation will be respected as you write. Otherwise, all words will be lower case, including acronyms, etc. Don't write a final dot in the title, the style will add one already.
+- Include the `title` between double curly braces. This way the capitalisation will be respected as you write. Otherwise, all words will be lower case, including acronyms, etc. Don't write a final dot in the title, the style will add one already.
 - Have a consistent way of naming the `bib` entry. Choose whatever you like, for example i chose: `<Main_author_LastName>:<Conference/Venue>:<Year>` where the year is in two digits representation, e.g. `Assaf:ESWC:13`
 - For `inproceedings` just write the conference name, and do not include the address, or month, or even the word **Proceedings** since the style might display it as well and you don't want to read "Proceedings of Proceedings of ..."
 - If you write a URL, anywhere, then say it's a url using the `\url` command.
