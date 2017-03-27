@@ -27,26 +27,19 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
 
  - As i did not have a specific research topic in the beginning, i was skimming various *wide* fields. As a result, i have created a separate folder for each research field i was focusing on e.g., `Dataset Profiling`, `Linked Data quality`
  - I had a root folder for conferences, journals and workshops that contained a separate folder for each relevant venue for my research. For example, i had:
+ - I also had a separate folder foe even paper i have made. That folder contained all the papers i have read that influenced my research for that paper and/or have been referenced in it.
 
 ```
 ├── Conferences
-│   ├── ISWC'13 - International Semantic Web conference 2013
-│   ├── ESWC'13 - Extended Semantic Web conference 2013
-|   .....
+    ├── ISWC'13 - International Semantic Web conference 2013
+    ├── ESWC'13 - Extended Semantic Web conference 2013
 ├── Workshops
-|	├── PROFILES'15 - International Workshop on Dataset PROFIling and fEderated Search for Linked Data
-|	 ......
+	├── PROFILES'15 - International Workshop on Dataset PROFIling and fEderated Search for Linked Data
 ├── Posters
-│   ├── Semantic Web Journal
-│   ├── IJSWIS - International Journal on Semantic Web and Information Systems
-|   ....Organisations
+    ├── Semantic Web Journal
+    ├── IJSWIS - International Journal on Semantic Web and Information Systems
 ```
-
- - I also had a separate folder foe even paper i have made. That folder contained all the papers i have read that influenced my research for that paper and/or have been referenced in it.
-
-I have also kept a bunch of bookmarks for all the relevant conferences, journals. Made sure i also follow their respective Twitter accounts and made also a separate columns in [Tweetdeck](https://tweetdeck.twitter.com/) for their Tweet feed and for specific hashtags.
-
-Some of these bookmarks are:
+I have also kept a bunch of bookmarks for all the relevant conferences, journals. Made sure i also follow their respective Twitter accounts and made also a separate columns in [Tweetdeck](https://tweetdeck.twitter.com/) for their Tweet feed and for specific hashtags. Some of these bookmarks are:
 
 ### Journals and Research Portals
 
@@ -57,7 +50,6 @@ Some of these bookmarks are:
 - [Google Scholar](http://scholar.google.com/)
 - [ResearchGate](http://www.researchgate.net/)
 - [Academia](http://www.academia.edu/)
-- [EasyChair Conference System](http://www.easychair.org/)
 - [WikiCFP : Call For Papers of Conferences, Workshops and Journals](http://www.wikicfp.com/cfp/)
 - [DBWorld](https://research.cs.wisc.edu/dbworld/)
 
