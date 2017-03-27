@@ -28,7 +28,7 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
  - As i did not have a specific research topic in the beginning, i was skimming various *wide* fields. As a result, i have created a separate folder for each research field i was focusing on e.g., `Dataset Profiling`, `Linked Data quality`
  - I had a root folder for conferences, journals and workshops that contained a separate folder for each relevant venue for my research. For example, i had:
 
- ```
+```
 ├── Conferences
 │   ├── ISWC'13 - International Semantic Web conference 2013
 │   ├── ESWC'13 - Extended Semantic Web conference 2013
