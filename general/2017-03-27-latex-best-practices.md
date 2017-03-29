@@ -11,15 +11,13 @@ image: /images/posts/phd.png
 ---
 
 
-# LaTeX Best Practices
-
 Completing a PhD can be a hell of a task. It took me lots of time to be able to come up with a framework that optimises how i do research and how i write and publish my research. This post discusses some of the tools and techniques i used in addition to LaTEX best practices. These are gathered either by experience, online search and most importantly the wisdom of my PhD supervisor [@Raphael Troncy](https://twitter.com/rtroncy).
 
 I hope this post can help you complete your PhD smoothly.
 
 > You can head to my [PhD Github repository](https://github.com/ahmadassaf/PhD) to see all my LaTEX recommendations in action
 
-## Toolbelt
+## Mendeley and Bibliography Management
 
 Doing effective and genuine research requires that you familiarise yourself with the state of the art in your field. This requires reading **tons** of journal, conference and workshop papers. However, after some time, recalling what you have read and being able to effectively reference that in your research becomes a daunting task.
 
@@ -39,32 +37,6 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
     ├── Semantic Web Journal
     ├── IJSWIS - International Journal on Semantic Web and Information Systems
 ```
-I have also kept a bunch of bookmarks for all the relevant conferences, journals. Made sure i also follow their respective Twitter accounts and made also a separate columns in [Tweetdeck](https://tweetdeck.twitter.com/) for their Tweet feed and for specific hashtags. Some of these bookmarks are:
-
-### Journals and Research Portals
-
-- [ACM Digital Library](http://dl.acm.org/)
-- [IEEE Xplore Digital Library](http://ieeexplore.ieee.org/Xplore/home.jsp)
-- [DBLP Bibliography](http://www.informatik.uni-trier.de/~ley/db/)
-- [Springer](http://link.springer.com/)
-- [Google Scholar](http://scholar.google.com/)
-- [ResearchGate](http://www.researchgate.net/)
-- [Academia](http://www.academia.edu/)
-- [WikiCFP : Call For Papers of Conferences, Workshops and Journals](http://www.wikicfp.com/cfp/)
-- [DBWorld](https://research.cs.wisc.edu/dbworld/)
-
-### Tools
-
-- [Mendeley - Free reference manager and PDF organizer](http://www.mendeley.com)
-- [Qiqqa - Free reference manager and research manager](http://www.qiqqa.com)
-- [Figshare - credit for all your research](http://figshare.com/)
-- [Protocols.io - Bringing science communication into the 21st century](https://www.protocols.io/)
-- [Zotero](https://www.zotero.org)
-- [crossref.org - Free DOI guest search](http://www.crossref.org/guestquery)
-- [CiteSeerX](http://citeseerx.ist.psu.edu/inde)
-- [BibSonomy - The easy way to manage scientific publications and bookmarks](http://www.bibsonomy.org)
-- [ShareLaTeX, the Online LaTeX Editor](https://www.sharelatex.com/templates)
-- [AMiner - Mining  Deep Knowledge  From Scientific Networks](https://aminer.org/)
 
 ## General Organisations
 
@@ -105,7 +77,7 @@ I have also kept a bunch of bookmarks for all the relevant conferences, journals
     └── LaTEX
 ```
 
-### Special Organisation
+#### Special Organisation
 
 For special reports (or thesis), when you have multiple `.tex` files and things can get messy then you can:
 
@@ -139,13 +111,13 @@ For special reports (or thesis), when you have multiple `.tex` files and things 
     + Ghostscript 9.10
     + TeX Live 2014, the actual TeX distribution
 
-### Generating LaTeX Tables
+#### Generating LaTeX Tables
 
 -  A nice program that provides a GUI for various tasks is Lyx. I have not used it for Mac but it was useful when editing/creating tables on Windows. It can import data in `.csv` format and generate `.tex` code from it.
 -  There is several online `.tex` generators. I use [the online LaTeX table generator](http://www.tablesgenerator.com/), and found it very useful for small/medium tables.
 -  There is a handy Excel script to convert tables in Excel files to LaTeX. You can find it in `Util/Excel To LaTeX Table Converter.xla`
 
-### Editing LaTeX with Sublime Text
+#### Editing LaTeX with Sublime Text
 
 I use [Sublime Text](https://www.sublimetext.com/) for nearly everything, so using it to write LaTeX was the logical choice for me. With the correct plugins it is a handy editor. You first need to make sure you have a valid TeX distribution (see above) and installed [Skim PDF Viewer](http://skim-app.sourceforge.net/). Skim is used to generate the result of the LaTeX build.
 
@@ -165,11 +137,11 @@ Now you will be able to use latex in Sublime. A powerful feature is **auto-compl
 - Use `~` to have a space between the last work and the reference or citation e.g. `in~cite{}`
 -  In your LaTeX document, avoid as much as possible to control the layout. Hence, you should never use `\\` Either you want to start a new paragraph or you don't but you should let LaTeX format the paper.
 
-### Writing-Style Tips
+## Writing-Style Tips
 
 - When writing, try to use as much as possible the present tense (as opposed to the past tense). Most of the things you're writing are still true, so why using the past tense? This, generally, makes sentences which are much more complicated and hard to read.
 
-## Working with Citations and `.bib` files
+### Working with Citations and `.bib` files
 
 I used to have a separate `.bib` file for each paper. However, i ended up using a bunch of the same references in more than one paper. I thought of why not having a centralised `.bib` file where i can maintain and then reference this file from all my other papers. The idea is:
 
@@ -193,7 +165,7 @@ I used to copy/paste BibTex citations from the Internet and though that i am goo
 - If you use the article element, then specify the volume and number.
 - Don't use the `incollection` element, this is often incorrect. In most of your references, those Springer volumes are just proceedings of conferences
 
-### Some Useful Hacks
+## Some Useful Hacks
 
 - Loading the [strict](http://texd.cvs.sourceforge.net/texd/latex/sty/strict.sty?revision=1.2&view=markup) package prevents using LaTeX's declarations as environments.
 - Loading the [fixltx2e](http://ctan.org/pkg/fixltx2e) package fixes some LaTeX2e errors.
@@ -201,3 +173,29 @@ I used to copy/paste BibTex citations from the Internet and though that i am goo
 - [refcheck](https://www.ctan.org/tex-archive/macros/latex/contrib/refcheck) for checking "references in a document, looking for numbered but unlabeled equations, for labels which are not used in the text, for unused bibliography references.
 - [LaTeX Templates](https://www.sharelatex.com/templates/)
 
+I have also kept a bunch of bookmarks for all the relevant conferences, journals. Made sure i also follow their respective Twitter accounts and made also a separate columns in [Tweetdeck](https://tweetdeck.twitter.com/) for their Tweet feed and for specific hashtags. Some of these bookmarks are:
+
+## Journals and Research Portals
+
+- [ACM Digital Library](http://dl.acm.org/)
+- [IEEE Xplore Digital Library](http://ieeexplore.ieee.org/Xplore/home.jsp)
+- [DBLP Bibliography](http://www.informatik.uni-trier.de/~ley/db/)
+- [Springer](http://link.springer.com/)
+- [Google Scholar](http://scholar.google.com/)
+- [ResearchGate](http://www.researchgate.net/)
+- [Academia](http://www.academia.edu/)
+- [WikiCFP : Call For Papers of Conferences, Workshops and Journals](http://www.wikicfp.com/cfp/)
+- [DBWorld](https://research.cs.wisc.edu/dbworld/)
+
+## Tools
+
+- [Mendeley - Free reference manager and PDF organizer](http://www.mendeley.com)
+- [Qiqqa - Free reference manager and research manager](http://www.qiqqa.com)
+- [Figshare - credit for all your research](http://figshare.com/)
+- [Protocols.io - Bringing science communication into the 21st century](https://www.protocols.io/)
+- [Zotero](https://www.zotero.org)
+- [crossref.org - Free DOI guest search](http://www.crossref.org/guestquery)
+- [CiteSeerX](http://citeseerx.ist.psu.edu/inde)
+- [BibSonomy - The easy way to manage scientific publications and bookmarks](http://www.bibsonomy.org)
+- [ShareLaTeX, the Online LaTeX Editor](https://www.sharelatex.com/templates)
+- [AMiner - Mining  Deep Knowledge  From Scientific Networks](https://aminer.org/)

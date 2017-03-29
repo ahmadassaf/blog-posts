@@ -41,16 +41,16 @@ This is an intuitive knowledge representation using directed graphs, where the s
 |:-----------:|:--------------:|:------------------------------:|
 |     Ahmad   |     has a blog |     http://ahmadassaf.com/blog |
 
-## Constituents of an RDF Triple
+# Constituents of an RDF Triple
 
-### URIs
+## URIs
 
 A Unique referenceable URI.  A [URI reference](http://en.wikipedia.org/wiki/Uniform_resource_identifier "Uniform resource identifier") is a Unicode string that does not contain any control characters and would produce a valid URI character sequence representing an absolute URI with optional [fragment identifier](http://en.wikipedia.org/wiki/Fragment_identifier "Fragment identifier") when subjected to the encoding that consists of:
 
 *   encoding the Unicode string as [UTF-8](http://en.wikipedia.org/wiki/UTF-8 "UTF-8") giving a sequence of octet values.
 *   %-escaping octets that do not correspond to permitted [US-ASCII](http://en.wikipedia.org/wiki/ASCII "ASCII") characters.
 
-### Literals
+## Literals
 
 Simple Strings that describe data values that do not have a separate existence. They can be plain (simple string combined with an optional language tag) or typed (string combined with a datatype URI and an optional language tag). Typed Literals are expressed via the XML Schema data types. Whenever we are using URIs to describe things in RDF we try as much as we can to reuse existing namespaces and for literals we use the XML Schema defined in [http://www.w3.org/2001/XMLSchema#](http://www.w3.org/2001/XMLSchema#).  So for example if i want to define a literal as a [String](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") i use the following syntax :
 
@@ -85,19 +85,19 @@ These mean ahmad age is 20. That is, the textual representation of the number is
 
 in Turtle notation the type used to describe XML literals is `rdf:XMLLiteral`
 
-### Blank Nodes
+## Blank Nodes
 
 Subjects or Objects can be modeled as blank nodes. They denote the existence of an individual with specific attributes but without providing any information about identity or reference. A **Ground RDF Graph** is a graph where there is no **Blank Nodes** .
 
-## RDF Representation
+# RDF Representation
 
 RDF Resources can be in principle anything that must be uniquely identified and referenced by a URI. The Description of sources is done via representing properties and relationships among sources; this representation can be done in several ways:
 
-### Labeled Directed Graph
+## Labeled Directed Graph
 
 This is a visual way of modeling RD as a Node-Edge-Node Triple. Its directed as the direction of the edge is significant and always points towards the object
 
-### XML RDF Notation
+## XML RDF Notation
 
 Using XML syntax to represent RDF triples. We should point out that we do use namespaces in order to minimize the writing that we have to do. So, if we are using many URIs repeatedly throughout our representation then its better to define some global namespace and start referring to these namespaces with a shorthand.
 
@@ -133,18 +133,18 @@ In an **RDF/XML** document there are two types of XML nodes: 1) **resource XM
 and i have changed my URI from `http://ahmadassaf.com` to `http://ahmadassaf.com/Administrators#AhmadAssaf` then in the XML RDF i point out to that as:
 
 ```xml
-<rdf:Description rdf:about="#AhmadAssaf" aa:hasEmail="...... ></rdf:Description>
+<rdf:Description rdf:about="#AhmadAssaf" aa:hasEmail="......"></rdf:Description>
 ```
 
 instead of using `rdf:about` and then put the hash # in front of the fragment URI, i can use the `rdf:ID` which has the hash tag complemented in it so that i can write:
 
 ```xml
-<rdf:Description rdf:ID="AhmadAssaf" aa:hasEmail="...... ></rdf:Description>
+<rdf:Description rdf:ID="AhmadAssaf" aa:hasEmail="......"></rdf:Description>
 ```
 
 However, despite the fact that **XML RDF** is difficult to read and a bit expensive and not flexible, it is the standard for web documents as we can embed it simply as XML is supported by most browsers and parsers.
 
-### N3 Notation
+## N3 Notation
 
 Simple listing of triples. It is a shorthand non-XML serialization of RDF models designed with Human readability in mind. It is more compact than RDF XML but for complex and large models it can become very expensive.
 
@@ -164,7 +164,7 @@ And if the same subject is repeated, but with different predicates, one may use 
 <http://ahmadassaf.com> <http://ahmadassaf.com/Personal#hasBlog> <http://ahmadassaf.com/blog>; foaf:name "Ahmad Assaf" .
 ```
 
-### Turtle (Terse RDF Triple Language)
+## Turtle (Terse RDF Triple Language)
 
 A simplified of the N3 notation. URIs are wrapped in angle brackets and Literals in quotations marks. Every triple ends up with a period and whitespaces or indentation will be ignored.
 
@@ -196,7 +196,7 @@ Note that we have used a semi colon to express that we want to keep stating fact
     @base <foo/> .
     # In-scope base URI is http://example.org/ns/foo/ at this point ...
 
-#### **Notes:**
+#### Notes
 
 *   Turtle strings and URIs can use -escape sequences to represent Unicode code points (t, n, .... etc. )
 *   Comments in Turtle take the form of `#`, outside a relative URI or strings, and continue to the end of line
@@ -288,11 +288,11 @@ In Turtle we use the underscore `_` followed by a colon that denotes the defau
 
 so Blank Nodes do **NOT** need be de-referencable and accessed from the outside world, however they can have IDs or names that will them to be referenced in an RDF document or model.
 
-## Data Structures in RDF
+# Data Structures in RDF
 
 In RDF there exists some kind of collections (in computer science terms) that will allow us aggregate nodes or facts together. They are general data structures to enumerate any resource or literal. They are basically a syntactic sugar that will ease the process of writing code with no semantic expressiveness whatsoever. We have in RDF two different aggregators:
 
-### Containers
+## Containers
 
 An open list of elements possibly including duplicate members where new entries (additions) are possible Note that the container resource (which may either be a blank node or a resource with a URIref) denotes the group as a whole. The members of the container can be described by defining a container membership property for each member with the container resource as its subject and the member as its object. These container membership properties have names of the form `rdf:_n` where n is a decimal integer greater than zero, with no leading zeros, e.g., `rdf:_1, rdf:_2, rdf:_3` and so on, and are used specifically for describing the members of containers. Container resources may also have other properties that describe the container, in addition to the container membership properties and the `rdf:type` property.
 
@@ -356,7 +356,7 @@ In **XML/RDF**
 *   `rdf:Bag`  This is an unordered list of elements possibly including duplicate members and there is no given order for elements.
 *   `rdf:Alt` Defines alternatives of elements and only one element of the given alternatives is relevant to the application ( a group of resources or literals that are alternatives (typically for a single value of a property) . An Alt container is intended to have at least one member, identified by the property rdf:_1\. This member is intended to be considered as the default or preferred value. Other than the member identified as `rdf:_1` the order of the remaining elements is not significant.
 
-### Collections
+## Collections
 
 These are closed lists where there is no extension possible. Elements of the list are already predefined. It really resembles the traditional list data structure with the fact that it is closed to insert operations. It is split recursively with **Head** (first) and **Tail** (rest), we end the list by linking to `rdf:nil`
 
@@ -425,7 +425,7 @@ When using named graphs, `TriG` is the de facto serialization. It's the same a
 
 This trivial example puts all the statements in the document into a single named graph, egotistically called `:blogGraph` Again, like all things in RDF `:blogGraph` is a URI. Looking at the 4-tuples, it's pretty obvious that the same statement can exist in multiple named graphs. This is by design and is a very important feature. By organizing the statement into named graphs, a Semantic Web application can implement access control, trust, data lineage, and other functionality very cleanly.
 
-## RDF Reification
+# RDF Reification
 
 RDF applications sometimes need to describe other RDF statements using RDF, for instance, to record information about when statements were made, who made them, or other similar information (this is sometimes referred to as "provenance" information). Moreover, sometimes we will come across use cases where we deduce facts in our model, and the deducted facts also need to be used and modeled (become the subject of a new RDF statements). For example, if a detective (Sherlock Holmes) deduced that the gardener is the one who has killed the butler, then i might want to use this new discovered fact in a new RDF statement. This is another use case of **reification. **
 
@@ -519,13 +519,13 @@ plus the reification triples:
     http://ahmadassaf.com/triples#triple12345 rdf:predicate aa:hasAdmin.
     http://ahmadassaf.com/triples#triple12345 rdf:object :ahmadassaf.
 
-### Reification Advantages
+## Reification Advantages
 
 *   Modeling data provenance
 *   Formalizing statements about Reliability and Trust
 *   Definition of metadata about statements (Assertions and Statements)
 
-## Wrap Up
+# Wrap Up
 
 *   An RDF Model is a set of RDF statements
 *   An RDF statement consists of subject, property, object

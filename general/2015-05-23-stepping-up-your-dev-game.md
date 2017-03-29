@@ -13,7 +13,7 @@ image: /images/posts/mac_osx_desktop.png
 In every developer time, there comes a time when he has to set-up his new working environment. For me, the transition from Windows powered PC to a Mac OSX powered laptop was one of the best things I did in my career. I found the openness of things you can do on a Unix based system accompanied with a solid appealing set of software.
 However, setting everything the way you **want** it can be time consuming, so i decided after few trials and errors to share my experience in customizing my machine and how it can be easily transferred into other machines as well.
 
-## Customizing the UI
+# Customizing the UI
 
 {% capture images %}
     /images/posts/mac-osx-desktop.png
@@ -29,7 +29,7 @@ First, lets start with the light weight things. The desktop and general UI enhan
 
 There is already a nice set of widgets published in the [gallery](http://tracesof.net/uebersicht-widgets/). In my `widgets` folder, you will find the set of widgets i am using with customized positioning and styling.
 
-### Widgets
+## Widgets
 
 - [simple-date](https://github.com/ahmadassaf/configurations/blob/master/widgets/simple-date.coffee) for the date and time in the middle of the screen
 - [prayer](https://github.com/ahmadassaf/configurations/tree/master/widgets/prayer.widget) to show the Muslim prayer times for my area, the green indicating the current active prayer time
@@ -44,13 +44,13 @@ There is already a nice set of widgets published in the [gallery](http://traceso
     - [network-throughput](https://github.com/ahmadassaf/configurations/blob/master/widgets/network-throughput.coffee.buggy): Shows incoming and outgoing throughput on a user-specified network interface.
     - [total-mem](https://github.com/ahmadassaf/configurations/tree/master/widgets/total-mem.widget): Total system memory benchmarks.
 
-#### Installation
+### Installation
 
 - Installing Übersicht can be bone using the downloadable [zip file](http://tracesof.net/uebersicht/releases/Uebersicht-0.3.13.app.zip) or the recommended using would be via cask (which i will explain later) via `brew cask install ubersicht`
 - Installing the widgets is done by copying the **contents** of the widgets folder into `Library -> Application Support -> Übersicht -> widgets`. However, what i do is i setup my widgets to be in my Github repo or dropbox folder so that they are synced and can be backed up and i link the folder directly to the desired location via `ln -s ~/Projects/Configurations/config/widgets/ ~/Library/Application\ Support/U¨bersicht/widgets` where the first parameter is the location of the `widgets/` folder cloned.
 **Note** I have included the folder link in my `.osx` file, you may need to adjust the path of the first argument.
 
-### Other Widgets
+## Other Widgets
 
 One element that i use that is not part of Übersicht is [Dateline](https://itunes.apple.com/us/app/dateline/id406119724?mt=12). It is a discrete desktop calendar with support to iCal and other calendar applications.
 
@@ -58,7 +58,7 @@ One element that i use that is not part of Übersicht is [Dateline](https://itun
 
 In the `geeklets/` folder there is a backup of the deprecated Geeklet scripts that i used with the old Geektool. If you still prefer it over Übersicht then feel free to use them.
 
-### Dock & Desktop Icons
+## Dock & Desktop Icons
 
 In the `flat-icons` you will find the set of flat icons i have used for my mounted HDD icons and the dock.
 To easily change application icons, i suggest you use [LiteIcon](http://www.macupdate.com/app/mac/24764/liteicon) which can be also installed via my `caskfile.sh`
@@ -71,11 +71,11 @@ I also remove the arrow icons for aliases/shortcuts which can be done automatica
 mv /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AliasBadgeIcon.icns /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AliasBadgeIcon_OFF.icns
 ```
 
-### Finder
+## Finder
 
 Although i have the latest OSX Yosemite update, i am still unhappy with the capabilities of the Finder. I have found that [PathFinder](http://www.cocoatech.com/pathfinder/) is a great replacement. Just head over and you can check the list of things you can do with this great piece of software.
 
-### Other Tools
+## Other Tools
 
 - **[Flexiglass](http://www.nulana.com/flexiglass/)**: Flexiglass features complete and convenient window management with exclusive multi-touch gestures support, offering a simple way to manage many windows on a Mac with a mouse, keyboard, trackpad, and graphics tablet. It includes different tools to move, resize, and arrange windows on the screen easily and joyfully.
 - [Bartender](http://www.macbartender.com/): Bartender lets you organize your menu bar apps, by hiding them, rearranging them, or moving them to Bartender's Bar. You can display the full menu bar, set options to have menu bar items show in the menu bar when they have updated, or have them always visible in Bartender's Bar.
@@ -84,7 +84,7 @@ Although i have the latest OSX Yosemite update, i am still unhappy with the capa
 - **[Flashlight](https://github.com/nate-parrott/Flashlight)**: Flashlight is an unofficial Spotlight API that allows you to pro grammatically process queries and add additional results. It's very rough right now, and a horrendous hack, but a fun proof of concept.
 - **[uBar](http://brawersoftware.com/products/ubar)**: uBar aims at replacing the Mac Dock. It helps you find the window you're looking for at a glance. If an application has more than one window, you'll know right away. Click that application to open the window menu, which allows you to bring any window or even just the application itself to focus. You can turn window grouping off, and all your individual windows will be shown right in uBar.
 
-#### Alfred Workflows
+## Alfred Workflows
 
 Workflows are one of the key features in Alfred v2; They provide a way for you to extend Alfred to perform the tasks you need more efficiently.
 
@@ -102,7 +102,7 @@ The Workflows i use are (Located in the `workflows` folder):
 
 [Workflows Reference](https://github.com/hzlzh/Alfred-Workflows)
 
-## Setting-up the Machine
+# Setting-up the Machine
 
 Developers are very picky about their working environment. We may consolidate various `.` files tailed for our tastes over years and track the change in a version control system. It’s no secret that on the UNIX world, dotfiles play a very important part when it comes to making your terminal look good. Be it on Linux, be it on a Mac. Dotfiles are there so you can configure your favorite software to look just the way you like it.
 
@@ -117,7 +117,7 @@ My configuration consists of the following:
 - A cloned `gitignore` repo for easy fetching of `.gitignore` files into various projects
 - A Custom set of [dotfiles](http://github.com/ahmadassaf/dotfiles) for various machine-wide configurations
 
-# Installation
+## Installation
 
 First of all you will have to clone this repository into your local machine, and since there are a bunch of other git modules in this repo, you will need to recursively clone this repository and all of it children using:
 

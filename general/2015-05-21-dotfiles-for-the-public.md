@@ -21,19 +21,19 @@ Your dotfiles will help you create powerful and consistent shell shortcuts and f
 
 **Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don’t want or need. Don’t blindly use my settings unless you know what that entails. Use at your own risk!
 
-# Superhero Dotfiles and Their Super Powers
+## Superhero Dotfiles and Their Super Powers
 
 Dotfiles are split into two main types. Those that contain a set of commands and only run once, .osx for example runs a list of commands and gives OS X super powers. Other files such as .bash_profile and .bashrc run each time you open a new Terminal session and gives your Terminal super powers.
 
 Here's a run down of the dotfiles in my repo and a description of what they can do.
 
-## .bash_profile / .bashrc
+#### .bash_profile / .bashrc
 
 When you open a new Terminal session, this file is loaded by Bash. It loads in the other dotfiles `path,bash_prompt,exports,aliases,functions,extra` and configures some useful settings such as auto correcting typos when using cd completion.
 
 In some instances `.bashrc` can be loaded, so this file makes sure that .bash_profile is called.
 
-## .path
+#### .path
 
 This file speeds up the process of running executable files. Rather than having to cd back and forth across various paths to executable files, you can set the file paths in your .path dotilfe and then run executable files directly.
 
@@ -42,41 +42,41 @@ Generally, this file isn't held in the public repo as it can contain sensitive i
 Here’s an example `~/.path` file that adds `~/utils` to the `$PATH:
 export PATH="$HOME/utils:$PATH"``
 
-## .bash_prompt
+#### .bash_prompt
 
 Using this file you can customise and set the various colors of your Bash prompt.
 
-## .exports
+#### .exports
 
 Sets environment variables, such as setting Vim as the default editor using export `EDITOR="sublime"` It also increases the amount of history saved, useful for backtracking over previous commands you've used.
 
-## .aliases
+#### .aliases
 
 This file contains useful aliases to help you write less. For example, instead of typing `cd ..` you can set it here to be '..'. Starting to like these files yet?
 
-## .functions
+#### .functions
 
 Similar to aliases, except functions can take arguments.
 
 Before when I mentioned I was looking over different dotfile repos, I did mkdir to create a directory. After that, I'd then need to cd into that directory.
 
-## .gitconfig
+#### .gitconfig
 
 This file is only used by Git, for example, when a git command is invoked. So although there's an `.aliases` file, those aliases are run directly.
 
-## .gitignore
+#### .gitignore
 
 Set files that you'd like Git to ignore on the entire system. Yay, no more `.DS_Store` being accidentally committed!
 
-## .gvimrc
+#### .gvimrc
 
 A small file that improves readability for gvim.
 
-## .hgignore
+#### .hgignore
 
 Simliar to .gitignore for Mercurial.
 
-## .hushlogin
+#### .hushlogin
 
 In some instances, for example, when you ssh into a machine, you may be presented with a message. It might look something like this:
 
@@ -95,14 +95,14 @@ All activity may be logged.
 
 This file prevents this from being shown.
 
-## .inputrc
+#### .inputrc
 
 Configures the 'Readline environment'. This controls the way keys work when you're entering a command into your shell.
 An example of how I find this useful is to make tab autocomplete regardless of filename case:
 
 `set completion-ignore-case on`
 
-## .osx
+#### .osx
 
 This is my favorite of all the dotfiles. It is run once, manually, for the commands to run and take effect. Depending on what you've added to this file, you may need to restart your machine.
 
@@ -117,11 +117,11 @@ Some of the awesome things I love are:
 - When performing a search, search the current folder by default
 - Speed up Mission Control animations
 
-## .screenrc
+#### .screenrc
 
 If you use screen, this removes the startup message.
 
-## .vimrc
+#### .vimrc
 
 I'm not that familiar with vim. However some of the things you can do with this file include enabling line numbers and adding syntax highlighting.
 
@@ -141,7 +141,7 @@ set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
 
 This can be change **depending on the path to the `python` directory**
 
-## .wgetrc
+#### .wgetrc
 
 If you use wget, this adds additional settings such as changing the timeout to 60 seconds rather than the default 15 minutes. It also sets the retry to three, rather than the default 20!
 
@@ -150,7 +150,7 @@ If you use wget, this adds additional settings such as changing the timeout to 6
 If you notice, some files that have mentioned above don't exist in this repo. This is because i am using the amazing [bash-it](http://github.com/ahmadassaf/bash-it) repo to organize those dotfiles.
 I recommend you head overthere and read how to use them.d
 
-# Installing the Scripts
+## Installing the Scripts
 
 For installing the above files outside of the workflow mentioned in the [main configurations](http://github.com/ahmadassaf/configurations), you need to run the following command `sh install.sh`. The command will symlink all the files in this directory into your home directory, overwriting existing files.
 
