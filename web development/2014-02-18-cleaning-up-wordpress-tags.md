@@ -7,11 +7,8 @@ tag:
 - Wordpress
 - PHP
 category: web development
+image: /images/posts/wordpress.jpg
 ---
-
-<figure style="display:none">
-  <img src="/images/posts/wordpress.jpg" alt="quora-logo">
-</figure>
 
 During the process of designing my blog (which i considered as a learning playground mostly) i had to import/export the database multiple times, delete and review posts and do lots of changes in my posts. In the end, i have noticed that although i have cleaned my posts, the number of tags is still unrealistic. After some digging, i discovered that at some point, WordPress was not cleaning my tags for unknown reasons to me up to now. I have decided to write a small PHP script that will scan my WordPress database and posts to determine the unique tags that i should ONLY have. The code below will do the following steps:
 

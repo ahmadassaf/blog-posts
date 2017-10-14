@@ -7,11 +7,8 @@ tag:
 - Wordpress
 - PHP
 category: web development
+image: /images/posts/wordpress.jpg
 ---
-
-<figure style="display:none">
-  <img src="/images/posts/wordpress.jpg" alt="quora-logo">
-</figure>
 
 During my many trials to start a useful blog, i have tried a handful of plugins and extensions that do all sort of stuff. However, after a while, especially when i became more and more familiar with PHP and WordPress, i decided to dump lots of these plugins and go with self developed tailored functions. Unfortunately, uninstalling these plugins did not solve all my problems. Some of them did actually insert some special markup to my posts ( mostly logos and links, for example the [Zemanta Plugin](http://wordpress.org/plugins/zemanta/) ). I decided that i had to clean up my posts from such 'malicious' markup. So i had to first of all to find the infected posts. To do so, i did write a small snippet that will run and search for several posts that contain specific strings, or characters or codes. I did run this code in a separate PHP file in the root of my domain. [You need to provide access to your WordPress installation though](http://wordpress.stackexchange.com/questions/47049/what-is-the-correct-way-to-use-wordpress-functions-outside-wordpress-files). In the first step, we first need to fetch all the posts that wee need to inspect. In my snippet i specified that i need to search for **posts** that have been **published**. You can change these parameters to include drafts, pending posts, pages and so on.
 

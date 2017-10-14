@@ -7,23 +7,74 @@ tag:
 - Jekyll
 category: web development
 featured: true
+image: /images/posts/jekyll.png
 ---
 
 Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on [Jekyll](https://jekyllrb.com/) for its simplicity and extensibility.
 
-Jekyll takes your content written in Markdown, passes it through your templates and spits it out as a complete static website, ready to be served.
+Jekyll takes your content written in Markdown, passes it through your templates and spits it out as a complete static website, ready to be served. Jekyll is a static site generator in contrast to Wordpress.
 
-Jekyll uses the Liquid templating language to process templates. There are two important things to know about using Liquid.
+In dynamic websites as in the case of Wordpress, when a visitor gets to a website, a server-side script will query one or multiple databases to get the content for the requested page. The server-side script will then pass the results to a templating engine that will format and arrange everything properly and generate an HTML file for the user to consume. This is a heavy task, although you can optimize that with various caching mechanisms. This concept makes sense for content that changes often, thus the name "dynamic".
+
+The proposition of a static site is to shift the heavy load from the moment visitors request the content to the moment content actually changes. When a visitor requests a page, the content is already rendered and ready to be served instantly as the build process had been already executed at the build stage offline. In the case of a blog (or at least my blog), after the post is written, it is rarely changed except when major content updates are needed.
+
+This means that whenever a content is changed, the whole site has to be rebuilt. For small sites, the build time is minimal. However, for larger ones, the build time can be about 10 times as long. The build time depends on a number of factors, such as the number of loops and other code complexities you have going on.
+
+Anther reason for choosing Jekyll for me was their incremental build feature. This means that instead of rebuilding the entire site, Jekyll rebuilds only the files that changed. That is, instead of completely blowing away and rebuilding the whole site from scratch each time, Jekyll regenerates just the part that changed.
+
+> [StaticGen](https://www.staticgen.com/) maintains a list of the most common static site generators
+
+#### To sum up the advantages of static site generators
+
+ - **Speed**: As there are no database queries to run, no templating and no processing whatsoever on every request, the content is served very fast
+ - **Content Version Control**: In a static site, the content is typically stored in flat files and treated as any other component of the codebase
+ - **Security**: Static sites keep it simple, since there's not much to mess up when there's only a web server serving plain HTML pages
+ - **Ease-of-use**: The site generation process, that can be done from an environment that you control locally and not necessarily on the web server that will run the site which means that there is very little hassle to set up the server and maintain it
+ - **Scalability**: A static site is generally better prepared for unexpected traffic peaks, as serving static HTML pages consumes a very small amount of server resources
+
+Jekyll uses the [Liquid templates](https://shopify.github.io/liquid/) to process and render HTML. There are two important things to know about using Liquid.
 First, a YAML front-matter block is at the beginning of every content file. It specifies the layout of the page and other variables, like title, date and tags. It may include custom page variables that you’ve created, too.
 Liquid template tags are used to execute loops and conditional statements and to output content.
 
+## Setting up the environment
+
+Jekyll is a command-line executable built with Ruby and has a few commands we need to run from time to time. Ruby comes installed by default on various operating systems, the latest stable version is 2.3.1, but anything above 2.2 should be fine. If you need to upgrade, we recommend using something like rbenv to make it easy.
+
+You can then install Jekyll easily by executing:
+
+```bash
+gem install jekyll -v 3.1.6
+```
+
+Now, creating a new Jekyll site is as easy as:
+
+```bash
+jekyll new awesome-blog
+```
+
+The `new` command here will create an install of Jekyll with the default theme.
+
+Jekyll comes with a built-in development server. `jekyll serve` command start this server on your machine and starts watching your files for changes similar to Grunt or Gulp.
+
+For more detailed instructions about setting about Jekyll sites, i recommend reading:
+
+ - [Getting Started with Jekyll ](https://scotch.io/tutorials/getting-started-with-jekyll-plus-a-free-bootstrap-3-starter-theme)
+ - [Make a Static Website with Jekyll](https://www.taniarascia.com/make-a-static-website-with-jekyll/)
+ - [Building a Jekyll Site: Converting a Static Website To Jekyll](https://css-tricks.com/building-a-jekyll-site-part-1-of-3/)
+ - [Build A Blog With Jekyll And GitHub Pages](https://www.smashingmagazine.com/2014/08/build-blog-jekyll-github-pages/)
+ - [jekyll-now - Build a Jekyll blog in minutes, without touching the command line](https://github.com/barryclark/jekyll-now)
+
 ## Directory Structure
 
+Jekyll is, at its core, a text transformation engine. The concept behind the system is this: you give it text written in your favorite markup language, be that Markdown, Textile, or just plain HTML, and it churns that through a layout or a series of layout files.
+
+> You can refer to Jekyll docs [documentation](https://jekyllrb.com/docs/structure/) for more detailed descriptions about the files and folders structure
 
  - **_data**: In addition to the built-in variables in the main config, you can specify your own custom data that can be accessed from here
  - **_includes**: Snippets of code that can be used throughout your templates
  - **_layouts**: The main layouts defined for various pages and posts
  - **_pages**: Any special pages that are not of type posts
+ - **_drafts**: This folder actually isn’t there if your using the default theme. You can create this empty folder now, but this is just where you will store unpublished posts
  - **_plugins**: Any defined ruby plugins if you have any
  - **_posts**: The main folder than contains the markdown posts
  - **_script**: Contains any additional scripts you would like to run and define in your config file
@@ -99,7 +150,7 @@ paginate: 7
 paginate_path: "posts/page/:num"
 ```
 
-The `paginate_path` is the important property that we need to take care about. It specifies the page that we want to enable pagination on. The plugin does not support pagination on `tag` and `category` pages, so as a workaround i have a new `/posts` route that will contain all the posts and enable pagination on them. To do so, i have created a new dicrectory called `posts` in the root folder with an `index.html` page. This will be picked up by Jekyll and result in a `/posts` page. The page contains normal Liquid templates as follows:
+The `paginate_path` is the important property that we need to take care about. It specifies the page that we want to enable pagination on. The plugin does not support pagination on `tag` and `category` pages, so as a workaround i have a new `/posts` route that will contain all the posts and enable pagination on them. To do so, i have created a new directory called `posts` in the root folder with an `index.html` page. This will be picked up by Jekyll and result in a `/posts` page. The page contains normal Liquid templates as follows:
 
 ```html
 {% raw %}<div class="archive-container">
@@ -255,6 +306,16 @@ When using Kramdown `{: .notice}` can be added after a sentence to assign the `.
 {: .notice_success}
 ```
 
+## Code Formatting
+
+I use rouge syntax highlighter that comes with Jekyll. Rouge can be installed if not already via `gem install rouge` then enabled in `configs.yml` with `highlighter: rouge`. I am using a custom theme that is defined in `/assets/_sass/_syntax.scss`. For various themes and presets you can check:
+
+ - [Obsidian theme for rouge syntax highlighter](http://vgaidarji.github.io/blog/2016/02/27/obsidian-theme-for-rouge-syntax-highlighter/)
+ - [Darkly Pygments CSS Theme](http://sourcey.com/darkly-pygments-css-theme/)
+ - [jekyll-pygments-themes](https://github.com/jwarby/jekyll-pygments-themes)
+
+ For any of the later, you can simply copy and replace the code in `/assets/_sass/_syntax.scss` and you should be good to go.
+
 ## Enabling Search
 
 One thing i wanted to add is the ability to perform full text search on the posts. To do so, i first wanted to be able to grab the posts data and have them saved. I managed to o that by creating the `/posts.json`:
@@ -299,10 +360,10 @@ _.each(posts, function(post){
 
 ## Putting it all together
 
-To wrap up all these features together i have created a little build script using Grunt.js. The notable build actions are:
+To wrap up all these features together i have created a little build script using `Grunt.js`. The notable build actions are:
 
  - Cleaning up working directories (the images folder and the built JavaScript destination)
- - Create the images directory that we will copy the posts iamges into as well as the JavaScript build destination directory
+ - Create the images directory that we will copy the posts images into as well as the JavaScript build destination directory
  - Copy the images from the posts directory into the main images folder
 
  Now, i would like to easily be able deploy my application on my live server as well as being able to run and test it in my local machine. The main thing to note here is that we need to have the `url` pointing to two different URIs on each machine. To do this dynamically, i created a new `_config.dev.yml` file that will overwrite only the `url` setting to run on `localhost:4000` and kept the url in my main `_config.yml` to my live server address.
@@ -316,121 +377,104 @@ To wrap up all these features together i have created a little build script usin
 I use [Browserify](http://browserify.org/) in my `main.js` to easily bundle up all of my front-end dependencies. Now, if i am serving my site and want to test my JavaScript changes, it is painful to build everytime the site for that. The jekyll watch feature will not run browserify for me, so instead i use the [grunt-concurrent](https://github.com/sindresorhus/grunt-concurrent) with a `watch` task defined to monitor and fire a browserify build whenever a change is detected and a background shell process using [grunt-bg-shell](https://github.com/rma4ok/grunt-bg-shell) to serve. The all come together like:
 
 ```javascript
+clean: ['assets/js/build/'],
+
+mkdir: {
+    images: {
+        options: { create: ['images/posts'] }},
+    js: {
+        options: { create: ['assets/js/build'] }
+    }
+},
+
+copy: {
+    images: {
+        files: [{
+            expand: true,
+            cwd: '_posts/images',
+            src: ['**'],
+            dest: 'images/posts/'
+        }]
+    }
+},
+
+imagemin: {
+    dynamic: {
+      files: [{
+        expand: true,
+        cwd: 'images/posts/',
+        src: ['**/*.{png,jpg,gif}'],
+        dest: 'images/posts/'
+      }]
+    }
+  },
+
 browserify: {
-     dist: {
-         files: {
-             'assets/js/build/main.js': ['assets/js/src/**/*.js']
-         },
-         options: {
-             debug: true,
-             standalone: pkg['export-symbol']
-         }
-     }
- },
- bgShell: {
-     jekyllBuild: {
-         cmd: 'jekyll build --incremental',
-         done: function() {
-             console.log("Finished Building Jekyll Site");
-         }
-     },
-     jekyllServe: {
-         cmd: 'bundle exec jekyll serve --incremental'
-     },
-     jekyllLocal: {
-         cmd: 'bundle exec jekyll serve --incremental --config _config.yml,_config.dev.yml'
-     }
- },
- watch: {
-     files: ['assets/js/**/*.js'],
-     tasks: ['browserify']
- },
- concurrent: {
-     serve: [
-         'watch',
-         'bgShell:jekyllServe'
-     ],
-     local: [
-         'watch',
-         'bgShell:jekyllLocal'
-     ],
-     options: {
-         logConcurrentOutput: true
-     }
- }
+    dist: {
+        files: {
+            'assets/js/build/main.js': ['assets/js/src/**/*.js']
+        },
+        options: {
+            debug: true,
+            standalone: pkg['export-symbol']
+        }
+    }
+},
+
+minified: {
+    files: { src: ['assets/js/build/main.js'], dest: '_site/assets/js/build/' }
+  },
+
+bgShell: {
+    jekyllBuild: {
+        cmd: 'jekyll build --incremental',
+        done: function() {
+            console.log("Finished Building Jekyll Site");
+        }
+    },
+    jekyllServe: { cmd: 'bundle exec jekyll serve --incremental' },
+    jekyllLocal: { cmd: 'bundle exec jekyll serve --incremental --config _config.yml,_config.dev.yml' }
+},
+
+watch: {
+    files: ['assets/js/**/*.js'],
+    tasks: ['copy', 'browserify']
+},
+
+concurrent: {
+    serve: [
+        'watch',
+        'bgShell:jekyllServe'
+    ],
+    local: [
+        'watch',
+        'bgShell:jekyllLocal'
+    ],
+    options: {
+        logConcurrentOutput: true
+    }
+}
+});
+
 ```
+
 In the end, i have three main grunt tasks:
 
-```javascript
-// Register the grunt build task on live server
-grunt.registerTask('build', ['clean', 'mkdir:images', 'mkdir:js', 'copy:images', 'bgShell:jekyllBuild', 'browserify']);
 
-// Register the grunt serve task on live server
+```javascript
+// Register the grunt build task
+grunt.registerTask('build', ['clean', 'mkdir:images', 'mkdir:js', 'copy:images', 'bgShell:jekyllBuild', 'browserify', 'minified']);
+
+// Register the grunt serve task
 grunt.registerTask('serve', ['build', 'minified', 'concurrent:serve']);
 
-// Register the grunt serve task on local machine
-grunt.registerTask('local', ['build', 'minified', 'concurrent:local']);
+// Register the grunt serve task locally
+grunt.registerTask('local', ['build', 'newer:imagemin', 'minified', 'concurrent:local']);
+
+// Register build as the default task fallback
+grunt.registerTask('default', 'build');
 ```
 
-# Continuous Integration & Development (CI/CD)
-
-I have my jekyll instance running on a Digital Ocean Droplet. to configure one, you can easily follow [their great tutorial](https://www.digitalocean.com/community/tutorials/how-to-get-started-with-jekyll-on-an-ubuntu-vps).
-
-Jekyll website has a [great article on continuous integration](http://jekyllrb.com/docs/continuous-integration/) and [Deployment](https://jekyllrb.com/docs/deployment-methods/)In a nutshell,  serving Jekyll can be done in two ways:
-
- - It is a static website, so just have a webserver like Apache running and point that to the `_site`
- - Run the `jekyll serve` process on your server and proxy your webserver e.g., Apache to point to your `http://0.0.0.0:4000`
-
-> Setting 0.0.0.0 as an address to serve from is a way of saying to match all network interfaces on the machine. So if your local IP was 192.168.0.1 it would serve on both 127.0.0.1 and 192.168.0.1, computers on your local network would have access to your jekyll site. By doing `jekyll serve -H 0.0.0.0` you make sure the website is accessible externally properly.
-
-To enable those two scenarios, i am using a [Codeship](http://codeship.com) deployment pipeline that will make sure to pull the latest changes on the website and its submodules whenever a push is triggered on Github. I do that by having this line:
-
-```shell
-ssh -p $SSH-PORT-NUMBER root@SERVER-ADDRESS 'cd /www/blog; git pull origin master; git submodule foreach git pull origin master'
-```
-
-Where as you substitute the location of your github repo in the server to point correctly, e.g., `/www/blog`.
-
-Now, after that you can have a git `post-receive` or `post-merge` hook that will run the appropriate grunt task e.g., `grunt serve` or if you running using [tmux](http://tmux.sourceforge.net) for example and a jekyll serve process is already running, then it will pick up the change automatically and your changes will be reflected automatically.
-
-The only thing i'd like to note if you are using the `jekyll serve` approach is that you will need to tell your webserver to proxy requests to jekyll's instance. To do that, you will need to edit `/etc/apache2/sites-available/000-default.conf` file as follows:
-
-```shell
-<VirtualHost *:*>
-    ProxyPreserveHost On
-    # The ServerName directive sets the request scheme, hostname and port that
-    # the server uses to identify itself. This is used when creating
-    # redirection URLs. In the context of virtual hosts, the ServerName
-    # specifies what hostname must appear in the request's Host: header to
-    # match this virtual host. For the default virtual host (this file) this
-    # value is not decisive as it is used as a last resort host regardless.
-    # However, you must set it for any further virtual host explicitly.
-    #ServerName www.example.com
-
-    ServerAdmin webmaster@localhost
-    DocumentRoot /www/blog
-
-    # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
-    # error, crit, alert, emerg.
-    # It is also possible to configure the loglevel for particular
-    # modules, e.g.
-    #LogLevel info ssl:warn
-
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-    ProxyPass / http://0.0.0.0:4000/
-    ProxyPassReverse / http://0.0.0.0:4000/
-
-    ServerName localhost
-    # For most configuration files from conf-available/, which are
-    # enabled or disabled at a global level, it is possible to
-    # include a line for only one particular virtual host. For example the
-    # following line enables the CGI configuration for this host only
-    # after it has been globally disabled with "a2disconf".
-    #Include conf-available/serve-cgi-bin.conf
-</VirtualHost>
-```
 # Relevant References:
  - [jekyll-now - Build a Jekyll blog in minutes, without touching the command line](https://github.com/barryclark/jekyll-now)
  - [Website Continuous Integration with Travis CI, Jekyll, gulp, and GitHub](https://cesiumjs.org/2016/02/03/Cesium-Website-Continuous-Integration/)
@@ -438,3 +482,4 @@ The only thing i'd like to note if you are using the `jekyll serve` approach is 
  - [Travis CI deployments to DigitalOcean](https://kjaer.io/travis/)
  - [How To Set Up Apache Virtual Hosts on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-14-04-lts)
 
+Now i can run my blog locally or run it on the server as part of the [CI/CD process](http://ahmadassaf.com/posts/enabling-continuous-deployment-for-jekyll/).

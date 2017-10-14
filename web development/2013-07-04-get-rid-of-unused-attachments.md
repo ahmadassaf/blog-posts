@@ -7,11 +7,8 @@ tag:
 - Wordpress
 - PHP
 category: web development
+image: /images/posts/wordpress.jpg
 ---
-
-<figure style="display:none">
-  <img src="/images/posts/wordpress.jpg" alt="quora-logo">
-</figure>
 
 A very annoying thing in WordPress is that you deleting a post doesn't cascade to the content (attachments) of that post. After a while, you can end up with lots of unused attachments and media files in your library that will only take up hard drive space ! The function below will allow deletion of post attachments when the post is deleted.
 

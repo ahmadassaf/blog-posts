@@ -6,11 +6,8 @@ tag:
 - Wordpress
 - PHP
 category: web development
+image: /images/posts/wordpress.jpg
 ---
-
-<figure style="display:none">
-  <img src="/images/posts/wordpress.jpg" alt="quora-logo">
-</figure>
 
 For various reasons, one might want to get all the categories that are assigned for the posts in a certain category. This snippet below will allow to do just that. What i did is simply putting that in the `functions` and then you get to call that function anywhere in the code. The parameter that you need to pass is the category ID. Please note that the table names that you have may have different prefix, the default is the `wp_` and that we pull in the tags from `published` posts only. You can change that by changing the post status parameter. This code retrieves the tags based on the number of their occurrences in the posts in **DESCENDING** order. You can change that as well by changing the order to `ASC`
 
