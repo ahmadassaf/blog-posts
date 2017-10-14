@@ -436,6 +436,5 @@ The only thing i'd like to note if you are using the `jekyll serve` approach is 
  - [Website Continuous Integration with Travis CI, Jekyll, gulp, and GitHub](https://cesiumjs.org/2016/02/03/Cesium-Website-Continuous-Integration/)
  - [Jekyll and Continuous Integration with Travis CI](http://distresssignal.org/jekyll-continuous-integration-travis-ci)
  - [Travis CI deployments to DigitalOcean](https://kjaer.io/travis/)
- - [Setting Up a Continuous Delivery Blog](http://blog.grubernaut.com/vps-migration/)
  - [How To Set Up Apache Virtual Hosts on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-14-04-lts)
 
