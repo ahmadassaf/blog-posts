@@ -181,7 +181,8 @@ We have talked about namespaces and base URIs in XML. The same concepts are tran
     @prefix ex: <http://example.org/stuff/1.0/>.
     @base <http://ahmadassaf.com/Administrators>
 
-    so in my example i will have:
+so in my example i will have:
+
     :AhmadAssaf
     aa:hasBlog <http://ahmadassaf.com/blog> ;
     ex:fullname "Ahmad Assaf"^^xsd.string .
