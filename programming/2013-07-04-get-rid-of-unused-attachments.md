@@ -6,7 +6,7 @@ excerpt: "A very annoying thing in WordPress is that you deleting a post doesn't
 tag:
 - Wordpress
 - PHP
-category: web development
+category: programming
 image: /images/posts/wordpress.jpg
 ---
 

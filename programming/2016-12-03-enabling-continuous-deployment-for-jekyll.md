@@ -8,8 +8,9 @@ tag:
 - Continuous Deployment
 - Continuous Integration
 - Travis-CI
-category: web development
+category: programming
 image: /images/posts/jekyll.png
+featured: true
 ---
 
 Static sites are great and have [various advantages](http://ahmadassaf.com/posts/power-up-a-hero-blog-with-jekyll/). However, I am aware of how much easier to use Wordpress is for lots of users. If we want to compare Wordpress’ workflow to that of a static site: even though making changes to my Jekyll site may seem rather easy to me, it really isn’t that straightforward:
@@ -282,7 +283,7 @@ We also add our server IP address as well as our SSH IP address (i did this as i
 
 I reference a few bash scripts to run at various stages of the build process. These scripts have been placed in the `_scripts` directory, which won’t be built by Jekyll since its name starts with an underscore.
 
-#### `before_install`
+### `before_install`
 
 Before starting any of the process we need to make sure that we have set up our environment by installing `nvm`, `Node.js` and all of our global `npm` modules and `gem` files. Necessary files and folders will be brought up from the cache when needed. Afterwards, we execute the `install.sh` file which contains:
 
@@ -300,11 +301,11 @@ The `openssl` command decrypts the encrypted private key.  I’ve actually just 
 
 Also, note that I’m moving the key to the `.ssh` directory under the name `id_rsa`. This is the default name for the key Git will look for when pushing to the server. It makes our lives a bit easier to place it there, under that name, since we won’t need to specify what key should be used later on.
 
-#### before_script
+### before_script
 
 A common problem i hit when trying to connect with SSH to my server was having SSH read properly from the `known_hosts` whenever i try to connect. However, there seemed to be a problem that i could not wrap my head around until i came across [this article](http://bencane.com/2013/07/22/ssh-disable-host-checking-for-scripts-automation/). As a result, i disable `StrictHostKeyChecking` to enable Travis to log in properly with these two commands.
 
-#### build
+### build
 
 The build is straightforward for me as i have everything configured in Grunt. My `build.sh` file looks like:
 
@@ -315,7 +316,7 @@ set -x
 grunt build
 ```
 
-#### test
+### test
 
 Testing is done with [HTML-Proofer](https://github.com/gjtorikian/html-proofer). Since it is in my Gemfile, Travis automatically installs it for us. My test file is configured as:
 
@@ -328,7 +329,7 @@ bundle exec htmlproofer _site --url-ignore "/ahmadassaf.com|github.com/" --only-
 
 In this one command, I’m validating HTML, checking that no external link returns a 400-error (ignoring any redirects as they are fine), and that the favicon is present and referenced on every page. I ignore my blog address url and Github's with `_site --url-ignore "/ahmadassaf.com|github.com/"` as whenever you’re adding a new post, it’ll return an error because the post isn’t online yet (i do that also for Github as i link as well the posts to my Github repository).
 
-#### deploy
+### deploy
 
 At this point, we want to deploy what we’ve just built. That’s why we’re going to push from a new repo in our `_site` folder.
 
@@ -353,7 +354,7 @@ We’re adding our remote with the deployment username that we have configured e
 
 Feel free to ask or check out my [GitHub repo](https://github.com/ahmadassaf/blog-core) to check how everything is set up in action !
 
-## Relevant References:
+## Relevant References
 
  - [Website Continuous Integration with Travis CI, Jekyll, gulp, and GitHub](https://cesiumjs.org/2016/02/03/Cesium-Website-Continuous-Integration/)
  - [Travis CI deployments to DigitalOcean](https://kjaer.io/travis/)

@@ -10,4 +10,5 @@ category: projects
 image: "/images/posts/npm.png"
 type: project
 link: "http://awesome-progress.ahmadassaf.com"
+github: "http://awesome-progress.ahmadassaf.com/"
 ---

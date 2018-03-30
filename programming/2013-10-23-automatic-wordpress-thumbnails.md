@@ -6,7 +6,7 @@ excerpt: "It happens very often that you design your WordPress theme without a n
 tag:
 - Wordpress
 - PHP
-category: web development
+category: programming
 image: /images/posts/wordpress.jpg
 ---
 

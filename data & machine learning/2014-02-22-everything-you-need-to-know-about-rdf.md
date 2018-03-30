@@ -7,7 +7,7 @@ tag:
 - Knowledge Representation
 - RDF
 - Linked Data
-category: Semantic Web
+category: data & machine learning
 featured: true
 image: /images/posts/rdf.png
 ---

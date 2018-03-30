@@ -10,4 +10,5 @@ category: projects
 image: "/images/posts/code-notes.png"
 type: project
 link: "http://code-notes.ahmadassaf.com"
+github: "http://code-notes.ahmadassaf.com/"
 ---

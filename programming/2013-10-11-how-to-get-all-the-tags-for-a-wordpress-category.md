@@ -5,7 +5,7 @@ excerpt: "For various reasons, one might want to get all the categories that are
 tag:
 - Wordpress
 - PHP
-category: web development
+category: programming
 image: /images/posts/wordpress.jpg
 ---
 

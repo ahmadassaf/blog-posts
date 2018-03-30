@@ -6,7 +6,7 @@ excerpt: "I have decided to write a small PHP script that will scan my WordPress
 tag:
 - Wordpress
 - PHP
-category: web development
+category: programming
 image: /images/posts/wordpress.jpg
 ---
 

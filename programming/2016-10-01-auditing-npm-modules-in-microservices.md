@@ -7,7 +7,7 @@ tag:
 - Node
 - Optimization
 - NPM
-category: web development
+category: programming
 image: /images/posts/npm.png
 ---
 

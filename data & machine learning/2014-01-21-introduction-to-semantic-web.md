@@ -6,7 +6,7 @@ tag:
 - Semantic Web
 - Knowledge Representation
 - Linked Data
-category: Semantic Web
+category: data & machine learning
 featured: true
 image: /images/posts/semantic-web.png
 ---

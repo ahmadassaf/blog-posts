@@ -6,7 +6,7 @@ excerpt: "During my many trials to start a useful blog, i have tried a handful o
 tag:
 - Wordpress
 - PHP
-category: web development
+category: programming
 image: /images/posts/wordpress.jpg
 ---
 
