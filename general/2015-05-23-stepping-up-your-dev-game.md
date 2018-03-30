@@ -52,7 +52,7 @@ There is already a nice set of widgets published in the [gallery](http://traceso
 
 ## Other Widgets
 
-One element that i use that is not part of Übersicht is [Dateline](https://itunes.apple.com/us/app/dateline/id406119724?mt=12). It is a discrete desktop calendar with support to iCal and other calendar applications.
+One element that i use that is not part of Übersicht is [Dateline](http://www.machinecodex.com/dateline/). It is a discrete desktop calendar with support to iCal and other calendar applications.
 
 ### Geeklets
 
