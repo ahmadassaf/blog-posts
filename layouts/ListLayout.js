@@ -1,8 +1,8 @@
-import Link from '@/components/Link'
-import Tag from '@/components/Tag'
+import Link from '@/components/blocks/Link'
+import Tag from '@/components/blocks/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { useState } from 'react'
-import Pagination from '@/components/Pagination'
+import Pagination from '@/components/blocks/Pagination'
 import formatDate from '@/lib/utils/formatDate'
 
 export default function ListLayout({ posts, title, initialDisplayPosts = [], pagination }) {

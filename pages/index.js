@@ -1,6 +1,6 @@
-import Link from '@/components/Link'
+import Link from '@/components/blocks/Link'
 import { PageSEO } from '@/components/SEO'
-import Tag from '@/components/Tag'
+import Tag from '@/components/blocks/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
