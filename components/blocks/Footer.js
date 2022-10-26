@@ -4,12 +4,12 @@ import SocialIcon from '@/components/icons'
 export default function Footer() {
   return (
     <footer aria-labelledby="footer-heading">
-      <div className="mx-auto max-w-7xl py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <div className="grid grid-cols-2 gap-8 xl:col-span-2">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
+      <div className="mx-auto max-w-7xl py-12 lg:py-16">
+        <div className="xl:grid xl:grid-cols-4 xl:gap-8">
+          <div className="grid grid-cols-1 gap-8 xl:col-span-2">
+            <div className="md:grid md:grid-cols-3 md:gap-8">
               <div>
-                <h3 className="text-base font-medium text-gray-900">Solutions</h3>
+                <h3 className="text-base font-medium text-gray-900">Categories</h3>
                 <ul role="list" className="mt-4 space-y-4">
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
@@ -36,42 +36,40 @@ export default function Footer() {
                   </li>
                 </ul>
               </div>
-              <div className="mt-12 md:mt-0">
-                <h3 className="text-base font-medium text-gray-900">Support</h3>
+              <div>
+                <h3 className="text-base font-medium text-gray-900">Projects</h3>
                 <ul role="list" className="mt-4 space-y-4">
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Pricing
+                      Gaudi
                     </a>
                   </li>
 
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Documentation
+                      Book.it
                     </a>
                   </li>
 
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Guides
+                      Ditto
                     </a>
                   </li>
 
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      API Status
+                      Gaudi-bash
                     </a>
                   </li>
                 </ul>
               </div>
-            </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-base font-medium text-gray-900">Company</h3>
+                <h3 className="text-base font-medium text-gray-900">About</h3>
                 <ul role="list" className="mt-4 space-y-4">
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      About
+                      Summary
                     </a>
                   </li>
 
@@ -83,48 +81,20 @@ export default function Footer() {
 
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Jobs
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
                       Press
                     </a>
                   </li>
 
                   <li>
                     <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Partners
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-12 md:mt-0">
-                <h3 className="text-base font-medium text-gray-900">Legal</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Claim
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Privacy
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Terms
+                      Publications
                     </a>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
-          <div className="mt-8 xl:mt-0">
+          <div className="mt-8 xl:col-span-2 xl:mt-0">
             <h3 className="text-base font-medium text-gray-900">Subscribe to our newsletter</h3>
             <p className="mt-4 text-base text-gray-500">
               The latest news, articles, and resources, sent to your inbox weekly.
