@@ -1,11 +1,11 @@
-import siteMetadata from '@/data/siteMetadata'
-import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
-import Link from '@/components/blocks/Link'
-import SectionContainer from '@/components/containers/SectionContainer'
 import Footer from '@/components/blocks/Footer'
+import headerNavLinks from '@/data/navigation'
+import Link from '@/components/mdx/Link'
 import MobileNav from '@/components/navigation/MobileNav'
-import ThemeSwitch from '@/components/ThemeSwitch'
+import SectionContainer from '@/components/containers/SectionContainer'
+import siteMetadata from '@/data/siteMetadata'
+import ThemeLogo from '@/components/navigation/Logo'
+import ThemeSwitch from '@/components/utils/ThemeSwitcher'
 
 const LayoutWrapper = ({ children }) => {
   return (
@@ -16,15 +16,8 @@ const LayoutWrapper = ({ children }) => {
             <Link href="/" aria-label={siteMetadata.headerTitle}>
               <div className="flex items-center justify-between">
                 <div className="mr-3">
-                  <Logo />
+                  <ThemeLogo />
                 </div>
-                {typeof siteMetadata.headerTitle === 'string' ? (
-                  <div className="hidden h-6 text-2xl font-semibold sm:block">
-                    {siteMetadata.headerTitle}
-                  </div>
-                ) : (
-                  siteMetadata.headerTitle
-                )}
               </div>
             </Link>
           </div>

@@ -4,7 +4,7 @@ subtitle: 'A guide for a smooth completion of your thesis'
 date: 2017-03-27
 summary: 'Completing a PhD can be a hell of a task. It took me lots of time to be able to come up with a framework to optimise how i do research and how i write and execute deliverables. I hope that this post can help you in completing yours'
 tags: ['LaTEX', 'productivity']
-category: general
+category: 'general'
 image: /static/images/phd.png
 ---
 

@@ -3,11 +3,11 @@ title: 'Enabling Continuous Deployment for Jekyll'
 subtitle: 'Making Digital Ocean, Jekyll, Github and TravisCI all work'
 summary: 'Having open sourced my blog on Github, deploying a new version of it live happens very often, and to do that manually every time is a daunting task. This post talks about my experience enabling Continuous Deployment (CD) using Github, TravisCI and my server on DigitalOcean and discuss what i tried and how i failed trying other methods'
 tags: ['Jekyll', 'Continuous Deployment', 'Continuous Integration', 'Travis-CI']
-category: web development
+category: 'web development'
 image: /static/images/jekyll.png
 ---
 
-Static sites are great and have [various advantages](http://ahmadassaf.com/posts/power-up-a-hero-blog-with-jekyll/). However, I am aware of how much easier to use Wordpress is for lots of users. If we want to compare Wordpress’ workflow to that of a static site: even though making changes to my Jekyll site may seem rather easy to me, it really isn’t that straightforward:
+Static sites are great and have [various advantages](http://assaf.website/posts/power-up-a-hero-blog-with-jekyll/). However, I am aware of how much easier to use Wordpress is for lots of users. If we want to compare Wordpress’ workflow to that of a static site: even though making changes to my Jekyll site may seem rather easy to me, it really isn’t that straightforward:
 
 - Write a post in Markdown
 - Commit changes to GitHub
@@ -318,10 +318,10 @@ Testing is done with [HTML-Proofer](https://github.com/gjtorikian/html-proofer).
 #!/bin/bash
 set -x
 
-bundle exec htmlproofer _site --url-ignore "/ahmadassaf.com|github.com/" --only-4xx --http-status-ignore "403" --check-html --check-favicon
+bundle exec htmlproofer _site --url-ignore "/assaf.website|github.com/" --only-4xx --http-status-ignore "403" --check-html --check-favicon
 ```
 
-In this one command, I’m validating HTML, checking that no external link returns a 400-error (ignoring any redirects as they are fine), and that the favicon is present and referenced on every page. I ignore my blog address url and Github's with `_site --url-ignore "/ahmadassaf.com|github.com/"` as whenever you’re adding a new post, it’ll return an error because the post isn’t online yet (i do that also for Github as i link as well the posts to my Github repository).
+In this one command, I’m validating HTML, checking that no external link returns a 400-error (ignoring any redirects as they are fine), and that the favicon is present and referenced on every page. I ignore my blog address url and Github's with `_site --url-ignore "/assaf.website|github.com/"` as whenever you’re adding a new post, it’ll return an error because the post isn’t online yet (i do that also for Github as i link as well the posts to my Github repository).
 
 #### deploy
 

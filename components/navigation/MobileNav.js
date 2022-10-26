@@ -1,18 +1,14 @@
 import { useState } from 'react'
-import Link from '@/components/blocks/Link'
-import headerNavLinks from '@/data/headerNavLinks'
+
+import Link from '@/components/mdx/Link'
+import headerNavLinks from '@/data/navigation'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)
 
   const onToggleNav = () => {
     setNavShow((status) => {
-      if (status) {
-        document.body.style.overflow = 'auto'
-      } else {
-        // Prevent scrolling
-        document.body.style.overflow = 'hidden'
-      }
+      status ? (document.body.style.overflow = 'auto') : (document.body.style.overflow = 'hidden')
       return !status
     })
   }

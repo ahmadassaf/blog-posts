@@ -1,4 +1,4 @@
-import Link from '@/components/blocks/Link'
+import Link from '@/components/mdx/Link'
 
 export default function Pagination({ totalPages, currentPage }) {
   const prevPage = parseInt(currentPage) - 1 > 0

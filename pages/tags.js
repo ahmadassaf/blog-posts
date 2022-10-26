@@ -1,5 +1,5 @@
-import Link from '@/components/blocks/Link'
-import { PageSEO } from '@/components/SEO'
+import Link from '@/components/mdx/Link'
+import { PageSEO } from '@/components/utils/SEO'
 import Tag from '@/components/blocks/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllTags } from '@/lib/tags'
@@ -24,15 +24,15 @@ export default function Tags({ tags }) {
         </div>
         <div className="flex max-w-lg flex-wrap">
           {Object.keys(tags).length === 0 && 'No tags found.'}
-          {sortedTags.map((t) => {
+          {sortedTags.map((_tag) => {
             return (
-              <div key={t} className="mt-2 mb-2 mr-5">
-                <Tag text={t} />
+              <div key={_tag} className="mt-2 mb-2 mr-5">
+                <Tag text={_tag} />
                 <Link
-                  href={`/tags/${kebabCase(t)}`}
+                  href={`/tag/${kebabCase(_tag)}`}
                   className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
                 >
-                  {` (${tags[t]})`}
+                  {` (${tags[_tag]})`}
                 </Link>
               </div>
             )

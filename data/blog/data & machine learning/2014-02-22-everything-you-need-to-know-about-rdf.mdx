@@ -2,12 +2,12 @@
 title: 'Everything you need to know about RDF'
 summary: 'Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. This post discusses the Resource Description Framework (RDF) which is the main data modeling block of the Semantic Web'
 tags: ['Semantic Web', 'Knowledge Representation', 'RDF', 'Linked Data']
-category: Semantic Web
+category: 'semantic web'
 featured: true
 image: /static/images/rdf.png
 ---
 
-Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. Lets take for example the fact that **I (Ahmad) have (owner of ) a blog (http://ahmadassaf.com/blog)**. In natural language i can easily express that. If i want to convert this into [XML](http://en.wikipedia.org/wiki/XML 'XML') which is one of the most popular data representation (markup) language, i can have the following representations:
+Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. Lets take for example the fact that **I (Ahmad) have (owner of ) a blog (http://assaf.website/blog)**. In natural language i can easily express that. If i want to convert this into [XML](http://en.wikipedia.org/wiki/XML 'XML') which is one of the most popular data representation (markup) language, i can have the following representations:
 
 However, this doesn't come intuitively to humans as they are used to present statements generally in a systematic fashion of `Subject - Verb/Predicate/Action - Object `From this thought, the idea of presenting knowledge in a three parts form was the basis of the [Resource Description Framework (RDF)](http://en.wikipedia.org/wiki/Resource_Description_Framework), where i can represent the following example saying that:
 
@@ -15,21 +15,21 @@ However, this doesn't come intuitively to humans as they are used to present
 <!-- Presentation Method (1) -->
 <blog>
      <owner>Ahmad</owner>
-     <address>http://ahmadassaf.com/blog</address>
+     <address>http://assaf.website/blog</address>
 </blog>
 <!-- Presentation Method  (2)-->
 <person name="Ahmad">
-     <blog>http://ahmadassaf.com/blog</blog>
+     <blog>http://assaf.website/blog</blog>
 </person>
 <!-- Presentation Method  (3)-->
-<person name="Ahmad" blog="http://ahmadassaf.com/blog" />
+<person name="Ahmad" blog="http://assaf.website/blog" />
 ```
 
 This is an intuitive knowledge representation using directed graphs, where the subjects and objects are the nodes and the predicates are the edges of that graph. This statement that comprises of these three parts is called RDF-Triple where the resource is a URI or a blank (empty) node, the property is a URI and the object can be a URI, literal or a [Blank Node](http://en.wikipedia.org/wiki/Blank_node 'Blank node'). If we wish to transform this knowledge into the traditional relational model (tables) it will look like:
 
-| **Subject** | **Predicate** |         **Object**         |
-| :---------: | :-----------: | :------------------------: |
-|    Ahmad    |  has a blog   | http://ahmadassaf.com/blog |
+| **Subject** | **Predicate** |        **Object**         |
+| :---------: | :-----------: | :-----------------------: |
+|    Ahmad    |  has a blog   | http://assaf.website/blog |
 
 # Constituents of an RDF Triple
 

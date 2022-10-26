@@ -3,7 +3,7 @@ title: 'Power-up a hero blog with Jekyll'
 subtitle: 'Setting up a modular Jekyll blog with Continuous Integration and Deployment'
 summary: "Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
 tags: ['Jekyll']
-category: web development
+category: 'web development'
 featured: true
 image: /static/images/jekyll.png
 ---
@@ -476,4 +476,4 @@ grunt.registerTask('default', 'build')
 - [Travis CI deployments to DigitalOcean](https://kjaer.io/travis/)
 - [How To Set Up Apache Virtual Hosts on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-14-04-lts)
 
-Now i can run my blog locally or run it on the server as part of the [CI/CD process](http://ahmadassaf.com/posts/enabling-continuous-deployment-for-jekyll/).
+Now i can run my blog locally or run it on the server as part of the [CI/CD process](http://assaf.website/posts/enabling-continuous-deployment-for-jekyll/).

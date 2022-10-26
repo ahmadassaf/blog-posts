@@ -1,11 +1,11 @@
-import Link from '@/components/blocks/Link'
+import Link from '@/components/mdx/Link'
 import PageTitle from '@/components/blocks/PageTitle'
 import SectionContainer from '@/components/containers/SectionContainer'
-import { BlogSEO } from '@/components/SEO'
+import { BlogSEO } from '@/components/utils/SEO'
 import siteMetadata from '@/data/siteMetadata'
 import formatDate from '@/lib/utils/formatDate'
-import Comments from '@/components/comments'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import Comments from '@/components/post/comments'
+import ScrollTopAndComment from '@/components/post/ScrollTopAndComment'
 
 export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
   const { date, title } = frontMatter

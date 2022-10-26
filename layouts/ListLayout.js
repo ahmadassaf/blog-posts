@@ -1,4 +1,4 @@
-import Link from '@/components/blocks/Link'
+import Link from '@/components/mdx/Link'
 import Tag from '@/components/blocks/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { useState } from 'react'

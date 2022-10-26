@@ -1,11 +1,12 @@
-import Link from '@/components/blocks/Link'
-import { PageSEO } from '@/components/SEO'
+import Link from '@/components/mdx/Link'
+import { PageSEO } from '@/components/utils/SEO'
 import Tag from '@/components/blocks/Tag'
 import siteMetadata from '@/data/siteMetadata'
+import { RoughNotation } from 'react-rough-notation'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 
-import NewsletterForm from '@/components/NewsletterForm'
+import NewsletterForm from '@/components/forms/NewsletterForm'
 
 const MAX_DISPLAY = 5
 
@@ -21,12 +22,31 @@ export default function Home({ posts }) {
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            Latest
-          </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            {siteMetadata.description}
-          </p>
+          <div>
+            <div className="pt-6">
+              <h1 className="pb-6 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+                Hi, I am{' '}
+                <span className="text-primary-color-500 dark:text-primary-color-dark-500">
+                  Ahmad Assaf
+                </span>
+              </h1>
+              <h2>
+                {`Welcome to ${siteMetadata.description}. I am a Data Engineer who is passionate about Data Science and Automation. In my free time, I like developing `}
+                side projects and learning new technologies.
+              </h2>
+              <div className="mt-8 text-slate-600 dark:text-slate-400">
+                <span className="text-sm">Press</span>{' '}
+                <span className="rounded-md bg-gray-300 p-1 text-sm text-gray-900 dark:bg-gray-400">
+                  ⌘
+                </span>{' '}
+                <span className="text-sm">+ </span>
+                <span className="rounded-md bg-gray-300 p-1 text-sm text-gray-900 dark:bg-gray-400">
+                  K
+                </span>{' '}
+                <span className="text-sm">to start</span>
+              </div>
+            </div>
+          </div>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
