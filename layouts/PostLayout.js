@@ -26,7 +26,7 @@ export default function PostLayout({
       <ScrollTopAndComment />
 
       <article>
-        <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
+        <div>
           <PostHeader
             title={title}
             subtitle={subtitle}

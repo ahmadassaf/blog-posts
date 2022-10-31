@@ -9,8 +9,8 @@ const PostSharing = ({ siteMetadata, slug, fileName }) => {
     )}`
 
   return (
-    <div className="pbt-6 mt-3 flex border-t pt-6 text-sm text-gray-700 dark:text-gray-300">
-      <div className="mr-4 flex  space-x-2 hover:text-blue-700">
+    <div className="flex border-y py-6 text-sm text-gray-700 dark:text-gray-300">
+      <div className="mr-4 flex space-x-2 hover:text-blue-700">
         <SocialIcon kind="twitter" href={siteMetadata.github} size="5" />
         <Link href={discussUrl(slug)} rel="nofollow">
           {'Discuss on Twitter'}

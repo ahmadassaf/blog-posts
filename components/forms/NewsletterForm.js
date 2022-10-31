@@ -35,40 +35,38 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }) => {
   }
 
   return (
-    <div>
-      <div className="pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</div>
-      <form className="flex flex-col sm:flex-row" onSubmit={subscribe}>
-        <div>
-          <label className="sr-only" htmlFor="email-input">
-            Email address
-          </label>
-          <input
-            autoComplete="email"
-            className="w-72 rounded-md px-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-600 dark:bg-black"
-            id="email-input"
-            name="email"
-            placeholder={subscribed ? "You're subscribed !  🎉" : 'Enter your email'}
-            ref={inputEl}
-            required
-            type="email"
-            disabled={subscribed}
-          />
-        </div>
-        <div className="mt-2 flex w-full rounded-md shadow-sm sm:mt-0 sm:ml-3">
+    <div className="mt-8 xl:col-span-2 xl:mt-0">
+      <h3 className="text-base font-medium text-gray-900">Subscribe to my newsletter</h3>
+      <p className="mt-4 text-base text-gray-500">
+        The latest articles, readings, and resources, sent to your inbox monthly
+      </p>
+      <form className="mt-4 sm:flex sm:max-w-md" onSubmit={subscribe}>
+        <label htmlFor="email-address" className="sr-only">
+          Email address
+        </label>
+        <input
+          autoComplete="email"
+          id="email-input"
+          name="email"
+          placeholder={subscribed ? "You're subscribed !  🎉" : 'Enter your email'}
+          ref={inputEl}
+          required
+          type="email"
+          disabled={subscribed}
+          className="w-full min-w-0 appearance-none rounded-md border border-gray-300 bg-white py-2 px-4 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-indigo-500"
+        />
+        <div className="mt-3 rounded-md sm:mt-0 sm:ml-3 sm:flex-shrink-0">
           <button
-            className={`w-full rounded-md bg-primary-500 py-2 px-4 font-medium text-white sm:py-0 ${
-              subscribed ? 'cursor-default' : 'hover:bg-primary-700 dark:hover:bg-primary-400'
-            } focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:ring-offset-black`}
             type="submit"
             disabled={subscribed}
+            className={`flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-base font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              subscribed ? 'cursor-default' : 'hover:bg-primary-700 dark:hover:bg-primary-400'
+            } focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:ring-offset-black`}
           >
             {subscribed ? 'Thank you!' : 'Sign up'}
           </button>
         </div>
       </form>
-      {error && (
-        <div className="w-72 pt-2 text-sm text-red-500 dark:text-red-400 sm:w-96">{message}</div>
-      )}
     </div>
   )
 }

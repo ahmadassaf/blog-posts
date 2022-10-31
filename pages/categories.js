@@ -3,7 +3,6 @@ import { PageSEO } from '@/components/utils/SEO'
 import Category from '@/components/blocks/Category'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllCategories } from '@/lib/categories'
-import kebabCase from '@/lib/utils/kebabCase'
 
 export async function getStaticProps() {
   const categories = await getAllCategories('blog')
@@ -12,7 +11,7 @@ export async function getStaticProps() {
 }
 
 export default function Categories({ categories }) {
-  const sortedCategories = Object.keys(categories).sort((a, b) => categories[b] - categories[a])
+  console.log(categories)
   return (
     <>
       <PageSEO title={`Categories - ${siteMetadata.author}`} description="Things I blog about" />
@@ -24,15 +23,15 @@ export default function Categories({ categories }) {
         </div>
         <div className="flex max-w-lg flex-wrap">
           {Object.keys(categories).length === 0 && 'No Categories found'}
-          {sortedCategories.map((t) => {
+          {Object.keys(categories).map((category) => {
             return (
-              <div key={t} className="mt-2 mb-2 mr-5">
-                <Category text={t} />
+              <div key={category} className="mt-2 mb-2 mr-5">
+                <Category text={categories[category].display} />
                 <Link
-                  href={`/categories/${kebabCase(t)}`}
+                  href={`/categories/${category}`}
                   className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
                 >
-                  {` (${categories[t]})`}
+                  {` (${categories[category].count})`}
                 </Link>
               </div>
             )

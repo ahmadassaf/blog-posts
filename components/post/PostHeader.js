@@ -35,7 +35,7 @@ const PostHeader = ({
       <h4 className="text-gray-500">{readingTime.text}</h4>
 
       {tags && (
-        <div className="mt-4 flex flex-wrap">
+        <div className="my-4 flex flex-wrap">
           {tags.map((tag) => (
             <Tag key={tag} text={tag} />
           ))}

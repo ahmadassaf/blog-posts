@@ -13,11 +13,6 @@ However, setting everything the way you **want** it can be time consuming, so i 
 
 # Customizing the UI
 
-{% capture images %}
-/static/images/mac-osx-desktop.png
-{% endcapture %}
-{% include partials/post/gallery.html images=images caption="MacOSX Custom layout and widgets" cols=1 %}
-
 First, lets start with the light weight things. The desktop and general UI enhancement. I always love to show some nice widgets on my desktop, for that i am using [Übersicht](http://tracesof.net/uebersicht/). I have used [Geektool](http://projects.tynsoe.org/en/geektool/) which basically allows you to run custom scripts and display them on the desktop, but i wasn't at all happy with the experience of styling those "widgets" and the availability of 3rd party widgets.
 **Übersicht** lets you run system commands and display their output on your desktop in little containers, called widgets. Widgets are written using HTML5, which means they are:
 
