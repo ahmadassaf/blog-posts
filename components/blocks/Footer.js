@@ -5,35 +5,36 @@ import NewsletterForm from '@/components/forms/NewsletterForm'
 import projects from '@/data/projects'
 
 export default function Footer(props) {
-  console.log('footerData', props)
+  const _navigation = props.navigationProps
+
   return (
     <footer aria-labelledby="footer-heading">
       <div className="mx-auto max-w-7xl py-12 lg:py-16">
         <div className="xl:grid xl:grid-cols-4 xl:gap-8">
           <div className="grid grid-cols-1 gap-8 xl:col-span-2">
             <div className="md:grid md:grid-cols-3 md:gap-8">
-              {/* {Object.keys(categories).length && (
+              {_navigation.categories.length && (
                 <div>
                   <h3 className="text-base font-medium text-gray-900 dark:text-white">
                     Categories
                   </h3>
                   <ul role="list" className="mt-4 space-y-4">
-                    {Object.keys(categories)
+                    {_navigation.categories
                       .slice(0, 4)
                       .reverse()
                       .map((category) => (
                         <li key={category}>
                           <a
-                            href={`/categories/${category}`}
+                            href={`/blog/category/${category}`}
                             className="text-base capitalize text-gray-500 hover:text-gray-900"
                           >
-                            {categories[category].display}
+                            {category.replace('-', ' ')}
                           </a>
                         </li>
                       ))}
                   </ul>
                 </div>
-              )} */}
+              )}
               {projects && (
                 <div>
                   <h3 className="text-base font-medium text-gray-900 dark:text-white">Projects</h3>
@@ -74,7 +75,7 @@ export default function Footer(props) {
             </div>
           </div>
 
-          <NewsletterForm />
+          {siteMetadata.newsletter.provider !== '' && <NewsletterForm />}
         </div>
         <div className="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2">

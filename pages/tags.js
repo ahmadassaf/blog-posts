@@ -29,7 +29,7 @@ export default function Tags({ tags }) {
               <div key={_tag} className="mt-2 mb-2 mr-5">
                 <Tag text={_tag} />
                 <Link
-                  href={`/tag/${kebabCase(_tag)}`}
+                  href={`/blog/tag/${kebabCase(_tag)}`}
                   className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
                 >
                   {` (${tags[_tag]})`}

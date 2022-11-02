@@ -1,8 +1,27 @@
-const headerNavLinks = [
-  { href: '/blog', title: 'Blog' },
-  { href: '/tags', title: 'Tags' },
-  { href: '/projects', title: 'Projects' },
-  { href: '/about', title: 'About' },
-]
+const headerNavLinks = {
+  links: [
+    {
+      href: '/about',
+      title: 'About',
+      hideInPath: false,
+    },
+    {
+      href: '/blog/tags',
+      title: 'Tags',
+      hideInPath: '*',
+      showInPath: '/blog',
+    },
+    {
+      href: '/projects',
+      title: 'Projects',
+      hideInPath: false,
+    },
+    {
+      href: '/blog',
+      title: 'Blog',
+      hideInPath: '/blog',
+    },
+  ],
+}
 
 export default headerNavLinks

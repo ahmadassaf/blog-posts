@@ -61,7 +61,7 @@ const MobileNav = () => {
           </button>
         </div>
         <nav className="fixed mt-8 h-full">
-          {headerNavLinks.map((link) => (
+          {headerNavLinks.links.map((link) => (
             <div key={link.title} className="px-12 py-4">
               <Link
                 href={link.href}
