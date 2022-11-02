@@ -1,5 +1,5 @@
 import Link from '@/components/mdx/Link'
-import PageTitle from '@/components/blocks/PageTitle'
+import PageTitle from '@/components/post/PostTitle'
 import SectionContainer from '@/components/containers/SectionContainer'
 import { BlogSEO } from '@/components/utils/SEO'
 import siteMetadata from '@/data/siteMetadata'

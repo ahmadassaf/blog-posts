@@ -1,5 +1,5 @@
-import PageSubTitle from '@/components/blocks/PageSubTitle'
-import PageTitle from '@/components/blocks/PageTitle'
+import PostSubTitle from '@/components/post/PostSubTitle'
+import PostTitle from '@/components/post/PostTitle'
 import Tag from '@/components/blocks/Tag'
 import Category from '@/components/blocks/Category'
 import PostSharing from '@/components/post/PostSharing'
@@ -29,8 +29,8 @@ const PostHeader = ({
         </dd>
       </div>
       <div className="space-y-1 text-left">
-        <PageTitle>{title}</PageTitle>
-        <PageSubTitle>{subtitle}</PageSubTitle>
+        <PostTitle>{title}</PostTitle>
+        <PostSubTitle>{subtitle}</PostSubTitle>
       </div>
       <h4 className="text-gray-500">{readingTime.text}</h4>
 

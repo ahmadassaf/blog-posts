@@ -7,8 +7,7 @@ import siteMetadata from '@/data/siteMetadata'
 import ThemeLogo from '@/components/navigation/Logo'
 import ThemeSwitch from '@/components/utils/ThemeSwitcher'
 
-const LayoutWrapper = ({ categories, children }) => {
-  console.log('==>', categories)
+const LayoutWrapper = ({ children }) => {
   return (
     <SectionContainer>
       <div className="flex h-screen flex-col justify-between">
@@ -39,7 +38,7 @@ const LayoutWrapper = ({ categories, children }) => {
           </div>
         </header>
         <main className="mb-auto">{children}</main>
-        <Footer categories={categories} />
+        <Footer />
       </div>
     </SectionContainer>
   )

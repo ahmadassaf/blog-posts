@@ -4,15 +4,15 @@ import NewsletterForm from '@/components/forms/NewsletterForm'
 
 import projects from '@/data/projects'
 
-export default function Footer({ categories }) {
-  console.log('==> <====', categories)
+export default function Footer(props) {
+  console.log('footerData', props)
   return (
     <footer aria-labelledby="footer-heading">
       <div className="mx-auto max-w-7xl py-12 lg:py-16">
         <div className="xl:grid xl:grid-cols-4 xl:gap-8">
           <div className="grid grid-cols-1 gap-8 xl:col-span-2">
             <div className="md:grid md:grid-cols-3 md:gap-8">
-              {Object.keys(categories).length && (
+              {/* {Object.keys(categories).length && (
                 <div>
                   <h3 className="text-base font-medium text-gray-900 dark:text-white">
                     Categories
@@ -33,8 +33,7 @@ export default function Footer({ categories }) {
                       ))}
                   </ul>
                 </div>
-              )}
-
+              )} */}
               {projects && (
                 <div>
                   <h3 className="text-base font-medium text-gray-900 dark:text-white">Projects</h3>

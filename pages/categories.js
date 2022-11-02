@@ -11,7 +11,6 @@ export async function getStaticProps() {
 }
 
 export default function Categories({ categories }) {
-  console.log(categories)
   return (
     <>
       <PageSEO title={`Categories - ${siteMetadata.author}`} description="Things I blog about" />
