@@ -6,7 +6,7 @@ module.exports = {
     node: true,
     es6: true,
   },
-  extends: ['next', 'next/core-web-vitals'],
+  extends: ['next'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 0,
