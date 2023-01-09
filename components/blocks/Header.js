@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router'
+
 import Link from '@/components/mdx/Link'
 import MobileNav from '@/components/navigation/MobileNav'
 import siteMetadata from '@/data/siteMetadata'
@@ -6,11 +8,12 @@ import ThemeLogo from '@/components/navigation/Logo'
 import ThemeSwitch from '@/components/utils/ThemeSwitcher'
 
 const Header = (props) => {
+  const router = useRouter()
   return (
     <header className="flex items-center justify-between py-10">
       <Link href="/" aria-label={siteMetadata.headerTitle}>
         <div className="flex items-center justify-between">
-          <div className="mr-3">
+          <div className="mr-3 flex">
             <ThemeLogo />
           </div>
         </div>

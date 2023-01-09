@@ -1,5 +1,6 @@
 import Link from '@/components/mdx/Link'
 import { useRouter } from 'next/router'
+import Typewriter from 'typewriter-effect'
 
 const Menu = (props) => {
   const navigation = props.navigationProps

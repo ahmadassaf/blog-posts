@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import Link from '@/components/mdx/Link'
 import { PageSEO } from '@/components/utils/SEO'
 import Tag from '@/components/blocks/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
+import Search from '@/components/blocks/Search'
 
 const MAX_DISPLAY = 5
 
@@ -14,6 +16,12 @@ export async function getStaticProps() {
 }
 
 export default function Home({ posts }) {
+  const [searchValue, setSearchValue] = useState('')
+  const filteredBlogPosts = posts.filter((frontMatter) => {
+    const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ')
+    return searchContent.toLowerCase().includes(searchValue.toLowerCase())
+  })
+
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
@@ -45,14 +53,15 @@ export default function Home({ posts }) {
             </div>
           </div>
         </div>
+        <Search setSearchValue={setSearchValue}></Search>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
             const { slug, date, title, summary, tags } = frontMatter
             return (
-              <li key={slug} className="py-12">
+              <li key={slug} className="py-4">
                 <article>
-                  <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
+                  <div className="space-y-2 xl:grid xl:grid-cols-3 xl:items-baseline xl:space-y-0">
                     <dl>
                       <dt className="sr-only">Published on</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">

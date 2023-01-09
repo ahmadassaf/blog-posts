@@ -31,7 +31,7 @@ export async function getStaticProps({ params }) {
 
   // RSS
   if (filteredPosts.length > 0) {
-    const rss = generateRss(filteredPosts, `category/${params.category}/feed.xml`)
+    const rss = generateRss(filteredPosts, `blog/category/${params.category}/feed.xml`)
     const rssPath = path.join(root, 'public', 'category', params.category)
     fs.mkdirSync(rssPath, { recursive: true })
     fs.writeFileSync(path.join(rssPath, 'feed.xml'), rss)
@@ -41,14 +41,14 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Category({ posts, category }) {
-  const title = category.toUpperCase() + category.split(' ').join('-').slice(1)
+  const title = category.replace('-', ' ')
   return (
     <>
       <TagSEO
         title={`${category} - ${siteMetadata.author}`}
         description={`${category} Category - ${siteMetadata.author}`}
       />
-      <ListLayout posts={posts} title={title} />
+      <ListLayout className="capitalize" posts={posts} title={title} />
     </>
   )
 }

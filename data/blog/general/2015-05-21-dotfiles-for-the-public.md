@@ -2,7 +2,7 @@
 title: 'dotfiles for the public'
 subtitle: 'An Essential Introduction to powering up your machine'
 summary: 'Your dotfiles will help you create powerful and consistent shell shortcuts and functions, settings for your editors, color coding and layouts for your shell, preferences and authentication for ssh and mysql and other protocols, and more'
-date: 2015-05-21
+date: '2015-05-21'
 tags: ['bash', 'productivity']
 category: 'general'
 image: images/posts/shell.jpg

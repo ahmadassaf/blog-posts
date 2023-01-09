@@ -6,14 +6,7 @@ import Comments from '@/components/post/comments'
 import PostNavigation from '@/components/post/PostNavigation'
 import ScrollTopAndComment from '@/components/post/ScrollTopAndComment'
 
-export default function PostLayout({
-  frontMatter,
-  authorDetails,
-  next,
-  prev,
-  categories,
-  children,
-}) {
+export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
   const { slug, fileName, date, title, subtitle, category, readingTime, tags } = frontMatter
 
   return (
