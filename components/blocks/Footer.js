@@ -26,7 +26,7 @@ export default function Footer(props) {
                         <li key={category}>
                           <a
                             href={`/blog/category/${category}`}
-                            className="text-base capitalize text-gray-500 hover:text-gray-900"
+                            className="text-base capitalize text-gray-500 hover:text-gray-900 hover:text-blue-700"
                           >
                             {category.replace('-', ' ')}
                           </a>
@@ -43,7 +43,7 @@ export default function Footer(props) {
                       <li key={project.href}>
                         <a
                           href={project.href}
-                          className="text-base text-gray-500 hover:text-gray-900"
+                          className="text-base text-gray-500 hover:text-gray-900 hover:text-blue-700"
                         >
                           {project.title}
                         </a>
@@ -56,17 +56,26 @@ export default function Footer(props) {
                 <h3 className="text-base font-medium text-gray-900 dark:text-white">About</h3>
                 <ul role="list" className="mt-4 space-y-4">
                   <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
+                    <a
+                      href="#"
+                      className="text-base text-gray-500 hover:text-gray-900 hover:text-blue-700"
+                    >
                       Summary
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
+                    <a
+                      href="#"
+                      className="text-base text-gray-500 hover:text-gray-900 hover:text-blue-700"
+                    >
                       Press
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
+                    <a
+                      href="#"
+                      className="text-base text-gray-500 hover:text-gray-900 hover:text-blue-700"
+                    >
                       Publications
                     </a>
                   </li>

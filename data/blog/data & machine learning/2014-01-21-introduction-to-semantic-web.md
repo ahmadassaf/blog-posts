@@ -1,6 +1,6 @@
 ---
 title: 'Introduction to Semantic Web'
-date: '2018-05-14'
+date: '2014-04-21'
 summary: 'In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application'
 tags: ['Semantic Web', 'Knowledge Representation', 'Linked Data']
 category: 'semantic web'

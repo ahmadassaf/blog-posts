@@ -1,5 +1,3 @@
-import SocialIcon from '@/components/icons'
-import Image from '@/components/mdx/Image'
 import { PageSEO } from '@/components/utils/SEO'
 
 export default function AuthorLayout({ children, frontMatter }) {

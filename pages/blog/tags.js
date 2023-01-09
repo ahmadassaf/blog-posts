@@ -1,36 +1,39 @@
 import Link from '@/components/mdx/Link'
 import { PageSEO } from '@/components/utils/SEO'
-import Category from '@/components/blocks/Category'
+import Tag from '@/components/blocks/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { getAllCategories } from '@/lib/categories'
+import { getAllTags } from '@/lib/tags'
+import kebabCase from '@/lib/utils/kebabCase'
 
 export async function getStaticProps() {
-  const categories = await getAllCategories('blog')
+  const tags = await getAllTags('blog')
 
-  return { props: { categories } }
+  return { props: { tags } }
 }
 
-export default function Categories({ categories }) {
+export default function Tags({ tags }) {
+  const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
+
   return (
     <>
-      <PageSEO title={`Categories - ${siteMetadata.author}`} description="Things I blog about" />
+      <PageSEO title={`Tags - ${siteMetadata.author}`} description="Things I blog about" />
       <div className="flex flex-col items-start justify-start divide-y divide-gray-200 dark:divide-gray-700 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0">
         <div className="space-x-2 pt-6 pb-8 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:border-r-2 md:px-6 md:text-6xl md:leading-14">
-            Categories
+            Tags
           </h1>
         </div>
         <div className="flex max-w-lg flex-wrap">
-          {Object.keys(categories).length === 0 && 'No Categories found'}
-          {Object.keys(categories).map((category) => {
+          {Object.keys(tags).length === 0 && 'No tags found.'}
+          {sortedTags.map((_tag) => {
             return (
-              <div key={category} className="mt-2 mb-2 mr-5">
-                <Category text={categories[category].display} />
+              <div key={_tag} className="mt-2 mb-2 mr-5">
+                <Tag text={tags[_tag].display} slug={tags[_tag].slug} />
                 <Link
-                  href={`/categories/${category}`}
+                  href={`/blog/tag/${tags[_tag].slug}`}
                   className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
                 >
-                  {` (${categories[category].count})`}
+                  &nbsp;{` (${tags[_tag].count})`}
                 </Link>
               </div>
             )
