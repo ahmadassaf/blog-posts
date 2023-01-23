@@ -26,10 +26,7 @@ module.exports = {
       }
     ],
 		'array-callback-return': 'error',
-		'array-element-newline': [
-			'error',
-			'consistent'
-    ],
+		'array-element-newline': [ 'error', 'never' ],
 		'arrow-body-style': [
 			'error',
 			'as-needed',
@@ -609,23 +606,10 @@ module.exports = {
 				'block': {
 					'balanced': true,
 					'exceptions': [ '*' ],
-					'markers': [
-						'*package',
-						'!',
-						',',
-						':',
-						': :',
-						'flow-include'
-          ]
+					'markers': [ '*package', '!', ',', ':', ': :', 'flow-include' ]
         },
 				'line': {
-					'markers': [
-						'*package',
-						'!',
-						'/',
-						',',
-						'='
-          ]
+					'markers': [ '*package', '!', '/', ',', '=' ]
         }
       }
     ],

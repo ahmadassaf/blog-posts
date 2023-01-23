@@ -47,8 +47,7 @@ app.prepare().then(() => {
 
         if (program.command) spawn(
             shell, [
-              '-c',
-              program.command
+              '-c', program.command
                 .replace(/\{event\}/gi, filePathContext)
                 .replace(/\{path\}/gi, eventContext)
             ], {
