@@ -6,4 +6,7 @@ module.exports = {
   useTabs: false,
   trailingComma: 'es5',
   bracketSpacing: true,
+  quoteProps: 'consistent',
+  bracketSameLine: true,
+  singleAttributePerLine: false,
 }
