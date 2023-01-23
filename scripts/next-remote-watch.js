@@ -12,12 +12,11 @@ const program = require('commander');
 const http = require('http');
 const SocketIO = require('socket.io');
 const express = require('express');
-const { spawn } = require('child_process');
+const pkg = require('../package.json');
 const next = require('next');
 const path = require('path');
+const { spawn } = require('child_process');
 const { parse } = require('url');
-
-const pkg = require('../package.json');
 
 const defaultWatchEvent = 'change';
 
