@@ -3436,6 +3436,11 @@ eslint-plugin-react@^7.32.1:
     semver "^6.3.0"
     string.prototype.matchall "^4.0.8"
 
+eslint-plugin-require-sort@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-require-sort/-/eslint-plugin-require-sort-1.3.0.tgz#3f2a8859766684004d7465d9db91299a91570055"
+  integrity sha512-uGyXChANR0kO9SWqZDrZquyVfYQCydovKGjM7zCo+rZE2l3eoWXkNDVZC4JaHYANJ9m5fJ5QE/5kcWHGJLofSQ==
+
 eslint-plugin-simple-import-sort@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-9.0.0.tgz#04c97f06a2e526afd40e0ac694b70d1aaaec1aef"
@@ -3450,6 +3455,11 @@ eslint-plugin-sort-keys-fix@^1.1.2:
     esutils "^2.0.2"
     natural-compare "^1.4.0"
     requireindex "~1.2.0"
+
+eslint-plugin-sort-requires-by-path@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-sort-requires-by-path/-/eslint-plugin-sort-requires-by-path-1.0.2.tgz#1491bafa546e77478eda4b9697098c907762f954"
+  integrity sha512-xTjiwPeanMwgGtkfGfBlO9MDvog7u+oxrR0NPnBydfjUKHSVkRTLPz0QA2boKCuYiIRBr9OERQLvInaeJYCngg==
 
 eslint-scope@5.1.1, eslint-scope@^5.1.1:
   version "5.1.1"

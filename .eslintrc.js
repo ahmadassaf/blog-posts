@@ -8,7 +8,7 @@ module.exports = {
 		'node': true
   },
 	'extends': [ 'eslint:recommended', 'next', 'next/core-web-vitals' ],
-	'plugins': [ 'sort-keys-fix', 'simple-import-sort' ],
+	'plugins': [ 'sort-keys-fix', 'simple-import-sort', 'sort-requires-by-path' ],
 	'root': true,
 	'rules': {
 		'array-bracket-newline': [
@@ -564,7 +564,31 @@ module.exports = {
 			'last'
     ],
     'simple-import-sort/exports': 'error',
-    'simple-import-sort/imports': 'error',
+		'simple-import-sort/imports': [
+			'error',
+			{
+				'groups': [
+
+					// Packages `react` related packages come first.
+					[ '^react', '^@?\\w' ],
+
+					// Internal packages.
+					[ '^(@|components)(/.*|$)' ],
+
+					// Side effect imports.
+					[ '^\\u0000' ],
+
+					// Parent imports. Put `..` last.
+					[ '^\\.\\.(?!/?$)', '^\\.\\./?$' ],
+
+					// Other relative imports. Put same-folder imports and `.` last.
+					[ '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$' ],
+
+					// Style imports.
+					[ '^.+\\.?(css)$' ]
+				]
+			}
+		],
 		'sort-keys': [
 			'error',
 			'asc',
@@ -573,6 +597,7 @@ module.exports = {
       }
     ],
 		'sort-keys-fix/sort-keys-fix': 'warn',
+		'sort-requires-by-path/sort-requires-by-path': 'error',
 		'sort-vars': [
 			'error',
       {

@@ -6,17 +6,18 @@
  * The app listens to the event and triggers a client-side router refresh see components/ClientReload.js
  */
 
-const chalk = require('chalk');
-const chokidar = require('chokidar');
-const program = require('commander');
-const http = require('http');
-const SocketIO = require('socket.io');
-const express = require('express');
-const pkg = require('../package.json');
-const next = require('next');
-const path = require('path');
-const { spawn } = require('child_process');
-const { parse } = require('url');
+import chalk from 'chalk';
+import { spawn } from 'child_process';
+import chokidar from 'chokidar';
+import program from 'commander';
+import express from 'express';
+import http from 'http';
+import next from 'next';
+import path from 'path';
+import SocketIO from 'socket.io';
+import { parse } from 'url';
+
+import pkg from '../package.json';
 
 const defaultWatchEvent = 'change';
 
@@ -57,7 +58,6 @@ app.prepare().then(() => {
 
         if (program.script) try {
             const scriptPath = path.join(process.cwd(), program.script.toString());
-
             const executeFile = require(scriptPath);
 
             executeFile(filePathContext, eventContext);
