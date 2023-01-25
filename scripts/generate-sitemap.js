@@ -14,33 +14,31 @@ import siteMetadata from '../data/siteMetadata';
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
             ${pages.map((page) => {
 
-                // Exclude drafts from the sitemap
-                if (page.search('.md') >= 1 && fs.existsSync(page)) {
-                  const source = fs.readFileSync(page, 'utf8');
-                  const fm = matter(source);
+    // Exclude drafts from the sitemap
+    if (page.search('.md') >= 1 && fs.existsSync(page)) {
+      const source = fs.readFileSync(page, 'utf8');
+      const fm = matter(source);
 
-                  if (fm.data.draft) return false;
-                  if (fm.data.canonicalUrl) return false;
+      if (fm.data.draft) return false;
+      if (fm.data.canonicalUrl) return false;
 
-                }
-                const path = page.replace('pages/', '/').replace('data/blog', '/blog')
-                                  .replace('public/', '/')
-                                  .replace('.js', '')
-                                  .replace('.tsx', '')
-                                  .replace('.mdx', '')
-                                  .replace('.md', '')
-                                  .replace('/feed.xml', '');
-                const route = path === '/index' ? '' : path;
+    }
+    const path = page.replace('pages/', '/').replace('data/blog', '/blog')
+      .replace('public/', '/')
+      .replace('.js', '')
+      .replace('.tsx', '')
+      .replace('.mdx', '')
+      .replace('.md', '')
+      .replace('/feed.xml', '');
+    const route = path === '/index' ? '' : path;
 
-                if (page.search('pages/404.') > -1 || page.search('pages/blog/[...slug].') > -1) return false;
+    if (page.search('pages/404.') > -1 || page.search('pages/blog/[...slug].') > -1) return false;
 
-                return `
-                        <url>
-                            <loc>${siteMetadata.siteUrl}${route}</loc>
-                        </url>
-                    `;
-              })
-              .join('')}
+    return `<url>
+              <loc>${siteMetadata.siteUrl}${route}</loc>
+            </url>`;
+  })
+    .join('')}
         </urlset>
     `;
 

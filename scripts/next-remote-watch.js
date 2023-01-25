@@ -41,36 +41,36 @@ const io = SocketIO(server);
 
 app.prepare().then(() => {
   if (program.args.length > 0) chokidar
-      .watch(program.args, { 'usePolling': Boolean(program.polling) })
-      .on(program.event, async(filePathContext, eventContext = defaultWatchEvent) => {
-        io.sockets.emit('reload', filePathContext);
-        app.server.hotReloader.send('building');
+    .watch(program.args, { 'usePolling': Boolean(program.polling) })
+    .on(program.event, async(filePathContext, eventContext = defaultWatchEvent) => {
+      io.sockets.emit('reload', filePathContext);
+      app.server.hotReloader.send('building');
 
-        if (program.command) spawn(
-            shell, [
-              '-c', program.command
-                .replace(/\{event\}/gi, filePathContext)
-                .replace(/\{path\}/gi, eventContext)
-            ], {
-              'stdio': 'inherit'
-            }
-          );
+      if (program.command) spawn(
+        shell, [
+          '-c', program.command
+            .replace(/\{event\}/gi, filePathContext)
+            .replace(/\{path\}/gi, eventContext)
+        ], {
+          'stdio': 'inherit'
+        }
+      );
 
-        if (program.script) try {
-            const scriptPath = path.join(process.cwd(), program.script.toString());
-            const executeFile = require(scriptPath);
+      if (program.script) try {
+        const scriptPath = path.join(process.cwd(), program.script.toString());
+        const executeFile = require(scriptPath);
 
-            executeFile(filePathContext, eventContext);
-          } catch (error) {
-            console.error('Remote script failed');
-            console.error(error);
+        executeFile(filePathContext, eventContext);
+      } catch (error) {
+        console.error('Remote script failed');
+        console.error(error);
 
-            return error;
-          }
+        return error;
+      }
 
-        app.server.hotReloader.send('reloadPage');
+      app.server.hotReloader.send('reloadPage');
 
-      });
+    });
 
   reloadRoute.use(express.json());
   reloadRoute.all('/', (req, res) => {
