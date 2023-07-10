@@ -1,6 +1,6 @@
 ## Ahmad Assaf's Blog Posts
 
-This repository contains the blog posts that i post to my [personal blog](http://ahmadassaf.com/blog). I would like that people contribute to them by submitting pull requests and issues in order to make sure the content is accurate, rich and appealing.
+This repository contains the blog posts that i post to my [personal blog](http://assaf.website/blog). I would like that people contribute to them by submitting pull requests and issues in order to make sure the content is accurate, rich and appealing.
 
 ## How to contribute
 
