@@ -6,7 +6,7 @@ const LayoutWrapper = ({ navigationProps, children }) => (
   <SectionContainer>
     <div className='flex h-screen flex-col justify-between'>
       <Header navigationProps={ navigationProps }></Header>
-      <main className='mb-auto'>{children}</main>
+      <main className='mb-8'>{children}</main>
       <Footer navigationProps={ navigationProps } />
     </div>
   </SectionContainer>

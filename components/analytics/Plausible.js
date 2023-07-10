@@ -1,26 +1,22 @@
-import Script from 'next/script'
+import Script from 'next/script';
 
-import siteMetadata from '@/data/siteMetadata'
+import siteMetadata from '@/data/meta/site';
 
-const PlausibleScript = () => {
-  return (
-    <>
-      <Script
-        strategy="lazyOnload"
-        data-domain={siteMetadata.analytics.plausibleDataDomain}
-        src="https://plausible.io/js/plausible.js"
-      />
-      <Script strategy="lazyOnload" id="plausible-script">
-        {`
+const PlausibleScript = () => (
+  <>
+    <Script
+      strategy='lazyOnload'
+      data-domain={ siteMetadata.analytics.plausibleDataDomain }
+      src='https://plausible.io/js/plausible.js'
+    />
+    <Script strategy='lazyOnload' id='plausible-script'>
+      {`
             window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
         `}
-      </Script>
-    </>
-  )
-}
+    </Script>
+  </>
+);
 
-export default PlausibleScript
+export default PlausibleScript;
 
-export const logEvent = (eventName, ...rest) => {
-  return window.plausible?.(eventName, ...rest)
-}
+export const logEvent = (eventName, ...rest) => window.plausible?.(eventName, ...rest);

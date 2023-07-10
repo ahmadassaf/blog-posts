@@ -1,51 +1,56 @@
-import '@/css/tailwind.css'
-import '@/css/prism.css'
-import 'katex/dist/katex.css'
+import { useEffect } from 'react';
+import Head from 'next/head';
+import Router from 'next/router';
+import { ThemeProvider } from 'next-themes';
+import NProgress from 'nprogress';
 
-import '@fontsource/inter/variable-full.css'
+import Analytics from '@/components/analytics';
+import { ClientReload } from '@/components/utils/ClientReload';
+import LayoutWrapper from '@/components/wrappers/LayoutWrapper';
+import siteMetadata from '@/data/meta/site';
 
-import { useEffect } from 'react'
-import { ThemeProvider } from 'next-themes'
-import Head from 'next/head'
+import '@/css/tailwind.css';
+import '@/css/prism.css';
+import 'katex/dist/katex.css';
+import '@fontsource/inter/variable-full.css';
+import 'nprogress/nprogress.css';
 
-import siteMetadata from '@/data/siteMetadata'
-import Analytics from '@/components/analytics'
-import LayoutWrapper from '@/components/wrappers/LayoutWrapper'
-import { ClientReload } from '@/components/utils/ClientReload'
-
-let navigationPropsCache
-const isDevelopment = process.env.NODE_ENV === 'development'
-const isSocket = process.env.SOCKET
+let navigationPropsCache;
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isSocket = process.env.SOCKET;
 
 const App = ({ Component, pageProps, navigationProps }) => {
   useEffect(() => {
-    navigationPropsCache = navigationProps
-  }, [])
+    navigationPropsCache = navigationProps;
+  }, [ navigationProps ]);
+
+  Router.events.on('routeChangeStart', () => NProgress.start());
+  Router.events.on('routeChangeComplete', () => NProgress.done());
+  Router.events.on('routeChangeError', () => NProgress.done());
 
   return (
-    <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
+    <ThemeProvider attribute='class' defaultTheme={ siteMetadata.theme }>
       <Head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta content='width=device-width, initial-scale=1' name='viewport' />
       </Head>
       {isDevelopment && isSocket && <ClientReload />}
       <Analytics />
-      <LayoutWrapper navigationProps={navigationProps}>
-        <Component {...pageProps} />
+      <LayoutWrapper navigationProps={ navigationProps }>
+        <Component { ...pageProps } />
       </LayoutWrapper>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-App.getInitialProps = async () => {
-  if (navigationPropsCache) {
-    return { navigationProps: navigationPropsCache }
-  }
+App.getInitialProps = async() => {
+  if (navigationPropsCache) return { 'navigationProps': navigationPropsCache };
 
-  const res = await fetch('http://localhost:3000/api/navigation')
-  const navigationProps = await res.json()
-  navigationPropsCache = navigationProps
+  const res = await fetch('http://localhost:3000/api/navigation');
+  const navigationProps = await res.json();
 
-  return { navigationProps }
-}
+  navigationPropsCache = navigationProps;
 
-export default App
+  return { navigationProps };
+};
+
+export default App;

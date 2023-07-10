@@ -1,56 +1,37 @@
-import { PageSEO } from '@/components/utils/SEO'
-import siteMetadata from '@/data/siteMetadata'
-import { getAllFilesFrontMatter } from '@/lib/mdx'
-import ListLayout from '@/layouts/ListLayout'
-import { POSTS_PER_PAGE } from '../../blog'
+import { POSTS_PER_PAGE } from '@/components/blocks/Pagination';
+import { PageSEO } from '@/components/utils/SEO';
+import siteMetadata from '@/data/meta/site';
+import ListLayout from '@/layouts/ListLayout';
+import { getAllFilesFrontMatter } from '@/lib/mdx';
 
 export async function getStaticPaths() {
-  const totalPosts = await getAllFilesFrontMatter('blog')
-  const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE)
-  const paths = Array.from({ length: totalPages }, (_, i) => ({
-    params: { page: (i + 1).toString() },
-  }))
+  const totalPosts = await getAllFilesFrontMatter('blog');
+  const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE);
+  const paths = Array.from({ 'length': totalPages }, (_, index) => {
+    return { 'params': { 'page': (index + 1).toString() } };
+  });
 
-  return {
-    paths,
-    fallback: false,
-  }
+  return { 'fallback': false, paths };
 }
 
 export async function getStaticProps(context) {
-  const {
-    params: { page },
-  } = context
-  const posts = await getAllFilesFrontMatter('blog')
-  const pageNumber = parseInt(page)
-  const initialDisplayPosts = posts.slice(
-    POSTS_PER_PAGE * (pageNumber - 1),
-    POSTS_PER_PAGE * pageNumber
-  )
+  const { 'params': { page } } = context;
+  const posts = await getAllFilesFrontMatter('blog');
+  const pageNumber = parseInt(page);
+  const pagePosts = posts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
   const pagination = {
-    currentPage: pageNumber,
-    totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
-  }
+    'currentPage': pageNumber,
+    'totalPages': Math.ceil(posts.length / POSTS_PER_PAGE)
+  };
 
-  return {
-    props: {
-      posts,
-      initialDisplayPosts,
-      pagination,
-    },
-  }
+  return { 'props': { pagePosts, pagination } };
 }
 
-export default function PostPage({ posts, initialDisplayPosts, pagination }) {
+export default function PostPage({ pagePosts, pagination }) {
   return (
     <>
-      <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
-      <ListLayout
-        posts={posts}
-        initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
-        title="All Posts"
-      />
+      <PageSEO title={ siteMetadata.title } description={ siteMetadata.description } />
+      <ListLayout posts={ pagePosts } paginate={ true } listTitle='All Posts' currentPage={ pagination.currentPage } totalPages={ pagination.totalPages }/>
     </>
-  )
+  );
 }

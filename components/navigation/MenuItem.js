@@ -1,14 +1,15 @@
-import React from 'react'
-import { useRouter } from 'next/router'
-import propTypes from 'prop-types'
+import React from 'react';
+import { useRouter } from 'next/router';
+import propTypes from 'prop-types';
 
 const NavItem = ({ item }) => {
-  const router = useRouter()
-  return <>{router.pathname === '/' ? item : ''}</>
-}
+  const router = useRouter();
 
-export default NavItem
+  return <>{router.pathname === '/' ? item : ''}</>;
+};
+
+export default NavItem;
 
 NavItem.propTypes = {
-  item: propTypes.string,
-}
+  'item': propTypes.string
+};

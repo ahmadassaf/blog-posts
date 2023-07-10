@@ -1,6 +1,6 @@
 import Link from '@/components/mdx/Link';
 import { PageSEO } from '@/components/utils/SEO';
-import siteMetadata from '@/data/siteMetadata';
+import siteMetadata from '@/data/meta/site';
 
 export default function FourZeroFour() {
   return (

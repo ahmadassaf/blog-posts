@@ -4,7 +4,7 @@ date: '2016-02-03'
 subtitle: 'Making Digital Ocean, Jekyll, Github and TravisCI all work'
 summary: 'Having open sourced my blog on Github, deploying a new version of it live happens very often, and to do that manually every time is a daunting task. This post talks about my experience enabling Continuous Deployment (CD) using Github, TravisCI and my server on DigitalOcean and discuss what i tried and how i failed trying other methods'
 tags: ['Jekyll', 'Continuous Deployment', 'Continuous Integration', 'Travis-CI']
-category: 'web development'
+category: 'development'
 image: /static/images/jekyll.png
 ---
 

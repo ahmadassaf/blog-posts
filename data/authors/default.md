@@ -1,7 +1,7 @@
 ---
 name: Ahmad Assaf
 avatar: /static/images/avatar.png
-occupation: Head of Artificial Intelligence and Data
+occupation: VP of Artificial Intelligence and Data
 company: Beamery
 email: me@assaf.website
 twitter: https://twitter.com/ahmadaassaf

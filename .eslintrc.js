@@ -82,7 +82,7 @@ module.exports = {
       }
     ],
     'handle-callback-err': [ 'error', '^(err|error)$' ],
-    'id-blacklist': [ 'error', 'data', 'err', 'e', 'cb', 'callback' ],
+    'id-blacklist': [ 'error', 'e', 'cb' ],
     'implicit-arrow-linebreak': [ 'error', 'beside' ],
     'indent': [ 'error', 2 ],
     'jsx-quotes': [ 'error', 'prefer-single' ],
@@ -132,9 +132,10 @@ module.exports = {
       }
     ],
     'new-parens': 'error',
+    'newline-before-return': 'error',
     'newline-per-chained-call': [
       'error', {
-        'ignoreChainWithDepth': 2
+        'ignoreChainWithDepth': 3
       }
     ],
     'no-array-constructor': 'error',

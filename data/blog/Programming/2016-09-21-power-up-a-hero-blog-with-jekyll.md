@@ -4,8 +4,9 @@ date: '2016-09-21'
 subtitle: 'Setting up a modular Jekyll blog with Continuous Integration and Deployment'
 summary: "Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
 tags: ['Jekyll']
-category: 'web development'
+category: 'development'
 featured: true
+draft: true
 image: /static/images/jekyll.png
 ---
 

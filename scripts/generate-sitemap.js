@@ -3,7 +3,7 @@ import globby from 'globby';
 import matter from 'gray-matter';
 import prettier from 'prettier';
 
-import siteMetadata from '../data/siteMetadata';
+import siteMetadata from '../data/meta/site';
 
 (async() => {
   const prettierConfig = await prettier.resolveConfig('./.prettierrc.js');

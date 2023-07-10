@@ -1,7 +1,7 @@
 import Card from '@/components/blocks/Card';
 import { PageSEO } from '@/components/utils/SEO';
-import projectsData from '@/data/projects';
-import siteMetadata from '@/data/siteMetadata';
+import projectsData from '@/data/meta/projects';
+import siteMetadata from '@/data/meta/site';
 
 export default function Projects() {
   return (
@@ -13,10 +13,10 @@ export default function Projects() {
             Projects
           </h1>
         </div>
-        <div className='container py-12'>
-          <div className='grid grid-cols-2 gap-2'>
+        <div className='py-12'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
             {projectsData.map((d) => (
-              <Card key={ d.title } title={ d.title } subtitle={ d.subtitle } description={ d.description } imgSrc={ d.imgSrc } href={ d.href }/>
+              <Card key={ d.title } title={ d.title } subtitle={ d.subtitle } description={ d.description } href={ d.href } />
             ))}
           </div>
         </div>
