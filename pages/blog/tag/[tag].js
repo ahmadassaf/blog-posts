@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { TagSEO } from '@/components/utils/SEO';
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
 import generateRss from '@/lib/generate-rss';
 import { getAllFilesFrontMatter } from '@/lib/mdx';

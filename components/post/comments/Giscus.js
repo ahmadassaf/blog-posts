@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 
 const Giscus = () => {
   const [ enableLoadComments, setEnabledLoadComments ] = useState(true);

@@ -2,7 +2,7 @@ import Link from '@/components/mdx/Link';
 
 const Card = ({ title, subtitle, description, href }) => (
   <div
-    className='min-h-80 group border-2 border-gray-200 border-opacity-60 hover:border-blue-700 dark:border-gray-700'
+    className='min-h-80 group border-2 border-gray-200 border-opacity-60 hover:border-blue-700 dark:border-gray-700 dark:hover:border-blue-700'
   >
     <Link href={ href }>
       <div className='p-6'>

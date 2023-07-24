@@ -10,7 +10,7 @@ const MAX_LIST_DISPLAY = 5;
 export default function ListLayout({ posts, listTitle, linkAllPosts = false, paginate, currentPage, totalPages }) {
 
   const [ searchValue, setSearchValue ] = useState('');
-  const initialDisplayPosts = posts.slice(0, MAX_LIST_DISPLAY);
+  const initialDisplayPosts = paginate ? posts.slice(0, MAX_LIST_DISPLAY) : posts;
   const pagination = { 'currentPage': currentPage || 1, 'totalPages': totalPages || Math.ceil(posts.length / POSTS_PER_PAGE) };
 
   const filteredBlogPosts = posts.filter((frontMatter) => {

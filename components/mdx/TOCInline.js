@@ -3,7 +3,7 @@ const TOCInline = ({
   indentDepth = 3,
   fromHeading = 1,
   toHeading = 6,
-  asDisclosure = false,
+  asDisclosure = true,
   exclude = ''
 }) => {
   const re = Array.isArray(exclude) ? new RegExp(`^(${exclude.join('|')})$`, 'i') : new RegExp(`^(${exclude})$`, 'i');
@@ -25,7 +25,8 @@ const TOCInline = ({
   return (
     <>
       {asDisclosure ? (
-        <details open>
+        // eslint-disable-next-line react/no-unknown-property
+        <details closed='true'>
           <summary className='ml-6 pt-2 pb-2 text-xl font-bold'>Table of Contents</summary>
           <div className='ml-6'>{tocList}</div>
         </details>

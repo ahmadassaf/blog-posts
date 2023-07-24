@@ -23,3 +23,12 @@ input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition: background-color 600000s 0s, color 600000s 0s;
 }
+
+.label foreignObject {
+  overflow: visible;
+}
+
+strong.highlight {
+  border-bottom: 3px solid #17a34a;
+  padding-bottom: 1.5px;
+}

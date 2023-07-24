@@ -4,7 +4,7 @@ subtitle: 'An Essential Introduction to powering up your machine'
 summary: 'Your dotfiles will help you create powerful and consistent shell shortcuts and functions, settings for your editors, color coding and layouts for your shell, preferences and authentication for ssh and mysql and other protocols, and more'
 date: '2015-05-21'
 tags: ['bash', 'productivity']
-category: 'productivity'
+category: 'development'
 image: images/posts/shell.jpg
 ---
 
@@ -75,22 +75,7 @@ Simliar to .gitignore for Mercurial.
 
 #### .hushlogin
 
-In some instances, for example, when you ssh into a machine, you may be presented with a message. It might look something like this:
-
-```_
-                                  | |
- _ __ ___  _   _    ___ ___   ___ | |  ___  ___ _ ____   _____ _ __
-| '_ ` _ \| | | |  / __/ _ \ / _ \| | / __|/ _ \ '__\ \ / / _ \ '__|
-| | | | | | |_| | | (_| (_) | (_) | | \__ \  __/ |   \ V /  __/ |
-|_| |_| |_|\__, |  \___\___/ \___/|_| |___/\___|_|    \_/ \___|_|
-            __/ |
-           |___/
-Welcome to my cool server.
-Any malicious and/or unauthorized activity is strictly forbidden.
-All activity may be logged.
-```
-
-This file prevents this from being shown.
+In some instances, for example, when you ssh into a machine, you may be presented with a message. This file prevents this from being shown.
 
 #### .inputrc
 

@@ -7,7 +7,7 @@ import NProgress from 'nprogress';
 import Analytics from '@/components/analytics';
 import { ClientReload } from '@/components/utils/ClientReload';
 import LayoutWrapper from '@/components/wrappers/LayoutWrapper';
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 
 import '@/css/tailwind.css';
 import '@/css/prism.css';

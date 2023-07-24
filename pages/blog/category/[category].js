@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { TagSEO } from '@/components/utils/SEO';
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
 import { getAllCategories } from '@/lib/categories';
 import generateRss from '@/lib/generate-rss';
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  console.log('params', params);
+
   const allPosts = await getAllFilesFrontMatter('blog');
   const filteredPosts = allPosts.filter(
     (post) => kebabCase(post.category) === params.category
@@ -48,13 +48,15 @@ export async function getStaticProps({ params }) {
 export default function Category({ posts, category }) {
   const title = category.replace('-', ' ');
 
+  console.log('posts', posts);
+
   return (
     <>
       <TagSEO
         title={ `${category} - ${siteMetadata.author}` }
         description={ `${category} Category - ${siteMetadata.author}` }
       />
-      <ListLayout className='capitalize' posts={ posts } title={ title } />
+      <ListLayout className='capitalize' posts={ posts } title={ title } paginate={ false }/>
     </>
   );
 }

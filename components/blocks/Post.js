@@ -18,7 +18,7 @@ const Post = ({ frontMatter }) => (
             <time dateTime={ frontMatter.date }>{formatDate(frontMatter.date)}</time>
           </dd>
         </div>
-        <div className='prose max-w-none text-gray-500 dark:text-gray-400 group-hover:text-gray-600'>
+        <div className='prose max-w-none text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white'>
           {frontMatter.summary}
         </div>
       </div>

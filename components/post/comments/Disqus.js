@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 
 const Disqus = ({ frontMatter }) => {
   const [ enableLoadComments, setEnabledLoadComments ] = useState(true);

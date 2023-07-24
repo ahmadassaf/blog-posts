@@ -1,6 +1,6 @@
 import Script from 'next/script';
 
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 
 const GAScript = () => (
   <>

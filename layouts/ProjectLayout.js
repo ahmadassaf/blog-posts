@@ -2,9 +2,8 @@ import SectionContainer from '@/components/containers/SectionContainer';
 import Link from '@/components/mdx/Link';
 import Comments from '@/components/post/comments';
 import PageTitle from '@/components/post/PostTitle';
-import ScrollTopAndComment from '@/components/post/ScrollTopAndComment';
 import { BlogSEO } from '@/components/utils/SEO';
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 import formatDate from '@/lib/utils/formatDate';
 
 export default function PostLayout({ frontMatter, next, prev, children }) {
@@ -13,7 +12,6 @@ export default function PostLayout({ frontMatter, next, prev, children }) {
   return (
     <SectionContainer>
       <BlogSEO url={ `${siteMetadata.siteUrl}/blog/${frontMatter.slug}` } { ...frontMatter } />
-      <ScrollTopAndComment />
       <article>
         <div>
           <header>

@@ -1,4 +1,4 @@
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 
 import GA from './GoogleAnalytics';
 import Plausible from './Plausible';

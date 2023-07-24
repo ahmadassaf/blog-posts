@@ -2,7 +2,7 @@
 title: 'Power-up a hero blog with Jekyll'
 date: '2016-09-21'
 subtitle: 'Setting up a modular Jekyll blog with Continuous Integration and Deployment'
-summary: "Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
+summary: "Having had my blog on WordPress for a while now, I thought I need a lighter platform especially that my blog content is very lightweight and I don't really need a fully-fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
 tags: ['Jekyll']
 category: 'development'
 featured: true
@@ -10,17 +10,17 @@ draft: true
 image: /static/images/jekyll.png
 ---
 
-Having had my blog on WordPress for a while now, i thought i need a lighter platform especially that my blog content is very lightweight and i don't really need a fully fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on [Jekyll](https://jekyllrb.com/) for its simplicity and extensibility.
+Having had my blog on WordPress for a while now, I thought I needed a lighter platform, especially since my blog content is very lightweight and I don't need a fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility.
 
-Jekyll takes your content written in Markdown, passes it through your templates and spits it out as a complete static website, ready to be served. Jekyll is a static site generator in contrast to Wordpress.
+Jekyll takes your content written in Markdown, passes it through your templates, and spits it out as a completely static website, ready to be served. Jekyll is a static site generator in contrast to WordPress.
 
-In dynamic websites as in the case of Wordpress, when a visitor gets to a website, a server-side script will query one or multiple databases to get the content for the requested page. The server-side script will then pass the results to a templating engine that will format and arrange everything properly and generate an HTML file for the user to consume. This is a heavy task, although you can optimize that with various caching mechanisms. This concept makes sense for content that changes often, thus the name "dynamic".
+In dynamic websites, as in the case of WordPress, when a visitor gets to a website, a server-side script will query one or many databases to get the content for the requested page. The server-side script will then pass the results to a templating engine that will format and arrange everything and generate an HTML file for the user to consume. This is a heavy task, although you can optimize that with various caching mechanisms. This concept makes sense for content that changes often, thus the name "dynamic".
 
-The proposition of a static site is to shift the heavy load from the moment visitors request the content to the moment content actually changes. When a visitor requests a page, the content is already rendered and ready to be served instantly as the build process had been already executed at the build stage offline. In the case of a blog (or at least my blog), after the post is written, it is rarely changed except when major content updates are needed.
+A static site proposes to shift the heavy load from the moment visitors request the content to the moment content changes. When a visitor requests a page, the content is already rendered and ready to be served as the build process had been already executed at the build stage offline. In the case of a blog (or at least my blog), after the post is written, it is rarely changed except when major content updates are needed.
 
-This means that whenever a content is changed, the whole site has to be rebuilt. For small sites, the build time is minimal. However, for larger ones, the build time can be about 10 times as long. The build time depends on a number of factors, such as the number of loops and other code complexities you have going on.
+This means that whenever the content is changed, the whole site has to be rebuilt. For small sites, the build time is minimal. Yet, for larger ones, the build time can be about 10 times as long. The build time depends on some factors, such as the number of loops and other code complexities you have going on.
 
-Anther reason for choosing Jekyll for me was their incremental build feature. This means that instead of rebuilding the entire site, Jekyll rebuilds only the files that changed. That is, instead of completely blowing away and rebuilding the whole site from scratch each time, Jekyll regenerates just the part that changed.
+Another reason for choosing Jekyll for me was their incremental build feature. This means that instead of rebuilding the entire site, Jekyll rebuilds only the files that changed. That is, instead of completely blowing away and rebuilding the whole site from scratch each time, Jekyll regenerates just the part that changed.
 
 > [StaticGen](https://www.staticgen.com/) maintains a list of the most common static site generators
 
@@ -28,8 +28,8 @@ Anther reason for choosing Jekyll for me was their incremental build feature. Th
 
 - **Speed**: As there are no database queries to run, no templating and no processing whatsoever on every request, the content is served very fast
 - **Content Version Control**: In a static site, the content is typically stored in flat files and treated as any other component of the codebase
-- **Security**: Static sites keep it simple, since there's not much to mess up when there's only a web server serving plain HTML pages
-- **Ease-of-use**: The site generation process, that can be done from an environment that you control locally and not necessarily on the web server that will run the site which means that there is very little hassle to set up the server and maintain it
+- **Security**: Static sites keep it simple since there's not much to mess up when there's only a web server serving plain HTML pages
+- **Ease-of-use**: The site generation process can be done from an environment that you control locally and not necessarily on the web server that will run the site which means that there is very little hassle to set up the server and maintain it
 - **Scalability**: A static site is generally better prepared for unexpected traffic peaks, as serving static HTML pages consumes a very small amount of server resources
 
 Jekyll uses the [Liquid templates](https://shopify.github.io/liquid/) to process and render HTML. There are two important things to know about using Liquid.
@@ -54,9 +54,9 @@ jekyll new awesome-blog
 
 The `new` command here will create an install of Jekyll with the default theme.
 
-Jekyll comes with a built-in development server. `jekyll serve` command start this server on your machine and starts watching your files for changes similar to Grunt or Gulp.
+Jekyll comes with a built-in development server. `jekyll `serve` command starts this server on your machine and starts watching your files for changes similar to Grunt or Gulp.
 
-For more detailed instructions about setting about Jekyll sites, i recommend reading:
+For more detailed instructions about setting up Jekyll sites, I recommend reading:
 
 - [Getting Started with Jekyll ](https://scotch.io/tutorials/getting-started-with-jekyll-plus-a-free-bootstrap-3-starter-theme)
 - [Make a Static Website with Jekyll](https://www.taniarascia.com/make-a-static-website-with-jekyll/)
@@ -74,7 +74,7 @@ Jekyll is, at its core, a text transformation engine. The concept behind the sys
 - **\_includes**: Snippets of code that can be used throughout your templates
 - **\_layouts**: The main layouts defined for various pages and posts
 - **\_pages**: Any special pages that are not of type posts
-- **\_drafts**: This folder actually isn’t there if your using the default theme. You can create this empty folder now, but this is just where you will store unpublished posts
+- **\_drafts**: This folder actually isn’t there if you are using the default theme. You can create this empty folder now, but this is just where you will store unpublished posts
 - **\_plugins**: Any defined ruby plugins if you have any
 - **\_posts**: The main folder than contains the markdown posts
 - **\_script**: Contains any additional scripts you would like to run and define in your config file
@@ -101,7 +101,7 @@ Jekyll is, at its core, a text transformation engine. The concept behind the sys
 └── _site # This is the destination of Jekyll build process | The static website
 ```
 
-## Files you need to know about !
+## Files you need to know about!
 
 - **\_config.dev.yml**: Jekyll configuration overrides for local dev environment
 - **\_config.yml**: The default jekyll configuration file
@@ -123,13 +123,13 @@ Jekyll is, at its core, a text transformation engine. The concept behind the sys
 
 ## Posts & Pages
 
-There are two main types of web pages that i am using; the default `post` type which goes to the `_posts` and converts any `.md` file into an html page and a `page` which is rendered based on the templates defined in `/_pages`.
+There are two main types of web pages that I am using; the default `post` type which goes to the `_posts` and converts any `.md` file into an html page and a `page` which is rendered based on the templates defined in `/_pages`.
 
 What is notable about a **page** is the ability to define a `permalink` in the front matter e.g., `permalink: /tags.html`. This means that this is the page that will be access from `{{site.url}}/tags`. Jekyll will then look at the `layout` defined in the front matter and render the correct file from `_layouts`.
 
 ## Collaborating on Posts
 
-Since one of the reasons i moved to Jekyll and markdown-based blog is to enable people to contribute to my posts. To do so, i host the posts into a [separate Github repository](https://github.com/ahmadassaf/blog) and include that as a separate git submodule by configuring the `.gitmodules` as follows:
+Since one of the reasons I moved to Jekyll and markdown-based blog is to enable people to contribute to my posts. To do so, I host the posts into a [separate Github repository](https://github.com/ahmadassaf/blog) and include that as a separate git submodule by configuring the `.gitmodules` as follows:
 
 ```
 [submodule "_posts"]
@@ -139,18 +139,18 @@ Since one of the reasons i moved to Jekyll and markdown-based blog is to enable 
 
 ## Featured Posts
 
-In the homepage i want always to show a set of most recent N featured posts. To do that, i have added a `featured` property in the front matter that will indicate if this post that i want is featured or not.
+In the homepage I want always to show a set of most recent N featured posts. To do that, I have added a `featured` property in the front matter that will indicate if this post that I want is featured or not.
 
 ## Pagination
 
-For pagination i have used the [jekyll-paginate](https://github.com/jekyll/jekyll-paginate) gem which should be included in the `_config.yml` as:
+For pagination I have used the [jekyll-paginate](https://github.com/jekyll/jekyll-paginate) gem which should be included in the `_config.yml` as:
 
 ```yml
 paginate: 7
 paginate_path: 'posts/page/:num'
 ```
 
-The `paginate_path` is the important property that we need to take care about. It specifies the page that we want to enable pagination on. The plugin does not support pagination on `tag` and `category` pages, so as a workaround i have a new `/posts` route that will contain all the posts and enable pagination on them. To do so, i have created a new directory called `posts` in the root folder with an `index.html` page. This will be picked up by Jekyll and result in a `/posts` page. The page contains normal Liquid templates as follows:
+The `paginate_path` is the important property that we need to take care about. It specifies the page that we want to enable pagination on. The plugin does not support pagination on `tag` and `category` pages, so as a workaround I have a new `/posts` route that will contain all the posts and enable pagination on them. To do so, I have created a new directory called `posts` in the root folder with an `index.html` page. This will be picked up by Jekyll and result in a `/posts` page. The page contains normal Liquid templates as follows:
 
 ```html
 {% raw %}
@@ -167,7 +167,7 @@ You notice that the pagination is enabled by including the partial `_includes/pa
 
 ## Categories and Tag Pages
 
-In a fashion similar to Wordpress i wanted to have pages for my categories and tags, to do so i have used [jekyll-archives](https://github.com/jekyll/jekyll-archives) gem. The plugin is enabled in the `config.yml` by:
+In a fashion similar to Wordpress I wanted to have pages for my categories and tags, to do so I have used [jekyll-archives](https://github.com/jekyll/jekyll-archives) gem. The plugin is enabled in the `config.yml` by:
 
 ```yml
 jekyll-archives:
@@ -182,11 +182,11 @@ jekyll-archives:
     category: '/:name/'
 ```
 
-This is straightforward as i just specify that i want to enable them on both category and tag pages and specify the layout that will render those pages. The permalink specifies the url of the page, i have set that up to be the name of the category or the tag.
+This is straightforward as I just specify that I want to enable them on both category and tag pages and specify the layout that will render those pages. The permalink specifies the url of the page, I have set that up to be the name of the category or the tag.
 
 > The layout specified has to be in the `/_includes` directory.
 
-Another special page i created is a tags archive page. This is done by creating a page in `/_pages` and a `tags-archive` template. The main code to bring all the blog tags and their posts is:
+Another special page I created is a tags archive page. This is done by creating a page in `/_pages` and a `tags-archive` template. The main code to bring all the blog tags and their posts is:
 
 ```html
 {% raw %}{% capture site_tags %}{% for tag in site.tags %}{{ tag | first }}{% unless forloop.last
@@ -220,7 +220,7 @@ There are various features powered by a set of JavaScript plugins and functions.
 
 ## Dynamic Navigation Menu
 
-I wanted to have a navigation menu that is dynamic and shows automatically all the categories i have configured in the posts front matter. To do that, i use the following:
+I wanted to have a navigation menu that is dynamic and shows automatically all the categories I have configured in the posts front matter. To do that, I use the following:
 
 ```html
 {% raw %}{% capture site_categories %}{% for category in site.categories %}{{ category | first }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
@@ -233,7 +233,7 @@ I wanted to have a navigation menu that is dynamic and shows automatically all t
 {% endunless %}{% endfor %}{% endraw %}
 ```
 
-> As you see that i transfer the name of the category to lower case and replace any space with `-` to match the permalink generated by Jekyll.
+> As you see that I transfer the name of the category to lower case and replace any space with `-` to match the permalink generated by Jekyll.
 
 ## Image Gallery
 
@@ -318,7 +318,7 @@ For any of the later, you can simply copy and replace the code in `/assets/_sass
 
 ## Enabling Search
 
-One thing i wanted to add is the ability to perform full text search on the posts. To do so, i first wanted to be able to grab the posts data and have them saved. I managed to o that by creating the `/posts.json`:
+One thing I wanted to add is the ability to perform full text search on the posts. To do so, I first wanted to be able to grab the posts data and have them saved. I managed to o that by creating the `/posts.json`:
 
 ```html
 {% raw %} [ {% for post in site.posts %} { "{{ forloop.index }}" : { "id" : "{{ forloop.index }}",
@@ -328,7 +328,7 @@ site.baseurl }}{{ post.url }}", "date" : "{{ post.date }}" } } {% unless forloop
 endunless %} {% endfor %} ] {% endraw %}
 ```
 
-Now by requesting `{{site.url}}/posts.json` i am able to have a JSON file that contains the post id, title, category, url, published data and most importantly the content.
+Now by requesting `{{site.url}}/posts.json` I am able to have a JSON file that contains the post id, title, category, url, published data and most importantly the content.
 Enabling full text search is done with [elasticlunr](https://github.com/weixsong/elasticlunr.js/) by iterating the `posts.json` and building our index
 
 ```javascript
@@ -348,21 +348,21 @@ _.each(posts, function (post) {
 
 ## Putting it all together
 
-To wrap up all these features together i have created a little build script using `Grunt.js`. The notable build actions are:
+To wrap up all these features together I have created a little build script using `Grunt.js`. The notable build actions are:
 
 - Cleaning up working directories (the images folder and the built JavaScript destination)
 - Create the images directory that we will copy the posts images into as well as the JavaScript build destination directory
 - Copy the images from the posts directory into the main images folder
 
-Now, i would like to easily be able deploy my application on my live server as well as being able to run and test it in my local machine. The main thing to note here is that we need to have the `url` pointing to two different URIs on each machine. To do this dynamically, i created a new `_config.dev.yml` file that will overwrite only the `url` setting to run on `localhost:4000` and kept the url in my main `_config.yml` to my live server address.
+Now, I would like to easily be able deploy my application on my live server as well as being able to run and test it in my local machine. The main thing to note here is that we need to have the `url` pointing to two different URIs on each machine. To do this dynamically, I created a new `_config.dev.yml` file that will overwrite only the `url` setting to run on `localhost:4000` and kept the url in my main `_config.yml` to my live server address.
 
-Now, after doing that to serve the site locally i pass in the `--config` flag with the two config files, with the overriding config last as: `bundle exec jekyll serve --incremental --config _config.yml,_config.dev.yml`
+Now, after doing that to serve the site locally I pass in the `--config` flag with the two config files, with the overriding config last as: `bundle exec jekyll serve --incremental --config _config.yml,_config.dev.yml`
 
 > note that the `--incremental` is a defualt optional flag to optimize the build and serve process by rebuilding changed files only and not the whole site
 
 ## Using Jekyll, Grunt and Browserify
 
-I use [Browserify](http://browserify.org/) in my `main.js` to easily bundle up all of my front-end dependencies. Now, if i am serving my site and want to test my JavaScript changes, it is painful to build everytime the site for that. The jekyll watch feature will not run browserify for me, so instead i use the [grunt-concurrent](https://github.com/sindresorhus/grunt-concurrent) with a `watch` task defined to monitor and fire a browserify build whenever a change is detected and a background shell process using [grunt-bg-shell](https://github.com/rma4ok/grunt-bg-shell) to serve. The all come together like:
+I use [Browserify](http://browserify.org/) in my `main.js` to easily bundle up all of my front-end dependencies. Now, if I am serving my site and want to test my JavaScript changes, it is painful to build everytime the site for that. The jekyll watch feature will not run browserify for me, so instead I use the [grunt-concurrent](https://github.com/sindresorhus/grunt-concurrent) with a `watch` task defined to monitor and fire a browserify build whenever a change is detected and a background shell process using [grunt-bg-shell](https://github.com/rma4ok/grunt-bg-shell) to serve. The all come together like:
 
 ```javascript
 clean: ['assets/js/build/'],
@@ -446,7 +446,7 @@ concurrent: {
 
 ```
 
-In the end, i have three main grunt tasks:
+In the end, I have three main grunt tasks:
 
 ```javascript
 // Register the grunt build task
@@ -478,4 +478,4 @@ grunt.registerTask('default', 'build')
 - [Travis CI deployments to DigitalOcean](https://kjaer.io/travis/)
 - [How To Set Up Apache Virtual Hosts on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-14-04-lts)
 
-Now i can run my blog locally or run it on the server as part of the [CI/CD process](http://assaf.website/posts/enabling-continuous-deployment-for-jekyll/).
+Now I can run my blog locally or run it on the server as part of the [CI/CD process](/blog/programming/2016-12-03-enabling-continuous-deployment-for-jekyll).

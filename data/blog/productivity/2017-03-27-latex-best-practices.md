@@ -1,14 +1,14 @@
 ---
 title: 'LaTeX Best Practices'
-subtitle: 'A guide for a smooth completion of your thesis'
-date: '2017-03-27'
-summary: 'Completing a PhD can be a hell of a task. It took me lots of time to be able to come up with a framework to optimise how i do research and how i write and execute deliverables. I hope that this post can help you in completing yours'
 tags: ['LaTEX', 'productivity']
-category: 'productivity'
+summary: 'Completing a Ph.D. can be a hell of a task. It took me lots of time to come up with a framework to optimize how I do research and write and execute deliverables. This post can help you in completing yours.'
+subtitle: 'A guide for a smooth completion of your thesis'
 image: /static/images/phd.png
+date: '2017-03-27'
+category: 'productivity'
 ---
 
-Completing a PhD can be a hell of a task. It took me lots of time to be able to come up with a framework that optimises how i do research and how i write and publish my research. This post discusses some of the tools and techniques i used in addition to LaTEX best practices. These are gathered either by experience, online search and most importantly the wisdom of my PhD supervisor [@Raphael Troncy](https://twitter.com/rtroncy).
+Completing a Ph.D. can be a hell of a task. It took me lots of time to develop a framework that optimizes how I do research and write and publish my research. This post discusses some of the tools and techniques I used in addition to LaTEX best practices. These are gathered either by experience, online search and most importantly the wisdom of my PhD supervisor [@Raphael Troncy](https://twitter.com/rtroncy).
 
 I hope this post can help you complete your PhD smoothly.
 

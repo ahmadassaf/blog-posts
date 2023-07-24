@@ -1,7 +1,7 @@
 import Category from '@/components/blocks/Category';
 import Link from '@/components/mdx/Link';
 import { PageSEO } from '@/components/utils/SEO';
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 import { getAllCategories } from '@/lib/categories';
 
 export async function getStaticProps() {

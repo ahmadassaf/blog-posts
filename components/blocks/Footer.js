@@ -1,10 +1,12 @@
 import NewsletterForm from '@/components/forms/NewsletterForm';
 import SocialIcon from '@/components/icons';
-import projects from '@/data/meta/projects';
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
+import projects from '@/data/meta/projectsMetadata';
 
 export default function Footer(props) {
   const _navigation = props.navigationProps;
+
+  console.log(_navigation);
 
   return (
     <footer aria-labelledby='footer-heading' className='border-t border-gray-200'>
@@ -14,14 +16,12 @@ export default function Footer(props) {
             <div className='grid md:grid-cols-3 gap-8'>
               {_navigation.categories.length && (
                 <div>
-                  <h3 className='text-base font-medium text-gray-900 dark:text-white'>
-                    Categories
-                  </h3>
+                  <h3 className='text-base font-medium text-gray-900 dark:text-white'>Categories</h3>
                   <ul role='list' className='mt-4 space-y-4'>
                     {_navigation.categories.slice(0, 4).reverse().map((category) => (
-                      <li key={ category }>
-                        <a href={ `/blog/category/${category}` } className='text-base capitalize text-gray-500 hover:text-blue-700'>
-                          {category.replace('-', ' ')}
+                      <li key={ category.id }>
+                        <a href={ `/blog/category/${category.id}` } className='text-base capitalize text-gray-500 hover:text-blue-700'>
+                          {category.title.replace('-', ' ')}
                         </a>
                       </li>
                     ))}
@@ -46,25 +46,13 @@ export default function Footer(props) {
                 <h3 className='text-base font-medium text-gray-900 dark:text-white'>About</h3>
                 <ul role='list' className='mt-4 space-y-4'>
                   <li>
-                    <a href={ '/about' } className='text-base text-gray-500 hover:text-blue-700'>
-                      Summary
-                    </a>
+                    <a href={ '/about' } className='text-base text-gray-500 hover:text-blue-700'>Summary</a>
                   </li>
                   <li>
-                    <a
-                      href='#'
-                      className='text-base text-gray-500 hover:text-gray-900 hover:text-blue-700'
-                    >
-                      Press
-                    </a>
+                    <a href='#' className='text-base text-gray-500 hover:text-blue-700'>Press</a>
                   </li>
                   <li>
-                    <a
-                      href='#'
-                      className='text-base text-gray-500 hover:text-gray-900 hover:text-blue-700'
-                    >
-                      Publications
-                    </a>
+                    <a href='#' className='text-base text-gray-500 hover:text-blue-700'>Publications</a>
                   </li>
                 </ul>
               </div>
@@ -72,8 +60,10 @@ export default function Footer(props) {
           </div>
 
           {siteMetadata.newsletter.provider !== '' && <NewsletterForm />}
+
         </div>
         <div className='mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between'>
+
           <div className='flex space-x-6 md:order-2 sm:justify-center'>
             <SocialIcon kind='mail' href={ `mailto:${siteMetadata.email}` } size='5' />
             <SocialIcon kind='github' href={ siteMetadata.github } size='5' />
@@ -82,9 +72,11 @@ export default function Footer(props) {
             <SocialIcon kind='linkedin' href={ siteMetadata.linkedin } size='5' />
             <SocialIcon kind='twitter' href={ siteMetadata.twitter } size='5' />
           </div>
+
           <p className='mt-8 text-base text-gray-400 md:order-1 md:mt-0 sm:text-center'>
             &copy;{`${new Date().getFullYear()} ${siteMetadata.author}. All rights reserved`}
           </p>
+
         </div>
       </div>
     </footer>

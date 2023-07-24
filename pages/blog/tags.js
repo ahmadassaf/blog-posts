@@ -1,7 +1,7 @@
 import Tag from '@/components/blocks/Tag';
 import Link from '@/components/mdx/Link';
 import { PageSEO } from '@/components/utils/SEO';
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 import { getAllTags } from '@/lib/tags';
 
 export async function getStaticProps() {

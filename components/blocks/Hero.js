@@ -1,5 +1,5 @@
 
-import siteMetadata from '@/data/meta/site';
+import siteMetadata from '@/data/meta/metadata';
 
 const Hero = () => (
   <div className='space-y-2 pt-6 pb-8 md:space-y-5'>

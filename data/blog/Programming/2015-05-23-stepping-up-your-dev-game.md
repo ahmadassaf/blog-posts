@@ -4,7 +4,7 @@ subtitle: 'Setting-up a superhero development environment'
 date: '2015-05-23'
 summary: 'Setting up a proper development environment can be a tedious task. This post walks you through various configuration and automatic bash scripts that i have created to help automate setting up your development environment'
 tags: ['bash', 'productivity']
-category: 'productivity'
+category: 'development'
 image: /static/images/mac_osx_desktop.png
 ---
 
