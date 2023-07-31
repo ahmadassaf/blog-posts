@@ -3,13 +3,14 @@ import React from 'react';
 
 import NewsletterForm from '@/components/forms/NewsletterForm';
 import Link from '@/components/mdx/Link';
-import MenuDropDown from '@/components/navigation/MenuDropDown';
 import ThemeLogo from '@/components/navigation/MenuLogo';
+import MenuSearch from '@/components/navigation/MenuSearch';
+import SimpleMenuDropDown from '@/components/navigation/SimpleMenuDropDown';
 import siteMetadata from '@/data/meta/metadata';
 
-const MenuMobile = ({ navigation, setMobileMenuOpen }) => {
+const MenuMobile = ({ navigation, setMobileMenuOpen, setLaunherOpen }) => {
 
-  const [ open, setOpen ] = React.useState(true);
+  const [ menuMobileOpen, setMenuMobileOpen ] = React.useState(true);
 
   return (
     <div className='lg:hidden' role='dialog' aria-modal='true'>
@@ -29,12 +30,17 @@ const MenuMobile = ({ navigation, setMobileMenuOpen }) => {
         <div className='mt-6 flow-root'>
           <div className='-my-6 divide-y divide-gray-500/10'>
             <div className='space-y-2 py-6'>
+
+              <div className='hidden max-sm:flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end'>
+                <MenuSearch setOpen={ setLaunherOpen }></MenuSearch>
+              </div>
+
               <div className='-mx-3'>
-                <MenuDropDown name='Blog' open={ open } setOpen={ setOpen }></MenuDropDown>
-                {open ? (
+                <SimpleMenuDropDown name='Blog' menuDropDownOpen={ menuMobileOpen } setMenuDropDownOpen={ setMenuMobileOpen }></SimpleMenuDropDown>
+                {menuMobileOpen ? (
                   <div className='mt-2 space-y-2' id='disclosure-1'>
                     {navigation.categories.map((category) => (
-                      <a key='link' href={ `/blog/category/${category.id}` } className='group capitalize block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{category.title.replace('-', ' ')}
+                      <a key={ category.id } href={ `/blog/category/${category.id}` } className='group capitalize block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{category.title.replace('-', ' ')}
                         <p className='mt-1 text-gray-600 font-light text-s dark:text-gray-100 dark:group-hover:text-gray-600'>{category.description}</p>
                       </a>
                     ))}

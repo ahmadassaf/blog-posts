@@ -1,9 +1,9 @@
 import Menu from '@/components/navigation/Menu';
 
-const Header = ({ navigationProps }) => (
+const Header = ({ navigation }) => (
   <header>
 
-    <Menu navigation={ navigationProps } />
+    <Menu navigation={ navigation }/>
 
   </header>
 );

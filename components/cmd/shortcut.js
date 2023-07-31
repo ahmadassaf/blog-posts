@@ -1,5 +1,4 @@
-
-const CommandLauncher = () => (
+const LauncherShortcut = () => (
   <div className='mt-8 text-slate-600 dark:text-slate-400'>
     <span className='text-sm'>Press</span>{' '}
     <span className=' bg-gray-300 p-1 text-sm text-gray-900 dark:bg-gray-400'>
@@ -13,4 +12,4 @@ const CommandLauncher = () => (
   </div>
 );
 
-export default CommandLauncher;
+export default LauncherShortcut;

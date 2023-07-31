@@ -3,10 +3,7 @@ import SocialIcon from '@/components/icons';
 import siteMetadata from '@/data/meta/metadata';
 import projects from '@/data/meta/projectsMetadata';
 
-export default function Footer(props) {
-  const _navigation = props.navigationProps;
-
-  console.log(_navigation);
+export default function Footer({ navigation }) {
 
   return (
     <footer aria-labelledby='footer-heading' className='border-t border-gray-200'>
@@ -14,11 +11,11 @@ export default function Footer(props) {
         <div className='xl:grid xl:grid-cols-4 xl:gap-8'>
           <div className='grid grid-cols-1 gap-8 xl:col-span-2'>
             <div className='grid md:grid-cols-3 gap-8'>
-              {_navigation.categories.length && (
+              {navigation.categories.length && (
                 <div>
                   <h3 className='text-base font-medium text-gray-900 dark:text-white'>Categories</h3>
                   <ul role='list' className='mt-4 space-y-4'>
-                    {_navigation.categories.slice(0, 4).reverse().map((category) => (
+                    {navigation.categories.slice(0, 4).reverse().map((category) => (
                       <li key={ category.id }>
                         <a href={ `/blog/category/${category.id}` } className='text-base capitalize text-gray-500 hover:text-blue-700'>
                           {category.title.replace('-', ' ')}

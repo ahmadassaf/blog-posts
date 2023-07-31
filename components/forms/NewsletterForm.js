@@ -55,13 +55,13 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }) => {
           required
           type='email'
           disabled={ subscribed }
-          className='w-full min-w-0 appearance-none  border border-gray-300 bg-white py-2 px-4 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-indigo-500'
+          className='rounded w-full min-w-0 appearance-none  border border-gray-300 bg-white py-2 px-4 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-indigo-500'
         />
         <div className='mt-3  sm:mt-0 sm:ml-3 sm:flex-shrink-0'>
           <button
             type='submit'
             disabled={ subscribed }
-            className={ `flex w-full items-center justify-center  border border-transparent bg-blue-600 py-2 px-4 text-base font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+            className={ `rounded flex w-full items-center justify-center  border border-transparent bg-blue-600 py-2 px-4 text-base font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
               subscribed ? 'cursor-default' : 'hover:bg-primary-700 dark:hover:bg-primary-400'
             } focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:ring-offset-black` }
           >

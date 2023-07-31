@@ -2,10 +2,11 @@
 type: project
 title: 'Roomba'
 tags: ['opendata', 'semantic-web', 'data-quality']
-summary: 'Automatic Validation, Correction and Generation of Dataset Metadata'
+summary: 'Roomba is a scalable automatic approach for extracting, validating and generating descriptive linked dataset profiles. This approach applies several techniques to check the validity of the attached metadata as well as providing descriptive and statistical information of a certain dataset as well as a whole data portal. Using our framework on prominent data portals shows that the general state of the Linked Open Data needs attention as most of datasets suffer from bad quality metadata and lack additional informative metrics'
+subtitle: 'Automatic Validation, Correction and Generation of Dataset Metadata'
 layout: ProjectLayout
-featured: false
-draft: false
+github: 'https://github.com/ahmadassaf/openData-checker'
+featured: 'false'
 date: '2018-08-07'
 ---
 

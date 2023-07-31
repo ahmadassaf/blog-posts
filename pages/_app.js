@@ -19,7 +19,7 @@ let navigationPropsCache;
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isSocket = process.env.SOCKET;
 
-const App = ({ Component, pageProps, navigationProps }) => {
+const App = ({ Component, pageProps, navigationProps, posts, projects }) => {
   useEffect(() => {
     navigationPropsCache = navigationProps;
   }, [ navigationProps ]);
@@ -35,7 +35,7 @@ const App = ({ Component, pageProps, navigationProps }) => {
       </Head>
       {isDevelopment && isSocket && <ClientReload />}
       <Analytics />
-      <LayoutWrapper navigationProps={ navigationProps }>
+      <LayoutWrapper navigation={ navigationProps }>
         <Component { ...pageProps } />
       </LayoutWrapper>
     </ThemeProvider>

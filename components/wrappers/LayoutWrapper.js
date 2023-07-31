@@ -3,14 +3,14 @@ import Header from '@/components/blocks/Header';
 import SectionContainer from '@/components/containers/SectionContainer';
 import ShapeContainer from '@/components/containers/ShapeContainer';
 
-const LayoutWrapper = ({ navigationProps, children }) => (
+const LayoutWrapper = ({ navigation, children }) => (
   <div className='relative isolate'>
     <ShapeContainer></ShapeContainer>
     <SectionContainer>
       <div className='flex h-screen flex-col justify-between'>
-        <Header navigationProps={ navigationProps }></Header>
+        <Header navigation={ navigation }></Header>
         <main className='mb-8'>{children}</main>
-        <Footer navigationProps={ navigationProps } />
+        <Footer navigation={ navigation } />
       </div>
     </SectionContainer>
   </div>

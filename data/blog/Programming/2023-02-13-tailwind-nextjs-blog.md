@@ -3,10 +3,8 @@ title: 'New features in v1'
 date: '2021-08-07'
 lastmod: '2021-02-01'
 tags: ['next-js', 'tailwind', 'guide']
-draft: false
 category: 'development'
 summary: 'An overview of the new features released in v1 - code block copy, multiple authors, frontmatter layout and more'
-canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1/
 ---
 
 ## Overview

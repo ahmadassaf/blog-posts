@@ -12,9 +12,10 @@ const root = process.cwd();
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   const files = await getFiles('blog');
-  const posts = await getAllFilesFrontMatter('blog');
+  const allPosts = await getAllFilesFrontMatter('blog');
+  const posts = allPosts.filter((post) => post.type !== 'project');
+  const projects = allPosts.filter((post) => post.type === 'project');
   const tags = await getAllTags('blog');
-  const initialDisplayPosts = posts.slice(0, 3);
 
   const categories = [];
 
@@ -29,7 +30,11 @@ export default async(req, res) => {
   navigationMetadata.categories = navigationMetadata.categories.map((category) => {
     return ({ 'description': navigationMetadata.categoriesMetadata[category], 'id': category, 'title': kebabCase(category) });
   });
-  navigationMetadata.posts = initialDisplayPosts;
+
+  navigationMetadata.posts = posts;
   navigationMetadata.tags = tags;
+  navigationMetadata.projects = projects;
+  navigationMetadata.initialDisplayPosts = posts.slice(0, 3);
+
   res.status(200).json(navigationMetadata);
 };

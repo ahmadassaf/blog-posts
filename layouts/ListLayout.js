@@ -14,6 +14,7 @@ export default function ListLayout({ posts, listTitle, linkAllPosts = false, pag
   const pagination = { 'currentPage': currentPage || 1, 'totalPages': totalPages || Math.ceil(posts.length / POSTS_PER_PAGE) };
 
   const filteredBlogPosts = posts.filter((frontMatter) => {
+
     const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ');
 
     return searchContent.toLowerCase().includes(searchValue.toLowerCase());

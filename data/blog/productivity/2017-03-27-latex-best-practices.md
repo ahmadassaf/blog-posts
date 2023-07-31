@@ -3,7 +3,6 @@ title: 'LaTeX Best Practices'
 tags: ['LaTEX', 'productivity']
 summary: 'Completing a Ph.D. can be a hell of a task. It took me lots of time to come up with a framework to optimize how I do research and write and execute deliverables. This post can help you in completing yours.'
 subtitle: 'A guide for a smooth completion of your thesis'
-image: /static/images/phd.png
 date: '2017-03-27'
 category: 'productivity'
 ---

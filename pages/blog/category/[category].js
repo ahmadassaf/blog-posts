@@ -48,8 +48,6 @@ export async function getStaticProps({ params }) {
 export default function Category({ posts, category }) {
   const title = category.replace('-', ' ');
 
-  console.log('posts', posts);
-
   return (
     <>
       <TagSEO

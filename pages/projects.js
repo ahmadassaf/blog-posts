@@ -1,9 +1,16 @@
 import Card from '@/components/blocks/Card';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
-import projectsData from '@/data/meta/projectsMetadata';
+import { getAllFilesFrontMatter } from '@/lib/mdx';
 
-export default function Projects() {
+export async function getStaticProps() {
+  const posts = await getAllFilesFrontMatter('blog');
+  const projects = posts.filter((post) => post.type === 'project');
+
+  return { 'props': { projects } };
+}
+
+export default function Projects({ projects }) {
   return (
     <>
       <PageSEO title={ `Projects - ${siteMetadata.author}` } description={ siteMetadata.description } />
@@ -15,8 +22,8 @@ export default function Projects() {
         </div>
         <div className='py-12'>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
-            {projectsData.map((d) => (
-              <Card key={ d.title } title={ d.title } subtitle={ d.subtitle } description={ d.description } href={ d.href } />
+            {projects.map((project) => (
+              <Card key={ project.title } title={ project.title } subtitle={ project.subtitle } description={ project.summary } href={ `/blog/${project.slug}` } />
             ))}
           </div>
         </div>

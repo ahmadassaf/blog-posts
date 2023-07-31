@@ -5,13 +5,13 @@ import MenuDropDown from '@/components/navigation/MenuDropDown';
 import formatDate from '@/lib/utils/formatDate';
 
 const MenuBlog = ({ navigation }) => {
-  const [ open, setOpen ] = React.useState(false);
+  const [ menuBlogOpen, setMenuBlogOpen ] = React.useState(false);
 
   return (<>
 
-    <MenuDropDown name='Blog' open={ open } setOpen={ setOpen }></MenuDropDown>
+    <MenuDropDown name='Blog' menuDropDownOpen={ menuBlogOpen } setMenuDropDownOpen={ setMenuBlogOpen }></MenuDropDown>
 
-    {open ? (
+    {menuBlogOpen ? (
       <div className='absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4 top-10'>
         <div className='w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5'>
           <div className='p-4'>
@@ -35,7 +35,7 @@ const MenuBlog = ({ navigation }) => {
               <Link href={ `/blog` } className='text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600' >See all &rarr;</Link>
             </div>
             <ul role='list' className='mt-6 space-y-6'>
-              {navigation.posts.map((post) => (
+              {navigation.initialDisplayPosts.map((post) => (
                 <li key={ post.slug } className='relative'>
                   <time dateTime={ post.date } className='block text-xs leading-6 text-gray-600 font-light'>{formatDate(post.date)}</time>
                   <a href={ `/${post.slug}` } className='block truncate text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600'>

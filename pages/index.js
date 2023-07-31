@@ -1,11 +1,12 @@
-import CommandLauncher from '@/components/blocks/CommandLauncher';
+import LauncherShortcut from '@/components/cmd/shortcut';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
 import { getAllFilesFrontMatter } from '@/lib/mdx';
 
 export async function getStaticProps() {
-  const posts = await getAllFilesFrontMatter('blog');
+  const allPosts = await getAllFilesFrontMatter('blog');
+  const posts = allPosts.filter((post) => post.type !== 'project');
 
   return { 'props': { posts } };
 }
@@ -24,7 +25,7 @@ export default function Home({ posts }) {
             </span>
           </h1>
           <h2>{`Welcome to ${siteMetadata.description}. ${siteMetadata.about}`}</h2>
-          <CommandLauncher/>
+          <LauncherShortcut />
         </div>
         <ListLayout posts={ posts } linkAllPosts={ true } listTitle='Latest Posts' />
       </div>

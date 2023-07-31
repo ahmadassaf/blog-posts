@@ -1,6 +1,7 @@
 import { React, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import CommandLauncher from '@/components/cmd/launcher';
 import Link from '@/components/mdx/Link';
 import MenuBlog from '@/components/navigation/MenuBlog';
 import ThemeLogo from '@/components/navigation/MenuLogo';
@@ -14,6 +15,7 @@ const Menu = ({ navigation }) => {
   const router = useRouter();
   const path = router?.asPath;
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
+  const [ LauncherOpen, LauncherSetOpen ] = useState(false);
 
   return (<nav className='flex h-16 items-center justify-between px-0 py-16 first-letter:mx-auto max-w-7xl'>
 
@@ -38,7 +40,7 @@ const Menu = ({ navigation }) => {
 
       <ThemeSwitch />
 
-      {mobileMenuOpen ? (<MenuMobile navigation={ navigation } setMobileMenuOpen={ setMobileMenuOpen } />) : null}
+      {mobileMenuOpen ? (<MenuMobile navigation={ navigation } setMobileMenuOpen={ setMobileMenuOpen } setLaunherOpen={ LauncherSetOpen } />) : null}
       <div className='mx-auto max-w-7xl px-2 lg:px-8'>
         <div className='flex h-16 justify-between'>
           <div className='flex px-2 lg:px-0 relative'>
@@ -63,11 +65,13 @@ const Menu = ({ navigation }) => {
             </div>
           </div>
 
-          <MenuSearch></MenuSearch>
+          <div className='max-sm:hidden flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end'>
+            <MenuSearch setOpen={ LauncherSetOpen }></MenuSearch>
+          </div>
 
         </div>
       </div>
-
+      <CommandLauncher projects={ navigation.projects } posts={ navigation.posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
     </div>
   </nav>
   );
