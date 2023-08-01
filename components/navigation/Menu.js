@@ -5,6 +5,7 @@ import CommandLauncher from '@/components/cmd/launcher';
 import Link from '@/components/mdx/Link';
 import MenuBlog from '@/components/navigation/MenuBlog';
 import ThemeLogo from '@/components/navigation/MenuLogo';
+import MenuMain from '@/components/navigation/MenuMain';
 import MenuMobile from '@/components/navigation/MenuMobile';
 import MenuSearch from '@/components/navigation/MenuSearch';
 import ThemeSwitch from '@/components/utils/ThemeSwitcher';
@@ -48,7 +49,7 @@ const Menu = ({ navigation }) => {
               <ul className='invisible lg:visible flex-row-reverse sm:flex items-center'>
                 {navigation.links.map((link) => {
                   if (
-                    (link.hideInPath === '*' || path.includes(link.hideInPath)) && !path.includes(link.showInPath)) return true;
+                    (link.hideInPath === '*' && !path.includes(link.showInPath)) || path.includes(link.hideInPath)) return true;
 
                   return (
                     <li key={ link.href }>
@@ -59,7 +60,8 @@ const Menu = ({ navigation }) => {
                   );
                 })}
 
-                <MenuBlog navigation={ navigation }></MenuBlog>
+                { !path.includes('/blog') && (<MenuMain navigation={ navigation }></MenuMain>) }
+                { path.includes('/blog') && (<MenuBlog navigation={ navigation }></MenuBlog>) }
 
               </ul>
             </div>

@@ -1,7 +1,6 @@
 import NewsletterForm from '@/components/forms/NewsletterForm';
 import SocialIcon from '@/components/icons';
 import siteMetadata from '@/data/meta/metadata';
-import projects from '@/data/meta/projectsMetadata';
 
 export default function Footer({ navigation }) {
 
@@ -25,11 +24,11 @@ export default function Footer({ navigation }) {
                   </ul>
                 </div>
               )}
-              {projects && (
+              {navigation.projects && (
                 <div>
                   <h3 className='text-base font-medium text-gray-900 dark:text-white'>Projects</h3>
                   <ul role='list' className='mt-4 space-y-4'>
-                    {projects.slice(0, 4).map((project) => (
+                    {navigation.projects.slice(0, 4).map((project) => (
                       <li key={ project.href }>
                         <a href={ project.href } className='text-base text-gray-500 hover:text-blue-700'>
                           {project.title}

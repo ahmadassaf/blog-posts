@@ -16,7 +16,8 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
   const { 'params': { page } } = context;
-  const posts = await getAllFilesFrontMatter('blog');
+  const allPosts = await getAllFilesFrontMatter('blog');
+  const posts = allPosts.filter((post) => post.type !== 'project');
   const pageNumber = parseInt(page);
   const pagePosts = posts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
   const pagination = {
@@ -31,7 +32,7 @@ export default function PostPage({ pagePosts, pagination }) {
   return (
     <>
       <PageSEO title={ siteMetadata.title } description={ siteMetadata.description } />
-      <ListLayout posts={ pagePosts } paginate={ true } listTitle='All Posts' currentPage={ pagination.currentPage } totalPages={ pagination.totalPages }/>
+      <ListLayout posts={ pagePosts } listTitle='All Posts' currentPage={ pagination.currentPage } totalPages={ pagination.totalPages } paginationURL='blog/page' baseURL='blog'/>
     </>
   );
 }

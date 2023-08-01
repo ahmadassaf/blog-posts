@@ -54,7 +54,7 @@ export default function Category({ posts, category }) {
         title={ `${category} - ${siteMetadata.author}` }
         description={ `${category} Category - ${siteMetadata.author}` }
       />
-      <ListLayout className='capitalize' posts={ posts } title={ title } paginate={ false }/>
+      <ListLayout className='capitalize' posts={ posts } listTitle={ `${title} Posts` } paginationURL={ `blog/category/${category}/page` } baseURL={ `blog/category/${category}` }/>
     </>
   );
 }

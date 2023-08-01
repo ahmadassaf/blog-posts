@@ -44,8 +44,7 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Tag({ posts, tag }) {
-  const title = tag[0].toUpperCase() + tag.split(' ').join('-')
-    .slice(1);
+  const title = tag.split('-').join(' ');
 
   return (
     <>
@@ -53,7 +52,7 @@ export default function Tag({ posts, tag }) {
         title={ `${tag} - ${siteMetadata.author}` }
         description={ `${tag} tag - ${siteMetadata.author}` }
       />
-      <ListLayout posts={ posts } title={ title } />
+      <ListLayout posts={ posts } listTitle={ `${title} Posts` } paginationURL={ `blog/tag/${tag}/page` } baseURL={ `blog/tag/${tag}` }/>
     </>
   );
 }

@@ -5,14 +5,11 @@ import Post from '@/components/blocks/Post';
 import Search from '@/components/blocks/Search';
 import Link from '@/components/mdx/Link';
 
-const MAX_LIST_DISPLAY = 5;
-
-export default function ListLayout({ posts, listTitle, linkAllPosts = false, paginate, currentPage, totalPages }) {
+export default function ListLayout({ posts, listTitle, linkAllPosts = false, baseURL, paginationURL, currentPage, totalPages }) {
 
   const [ searchValue, setSearchValue ] = useState('');
-  const initialDisplayPosts = paginate ? posts.slice(0, MAX_LIST_DISPLAY) : posts;
+  const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE);
   const pagination = { 'currentPage': currentPage || 1, 'totalPages': totalPages || Math.ceil(posts.length / POSTS_PER_PAGE) };
-
   const filteredBlogPosts = posts.filter((frontMatter) => {
 
     const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ');
@@ -32,12 +29,12 @@ export default function ListLayout({ posts, listTitle, linkAllPosts = false, pag
         </div>
         <Search setSearchValue={ setSearchValue }></Search>
         <ul className='pt-8'>
-          {!filteredBlogPosts.length && 'No posts found.'}
+          {!filteredBlogPosts.length && 'No posts found'}
           {displayPosts.map((frontMatter) => (
             <Post key={ frontMatter.slug } frontMatter={ frontMatter } />
           ))}
         </ul>
-        {linkAllPosts && posts.length > MAX_LIST_DISPLAY && (
+        {linkAllPosts && (
           <div className='flex justify-end text-base font-medium leading-6 border-none'>
             <Link href='/blog' className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400' aria-label='all posts' >
               All Posts
@@ -45,8 +42,8 @@ export default function ListLayout({ posts, listTitle, linkAllPosts = false, pag
           </div>
         )}
       </div>
-      { paginate && pagination.totalPages > 1 && !searchValue && (
-        <Pagination currentPage={ pagination.currentPage } totalPages={ pagination.totalPages } />
+      { pagination.totalPages > 1 && !searchValue && (
+        <Pagination currentPage={ pagination.currentPage } totalPages={ pagination.totalPages } paginationURL={ paginationURL } baseURL={ baseURL }/>
       )}
     </>
   );

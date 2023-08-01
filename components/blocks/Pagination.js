@@ -2,7 +2,7 @@ import Link from '@/components/mdx/Link';
 
 export const POSTS_PER_PAGE = 5;
 
-export function Pagination({ totalPages, currentPage }) {
+export function Pagination({ totalPages, currentPage, baseURL, paginationURL }) {
   const prevPage = parseInt(currentPage) - 1 > 0;
   const nextPage = parseInt(currentPage) + 1 <= parseInt(totalPages);
 
@@ -13,7 +13,7 @@ export function Pagination({ totalPages, currentPage }) {
           <button rel='previous' className='cursor-auto disabled:opacity-50' disabled={ !prevPage }>Previous</button>
         )}
         {prevPage && (
-          <Link href={ currentPage - 1 === 1 ? `/blog/` : `/blog/page/${currentPage - 1}` }>
+          <Link href={ currentPage - 1 === 1 ? `/${baseURL}/` : `/${paginationURL}/${currentPage - 1}` }>
             <button rel='previous'>Previous</button>
           </Link>
         )}
@@ -24,7 +24,7 @@ export function Pagination({ totalPages, currentPage }) {
           <button rel='next' className='cursor-auto disabled:opacity-50' disabled={ !nextPage }>Next</button>
         )}
         {nextPage && (
-          <Link href={ `/blog/page/${currentPage + 1}` }>
+          <Link href={ `/${paginationURL}/${currentPage + 1}` }>
             <button rel='next'>Next</button>
           </Link>
         )}

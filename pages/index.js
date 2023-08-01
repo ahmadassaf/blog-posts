@@ -6,7 +6,7 @@ import { getAllFilesFrontMatter } from '@/lib/mdx';
 
 export async function getStaticProps() {
   const allPosts = await getAllFilesFrontMatter('blog');
-  const posts = allPosts.filter((post) => post.type !== 'project');
+  const posts = allPosts.filter((post) => post.type !== 'project').slice(0, 5);
 
   return { 'props': { posts } };
 }
