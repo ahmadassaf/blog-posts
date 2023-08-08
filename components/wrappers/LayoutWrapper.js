@@ -1,7 +1,7 @@
-import Footer from '@/components/blocks/Footer';
-import Header from '@/components/blocks/Header';
 import SectionContainer from '@/components/containers/SectionContainer';
 import ShapeContainer from '@/components/containers/ShapeContainer';
+import Footer from '@/components/elements/Footer';
+import Header from '@/components/elements/Header';
 
 const LayoutWrapper = ({ navigation, children }) => (
   <div className='relative isolate'>

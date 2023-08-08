@@ -1,5 +1,5 @@
-import Category from '@/components/blocks/Category';
-import Tag from '@/components/blocks/Tag';
+import Category from '@/components/elements/Category';
+import Tag from '@/components/elements/Tag';
 import PostSharing from '@/components/post/PostSharing';
 import PostSubTitle from '@/components/post/PostSubTitle';
 import PostTitle from '@/components/post/PostTitle';

@@ -1,39 +1,37 @@
 import CommandPalette, { filterItems, getItemIndex } from '@tmikeladze/react-cmdk';
 
-import prepareLauncherCollection  from '@/components/cmd/utils';
+import CmdProject from '@/components/cmd/types/CmdProject';
 
 import '@tmikeladze/react-cmdk/dist/cmdk.css';
 
-function PostsCmd({ setPage, search, posts }) {
+function ProjectsCmd({ setPage, search, projects }) {
 
-  prepareLauncherCollection(posts);
-
-  const postsItems = filterItems(
+  const projectItems = filterItems(
     [
       {
-        'heading': 'Posts',
-        'id': 'posts',
-        'items': posts,
+        'heading': 'Projects',
+        'id': 'projects',
+        'items': projects,
         'options': { 'filterOnListHeading': true }
       }
     ], search
   );
 
   return (
-    <CommandPalette.Page id='posts' searchPrefix={ [ 'General', 'Posts' ] } onEscape={ () => {
+    <CommandPalette.Page id='projects' searchPrefix={ [ 'General', 'Projects' ] } onEscape={ () => {
       setPage('root');
     } }>
 
-      {postsItems.length ? (
-        postsItems.map((list) => (
+      {projectItems.length ? (
+        projectItems.map((list) => (
           <CommandPalette.List key={ list.id } heading={ list.heading }>
-            {list.items.map(({ id, title, ...rest }) => (
+            {list.items.map(({ id, title, subtitle, ...rest }) => (
               <CommandPalette.ListItem
                 key={ id }
-                index={ getItemIndex(postsItems, id) }
+                index={ getItemIndex(projectItems, id) }
                 { ...rest }
               >
-                { title }
+                <CmdProject title={ title } subtitle={ subtitle }/>
               </CommandPalette.ListItem>
             ))}
           </CommandPalette.List>
@@ -45,4 +43,4 @@ function PostsCmd({ setPage, search, posts }) {
   );
 }
 
-export default PostsCmd;
+export default ProjectsCmd;

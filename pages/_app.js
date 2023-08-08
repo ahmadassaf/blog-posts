@@ -19,7 +19,7 @@ let navigationPropsCache;
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isSocket = process.env.SOCKET;
 
-const App = ({ Component, pageProps, navigationProps, posts, projects }) => {
+const App = ({ Component, pageProps, navigationProps }) => {
   useEffect(() => {
     navigationPropsCache = navigationProps;
   }, [ navigationProps ]);

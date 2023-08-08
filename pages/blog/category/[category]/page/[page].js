@@ -1,4 +1,4 @@
-import { POSTS_PER_PAGE } from '@/components/blocks/Pagination';
+import { POSTS_PER_PAGE } from '@/components/elements/Pagination';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';

@@ -1,4 +1,4 @@
-import Category from '@/components/blocks/Category';
+import Category from '@/components/elements/Category';
 import Link from '@/components/mdx/Link';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';

@@ -1,4 +1,4 @@
-import Card from '@/components/blocks/Card';
+import Card from '@/components/elements/Card';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import { getAllFilesFrontMatter } from '@/lib/mdx';

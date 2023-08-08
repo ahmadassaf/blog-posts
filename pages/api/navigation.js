@@ -12,6 +12,7 @@ const root = process.cwd();
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   const files = await getFiles('blog');
+
   const allPosts = await getAllFilesFrontMatter('blog');
   const posts = allPosts.filter((post) => post.type !== 'project');
   const projects = allPosts.filter((post) => post.type === 'project');
@@ -32,7 +33,7 @@ export default async(req, res) => {
   });
 
   navigationMetadata.posts = posts;
-  navigationMetadata.tags = tags;
+  navigationMetadata.tags = Object.keys(tags).map((key) => tags[key]);
   navigationMetadata.projects = projects;
   navigationMetadata.initialDisplayPosts = posts.slice(0, 3);
 

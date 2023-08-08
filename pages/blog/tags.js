@@ -1,4 +1,4 @@
-import Tag from '@/components/blocks/Tag';
+import Tag from '@/components/elements/Tag';
 import Link from '@/components/mdx/Link';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';

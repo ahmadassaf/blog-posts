@@ -1,4 +1,4 @@
-import LauncherShortcut from '@/components/cmd/shortcut';
+import LauncherShortcut from '@/components/cmd/CmdLauncherShortcut';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';

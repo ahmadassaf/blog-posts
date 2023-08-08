@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { Pagination, POSTS_PER_PAGE } from '@/components/blocks/Pagination';
-import Post from '@/components/blocks/Post';
-import Search from '@/components/blocks/Search';
+import { Pagination, POSTS_PER_PAGE } from '@/components/elements/Pagination';
+import Post from '@/components/elements/Post';
+import Search from '@/components/elements/Search';
 import Link from '@/components/mdx/Link';
 
 export default function ListLayout({ posts, listTitle, linkAllPosts = false, baseURL, paginationURL, currentPage, totalPages }) {

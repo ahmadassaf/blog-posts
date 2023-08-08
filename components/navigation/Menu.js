@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import CommandLauncher from '@/components/cmd/launcher';
+import CommandLauncher from '@/components/cmd/CmdLauncher';
 import Link from '@/components/mdx/Link';
 import MenuBlog from '@/components/navigation/MenuBlog';
 import ThemeLogo from '@/components/navigation/MenuLogo';
@@ -73,7 +73,7 @@ const Menu = ({ navigation }) => {
 
         </div>
       </div>
-      <CommandLauncher projects={ navigation.projects } posts={ navigation.posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
+      <CommandLauncher tags={ navigation.tags } projects={ navigation.projects } posts={ navigation.posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
     </div>
   </nav>
   );

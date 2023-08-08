@@ -1,5 +1,5 @@
+import Icon from '@/components/elements/Icon';
 import NewsletterForm from '@/components/forms/NewsletterForm';
-import SocialIcon from '@/components/icons';
 import siteMetadata from '@/data/meta/metadata';
 
 export default function Footer({ navigation }) {
@@ -61,12 +61,11 @@ export default function Footer({ navigation }) {
         <div className='mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between'>
 
           <div className='flex space-x-6 md:order-2 sm:justify-center'>
-            <SocialIcon kind='mail' href={ `mailto:${siteMetadata.email}` } size='5' />
-            <SocialIcon kind='github' href={ siteMetadata.github } size='5' />
-            <SocialIcon kind='facebook' href={ siteMetadata.facebook } size='5' />
-            <SocialIcon kind='youtube' href={ siteMetadata.youtube } size='5' />
-            <SocialIcon kind='linkedin' href={ siteMetadata.linkedin } size='5' />
-            <SocialIcon kind='twitter' href={ siteMetadata.twitter } size='5' />
+            <Icon kind='mail' href={ `mailto:${siteMetadata.email}` } />
+            <Icon kind='github' href={ siteMetadata.github }/>
+            <Icon kind='youtube' href={ siteMetadata.youtube } />
+            <Icon kind='linkedin' href={ siteMetadata.linkedin } />
+            <Icon kind='twitter' href={ siteMetadata.twitter } />
           </div>
 
           <p className='mt-8 text-base text-gray-400 md:order-1 md:mt-0 sm:text-center'>
