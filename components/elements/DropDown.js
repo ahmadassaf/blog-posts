@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SimpleMenuDropDown = ({ name, menuDropDownOpen, setMenuDropDownOpen }) => {
+const DropDown = ({ name, menuDropDownOpen, setMenuDropDownOpen }) => {
 
   const handlemenuDropDownOpen = () => {
     setMenuDropDownOpen(!menuDropDownOpen);
@@ -16,5 +16,5 @@ const SimpleMenuDropDown = ({ name, menuDropDownOpen, setMenuDropDownOpen }) => 
   );
 };
 
-export default SimpleMenuDropDown;
+export default DropDown;
 

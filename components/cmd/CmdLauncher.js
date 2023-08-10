@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import CommandPalette, { filterItems, getItemIndex } from '@tmikeladze/react-cmdk';
 import { useTheme } from 'next-themes';
 
+import CmdFooter from '@/components/cmd/CmdLauncherFooter';
 import PostsCmd from '@/components/cmd/CmdLauncherPosts';
 import SearchCmd from '@/components/cmd/CmdLauncherSearch';
 import SocialCmd from '@/components/cmd/CmdLauncherSocial';
@@ -155,9 +156,7 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
         search={ search }
         isOpen={ open }
         page={ page }
-        footer={ <div className='text-sm p-2'>
-          <div>Hit <span className='h-6 select-none items-center bg-gray-300 gap-1 rounded border bg-muted px-1.5 font-mono text-[12px] font-medium opacity-100'>esc</span> to go back to the previous page</div>
-        </div> }
+        footer={ <CmdFooter /> }
       >
         <CommandPalette.Page id='root' searchPrefix={ [ 'General' ] }>
           {filteredItems.length ? (

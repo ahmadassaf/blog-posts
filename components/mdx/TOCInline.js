@@ -1,11 +1,4 @@
-const TOCInline = ({
-  toc,
-  indentDepth = 3,
-  fromHeading = 1,
-  toHeading = 6,
-  asDisclosure = true,
-  exclude = ''
-}) => {
+const TOCInline = ({ toc, indentDepth = 3, fromHeading = 1, toHeading = 6, asDisclosure = true, exclude = '' }) => {
   const re = Array.isArray(exclude) ? new RegExp(`^(${exclude.join('|')})$`, 'i') : new RegExp(`^(${exclude})$`, 'i');
 
   const filteredToc = toc.filter(

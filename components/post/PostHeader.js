@@ -1,8 +1,6 @@
 import Category from '@/components/elements/Category';
 import Tag from '@/components/elements/Tag';
 import PostSharing from '@/components/post/PostSharing';
-import PostSubTitle from '@/components/post/PostSubTitle';
-import PostTitle from '@/components/post/PostTitle';
 
 const postDateTemplate = { 'day': 'numeric', 'month': 'long', 'weekday': 'long', 'year': 'numeric' };
 
@@ -21,8 +19,13 @@ const PostHeader = ({ frontMatter, siteMetadata }) => (
       </dd>
     </div>
     <div className='space-y-1 text-left'>
-      <PostTitle>{frontMatter.title}</PostTitle>
-      <PostSubTitle>{frontMatter.subtitle}</PostSubTitle>
+      <h1 className='text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14'>
+        {frontMatter.title}
+      </h1>
+      <h3 className='text-1xl sm:text-1xl leading-9 tracking-tight text-gray-600 dark:text-gray-100 sm:leading-10 md:text-2xl md:leading-14'>
+        {frontMatter.subtitle}
+      </h3>
+
     </div>
     <h4 className='text-gray-500'>{frontMatter.readingTime.text}</h4>
 

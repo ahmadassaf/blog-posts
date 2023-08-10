@@ -1,7 +1,6 @@
 import SectionContainer from '@/components/containers/SectionContainer';
 import Link from '@/components/mdx/Link';
 import Comments from '@/components/post/comments';
-import PageTitle from '@/components/post/PostTitle';
 import { BlogSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import formatDate from '@/lib/utils/formatDate';
@@ -25,7 +24,9 @@ export default function PostLayout({ frontMatter, next, prev, children }) {
                 </div>
               </dl>
               <div>
-                <PageTitle>{title}</PageTitle>
+                <h1 className='text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14'>
+                  {title}
+                </h1>
               </div>
             </div>
           </header>

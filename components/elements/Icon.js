@@ -10,7 +10,7 @@ const components = {
   'youtube': FaYoutube
 };
 
-const SocialIcon = ({ kind, href }) => {
+const Icon = ({ kind, href }) => {
   // eslint-disable-next-line prefer-named-capture-group
   if (!href || (kind === 'mail' && !/^mailto:\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(href))) return null;
 
@@ -24,4 +24,4 @@ const SocialIcon = ({ kind, href }) => {
   );
 };
 
-export default SocialIcon;
+export default Icon;
