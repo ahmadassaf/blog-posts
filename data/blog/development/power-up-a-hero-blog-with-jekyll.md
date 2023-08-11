@@ -1,12 +1,12 @@
 ---
+type: 'post'
 title: 'Power-up a hero blog with Jekyll'
-date: '2016-09-21'
-subtitle: 'Setting up a modular Jekyll blog with Continuous Integration and Deployment'
-summary: "Having had my blog on WordPress for a while now, I thought I need a lighter platform especially that my blog content is very lightweight and I don't really need a fully-fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
 tags: ['Jekyll']
-category: 'development'
+summary: "Having had my blog on WordPress for a while now, I thought I need a lighter platform especially since my blog content is very lightweight and I don't need a fully-fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
+subtitle: 'Setting up a modular Jekyll blog with Continuous Integration and Deployment'
 featured: 'true'
-image: /static/images/jekyll.png
+date: '2016-09-21'
+category: 'development'
 ---
 
 Having had my blog on WordPress for a while now, I thought I needed a lighter platform, especially since my blog content is very lightweight and I don't need a fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility.

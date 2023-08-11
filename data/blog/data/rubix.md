@@ -1,4 +1,5 @@
 ---
+type: 'Blog'
 title: 'RUBIX'
 tags: ['Semantic Web', 'Schema Matching', 'Data Integration']
 summary: 'RUBIX is a framework that enables business users to semi-automatically combine potentially noisy data residing in heterogeneous silos. Semantically related data is identified and appropriate mappings are suggested to users'

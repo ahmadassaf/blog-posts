@@ -1,18 +1,15 @@
 ---
+type: 'post'
 title: 'Introducing Tailwind Nextjs Starter Blog'
-date: '2021-01-12'
-lastmod: '2021-02-01'
 tags: ['next-js', 'tailwind', 'guide']
+summary: 'Looking for a performant, out-of-the-box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.'
+featured: 'false'
+date: '2021-01-12'
 category: 'development'
-summary: 'Looking for a performant, out of the box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.'
-images: ['/static/images/canada/mountains.jpg', '/static/images/canada/toronto.jpg']
 ---
-
-![tailwind-nextjs-banner](/static/images/twitter-card.png)
 
 # Tailwind Nextjs Starter Blog
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/timlrx/tailwind-nextjs-starter-blog)
 
 This is a [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/) blogging starter template. Probably the most feature-rich Next.js markdown blogging template out there. Comes out of the box configured with the latest technologies to make technical writing a breeze. Easily configurable and customizable. Perfect as a replacement to existing Jekyll and Hugo individual blogs.
 

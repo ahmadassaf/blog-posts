@@ -47,11 +47,7 @@ app.prepare().then(() => {
       app.server.hotReloader.send('building');
 
       if (program.command) spawn(
-        shell, [
-          '-c', program.command
-            .replace(/\{event\}/gi, filePathContext)
-            .replace(/\{path\}/gi, eventContext)
-        ], {
+        shell, [ '-c', program.command.replace(/\{event\}/gi, filePathContext).replace(/\{path\}/gi, eventContext) ], {
           'stdio': 'inherit'
         }
       );

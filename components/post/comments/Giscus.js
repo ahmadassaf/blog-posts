@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-shadow */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';

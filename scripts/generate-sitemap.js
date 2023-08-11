@@ -14,7 +14,6 @@ import siteMetadata from '../data/meta/metadata';
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
             ${pages.map((page) => {
 
-    // Exclude drafts from the sitemap
     if (page.search('.md') >= 1 && fs.existsSync(page)) {
       const source = fs.readFileSync(page, 'utf8');
       const fm = matter(source);

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import MenuDropDown from '@/components/elements/DropDown';
 import Link from '@/components/mdx/Link';
-import MenuDropDown from '@/components/navigation/MenuDropDown';
 import formatDate from '@/lib/utils/formatDate';
 
 const MenuMain = ({ navigation }) => {
@@ -17,7 +17,7 @@ const MenuMain = ({ navigation }) => {
           <div className='p-4'>
 
             {navigation.categories.map((category) => (
-              <div key={ category.id } className='group relative flex rounded-lg p-3 hover:bg-gray-50'>
+              <div key={ category.id } className='group relative flex rounded-lg px-3 py-2 hover:bg-gray-50'>
                 <div>
                   <a href={ `/blog/category/${category.id}` } className='font-semibold text-gray-900 hover:text-blue-600 capitalize'>
                     {category.title.replace('-', ' ')}
@@ -34,7 +34,7 @@ const MenuMain = ({ navigation }) => {
               <h3 className='text-sm font-semibold leading-6 text-gray-500'>Recent posts</h3>
               <Link href={ `/blog` } className='text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600' >See all &rarr;</Link>
             </div>
-            <ul role='list' className='mt-6 space-y-6'>
+            <ul role='list' className='mt-2 space-y-6'>
               {navigation.initialDisplayPosts.map((post) => (
                 <li key={ post.slug } className='relative'>
                   <time dateTime={ post.date } className='block text-xs leading-6 text-gray-600 font-light'>{formatDate(post.date)}</time>

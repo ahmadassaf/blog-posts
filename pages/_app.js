@@ -45,7 +45,7 @@ const App = ({ Component, pageProps, navigationProps }) => {
 App.getInitialProps = async() => {
   if (navigationPropsCache) return { 'navigationProps': navigationPropsCache };
 
-  const res = await fetch('http://localhost:3000/api/navigation');
+  const res = await fetch('http://127.0.0.1:3000/api/navigation');
   const navigationProps = await res.json();
 
   navigationPropsCache = navigationProps;

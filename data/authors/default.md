@@ -1,6 +1,5 @@
 ---
 name: Ahmad Assaf
-avatar: /static/images/avatar.png
 occupation: VP of Artificial Intelligence and Data
 company: Beamery
 email: me@assaf.website

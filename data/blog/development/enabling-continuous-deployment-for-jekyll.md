@@ -1,11 +1,11 @@
 ---
+type: 'post'
 title: 'Enabling Continuous Deployment for Jekyll'
-date: '2016-02-03'
-subtitle: 'Making Digital Ocean, Jekyll, Github and TravisCI all work'
-summary: 'Having open sourced my blog on Github, deploying a new version of it live happens very often, and to do that manually every time is a daunting task. This post talks about my experience enabling Continuous Deployment (CD) using Github, TravisCI and my server on DigitalOcean and discuss what I tried and how I failed trying other methods'
 tags: ['Jekyll', 'Continuous Deployment', 'Continuous Integration', 'Travis-CI']
+summary: 'Having open sourced my blog on Github, deploying a new version of it live happens very often, and to do that manually every time is a daunting task. This post talks about my experience enabling Continuous Deployment (CD) using Github, TravisCI and my server on DigitalOcean and discuss what I tried and how I failed trying other methods'
+subtitle: 'Making Digital Ocean, Jekyll, Github and TravisCI all work'
+date: '2016-02-03'
 category: 'development'
-image: /static/images/jekyll.png
 ---
 
 Static sites are great and have various advantages. However, I am aware of how much easier to use WordPress is for lots of users. If we want to compare WordPress workflow to that of a static site: even though making changes to my Jekyll site may seem rather easy to me, it really isn’t that straightforward:

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MenuDropDown from '@/components/navigation/MenuDropDown';
+import MenuDropDown from '@/components/elements/DropDown';
 
 const MenuBlog = ({ navigation }) => {
   const [ menuBlogOpen, setMenuBlogOpen ] = React.useState(false);
@@ -10,7 +10,7 @@ const MenuBlog = ({ navigation }) => {
     <MenuDropDown name='Categories' menuDropDownOpen={ menuBlogOpen } setMenuDropDownOpen={ setMenuBlogOpen }></MenuDropDown>
 
     {menuBlogOpen ? (
-      <div className='absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4 top-10'>
+      <div className='absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-3 py-2 top-10'>
         <div className='w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5'>
           <div className='p-4'>
 

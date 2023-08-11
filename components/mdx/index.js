@@ -7,7 +7,7 @@ import Callout from '@/components/mdx/Callout';
 import Image from '@/components/mdx/Image';
 import CustomLink from '@/components/mdx/Link';
 import Pre from '@/components/mdx/Pre';
-import TOCInline from '@/components/mdx/TOCInline';
+import TOCInline from '@/components/mdx/TableOfContents';
 
 export const MDXComponents = {
   'BlogNewsletterForm': BlogNewsletterForm,

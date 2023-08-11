@@ -1,5 +1,5 @@
 ---
-type: project
+type: 'project'
 title: 'Micromanage'
 tags: ['opendata', 'semantic-web', 'data-quality']
 summary: 'Developing features affect very often more than one of these repos. Changing branches, syncing and development is hard as you have to keep flipping between multiple terminal tabs to make sure all the repos are in order. Beamery Micro-services Helpers are shell helper functions that will automate and facilitate manipulating micro-services repos and in general any multiple folders in a certain directory'
@@ -8,4 +8,5 @@ layout: ProjectLayout
 github: 'https://github.com/BeameryHQ/micromanage'
 featured: 'false'
 date: '2018-08-07'
+category: 'projects'
 ---

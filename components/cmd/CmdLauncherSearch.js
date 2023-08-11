@@ -11,7 +11,7 @@ function SearchCmd({ search, content }) {
 
   const searchAPI = useCallback(async(query) => {
 
-    const searchQuery = await fetch(`http://localhost:3000/api/search?q=${query}`);
+    const searchQuery = await fetch(`http://127.0.0.1:3000/api/search?q=${query}`);
     const searchResponse = await searchQuery.json();
 
     setSearchResult({ 'items': content.filter((_content) => searchResponse.includes(_content.slug)) });

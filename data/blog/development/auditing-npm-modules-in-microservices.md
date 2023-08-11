@@ -1,11 +1,12 @@
 ---
+type: 'post'
 title: 'Auditing NPM Modules in Microservices'
-date: '2016-10-01'
-subtitle: 'Clean-up some of the mess across your repositories'
-summary: 'Where i work at Beamery we follow Microservices Architecture and have a good 20+ git repositories. With time, these repos become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to easily audit and clean this mess.'
 tags: ['Node', 'Optimization', 'NPM']
+summary: 'Where I work at Beamery we follow Microservices Architecture and have a good 20+ git repositories. With time, these repos become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to easily audit and clean this mess.'
+subtitle: 'Clean-up some of the mess across your repositories'
+featured: 'false'
+date: '2016-10-01'
 category: 'development'
-image: /static/images/npm.png
 ---
 
 Where I work at [Beamery](http://beamery.com), we follow [Microservices Architecture](https://en.wikipedia.org/wiki/Microservices) and have a good 20+ git repositories. With time, these reports become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to quickly audit and clean this mess.

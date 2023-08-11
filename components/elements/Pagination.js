@@ -1,6 +1,6 @@
 import Link from '@/components/mdx/Link';
 
-export const POSTS_PER_PAGE = 5;
+const POSTS_PER_PAGE = 5;
 
 const Pagination = ({ totalPages, currentPage, baseURL, paginationURL }) => {
   const prevPage = parseInt(currentPage) - 1 > 0;
@@ -33,4 +33,4 @@ const Pagination = ({ totalPages, currentPage, baseURL, paginationURL }) => {
   );
 };
 
-export default Pagination;
+export { Pagination, POSTS_PER_PAGE };

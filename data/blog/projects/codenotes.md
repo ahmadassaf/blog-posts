@@ -8,4 +8,5 @@ layout: 'ProjectLayout'
 github: 'https://github.com/ahmadassaf/code-notes'
 featured: 'false'
 date: '2018-08-07'
+category: 'projects'
 ---
