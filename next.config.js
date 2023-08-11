@@ -1,8 +1,7 @@
-const createNextPluginPreval = require('next-plugin-preval/config');
-const withNextPluginPreval = createNextPluginPreval();
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   'enabled': process.env.ANALYZE === 'true'
 });
+const { withContentlayer } = require('next-contentlayer');
 
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
@@ -61,8 +60,9 @@ const securityHeaders = [
   }
 ];
 
-module.exports = withNextPluginPreval(
+module.exports = withContentlayer(
   withBundleAnalyzer({
+    'disableImportAliasWarning': true,
     'eslint': {
       'dirs': [ 'pages', 'components', 'lib', 'layouts', 'scripts' ]
     },

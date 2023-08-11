@@ -1,10 +1,11 @@
+import { allPosts } from 'contentlayer/generated';
+
 import siteMetadata from '@/data/meta/siteMetadata';
-import { getAllFilesFrontMatter } from '@/lib/mdx';
 
 export default async function sitemap() {
   const { siteUrl } = siteMetadata;
-  const allPosts = await getAllFilesFrontMatter('blog');
   const blogRoutes = allPosts.map((post) => {
+
     return {
       'lastModified': post.date || new Date(),
       'url': `${siteUrl}/${post.path}`
@@ -17,6 +18,8 @@ export default async function sitemap() {
       'url': `${siteUrl}/${route}`
     };
   });
+
+  console.log('blogRoutes', blogRoutes);
 
   return [ ...routes, ...blogRoutes ];
 }

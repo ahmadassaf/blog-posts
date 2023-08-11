@@ -1,0 +1,741 @@
+{
+  "cacheItemsMap": {
+    "authors/default.md": {
+      "document": {
+        "company": "Beamery",
+        "email": "me@assaf.website",
+        "github": "https://github.com/ahmadassaf,",
+        "linkedin": "https://www.linkedin.com/in/ahmadassaf",
+        "name": "Ahmad Assaf",
+        "occupation": "VP of Artificial Intelligence and Data",
+        "twitter": "https://twitter.com/ahmadaassaf",
+        "_id": "authors/default.md",
+        "_raw": {
+          "sourceFilePath": "authors/default.md",
+          "sourceFileName": "default.md",
+          "sourceFileDir": "authors",
+          "contentType": "markdown",
+          "flattenedPath": "authors/default"
+        },
+        "type": "Author",
+        "filePath": "authors/default.md",
+        "path": "authors/default"
+      },
+      "documentHash": "1691761580584",
+      "hasWarnings": false,
+      "documentTypeName": "Author"
+    },
+    "blog/data/rubix.md": {
+      "document": {
+        "category": "data",
+        "date": "2015-04-13T00:00:00.000Z",
+        "featured": false,
+        "subtitle": "A Framework for Improving Data Integration with Linked Data",
+        "summary": "RUBIX is a framework that enables business users to semi-automatically combine potentially noisy data residing in heterogeneous silos. Semantically related data is identified and appropriate mappings are suggested to users",
+        "tags": [
+          "Semantic Web",
+          "Schema Matching",
+          "Data Integration"
+        ],
+        "title": "RUBIX",
+        "_id": "blog/data/rubix.md",
+        "_raw": {
+          "sourceFilePath": "blog/data/rubix.md",
+          "sourceFileName": "rubix.md",
+          "sourceFileDir": "blog/data",
+          "contentType": "markdown",
+          "flattenedPath": "blog/data/rubix"
+        },
+        "type": "Post",
+        "filePath": "blog/data/rubix.md",
+        "path": "blog/data/rubix",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2015-04-13T00:00:00.000Z",
+          "datePublished": "2015-04-13T00:00:00.000Z",
+          "description": "RUBIX is a framework that enables business users to semi-automatically combine potentially noisy data residing in heterogeneous silos. Semantically related data is identified and appropriate mappings are suggested to users",
+          "headline": "RUBIX",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/data/rubix"
+        }
+      },
+      "documentHash": "1691761615645",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/productivity/latex-best-practices.md": {
+      "document": {
+        "category": "productivity",
+        "date": "2017-03-27T00:00:00.000Z",
+        "featured": false,
+        "subtitle": "A guide for a smooth completion of your thesis",
+        "summary": "Completing a Ph.D. can be a hell of a task. It took me lots of time to come up with a framework to optimize how I do research and write and execute deliverables. This post can help you in completing yours.",
+        "tags": [
+          "LaTEX",
+          "productivity"
+        ],
+        "title": "LaTeX Best Practices",
+        "_id": "blog/productivity/latex-best-practices.md",
+        "_raw": {
+          "sourceFilePath": "blog/productivity/latex-best-practices.md",
+          "sourceFileName": "latex-best-practices.md",
+          "sourceFileDir": "blog/productivity",
+          "contentType": "markdown",
+          "flattenedPath": "blog/productivity/latex-best-practices"
+        },
+        "type": "Post",
+        "filePath": "blog/productivity/latex-best-practices.md",
+        "path": "blog/productivity/latex-best-practices",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2017-03-27T00:00:00.000Z",
+          "datePublished": "2017-03-27T00:00:00.000Z",
+          "description": "Completing a Ph.D. can be a hell of a task. It took me lots of time to come up with a framework to optimize how I do research and write and execute deliverables. This post can help you in completing yours.",
+          "headline": "LaTeX Best Practices",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/productivity/latex-best-practices"
+        }
+      },
+      "documentHash": "1691761615801",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/development/auditing-npm-modules-in-microservices.md": {
+      "document": {
+        "category": "development",
+        "date": "2016-10-01T00:00:00.000Z",
+        "featured": false,
+        "subtitle": "Clean-up some of the mess across your repositories",
+        "summary": "Where I work at Beamery we follow Microservices Architecture and have a good 20+ git repositories. With time, these repos become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to easily audit and clean this mess.",
+        "tags": [
+          "Node",
+          "Optimization",
+          "NPM"
+        ],
+        "title": "Auditing NPM Modules in Microservices",
+        "_id": "blog/development/auditing-npm-modules-in-microservices.md",
+        "_raw": {
+          "sourceFilePath": "blog/development/auditing-npm-modules-in-microservices.md",
+          "sourceFileName": "auditing-npm-modules-in-microservices.md",
+          "sourceFileDir": "blog/development",
+          "contentType": "markdown",
+          "flattenedPath": "blog/development/auditing-npm-modules-in-microservices"
+        },
+        "type": "Post",
+        "filePath": "blog/development/auditing-npm-modules-in-microservices.md",
+        "path": "blog/development/auditing-npm-modules-in-microservices",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2016-10-01T00:00:00.000Z",
+          "datePublished": "2016-10-01T00:00:00.000Z",
+          "description": "Where I work at Beamery we follow Microservices Architecture and have a good 20+ git repositories. With time, these repos become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to easily audit and clean this mess.",
+          "headline": "Auditing NPM Modules in Microservices",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/development/auditing-npm-modules-in-microservices"
+        }
+      },
+      "documentHash": "1691761615716",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/development/dotfiles-for-the-public.md": {
+      "document": {
+        "category": "development",
+        "date": "2015-05-21T00:00:00.000Z",
+        "featured": false,
+        "subtitle": "An Essential Introduction to powering up your machine",
+        "summary": "Your dotfiles will help you create powerful and consistent shell shortcuts and functions, settings for your editors, color coding and layouts for your shell, preferences and authentication for ssh and mysql and other protocols, and more",
+        "tags": [
+          "bash",
+          "productivity"
+        ],
+        "title": "dotfiles for the public",
+        "_id": "blog/development/dotfiles-for-the-public.md",
+        "_raw": {
+          "sourceFilePath": "blog/development/dotfiles-for-the-public.md",
+          "sourceFileName": "dotfiles-for-the-public.md",
+          "sourceFileDir": "blog/development",
+          "contentType": "markdown",
+          "flattenedPath": "blog/development/dotfiles-for-the-public"
+        },
+        "type": "Post",
+        "filePath": "blog/development/dotfiles-for-the-public.md",
+        "path": "blog/development/dotfiles-for-the-public",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2015-05-21T00:00:00.000Z",
+          "datePublished": "2015-05-21T00:00:00.000Z",
+          "description": "Your dotfiles will help you create powerful and consistent shell shortcuts and functions, settings for your editors, color coding and layouts for your shell, preferences and authentication for ssh and mysql and other protocols, and more",
+          "headline": "dotfiles for the public",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/development/dotfiles-for-the-public"
+        }
+      },
+      "documentHash": "1691761615780",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/development/enabling-continuous-deployment-for-jekyll.md": {
+      "document": {
+        "category": "development",
+        "date": "2016-02-03T00:00:00.000Z",
+        "subtitle": "Making Digital Ocean, Jekyll, Github and TravisCI all work",
+        "summary": "Having open sourced my blog on Github, deploying a new version of it live happens very often, and to do that manually every time is a daunting task. This post talks about my experience enabling Continuous Deployment (CD) using Github, TravisCI and my server on DigitalOcean and discuss what I tried and how I failed trying other methods",
+        "tags": [
+          "Jekyll",
+          "Continuous Deployment",
+          "Continuous Integration",
+          "Travis-CI"
+        ],
+        "title": "Enabling Continuous Deployment for Jekyll",
+        "_id": "blog/development/enabling-continuous-deployment-for-jekyll.md",
+        "_raw": {
+          "sourceFilePath": "blog/development/enabling-continuous-deployment-for-jekyll.md",
+          "sourceFileName": "enabling-continuous-deployment-for-jekyll.md",
+          "sourceFileDir": "blog/development",
+          "contentType": "markdown",
+          "flattenedPath": "blog/development/enabling-continuous-deployment-for-jekyll"
+        },
+        "type": "Post",
+        "filePath": "blog/development/enabling-continuous-deployment-for-jekyll.md",
+        "path": "blog/development/enabling-continuous-deployment-for-jekyll",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2016-02-03T00:00:00.000Z",
+          "datePublished": "2016-02-03T00:00:00.000Z",
+          "description": "Having open sourced my blog on Github, deploying a new version of it live happens very often, and to do that manually every time is a daunting task. This post talks about my experience enabling Continuous Deployment (CD) using Github, TravisCI and my server on DigitalOcean and discuss what I tried and how I failed trying other methods",
+          "headline": "Enabling Continuous Deployment for Jekyll",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/development/enabling-continuous-deployment-for-jekyll"
+        }
+      },
+      "documentHash": "1691761551308",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/development/moving-blog-to-nextjs.md": {
+      "document": {
+        "category": "development",
+        "date": "2021-01-12T00:00:00.000Z",
+        "featured": false,
+        "summary": "Looking for a performant, out-of-the-box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.",
+        "tags": [
+          "next-js",
+          "tailwind",
+          "guide"
+        ],
+        "title": "Introducing Tailwind Nextjs Starter Blog",
+        "_id": "blog/development/moving-blog-to-nextjs.md",
+        "_raw": {
+          "sourceFilePath": "blog/development/moving-blog-to-nextjs.md",
+          "sourceFileName": "moving-blog-to-nextjs.md",
+          "sourceFileDir": "blog/development",
+          "contentType": "markdown",
+          "flattenedPath": "blog/development/moving-blog-to-nextjs"
+        },
+        "type": "Post",
+        "filePath": "blog/development/moving-blog-to-nextjs.md",
+        "path": "blog/development/moving-blog-to-nextjs",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2021-01-12T00:00:00.000Z",
+          "datePublished": "2021-01-12T00:00:00.000Z",
+          "description": "Looking for a performant, out-of-the-box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.",
+          "headline": "Introducing Tailwind Nextjs Starter Blog",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/development/moving-blog-to-nextjs"
+        }
+      },
+      "documentHash": "1691761615717",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/development/navigating-nextjs-dynamic-routing.md": {
+      "document": {
+        "category": "development",
+        "date": "2023-07-15T00:00:00.000Z",
+        "featured": false,
+        "subtitle": "How to create a dynamic pagination system for my Next.js blog",
+        "summary": "Next.js dynamic routing is extremely powerful! However, I ran into few issues trying to make that work with paginating dynamic category pages for my blog. I will share how I managed to work it out here",
+        "tags": [
+          "next.js",
+          "routing",
+          "pagination"
+        ],
+        "title": "Working with Next.js Dynamic Routing and Pagination",
+        "_id": "blog/development/navigating-nextjs-dynamic-routing.md",
+        "_raw": {
+          "sourceFilePath": "blog/development/navigating-nextjs-dynamic-routing.md",
+          "sourceFileName": "navigating-nextjs-dynamic-routing.md",
+          "sourceFileDir": "blog/development",
+          "contentType": "markdown",
+          "flattenedPath": "blog/development/navigating-nextjs-dynamic-routing"
+        },
+        "type": "Post",
+        "filePath": "blog/development/navigating-nextjs-dynamic-routing.md",
+        "path": "blog/development/navigating-nextjs-dynamic-routing",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2023-07-15T00:00:00.000Z",
+          "datePublished": "2023-07-15T00:00:00.000Z",
+          "description": "Next.js dynamic routing is extremely powerful! However, I ran into few issues trying to make that work with paginating dynamic category pages for my blog. I will share how I managed to work it out here",
+          "headline": "Working with Next.js Dynamic Routing and Pagination",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/development/navigating-nextjs-dynamic-routing"
+        }
+      },
+      "documentHash": "1691761615739",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/development/power-up-a-hero-blog-with-jekyll.md": {
+      "document": {
+        "category": "development",
+        "date": "2016-09-21T00:00:00.000Z",
+        "featured": true,
+        "subtitle": "Setting up a modular Jekyll blog with Continuous Integration and Deployment",
+        "summary": "Having had my blog on WordPress for a while now, I thought I need a lighter platform especially since my blog content is very lightweight and I don't need a fully-fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility",
+        "tags": [
+          "Jekyll"
+        ],
+        "title": "Power-up a hero blog with Jekyll",
+        "_id": "blog/development/power-up-a-hero-blog-with-jekyll.md",
+        "_raw": {
+          "sourceFilePath": "blog/development/power-up-a-hero-blog-with-jekyll.md",
+          "sourceFileName": "power-up-a-hero-blog-with-jekyll.md",
+          "sourceFileDir": "blog/development",
+          "contentType": "markdown",
+          "flattenedPath": "blog/development/power-up-a-hero-blog-with-jekyll"
+        },
+        "type": "Post",
+        "filePath": "blog/development/power-up-a-hero-blog-with-jekyll.md",
+        "path": "blog/development/power-up-a-hero-blog-with-jekyll",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2016-09-21T00:00:00.000Z",
+          "datePublished": "2016-09-21T00:00:00.000Z",
+          "description": "Having had my blog on WordPress for a while now, I thought I need a lighter platform especially since my blog content is very lightweight and I don't need a fully-fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility",
+          "headline": "Power-up a hero blog with Jekyll",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/development/power-up-a-hero-blog-with-jekyll"
+        }
+      },
+      "documentHash": "1691761622157",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/development/stepping-up-your-dev-game.md": {
+      "document": {
+        "category": "development",
+        "date": "2015-05-23T00:00:00.000Z",
+        "featured": false,
+        "subtitle": "Setting-up a superhero development environment",
+        "summary": "Setting up a proper development environment can be a tedious task. This post walks you through various configuration and automatic bash scripts that I have created to help automate setting up your development environment",
+        "tags": [
+          "bash",
+          "productivity"
+        ],
+        "title": "Stepping up your dev game",
+        "_id": "blog/development/stepping-up-your-dev-game.md",
+        "_raw": {
+          "sourceFilePath": "blog/development/stepping-up-your-dev-game.md",
+          "sourceFileName": "stepping-up-your-dev-game.md",
+          "sourceFileDir": "blog/development",
+          "contentType": "markdown",
+          "flattenedPath": "blog/development/stepping-up-your-dev-game"
+        },
+        "type": "Post",
+        "filePath": "blog/development/stepping-up-your-dev-game.md",
+        "path": "blog/development/stepping-up-your-dev-game",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2015-05-23T00:00:00.000Z",
+          "datePublished": "2015-05-23T00:00:00.000Z",
+          "description": "Setting up a proper development environment can be a tedious task. This post walks you through various configuration and automatic bash scripts that I have created to help automate setting up your development environment",
+          "headline": "Stepping up your dev game",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/development/stepping-up-your-dev-game"
+        }
+      },
+      "documentHash": "1691761615716",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/projects/booklight.md": {
+      "document": {
+        "category": "projects",
+        "date": "2018-08-07T00:00:00.000Z",
+        "featured": false,
+        "github": "https://github.com/ahmadassaf/booklight",
+        "layout": "ProjectLayout",
+        "subtitle": "Booklight is a clean Chrome Extension to ease the way of adding a bookmark",
+        "summary": "If you are: Obsessed with organization; Have a couple hundreds (or thousands) of folders in your bookmarks; You like to keep things tidy and every page has to be in its \"perfect\" place",
+        "tags": [
+          "opendata",
+          "semantic-web",
+          "data-quality"
+        ],
+        "title": "Booklight",
+        "_id": "blog/projects/booklight.md",
+        "_raw": {
+          "sourceFilePath": "blog/projects/booklight.md",
+          "sourceFileName": "booklight.md",
+          "sourceFileDir": "blog/projects",
+          "contentType": "markdown",
+          "flattenedPath": "blog/projects/booklight"
+        },
+        "type": "Project",
+        "filePath": "blog/projects/booklight.md",
+        "path": "blog/projects/booklight",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2018-08-07T00:00:00.000Z",
+          "datePublished": "2018-08-07T00:00:00.000Z",
+          "description": "If you are: Obsessed with organization; Have a couple hundreds (or thousands) of folders in your bookmarks; You like to keep things tidy and every page has to be in its \"perfect\" place",
+          "headline": "Booklight",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/projects/booklight"
+        }
+      },
+      "documentHash": "1691761615781",
+      "hasWarnings": false,
+      "documentTypeName": "Project"
+    },
+    "blog/projects/codenotes.md": {
+      "document": {
+        "category": "projects",
+        "date": "2018-08-07T00:00:00.000Z",
+        "featured": false,
+        "github": "https://github.com/ahmadassaf/code-notes",
+        "layout": "ProjectLayout",
+        "subtitle": "Tool to summarise all code annotation like TODO or FIXME",
+        "summary": "code-notes is a node.js version of Rails rake notes functionality. It allows you to put comments in your code and then have them annotated across your whole project",
+        "tags": [
+          "opendata",
+          "semantic-web",
+          "data-quality"
+        ],
+        "title": "Code-Notes",
+        "_id": "blog/projects/codenotes.md",
+        "_raw": {
+          "sourceFilePath": "blog/projects/codenotes.md",
+          "sourceFileName": "codenotes.md",
+          "sourceFileDir": "blog/projects",
+          "contentType": "markdown",
+          "flattenedPath": "blog/projects/codenotes"
+        },
+        "type": "Project",
+        "filePath": "blog/projects/codenotes.md",
+        "path": "blog/projects/codenotes",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2018-08-07T00:00:00.000Z",
+          "datePublished": "2018-08-07T00:00:00.000Z",
+          "description": "code-notes is a node.js version of Rails rake notes functionality. It allows you to put comments in your code and then have them annotated across your whole project",
+          "headline": "Code-Notes",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/projects/codenotes"
+        }
+      },
+      "documentHash": "1691761615781",
+      "hasWarnings": false,
+      "documentTypeName": "Project"
+    },
+    "blog/projects/ditto.md": {
+      "document": {
+        "category": "projects",
+        "date": "2018-08-07T00:00:00.000Z",
+        "featured": false,
+        "github": "https://github.com/BeameryHQ/json-ditto",
+        "layout": "ProjectLayout",
+        "subtitle": "Declarative JSON-to-JSON mapper .. shape-shift JSON files with Ditto",
+        "summary": "When dealing with data integration problems, the need to translate JSON from external formats to adhere to an internal representation becomes a vital task. Ditto was created to solve the issue of unifying external data representation.",
+        "tags": [
+          "opendata",
+          "semantic-web",
+          "data-quality"
+        ],
+        "title": "Ditto",
+        "_id": "blog/projects/ditto.md",
+        "_raw": {
+          "sourceFilePath": "blog/projects/ditto.md",
+          "sourceFileName": "ditto.md",
+          "sourceFileDir": "blog/projects",
+          "contentType": "markdown",
+          "flattenedPath": "blog/projects/ditto"
+        },
+        "type": "Project",
+        "filePath": "blog/projects/ditto.md",
+        "path": "blog/projects/ditto",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2018-08-07T00:00:00.000Z",
+          "datePublished": "2018-08-07T00:00:00.000Z",
+          "description": "When dealing with data integration problems, the need to translate JSON from external formats to adhere to an internal representation becomes a vital task. Ditto was created to solve the issue of unifying external data representation.",
+          "headline": "Ditto",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/projects/ditto"
+        }
+      },
+      "documentHash": "1691761615781",
+      "hasWarnings": false,
+      "documentTypeName": "Project"
+    },
+    "blog/projects/gaudi.md": {
+      "document": {
+        "category": "projects",
+        "date": "2018-08-07T00:00:00.000Z",
+        "featured": false,
+        "github": "https://github.com/g-udi",
+        "layout": "ProjectLayout",
+        "subtitle": "A collection of tools and services to boost developers productivity from bash frameworks and tools to OSX widgets and dotfiles",
+        "summary": "A collection of tools and services to boost developers productivity from bash frameworks and tools to OSX widgets and dotfiles",
+        "tags": [
+          "opendata",
+          "semantic-web",
+          "data-quality"
+        ],
+        "title": "Gaudi",
+        "_id": "blog/projects/gaudi.md",
+        "_raw": {
+          "sourceFilePath": "blog/projects/gaudi.md",
+          "sourceFileName": "gaudi.md",
+          "sourceFileDir": "blog/projects",
+          "contentType": "markdown",
+          "flattenedPath": "blog/projects/gaudi"
+        },
+        "type": "Project",
+        "filePath": "blog/projects/gaudi.md",
+        "path": "blog/projects/gaudi",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2018-08-07T00:00:00.000Z",
+          "datePublished": "2018-08-07T00:00:00.000Z",
+          "description": "A collection of tools and services to boost developers productivity from bash frameworks and tools to OSX widgets and dotfiles",
+          "headline": "Gaudi",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/projects/gaudi"
+        }
+      },
+      "documentHash": "1691761615781",
+      "hasWarnings": false,
+      "documentTypeName": "Project"
+    },
+    "blog/projects/kbe.md": {
+      "document": {
+        "category": "projects",
+        "date": "2018-08-07T00:00:00.000Z",
+        "featured": false,
+        "github": "https://github.com/ahmadassaf/KBE",
+        "layout": "ProjectLayout",
+        "subtitle": "Knowledge Base Extractor",
+        "summary": "This is a node.js application that aims at extracting the knowledge represented in the Google infoboxes (aka Google Knowlege Graph Panel)",
+        "tags": [
+          "opendata",
+          "semantic-web",
+          "data-quality"
+        ],
+        "title": "KBE",
+        "_id": "blog/projects/kbe.md",
+        "_raw": {
+          "sourceFilePath": "blog/projects/kbe.md",
+          "sourceFileName": "kbe.md",
+          "sourceFileDir": "blog/projects",
+          "contentType": "markdown",
+          "flattenedPath": "blog/projects/kbe"
+        },
+        "type": "Project",
+        "filePath": "blog/projects/kbe.md",
+        "path": "blog/projects/kbe",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2018-08-07T00:00:00.000Z",
+          "datePublished": "2018-08-07T00:00:00.000Z",
+          "description": "This is a node.js application that aims at extracting the knowledge represented in the Google infoboxes (aka Google Knowlege Graph Panel)",
+          "headline": "KBE",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/projects/kbe"
+        }
+      },
+      "documentHash": "1691761615782",
+      "hasWarnings": false,
+      "documentTypeName": "Project"
+    },
+    "blog/projects/micromanage.md": {
+      "document": {
+        "category": "projects",
+        "date": "2018-08-07T00:00:00.000Z",
+        "featured": false,
+        "github": "https://github.com/BeameryHQ/micromanage",
+        "layout": "ProjectLayout",
+        "subtitle": "A Micro-services Helpers Framework | Easily manage multiple repositories and projects",
+        "summary": "Developing features affect very often more than one of these repos. Changing branches, syncing and development is hard as you have to keep flipping between multiple terminal tabs to make sure all the repos are in order. Beamery Micro-services Helpers are shell helper functions that will automate and facilitate manipulating micro-services repos and in general any multiple folders in a certain directory",
+        "tags": [
+          "opendata",
+          "semantic-web",
+          "data-quality"
+        ],
+        "title": "Micromanage",
+        "_id": "blog/projects/micromanage.md",
+        "_raw": {
+          "sourceFilePath": "blog/projects/micromanage.md",
+          "sourceFileName": "micromanage.md",
+          "sourceFileDir": "blog/projects",
+          "contentType": "markdown",
+          "flattenedPath": "blog/projects/micromanage"
+        },
+        "type": "Project",
+        "filePath": "blog/projects/micromanage.md",
+        "path": "blog/projects/micromanage",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2018-08-07T00:00:00.000Z",
+          "datePublished": "2018-08-07T00:00:00.000Z",
+          "description": "Developing features affect very often more than one of these repos. Changing branches, syncing and development is hard as you have to keep flipping between multiple terminal tabs to make sure all the repos are in order. Beamery Micro-services Helpers are shell helper functions that will automate and facilitate manipulating micro-services repos and in general any multiple folders in a certain directory",
+          "headline": "Micromanage",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/projects/micromanage"
+        }
+      },
+      "documentHash": "1691761615781",
+      "hasWarnings": false,
+      "documentTypeName": "Project"
+    },
+    "blog/projects/roomba.md": {
+      "document": {
+        "category": "projects",
+        "date": "2018-08-07T00:00:00.000Z",
+        "featured": false,
+        "github": "https://github.com/ahmadassaf/openData-checker",
+        "layout": "ProjectLayout",
+        "subtitle": "Automatic Validation, Correction and Generation of Dataset Metadata",
+        "summary": "Roomba is a scalable automatic approach for extracting, validating and generating descriptive linked dataset profiles. This approach applies several techniques to check the validity of the attached metadata as well as providing descriptive and statistical information of a certain dataset as well as a whole data portal. Using our framework on prominent data portals shows that the general state of the Linked Open Data needs attention as most of datasets suffer from bad quality metadata and lack additional informative metrics",
+        "tags": [
+          "opendata",
+          "semantic-web",
+          "data-quality"
+        ],
+        "title": "Roomba",
+        "_id": "blog/projects/roomba.md",
+        "_raw": {
+          "sourceFilePath": "blog/projects/roomba.md",
+          "sourceFileName": "roomba.md",
+          "sourceFileDir": "blog/projects",
+          "contentType": "markdown",
+          "flattenedPath": "blog/projects/roomba"
+        },
+        "type": "Project",
+        "filePath": "blog/projects/roomba.md",
+        "path": "blog/projects/roomba",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2018-08-07T00:00:00.000Z",
+          "datePublished": "2018-08-07T00:00:00.000Z",
+          "description": "Roomba is a scalable automatic approach for extracting, validating and generating descriptive linked dataset profiles. This approach applies several techniques to check the validity of the attached metadata as well as providing descriptive and statistical information of a certain dataset as well as a whole data portal. Using our framework on prominent data portals shows that the general state of the Linked Open Data needs attention as most of datasets suffer from bad quality metadata and lack additional informative metrics",
+          "headline": "Roomba",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/projects/roomba"
+        }
+      },
+      "documentHash": "1691761615781",
+      "hasWarnings": false,
+      "documentTypeName": "Project"
+    },
+    "blog/semantic-web/everything-you-need-to-know-about-rdf.md": {
+      "document": {
+        "category": "semantic-web",
+        "date": "2014-02-22T00:00:00.000Z",
+        "featured": true,
+        "subtitle": "A Semantic Web Series",
+        "summary": "Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. This post discusses the Resource Description Framework (RDF) which is the main data modeling block of the Semantic Web",
+        "tags": [
+          "Semantic Web",
+          "RDF",
+          "RDFS",
+          "OWL",
+          "Linked Data"
+        ],
+        "title": "Everything you need to know about RDF",
+        "_id": "blog/semantic-web/everything-you-need-to-know-about-rdf.md",
+        "_raw": {
+          "sourceFilePath": "blog/semantic-web/everything-you-need-to-know-about-rdf.md",
+          "sourceFileName": "everything-you-need-to-know-about-rdf.md",
+          "sourceFileDir": "blog/semantic-web",
+          "contentType": "markdown",
+          "flattenedPath": "blog/semantic-web/everything-you-need-to-know-about-rdf"
+        },
+        "type": "Post",
+        "filePath": "blog/semantic-web/everything-you-need-to-know-about-rdf.md",
+        "path": "blog/semantic-web/everything-you-need-to-know-about-rdf",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2014-02-22T00:00:00.000Z",
+          "datePublished": "2014-02-22T00:00:00.000Z",
+          "description": "Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. This post discusses the Resource Description Framework (RDF) which is the main data modeling block of the Semantic Web",
+          "headline": "Everything you need to know about RDF",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/semantic-web/everything-you-need-to-know-about-rdf"
+        }
+      },
+      "documentHash": "1691761622117",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    },
+    "blog/semantic-web/introduction-to-semantic-web.md": {
+      "document": {
+        "category": "semantic-web",
+        "date": "2014-04-21T00:00:00.000Z",
+        "featured": true,
+        "subtitle": "A Semantic Web series",
+        "summary": "In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application",
+        "tags": [
+          "Semantic Web",
+          "Knowledge Representation",
+          "Linked Data"
+        ],
+        "title": "Introduction to Semantic Web",
+        "_id": "blog/semantic-web/introduction-to-semantic-web.md",
+        "_raw": {
+          "sourceFilePath": "blog/semantic-web/introduction-to-semantic-web.md",
+          "sourceFileName": "introduction-to-semantic-web.md",
+          "sourceFileDir": "blog/semantic-web",
+          "contentType": "markdown",
+          "flattenedPath": "blog/semantic-web/introduction-to-semantic-web"
+        },
+        "type": "Post",
+        "filePath": "blog/semantic-web/introduction-to-semantic-web.md",
+        "path": "blog/semantic-web/introduction-to-semantic-web",
+        "structuredData": {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "dateModified": "2014-04-21T00:00:00.000Z",
+          "datePublished": "2014-04-21T00:00:00.000Z",
+          "description": "In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application",
+          "headline": "Introduction to Semantic Web",
+          "image": "/static/images/twitter-card.png",
+          "url": "https://assaf.website/blog/semantic-web/introduction-to-semantic-web"
+        }
+      },
+      "documentHash": "1691761622117",
+      "hasWarnings": false,
+      "documentTypeName": "Post"
+    }
+  }
+}
