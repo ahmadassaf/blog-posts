@@ -1,12 +1,6 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files';
 import { writeFileSync } from 'fs';
-import GithubSlugger from 'github-slugger';
 import path from 'path';
-import { extractTocHeadings,
-  remarkCodeTitles,
-  remarkExtractFrontmatter,
-  remarkImgToJsx } from 'pliny/mdx-plugins/index.js';
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js';
 import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeCitation from 'rehype-citation';
@@ -17,7 +11,14 @@ import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 
+import navigationMetadata from './data/meta/navigationMetadata';
 import siteMetadata from './data/meta/siteMetadata';
+import { extractTocHeadings,
+  remarkCodeTitles,
+  remarkExtractFrontmatter,
+  remarkImgToJsx } from './lib/mdx/index.js';
+import { allCoreContent, sortPosts } from './lib/utils/contentLayer.js';
+import kebabCase from './lib/utils/kebabCase';
 
 const root = process.cwd();
 
@@ -38,35 +39,62 @@ const computedFields = {
   'toc': { 'resolve': (doc) => extractTocHeadings(doc.body.raw), 'type': 'string' }
 };
 
-/**
- * Count the occurrences of all tags across blog posts and write to json file
- */
-function createTagCount(allBlogs) {
-  const tagCount = {};
+function getAllTags(allPosts) {
+  const tags = {};
 
-  allBlogs.forEach((file) => {
-    if (file.tags && file.draft !== true) file.tags.forEach((tag) => {
-      const formattedTag = GithubSlugger.slug(tag);
+  allPosts.forEach((post) => {
+    if (post.tags) post.tags.forEach((tag) => {
+      const formattedTag = kebabCase(tag).trim();
 
-      if (formattedTag in tagCount) tagCount[formattedTag] += 1;
-      else tagCount[formattedTag] = 1;
-
+      if (tags[formattedTag]) tags[formattedTag].count++;
+      else tags[formattedTag] = {
+        'children': tag,
+        'count': 1,
+        'display': tag,
+        'href': `/blog/tag/${formattedTag}`,
+        'id': formattedTag,
+        'showType': false,
+        'slug': formattedTag,
+        'title': tag,
+        'type': 'tag'
+      };
     });
-
   });
-  writeFileSync('./app/tag-data.json', JSON.stringify(tagCount));
+  writeFileSync('./app/content/tags.json', JSON.stringify(Object.values(tags)));
 }
 
-function createSearchIndex(allBlogs) {
-  if (
-    siteMetadata?.search?.provider === 'kbar' &&
-    siteMetadata.search.kbarConfig.searchDocumentsPath
-  ) {
-    writeFileSync(
-      `public/${siteMetadata.search.kbarConfig.searchDocumentsPath}`, JSON.stringify(allCoreContent(sortPosts(allBlogs)))
-    );
-    console.log('Local search index generated...');
-  }
+function getAllCategories(allPosts) {
+  const categories = {};
+
+  allPosts.forEach((post) => {
+    if (post.category) {
+      const formattedCategory = kebabCase(post.category).trim();
+
+      if (categories[formattedCategory]) categories[formattedCategory].count++;
+      else categories[formattedCategory] = {
+        'children': post.category,
+        'count': 1,
+        'description': navigationMetadata.categoriesMetadata[post.category],
+        'href': `/blog/category/${formattedCategory}`,
+        'id': formattedCategory,
+        'showType': false,
+        'slug': formattedCategory,
+        'title': kebabCase(post.category),
+        'type': 'category'
+      };
+    }
+  });
+
+  writeFileSync('./app/content/categories.json', JSON.stringify(Object.values(categories)));
+}
+
+function createSearchIndex(allPosts) {
+
+  writeFileSync(
+    `./app/content/sitedata.json`, JSON.stringify(allCoreContent(sortPosts(allPosts)))
+  );
+  console.log('Local search index generated...');
+
 }
 
 export const Post = defineDocumentType(() => {
@@ -190,9 +218,10 @@ export default makeSource({
     ]
   },
   'onSuccess': async(importData) => {
-    const { allBlogs } = await importData();
+    const { allPosts } = await importData();
 
-    createTagCount(allBlogs);
-    createSearchIndex(allBlogs);
+    createSearchIndex(allPosts);
+    getAllTags(allPosts);
+    getAllCategories(allPosts);
   }
 });

@@ -1,12 +1,12 @@
+import { allPosts } from 'contentlayer/generated';
+
 import { POSTS_PER_PAGE } from '@/components/elements/Pagination';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
-import { getAllFilesFrontMatter } from '@/lib/mdx';
 
 export async function getStaticPaths() {
-  const totalPosts = await getAllFilesFrontMatter('blog');
-  const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE);
+  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
   const paths = Array.from({ 'length': totalPages }, (_, index) => {
     return { 'params': { 'page': (index + 1).toString() } };
   });
@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
   const { 'params': { page } } = context;
-  const allPosts = await getAllFilesFrontMatter('blog');
+
   const posts = allPosts.filter((post) => post.type !== 'project');
   const pageNumber = parseInt(page);
   const pagePosts = posts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);

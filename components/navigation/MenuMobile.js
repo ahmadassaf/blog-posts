@@ -1,13 +1,13 @@
 
 import React from 'react';
 
+import Link from '@/components/elements/Link';
 import NewsletterForm from '@/components/forms/NewsletterForm';
-import Link from '@/components/mdx/Link';
 import ThemeLogo from '@/components/navigation/MenuLogo';
 import MenuSearch from '@/components/navigation/MenuSearch';
 import siteMetadata from '@/data/meta/metadata';
 
-const MenuMobile = ({ navigation, setMobileMenuOpen, setLauncherOpen }) => (
+const MenuMobile = ({ categories, links, setMobileMenuOpen, setLauncherOpen }) => (
   <div className='lg:hidden' role='dialog' aria-modal='true'>
 
     <div className='fixed shadow dark:bg-gray-900 inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
@@ -34,7 +34,7 @@ const MenuMobile = ({ navigation, setMobileMenuOpen, setLauncherOpen }) => (
             <div className='-mx-3'>
 
               <div className='mt-2 space-y-2' id='disclosure-1'>
-                {navigation.categories.map((category) => (
+                {categories.map((category) => (
                   <a key={ category.id } href={ `/blog/category/${category.id}` } className='group capitalize block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{category.title.replace('-', ' ')}
                     <p className='mt-1 text-gray-600 font-light text-s dark:text-gray-100 dark:group-hover:text-gray-600'>{category.description}</p>
                   </a>
@@ -43,7 +43,7 @@ const MenuMobile = ({ navigation, setMobileMenuOpen, setLauncherOpen }) => (
 
             </div>
 
-            {navigation.links.map((link) => (
+            {links.map((link) => (
               <a key={ link.href } href={ link.href } className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{link.title}</a>
             ))}
 

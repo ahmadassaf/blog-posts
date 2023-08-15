@@ -60,13 +60,16 @@ const securityHeaders = [
   }
 ];
 
-module.exports = withContentlayer(
-  withBundleAnalyzer({
-    'disableImportAliasWarning': true,
+module.exports = () => {
+  const plugins = [ withContentlayer, withBundleAnalyzer ];
+
+  return plugins.reduce((acc, next) => next(acc), {
     'eslint': {
-      'dirs': [ 'pages', 'components', 'lib', 'layouts', 'scripts' ]
+      'dirs': [ 'app', 'components', 'layouts', 'scripts' ]
     },
-    'experimental': { 'appDir': true },
+    'experimental': {
+      'appDir': true
+    },
     async headers() {
       return [
         {
@@ -75,22 +78,18 @@ module.exports = withContentlayer(
         }
       ];
     },
-    'pageExtensions': [ 'js', 'jsx', 'md', 'mdx' ],
+    'images': {
+      'domains': [ 'picsum.photos' ]
+    },
+    'pageExtensions': [ 'ts', 'tsx', 'js', 'jsx', 'md', 'mdx' ],
     'reactStrictMode': true,
-    'webpack': (config, { dev, isServer }) => {
+    'webpack': (config, options) => {
       config.module.rules.push({
         'test': /\.svg$/,
         'use': [ '@svgr/webpack' ]
       });
 
-      if (!dev && !isServer) Object.assign(config.resolve.alias, {
-        'react': 'preact/compat',
-        'react-dom': 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-        'react/jsx-runtime.js': 'preact/compat/jsx-runtime'
-      });
-
       return config;
     }
-  })
-);
+  });
+};

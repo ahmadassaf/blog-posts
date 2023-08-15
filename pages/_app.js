@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
 import { ThemeProvider } from 'next-themes';
@@ -15,14 +14,10 @@ import 'katex/dist/katex.css';
 import '@fontsource/inter/variable-full.css';
 import 'nprogress/nprogress.css';
 
-let navigationPropsCache;
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isSocket = process.env.SOCKET;
 
-const App = ({ Component, pageProps, navigationProps }) => {
-  useEffect(() => {
-    navigationPropsCache = navigationProps;
-  }, [ navigationProps ]);
+const App = ({ Component, pageProps }) => {
 
   Router.events.on('routeChangeStart', () => NProgress.start());
   Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -35,22 +30,11 @@ const App = ({ Component, pageProps, navigationProps }) => {
       </Head>
       {isDevelopment && isSocket && <ClientReload />}
       <Analytics />
-      <LayoutWrapper navigation={ navigationProps }>
+      <LayoutWrapper>
         <Component { ...pageProps } />
       </LayoutWrapper>
     </ThemeProvider>
   );
-};
-
-App.getInitialProps = async() => {
-  if (navigationPropsCache) return { 'navigationProps': navigationPropsCache };
-
-  const res = await fetch('http://127.0.0.1:3000/api/navigation');
-  const navigationProps = await res.json();
-
-  navigationPropsCache = navigationProps;
-
-  return { navigationProps };
 };
 
 export default App;

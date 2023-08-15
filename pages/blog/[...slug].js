@@ -1,20 +1,15 @@
-import fs from 'fs';
+import { allPosts } from 'contentlayer/generated';
 
-import { MDXLayoutRenderer } from '@/components/mdx';
-import generateRss from '@/lib/generate-rss';
-import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx';
-
-const DEFAULT_LAYOUT = 'PostLayout';
+import { MDXComponents, MDXLayoutRenderer } from '@/components/mdx';
+import PostLayout from '@/layouts/PostLayout';
 
 export async function getStaticPaths() {
-  const posts = getFiles('blog');
-
   return {
     'fallback': false,
-    'paths': posts.map((p) => {
+    'paths': allPosts.map((post) => {
       return {
         'params': {
-          'slug': formatSlug(p).split('/')
+          'slug': post.slug.split('/')
         }
       };
     })
@@ -23,34 +18,22 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
 
-  const allPosts = await getAllFilesFrontMatter('blog');
-  const postIndex = allPosts.findIndex((post) => formatSlug(post.slug) === params.slug.join('/'));
+  const slug = decodeURI(params.slug.join('/'));
+
+  const postIndex = allPosts.findIndex((_post) => _post.slug === slug);
   const previousPost = allPosts[postIndex + 1] || null;
   const nextPost = allPosts[postIndex - 1] || null;
-  const post = await getFileBySlug('blog', params.slug.join('/'));
-  const authorList = post.frontMatter.authors || [ 'default' ];
-  const authorPromise = authorList.map(async(author) => {
-    const authorResults = await getFileBySlug('authors', [ author ]);
+  const post = allPosts.filter((_post) => _post.slug === slug)[0];
 
-    return authorResults.frontMatter;
-  });
-  const authorDetails = await Promise.all(authorPromise);
-
-  if (allPosts.length > 0) {
-    const rss = generateRss(allPosts);
-
-    fs.writeFileSync('./public/feed.xml', rss);
-  }
-
-  return { 'props': { authorDetails, nextPost, post, previousPost } };
+  return { 'props': { nextPost, post, previousPost } };
 }
 
-export default function Blog({ post, authorDetails, previousPost, nextPost }) {
-  const { mdxSource, toc, frontMatter } = post;
-
+export default function Blog({ nextPost, post, previousPost }) {
   return (
     <>
-      <MDXLayoutRenderer layout={ frontMatter.layout || DEFAULT_LAYOUT } toc={ toc } mdxSource={ mdxSource } frontMatter={ frontMatter } authorDetails={ authorDetails } previousPost={ previousPost } nextPost={ nextPost }/>
+      <PostLayout content={ post } next={ nextPost } prev={ previousPost } toc={ post.toc }>
+        <MDXLayoutRenderer code={ post.body.code } components={ MDXComponents } />
+      </PostLayout>
     </>
   );
 }

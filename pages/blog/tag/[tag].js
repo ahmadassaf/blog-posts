@@ -1,25 +1,18 @@
-import fs from 'fs';
-import path from 'path';
+import { allPosts } from 'contentlayer/generated';
 
+import tags from '@/app/content/tags';
 import { TagSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
-import generateRss from '@/lib/generate-rss';
-import { getAllFilesFrontMatter } from '@/lib/mdx';
-import { getAllTags } from '@/lib/tags';
 import kebabCase from '@/lib/utils/kebabCase';
 
-const root = process.cwd();
-
 export async function getStaticPaths() {
-  const tags = await getAllTags('blog');
-
   return {
     'fallback': false,
-    'paths': Object.keys(tags).map((tag) => {
+    'paths': tags.map((tag) => {
       return {
         'params': {
-          tag
+          'tag': tag.slug
         }
       };
     })
@@ -27,18 +20,9 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const allPosts = await getAllFilesFrontMatter('blog');
   const filteredPosts = allPosts.filter(
     (post) => post.tags.map((_tag) => kebabCase(_tag)).includes(params.tag)
   );
-
-  if (filteredPosts.length > 0) {
-    const rss = generateRss(filteredPosts, `blog/tag/${params.tag}/feed.xml`);
-    const rssPath = path.join(root, 'public', 'tag', params.tag);
-
-    fs.mkdirSync(rssPath, { 'recursive': true });
-    fs.writeFileSync(path.join(rssPath, 'feed.xml'), rss);
-  }
 
   return { 'props': { 'posts': filteredPosts, 'tag': params.tag } };
 }
@@ -48,10 +32,7 @@ export default function Tag({ posts, tag }) {
 
   return (
     <>
-      <TagSEO
-        title={ `${tag} - ${siteMetadata.author}` }
-        description={ `${tag} tag - ${siteMetadata.author}` }
-      />
+      <TagSEO title={ `Tag:${tag}` } description={ `Tag:${tag} | ${siteMetadata.title}` }/>
       <ListLayout posts={ posts } listTitle={ `${title} Posts` } paginationURL={ `blog/tag/${tag}/page` } baseURL={ `blog/tag/${tag}` }/>
     </>
   );

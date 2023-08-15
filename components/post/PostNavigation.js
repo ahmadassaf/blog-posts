@@ -1,4 +1,4 @@
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 
 const PostNavigation = ({ next, prev }) => (
   <div className='divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700'>

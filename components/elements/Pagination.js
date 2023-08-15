@@ -1,4 +1,4 @@
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 
 const POSTS_PER_PAGE = 5;
 

@@ -1,16 +1,16 @@
 import SectionContainer from '@/components/containers/SectionContainer';
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 import Comments from '@/components/post/comments';
 import { BlogSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import formatDate from '@/lib/utils/formatDate';
 
-export default function PostLayout({ frontMatter, next, prev, children }) {
-  const { date, title } = frontMatter;
+export default function PostLayout({ content, next, prev, children }) {
+  const { date, title } = content;
 
   return (
     <SectionContainer>
-      <BlogSEO url={ `${siteMetadata.siteUrl}/blog/${frontMatter.slug}` } { ...frontMatter } />
+      <BlogSEO url={ `${siteMetadata.siteUrl}/blog/${content.slug}` } { ...content } />
       <article>
         <div>
           <header>
@@ -37,7 +37,7 @@ export default function PostLayout({ frontMatter, next, prev, children }) {
             <div className='divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0'>
               <div className='prose max-w-none pt-10 pb-8 dark:prose-dark'>{children}</div>
             </div>
-            <Comments frontMatter={ frontMatter } />
+            <Comments content={ content } />
             <footer>
               <div className='flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base'>
                 {prev && (

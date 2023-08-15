@@ -1,17 +1,12 @@
+import { allPosts } from 'contentlayer/generated';
+
 import LauncherShortcut from '@/components/cmd/CmdLauncherShortcut';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
-import { getAllFilesFrontMatter } from '@/lib/mdx';
+import { sortPosts } from '@/lib/utils/contentlayer';
 
-export async function getStaticProps() {
-  const allPosts = await getAllFilesFrontMatter('blog');
-  const posts = allPosts.filter((post) => post.type !== 'project').slice(0, 5);
-
-  return { 'props': { posts } };
-}
-
-export default function Home({ posts }) {
+export default function Home() {
   return (
     <>
       <PageSEO title={ siteMetadata.title } description={ siteMetadata.description } />
@@ -27,7 +22,7 @@ export default function Home({ posts }) {
           <h2>{`Welcome to ${siteMetadata.description}. ${siteMetadata.about}`}</h2>
           <LauncherShortcut />
         </div>
-        <ListLayout posts={ posts } linkAllPosts={ true } listTitle='Latest Posts' />
+        <ListLayout posts={ sortPosts(allPosts, 'date').slice(0, 5) } linkAllPosts={ true } listTitle='Latest Posts' />
       </div>
     </>
   );

@@ -1,18 +1,12 @@
-import { MDXLayoutRenderer } from '@/components/mdx';
-import { getFileBySlug } from '@/lib/mdx';
+import { allAuthors } from 'contentlayer/generated';
 
-const DEFAULT_LAYOUT = 'AuthorLayout';
+import { MDXComponents, MDXLayoutRenderer } from '@/components/mdx';
+import AuthorLayout from '@/layouts/AuthorLayout';
 
-export async function getStaticProps() {
-  const authorDetails = await getFileBySlug('authors', [ 'default' ]);
-
-  return { 'props': { authorDetails } };
-}
-
-export default function About({ authorDetails }) {
-  const { mdxSource, frontMatter } = authorDetails;
-
+export default function About() {
   return (
-    <MDXLayoutRenderer layout={ frontMatter.layout || DEFAULT_LAYOUT } mdxSource={ mdxSource } frontMatter={ frontMatter }/>
+    <AuthorLayout content={ allAuthors[0] }>
+      <MDXLayoutRenderer code={ allAuthors[0].body.code } components={ MDXComponents } />
+    </AuthorLayout>
   );
 }

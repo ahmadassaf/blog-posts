@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import SocialIcon from '@/components/elements/Icon';
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 
 const PostSharing = ({ siteMetadata, slug, fileName }) => {
 

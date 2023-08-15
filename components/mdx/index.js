@@ -1,30 +1,36 @@
+/* eslint-disable no-new-func */
 /* eslint-disable react/display-name */
-import { useMemo } from 'react';
-import { getMDXComponent } from 'mdx-bundler/client';
+/* eslint-disable camelcase */
 
+import React from 'react';
+import * as _jsx_runtime from 'react/jsx-runtime';
+import ReactDOM from 'react-dom';
+
+import CustomLink from '@/components/elements/Link';
 import { BlogNewsletterForm } from '@/components/forms/NewsletterForm';
 import Callout from '@/components/mdx/Callout';
+import Faq from '@/components/mdx/Faq';
 import Image from '@/components/mdx/Image';
-import CustomLink from '@/components/mdx/Link';
 import Pre from '@/components/mdx/Pre';
-import TOCInline from '@/components/mdx/TableOfContents';
+import Quote from '@/components/mdx/Quote';
+import Stats from '@/components/mdx/Stats';
 
-export const MDXComponents = {
-  'BlogNewsletterForm': BlogNewsletterForm,
-  'Callout': Callout,
-  Image,
-  TOCInline,
-  'a': CustomLink,
-  'pre': Pre,
-  'wrapper': ({ components, layout, ...rest }) => {
-    const Layout = require(`../../layouts/${layout}`).default;
+export const MDXComponents = { BlogNewsletterForm, Callout, Faq, Image, Quote, Stats, 'a': CustomLink, 'pre': Pre };
 
-    return <Layout { ...rest } />;
-  }
+const getMDXComponent = (code, globals = {}) => {
+  const scope = { React, ReactDOM, _jsx_runtime, ...globals };
+  const fn = new Function(...Object.keys(scope), code);
+
+  return fn(...Object.values(scope)).default;
 };
 
-export const MDXLayoutRenderer = ({ layout, mdxSource, ...rest }) => {
-  const MDXLayout = useMemo(() => getMDXComponent(mdxSource), [ mdxSource ]);
+export const useMDXComponent = (
+  code,
+  globals = {}
+) => React.useMemo(() => getMDXComponent(code, globals), [ code, globals ]);
 
-  return <MDXLayout layout={ layout } components={ MDXComponents } { ...rest } />;
+export const MDXLayoutRenderer = ({ code, components, ...rest }) => {
+  const Mdx = useMDXComponent(code);
+
+  return <Mdx components={ components } { ...rest } />;
 };

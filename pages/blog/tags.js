@@ -1,18 +1,10 @@
+import tags from '@/app/content/tags';
+import Link from '@/components/elements/Link';
 import Tag from '@/components/elements/Tag';
-import Link from '@/components/mdx/Link';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
-import { getAllTags } from '@/lib/tags';
 
-export async function getStaticProps() {
-  const tags = await getAllTags('blog');
-
-  return { 'props': { tags } };
-}
-
-export default function Tags({ tags }) {
-  const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a]);
-
+export default function Tags() {
   return (
     <>
       <PageSEO title={ `Tags - ${siteMetadata.author}` } description='Things I blog about' />
@@ -23,15 +15,12 @@ export default function Tags({ tags }) {
           </h1>
         </div>
         <div className='flex max-w-lg flex-wrap'>
-          {Object.keys(tags).length === 0 && 'No tags found.'}
-          {sortedTags.map((_tag) => (
-            <div key={ _tag } className='mt-2 mb-2 mr-5'>
-              <Tag text={ tags[_tag].display } slug={ tags[_tag].slug } />
-              <Link
-                href={ `/blog/tag/${tags[_tag].slug}` }
-                className='-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300'
-              >
-                  &nbsp;{` (${tags[_tag].count})`}
+          {tags.length === 0 && 'No tags found.'}
+          {tags.length && tags.map((_tag) => (
+            <div key={ _tag.id } className='mt-2 mb-2 mr-5'>
+              <Tag text={ _tag.display } slug={ _tag.slug } />
+              <Link href={ `/blog/tag/${_tag.slug}` } className='-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300'>
+                  &nbsp;{` (${_tag.count})`}
               </Link>
             </div>
           ))}

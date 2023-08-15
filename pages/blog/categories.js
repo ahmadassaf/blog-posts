@@ -1,16 +1,10 @@
+import categories from '@/app/content/categories';
 import Category from '@/components/elements/Category';
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
-import { getAllCategories } from '@/lib/categories';
 
-export async function getStaticProps() {
-  const categories = await getAllCategories('blog');
-
-  return { 'props': { categories } };
-}
-
-export default function Categories({ categories }) {
+export default function Categories() {
   return (
     <>
       <PageSEO title={ `Categories - ${siteMetadata.author}` } description='Things I blog about' />
@@ -21,15 +15,15 @@ export default function Categories({ categories }) {
           </h1>
         </div>
         <div className='flex max-w-lg flex-wrap'>
-          {Object.keys(categories).length === 0 && 'No Categories found'}
-          {Object.keys(categories).map((category) => (
-            <div key={ category } className='mt-2 mb-2 mr-5'>
-              <Category text={ categories[category].display } slug={ categories[category].slug } />
+          {categories.length === 0 && 'No Categories found'}
+          {categories.map((category) => (
+            <div key={ category.id } className='mt-2 mb-2 mr-5'>
+              <Category text={ category.title } slug={ category.slug } />
               <Link
-                href={ `/categories/${category}` }
+                href={ `blog/categories/${category.slug}` }
                 className='-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300'
               >
-                  &nbsp;{` (${categories[category].count})`}
+                  &nbsp;{` (${category.count})`}
               </Link>
             </div>
           ))}

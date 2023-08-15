@@ -1,8 +1,11 @@
 import { React, useState } from 'react';
+import { allPosts, allProjects } from 'contentlayer/generated';
 import { useRouter } from 'next/router';
 
+import categories from '@/app/content/categories';
+import tags from '@/app/content/tags';
 import CommandLauncher from '@/components/cmd/CmdLauncher';
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 import MenuBlog from '@/components/navigation/MenuBlog';
 import ThemeLogo from '@/components/navigation/MenuLogo';
 import MenuMain from '@/components/navigation/MenuMain';
@@ -10,9 +13,9 @@ import MenuMobile from '@/components/navigation/MenuMobile';
 import MenuSearch from '@/components/navigation/MenuSearch';
 import ThemeSwitch from '@/components/utils/ThemeSwitcher';
 import siteMetadata from '@/data/meta/metadata';
+import NavigationMetadata from '@/data/meta/navigationMetadata';
 
-const Menu = ({ navigation }) => {
-
+const Menu = () => {
   const router = useRouter();
   const path = router?.asPath;
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
@@ -41,13 +44,13 @@ const Menu = ({ navigation }) => {
 
       <ThemeSwitch />
 
-      {mobileMenuOpen ? (<MenuMobile navigation={ navigation } setMobileMenuOpen={ setMobileMenuOpen } setLaunherOpen={ LauncherSetOpen } />) : null}
+      {mobileMenuOpen ? (<MenuMobile categories={ categories } links={ NavigationMetadata.links } setMobileMenuOpen={ setMobileMenuOpen } setLaunherOpen={ LauncherSetOpen } />) : null}
       <div className='mx-auto max-w-7xl px-2 lg:px-8'>
         <div className='flex h-16 justify-between'>
           <div className='flex px-2 lg:px-0 relative'>
             <div className='hidden lg:ml-6 lg:flex lg:space-x-8'>
               <ul className='invisible lg:visible flex-row-reverse sm:flex items-center'>
-                {navigation.links.map((link) => {
+                {NavigationMetadata.links.map((link) => {
                   if (
                     (link.hideInPath === '*' && !path.includes(link.showInPath)) || path.includes(link.hideInPath)) return true;
 
@@ -60,8 +63,8 @@ const Menu = ({ navigation }) => {
                   );
                 })}
 
-                { !path.includes('/blog') && (<MenuMain navigation={ navigation }></MenuMain>) }
-                { path.includes('/blog') && (<MenuBlog navigation={ navigation }></MenuBlog>) }
+                { !path.includes('/blog') && (<MenuMain categories={ categories } allPosts={ allPosts }></MenuMain>) }
+                { path.includes('/blog') && (<MenuBlog categories={ categories }></MenuBlog>) }
 
               </ul>
             </div>
@@ -73,7 +76,7 @@ const Menu = ({ navigation }) => {
 
         </div>
       </div>
-      <CommandLauncher tags={ navigation.tags } projects={ navigation.projects } posts={ navigation.posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
+      <CommandLauncher tags={ tags } projects={ allProjects } posts={ allPosts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
     </div>
   </nav>
   );

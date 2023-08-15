@@ -2,7 +2,7 @@ import React from 'react';
 
 import MenuDropDown from '@/components/elements/DropDown';
 
-const MenuBlog = ({ navigation }) => {
+const MenuBlog = ({ categories }) => {
   const [ menuBlogOpen, setMenuBlogOpen ] = React.useState(false);
 
   return (<>
@@ -14,7 +14,7 @@ const MenuBlog = ({ navigation }) => {
         <div className='w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5'>
           <div className='p-4'>
 
-            {navigation.categories.map((category) => (
+            {categories.map((category) => (
               <div key={ category.id } className='group relative flex rounded-lg p-3 hover:bg-gray-50'>
                 <div>
                   <a href={ `/blog/category/${category.id}` } className='font-semibold text-gray-900 hover:text-blue-600 capitalize'>

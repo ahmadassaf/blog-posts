@@ -24,7 +24,6 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
 
   prepareLauncherCollection(posts, 'post');
   prepareLauncherCollection(projects, 'project');
-  prepareLauncherCollection(tags, 'tag');
 
   React.useEffect(() => {
     const down = (event) => {

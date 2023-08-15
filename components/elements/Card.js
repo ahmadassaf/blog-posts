@@ -1,4 +1,4 @@
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 
 const Card = ({ title, subtitle, description, href }) => (
   <div className='min-h-80 group border-2 border-gray-200 border-opacity-60 hover:border-blue-700 dark:border-gray-700 dark:hover:border-blue-700'>

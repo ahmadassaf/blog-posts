@@ -5,6 +5,7 @@
       "contentlayer/generated": ["./.contentlayer/generated"],
       "@/components/*": ["components/*"],
       "@/data/*": ["data/*"],
+      "@/app/*": ["app/*"],
       "@/layouts/*": ["layouts/*"],
       "@/lib/*": ["lib/*"],
       "@/css/*": ["css/*"]

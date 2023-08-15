@@ -1,12 +1,10 @@
 import { useState } from 'react';
 
+import Link from '@/components/elements/Link';
 import { Pagination, POSTS_PER_PAGE } from '@/components/elements/Pagination';
 import Post from '@/components/elements/Post';
 import Search from '@/components/elements/Search';
-import Link from '@/components/mdx/Link';
 
-console.log('ListLayout', Pagination);
-console.log('POSTS_PER_PAGE', POSTS_PER_PAGE);
 export default function ListLayout({ posts, listTitle, linkAllPosts = false, baseURL, paginationURL, currentPage, totalPages }) {
 
   const [ searchValue, setSearchValue ] = useState('');

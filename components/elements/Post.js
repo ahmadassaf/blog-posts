@@ -1,4 +1,4 @@
-import Link from '@/components/mdx/Link';
+import Link from '@/components/elements/Link';
 import formatDate from '@/lib/utils/formatDate';
 
 const Post = ({ frontMatter }) => (

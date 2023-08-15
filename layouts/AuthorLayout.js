@@ -1,7 +1,7 @@
 import { PageSEO } from '@/components/utils/SEO';
 
-export default function AuthorLayout({ children, frontMatter }) {
-  const { name, occupation } = frontMatter;
+export default function AuthorLayout({ content, children }) {
+  const { name, occupation } = content;
 
   return (
     <>
@@ -16,7 +16,9 @@ export default function AuthorLayout({ children, frontMatter }) {
           </h3>
         </div>
         <div className='items-start space-y-2 xl:grid xl:grid-cols-2 xl:gap-x-8 xl:space-y-0'>
-          <div className='prose max-w-none pt-8 pb-8 dark:prose-dark xl:col-span-2'>{children}</div>
+          <div className='prose max-w-none pt-8 pb-8 dark:prose-dark xl:col-span-2'>
+            {children}
+          </div>
         </div>
       </div>
     </>
