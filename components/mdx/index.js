@@ -12,10 +12,11 @@ import Callout from '@/components/mdx/Callout';
 import Faq from '@/components/mdx/Faq';
 import Image from '@/components/mdx/Image';
 import Pre from '@/components/mdx/Pre';
+import Preview from '@/components/mdx/Preview';
 import Quote from '@/components/mdx/Quote';
 import Stats from '@/components/mdx/Stats';
 
-export const MDXComponents = { BlogNewsletterForm, Callout, Faq, Image, Quote, Stats, 'a': CustomLink, 'pre': Pre };
+export const MDXComponents = { BlogNewsletterForm, Callout, Faq, Image, Preview, Quote, Stats, 'a': CustomLink, 'pre': Pre };
 
 const getMDXComponent = (code, globals = {}) => {
   const scope = { React, ReactDOM, _jsx_runtime, ...globals };
