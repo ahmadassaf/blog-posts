@@ -8,10 +8,11 @@ import { ClientReload } from '@/components/utils/ClientReload';
 import LayoutWrapper from '@/components/wrappers/LayoutWrapper';
 import siteMetadata from '@/data/meta/metadata';
 
+import '@fontsource-variable/inter';
+
 import '@/css/tailwind.css';
 import '@/css/prism.css';
 import 'katex/dist/katex.css';
-import '@fontsource/inter/variable-full.css';
 import 'nprogress/nprogress.css';
 
 const isDevelopment = process.env.NODE_ENV === 'development';

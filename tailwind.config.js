@@ -27,7 +27,7 @@ module.exports = {
         'primary': colors.blue
       },
       'fontFamily': {
-        'sans': [ 'InterVariable', ...defaultTheme.fontFamily.sans ]
+        'sans': [ 'Inter Variable', ...defaultTheme.fontFamily.sans ]
       },
       'lineHeight': {
         '11': '2.75rem',
