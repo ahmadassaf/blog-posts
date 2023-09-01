@@ -10,9 +10,6 @@ module.exports = {
     './data/**/*.mdx'
   ],
   'darkMode': 'class',
-  'experimental': {
-    'optimizeUniversalDefaults': true
-  },
   'plugins': [ require('@tailwindcss/typography') ],
   'theme': {
     'extend': {

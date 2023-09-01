@@ -8,9 +8,9 @@ const LayoutWrapper = ({ children }) => (
     <ShapeContainer></ShapeContainer>
     <SectionContainer>
       <div className='flex h-screen flex-col justify-between'>
-        <Header/>
+        <Header />
         <main className='mb-8'>{children}</main>
-        <Footer/>
+        <Footer />
       </div>
     </SectionContainer>
   </div>

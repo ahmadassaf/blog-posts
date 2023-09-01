@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env SOCKET=true node ./scripts/next-remote-watch.js ./data",
-    "dev": "next dev",
-    "content": "contentlayer build -c contentlayer.notion.config.js && contentlayer build -c contentlayer.local.config.js",
-    "build": "node ./scripts/generate-sitemap",
-    "serve": "next start",
-    "analyze": "cross-env ANALYZE=true next build",
-    "lint": "next lint --fix --dir pages --dir components --dir lib --dir layouts --dir scripts",
+    "content": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 contentlayer build -c contentlayer.notion.config.js && contentlayer build -c contentlayer.config.js",
+    "start": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 cross-env INIT_CWD=$PWD next dev",
+    "dev": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 cross-env INIT_CWD=$PWD next dev",
+    "build": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 cross-env INIT_CWD=$PWD contentlayer build -c contentlayer.notion.config.js && contentlayer build -c contentlayer.config.js && next build && cross-env node ./scripts/postbuild.mjs",
+    "serve": "cross-env INIT_CWD=$PWD next start",
+    "analyze": "cross-env INIT_CWD=$PWD ANALYZE=true next build",
+    "lint": "cross-env INIT_CWD=$PWD next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
     "prepare": "husky install"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.8",
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@next/eslint-plugin-next": "^13.4.13",
     "@notionhq/client": "^2.2.11",
     "@tailwindcss/forms": "^0.5.4",
@@ -41,7 +42,6 @@
     "primereact": "^9.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.10.1",
     "reading-time": "^1.5.0",
     "rehype-autolink-headings": "^6.1.0",
     "rehype-citation": "^1.0.2",
@@ -60,7 +60,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^13.4.13",
+    "@next/bundle-analyzer": "^13.4.19",
     "@svgr/webpack": "^8.0.1",
     "cross-env": "^7.0.3",
     "dedent": "^1.5.1",
@@ -78,11 +78,8 @@
     "globby": "^13.2.2",
     "husky": "^8.0.3",
     "inquirer": "^9.2.10",
-    "lint-staged": "^13.2.3",
+    "lint-staged": "^14.0.1",
     "next-remote-watch": "^2.0.0",
-    "prettier": "^3.0.1",
-    "prettier-plugin-tailwindcss": "^0.5.2",
-    "pretty-quick": "^3.1.3",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2"
   },
@@ -90,5 +87,6 @@
     "*.+(js|jsx|ts|tsx)": [
       "eslint --fix"
     ]
-  }
+  },
+  "packageManager": "npm@9.7.2"
 }

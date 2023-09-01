@@ -7,7 +7,7 @@ export const Plant = defineDatabase(() => {
   return {
     'computedFields': {
       'title': {
-        'resolve': (post) => post.name.replace('<b class="notion-text-bold">', '').replace('</b>', ''),
+        'resolve': (post) => post.name.replace('<b className="notion-text-bold">', '').replace('</b>', ''),
         'type': 'string'
       },
       'url': {

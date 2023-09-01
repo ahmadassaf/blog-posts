@@ -15,7 +15,7 @@ export default function AuthorLayout({ content, children }) {
             {occupation}
           </h3>
         </div>
-        <div className='items-start space-y-2 xl:grid xl:grid-cols-2 xl:gap-x-8 xl:space-y-0'>
+        <div >
           <div className='prose max-w-none pt-8 pb-8 dark:prose-dark xl:col-span-2'>
             {children}
           </div>

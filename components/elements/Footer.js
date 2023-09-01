@@ -4,6 +4,7 @@ import categories from '@/app/content/categories';
 import Icon from '@/components/elements/Icon';
 import NewsletterForm from '@/components/forms/NewsletterForm';
 import siteMetadata from '@/data/meta/metadata';
+import { sortPosts } from '@/lib/utils/contentlayer';
 
 const Footer = () => (
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200'>
@@ -17,7 +18,7 @@ const Footer = () => (
                 <ul role='list' className='mt-4 space-y-4'>
                   {categories.slice(0, 4).reverse().map((category) => (
                     <li key={ category.id }>
-                      <a href={ `/blog/category/${category.id}` } className='text-base capitalize text-gray-500 hover:text-blue-700'>
+                      <a href={ category.href } className='text-base capitalize text-gray-500 hover:text-blue-700'>
                         {category.title.replace('-', ' ')}
                       </a>
                     </li>
@@ -29,9 +30,9 @@ const Footer = () => (
             <div>
               <h3 className='text-base font-medium text-gray-900 dark:text-white'>Projects</h3>
               <ul role='list' className='mt-4 space-y-4'>
-                {allProjects.slice(0, 4).map((project) => (
-                  <li key={ project.href }>
-                    <a href={ project.href } className='text-base text-gray-500 hover:text-blue-700'>
+                {sortPosts(allProjects).slice(0, 4).map((project) => (
+                  <li key={ project.slug }>
+                    <a href={ project.path } className='text-base text-gray-500 hover:text-blue-700'>
                       {project.title}
                     </a>
                   </li>
@@ -42,14 +43,14 @@ const Footer = () => (
             <div>
               <h3 className='text-base font-medium text-gray-900 dark:text-white'>About</h3>
               <ul role='list' className='mt-4 space-y-4'>
-                <li>
+                <li key='summary'>
                   <a href={ '/about' } className='text-base text-gray-500 hover:text-blue-700'>Summary</a>
                 </li>
-                <li>
-                  <a href='#' className='text-base text-gray-500 hover:text-blue-700'>Press</a>
+                <li key='press'>
+                  <a href={ '/press' } className='text-base text-gray-500 hover:text-blue-700'>Press</a>
                 </li>
-                <li>
-                  <a href='#' className='text-base text-gray-500 hover:text-blue-700'>Publications</a>
+                <li key='pub'>
+                  <a href={ '/publications' } className='text-base text-gray-500 hover:text-blue-700'>Publications</a>
                 </li>
               </ul>
             </div>

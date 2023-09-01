@@ -160,7 +160,7 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
         <CommandPalette.Page id='root' searchPrefix={ [ 'General' ] }>
           {filteredItems.length ? (
             filteredItems.map((list) => (
-              <div key={ list.id } className={ search.toLowerCase() === list.heading.toLowerCase() && 'hidden' }>
+              <div key={ list.id } className={ search.toLowerCase() === list.heading.toLowerCase() ? 'hidden' : '' }>
                 <div className={ list.hidden && !search.length ? 'hidden' : 'visible' }>
                   <CommandPalette.List key={ list.id } heading={ list.heading } >
                     {list.items.map(({ id, title, subtitle, category, count, type, children, ...rest }) => (

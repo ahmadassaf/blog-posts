@@ -8,7 +8,8 @@
       "@/app/*": ["app/*"],
       "@/layouts/*": ["layouts/*"],
       "@/lib/*": ["lib/*"],
-      "@/css/*": ["css/*"]
+      "@/css/*": ["css/*"],
+      "@/static/*": ["static/*"],
     }  
   },
   "include": [".contentlayer/generated"]

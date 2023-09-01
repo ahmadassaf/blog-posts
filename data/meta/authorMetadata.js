@@ -6,13 +6,12 @@ const AuthorMetadata = {
   Outside of programming and helping my wife take care of our two kids, I enjoy video games, karaoke, sushi, watching UFC/F1, and collecting mechanical watches.`,
   'author': 'Ahmad Assaf',
   'description': 'Applying Aritificial Intelligence to solve complex problem',
-  'email': 'address@yoursite.com',
-  'facebook': 'https://facebook.com',
-  'github': 'https://github.com',
-  'linkedin': 'https://www.linkedin.com',
+  'email': 'me@assaf.website',
+  'github': 'https://github.com/ahmadassaf',
+  'linkedin': 'https://www.linkedin.com/in/ahmadassaf',
   'name': 'Ahmad Assaf',
-  'twitter': 'https://twitter.com/Twitter',
-  'youtube': 'https://youtube.com'
+  'twitter': 'https://twitter.com/ahmadaassaf',
+  'youtube': 'https://www.youtube.com/ahmadassafa'
 };
 
 module.exports = AuthorMetadata;

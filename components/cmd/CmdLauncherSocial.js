@@ -1,5 +1,10 @@
-import { PiEnvelopeOpenLight, PiGithubLogo, PiLinkedinLogo, PiTwitterLogo } from 'react-icons/pi';
+
 import CommandPalette, { filterItems, getItemIndex } from '@tmikeladze/react-cmdk';
+
+import IconEmail from '@/static/icons/email-light.svg';
+import IconGithub from '@/static/icons/socials/github-light.svg';
+import IconLinkedin from '@/static/icons/socials/linkedin-light.svg';
+import IconTwitter from '@/static/icons/socials/twitter-light.svg';
 
 import '@tmikeladze/react-cmdk/dist/cmdk.css';
 
@@ -14,7 +19,7 @@ function PostsCmd({ setPage, search }) {
           {
             'children': 'Linkedin',
             'closeOnSelect': false,
-            'heroIcon': <PiLinkedinLogo/>,
+            'heroIcon': <IconLinkedin className='h-5 w-5'/>,
             'id': 'linkedin',
             'onClick': () => {
               window.open('https://linkedin.com/in/ahmadassaf', '_blank').focus();
@@ -24,7 +29,7 @@ function PostsCmd({ setPage, search }) {
           {
             'children': 'Twitter',
             'closeOnSelect': false,
-            'heroIcon': <PiTwitterLogo/>,
+            'heroIcon': <IconTwitter className='h-5 w-5'/>,
             'id': 'twitter',
             'onClick': () => {
               window.open('https://twitter.com/ahmadaassaf', '_blank').focus();
@@ -34,7 +39,7 @@ function PostsCmd({ setPage, search }) {
           {
             'children': 'Github',
             'closeOnSelect': false,
-            'heroIcon': <PiGithubLogo/>,
+            'heroIcon': <IconGithub className='h-5 w-5'/>,
             'id': 'github',
             'onClick': () => {
               window.open('https://github.com/ahmadassaf', '_blank').focus();
@@ -44,7 +49,7 @@ function PostsCmd({ setPage, search }) {
           {
             'children': 'Mail',
             'closeOnSelect': false,
-            'heroIcon': <PiEnvelopeOpenLight/>,
+            'heroIcon': <IconEmail className='h-5 w-5'/>,
             'id': 'mail',
             'onClick': () => {
               window.open('mailto:ahmad@assaf.website', '_blank').focus();

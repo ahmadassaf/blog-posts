@@ -14,10 +14,13 @@ import MenuSearch from '@/components/navigation/MenuSearch';
 import ThemeSwitch from '@/components/utils/ThemeSwitcher';
 import siteMetadata from '@/data/meta/metadata';
 import NavigationMetadata from '@/data/meta/navigationMetadata';
+import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
 
 const Menu = () => {
   const router = useRouter();
   const path = router?.asPath;
+  const sortedPosts = sortPosts(allPosts);
+  const posts = coreContent(sortedPosts);
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
   const [ LauncherOpen, LauncherSetOpen ] = useState(false);
 
@@ -63,7 +66,7 @@ const Menu = () => {
                   );
                 })}
 
-                { !path.includes('/blog') && (<MenuMain categories={ categories } allPosts={ allPosts }></MenuMain>) }
+                { !path.includes('/blog') && (<MenuMain categories={ categories } allPosts={ posts }></MenuMain>) }
                 { path.includes('/blog') && (<MenuBlog categories={ categories }></MenuBlog>) }
 
               </ul>
@@ -76,7 +79,7 @@ const Menu = () => {
 
         </div>
       </div>
-      <CommandLauncher tags={ tags } projects={ allProjects } posts={ allPosts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
+      <CommandLauncher tags={ tags } projects={ coreContent(sortPosts(allProjects)) } posts={ posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
     </div>
   </nav>
   );
