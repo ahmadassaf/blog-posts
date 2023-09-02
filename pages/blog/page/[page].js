@@ -4,6 +4,7 @@ import { POSTS_PER_PAGE } from '@/components/elements/Pagination';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
+import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
 
 export async function getStaticPaths() {
   const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
@@ -17,12 +18,12 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const { 'params': { page } } = context;
 
-  const posts = allPosts.filter((post) => post.type !== 'project');
+  const sortedPosts = coreContent(sortPosts(allPosts));
   const pageNumber = parseInt(page);
-  const pagePosts = posts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
+  const pagePosts = sortedPosts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
   const pagination = {
     'currentPage': pageNumber,
-    'totalPages': Math.ceil(posts.length / POSTS_PER_PAGE)
+    'totalPages': Math.ceil(sortedPosts.length / POSTS_PER_PAGE)
   };
 
   return { 'props': { pagePosts, pagination } };

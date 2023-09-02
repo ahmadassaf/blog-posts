@@ -25,14 +25,14 @@ export async function getStaticProps({ params }) {
   const postIndex = posts.findIndex((_post) => _post.slug === slug);
   const previousPost = posts[postIndex + 1] || null;
   const nextPost = posts[postIndex - 1] || null;
-  const post = allPosts.filter((_post) => _post.slug === slug)[0];
 
-  const mainContent = coreContent(post);
-
-  return { 'props': { mainContent, nextPost, post, previousPost } };
+  return { 'props': { nextPost, previousPost, slug } };
 }
 
-export default function Blog({ nextPost, post, mainContent, previousPost }) {
+export default function Blog({ nextPost, slug, previousPost }) {
+  const post = allPosts.filter((_post) => _post.slug === slug)[0];
+  const mainContent = coreContent(post);
+
   return (
     <>
       <PostLayout content={ mainContent } next={ nextPost } prev={ previousPost } toc={ post.toc }>

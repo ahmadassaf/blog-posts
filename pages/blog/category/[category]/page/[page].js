@@ -5,6 +5,7 @@ import { POSTS_PER_PAGE } from '@/components/elements/Pagination';
 import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
+import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
 import kebabCase from '@/lib/utils/kebabCase';
 
 export async function getStaticPaths() {
@@ -32,12 +33,13 @@ export async function getStaticProps(context) {
 
   const { 'params': { page, category } } = context;
 
-  const posts = allPosts.filter((post) => post.type !== 'project' && kebabCase(post.category) === category);
+  const posts = coreContent(sortPosts(allPosts));
+  const filteredPosts = posts.filter((post) => kebabCase(post.category) === category);
   const pageNumber = parseInt(page);
-  const pagePosts = posts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
+  const pagePosts = filteredPosts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
   const pagination = {
     'currentPage': pageNumber,
-    'totalPages': Math.ceil(posts.length / POSTS_PER_PAGE)
+    'totalPages': Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
   };
 
   return { 'props': { category, pagePosts, pagination } };
