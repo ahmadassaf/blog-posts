@@ -1,5 +1,3 @@
-'use client';
-
 import { React, useState } from 'react';
 import { allPosts, allProjects } from 'contentlayer/generated';
 import { useRouter } from 'next/router';
