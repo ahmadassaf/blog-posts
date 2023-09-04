@@ -1,14 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const TableOfContents = ({ toc, indentDepth = 3, fromHeading = 1, toHeading = 6, exclude = '' }) => {
   const [ activeSlug, setActiveSlug ] = useState('');
+  const isTableOfContentsLoaded = useRef(false);
   const re = Array.isArray(exclude) ? new RegExp(`^(${exclude.join('|')})$`, 'i') : new RegExp(`^(${exclude})$`, 'i');
 
   const filteredToc = toc.filter(
     (heading) => heading.depth >= fromHeading && heading.depth <= toHeading && !re.test(heading.value)
   );
 
+  console.log('filteredToc', filteredToc);
   useEffect(() => {
+    if (location.hash && !isTableOfContentsLoaded.current) {
+      console.log('FIRST RUN', location.hash.replace('#', ''));
+      setActiveSlug(location.hash.replace('#', ''));
+      isTableOfContentsLoaded.current = true;
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -16,12 +23,12 @@ const TableOfContents = ({ toc, indentDepth = 3, fromHeading = 1, toHeading = 6,
 
         });
       }, {
-        'rootMargin': '-30% 0px'
+        'rootMargin': '-25% 0px -75% 0px'
       }
     );
 
-    filteredToc.forEach((chapter) => {
-      const element = document.getElementById(chapter.id);
+    filteredToc.forEach((heading) => {
+      const element = document.getElementById(heading.id);
 
       if (element) observer.observe(element);
 
@@ -34,7 +41,7 @@ const TableOfContents = ({ toc, indentDepth = 3, fromHeading = 1, toHeading = 6,
     <ul className='list-none'>
       {filteredToc.map((heading) => (
         <li key={ heading.value } className={ `dark:text-white text-sm py-1 ${activeSlug === heading.id && 'text-blue-600'} ${heading.depth === 1 && 'hidden'} ${heading.depth > 2 ? 'font-light' : 'font-medium'} ${heading.depth >= indentDepth && 'ml-6'}` }>
-          <a href={ heading.url }>{heading.value}</a>
+          <a href={ heading.url } onClick={ () => setActiveSlug(heading.id) }>{heading.value}</a>
         </li>
       ))}
     </ul>

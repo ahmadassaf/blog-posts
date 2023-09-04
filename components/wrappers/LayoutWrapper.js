@@ -4,7 +4,7 @@ import Footer from '@/components/elements/Footer';
 import Header from '@/components/elements/Header';
 
 const LayoutWrapper = ({ children }) => (
-  <div className='relative isolate'>
+  <div className='relative isolate overflow-x-hidden'>
     <ShapeContainer></ShapeContainer>
     <SectionContainer>
       <div className='flex h-screen flex-col justify-between'>

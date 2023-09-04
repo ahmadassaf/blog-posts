@@ -20,7 +20,7 @@ allPosts.forEach((post) => {
   index.add(post.slug, post.body.raw);
 });
 
-function SearchCmd({ search, content }) {
+function SearchCmd({ search, setShowType, content }) {
   const [ searchResult, setSearchResult ] = useState([]);
 
   const searchAPI = useCallback(async(query) => {

@@ -1,4 +1,6 @@
 function CmdProject({ title, subtitle, showType }) {
+  console.log('showtype', showType);
+  console.log('title', title);
 
   return (
     <div className='flex w-full justify-between items-center'>
@@ -7,7 +9,7 @@ function CmdProject({ title, subtitle, showType }) {
         <div className='text-xs text-gray-600'>{ subtitle }</div>
       </div>
       {showType && (
-        <div className='text-xs rounded bg-blue-600 text-white p-1 capitalize h-fit'>Project</div>
+        <div className='text-xs rounded bg-violet-600 text-white p-2 capitalize h-fit'>Project</div>
       )}
     </div>
   );

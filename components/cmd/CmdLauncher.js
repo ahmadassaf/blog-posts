@@ -19,6 +19,7 @@ import '@tmikeladze/react-cmdk/dist/cmdk.css';
 const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
   const [ page, setPage ] = useState('root');
   const [ search, setSearch ] = useState('');
+  const [ showType ] = useState(true);
   const [ selected, setSelected ] = useState(0);
   const { theme, setTheme, resolvedTheme } = useTheme();
 
@@ -153,6 +154,7 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
         onChangeOpen={ setOpen }
         selected={ selected }
         search={ search }
+        showType={ showType }
         isOpen={ open }
         page={ page }
         footer={ <CmdFooter /> }
@@ -176,7 +178,7 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
                           case 'tag':
                             return <CmdTag title={ title } count={ count } CmdTag={ CmdTag }/>;
                           case 'project':
-                            return <CmdProject title={ title } subtitle={ subtitle }/>;
+                            return <CmdProject title={ title } subtitle={ subtitle } showType={ showType }/>;
                           default:
                             return <div>{children}</div>;
                           }
