@@ -9,10 +9,8 @@ const TableOfContents = ({ toc, indentDepth = 3, fromHeading = 1, toHeading = 6,
     (heading) => heading.depth >= fromHeading && heading.depth <= toHeading && !re.test(heading.value)
   );
 
-  console.log('filteredToc', filteredToc);
   useEffect(() => {
     if (location.hash && !isTableOfContentsLoaded.current) {
-      console.log('FIRST RUN', location.hash.replace('#', ''));
       setActiveSlug(location.hash.replace('#', ''));
       isTableOfContentsLoaded.current = true;
     }

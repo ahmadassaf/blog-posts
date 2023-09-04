@@ -19,7 +19,5 @@ export default async function sitemap() {
     };
   });
 
-  console.log('blogRoutes', blogRoutes);
-
   return [ ...routes, ...blogRoutes ];
 }

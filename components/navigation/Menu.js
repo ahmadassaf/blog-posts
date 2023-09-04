@@ -47,7 +47,7 @@ const Menu = () => {
 
       <ThemeSwitch />
 
-      {mobileMenuOpen ? (<MenuMobile categories={ categories } links={ NavigationMetadata.links } setMobileMenuOpen={ setMobileMenuOpen } setLaunherOpen={ LauncherSetOpen } />) : null}
+      {mobileMenuOpen ? (<MenuMobile categories={ categories } links={ NavigationMetadata.links } setMobileMenuOpen={ setMobileMenuOpen } setLauncherOpen={ LauncherSetOpen } />) : null}
       <div className='mx-auto max-w-7xl px-2 lg:px-8'>
         <div className='flex h-16 justify-between'>
           <div className='flex px-2 lg:px-0 relative'>

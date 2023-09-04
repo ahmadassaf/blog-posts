@@ -1,7 +1,4 @@
 function CmdProject({ title, subtitle, showType }) {
-  console.log('showtype', showType);
-  console.log('title', title);
-
   return (
     <div className='flex w-full justify-between items-center'>
       <div>
