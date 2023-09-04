@@ -11,8 +11,6 @@ import remarkMath from 'remark-math';
 
 import ComputedFields  from './lib/contentLayer/computedFields';
 import contentFields from './lib/contentLayer/contentFields';
-import getAllCategories from './lib/contentLayer/generateCategories';
-import getAllTags from './lib/contentLayer/generateTags';
 import structuredData from './lib/contentLayer/structuredData';
 import { remarkCodeTitles,
   remarkExtractFrontmatter,
@@ -82,11 +80,5 @@ export default makeSource({
       remarkMath,
       remarkImgToJsx
     ]
-  },
-  'onSuccess': async(importData) => {
-    const { allPosts } = await importData();
-
-    getAllTags(allPosts);
-    getAllCategories(allPosts);
   }
 });

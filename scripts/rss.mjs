@@ -1,8 +1,6 @@
-import { mkdirSync, writeFileSync } from 'fs';
-import path from 'path';
+import { writeFileSync } from 'fs';
 
 import { allPosts } from '../.contentlayer/generated/index.mjs';
-import tags from '../app/content/tags.json' assert { type: 'json' };
 import authorMetadata from '../data/meta/authorMetadata.js';
 import siteMetadata from '../data/meta/siteMetadata.js';
 

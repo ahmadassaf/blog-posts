@@ -79,7 +79,7 @@ const Menu = () => {
 
         </div>
       </div>
-      <CommandLauncher tags={ tags } projects={ coreContent(sortPosts(allProjects)) } posts={ posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
+      <CommandLauncher className='min-w-[300px]' tags={ tags } projects={ coreContent(sortPosts(allProjects)) } posts={ posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
     </div>
   </nav>
   );
