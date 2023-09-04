@@ -6,7 +6,7 @@
     "content": "mkdir -p ./app/content &&  NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 contentlayer build -c contentlayer.notion.config.js && contentlayer build -c contentlayer.config.js && node ./scripts/build.mjs",
     "start": "mkdir -p ./app/content &&  NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 cross-env INIT_CWD=$PWD next dev",
     "dev": "mkdir -p ./app/content && NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 cross-env INIT_CWD=$PWD next dev",
-    "build": "mkdir -p ./app/content && NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 cross-env INIT_CWD=$PWD contentlayer build -c contentlayer.notion.config.js && contentlayer build -c contentlayer.config.js && node ./scripts/build.mjs && next build",
+    "build": "mkdir -p ./app/content && mkdir ./public && NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 cross-env INIT_CWD=$PWD contentlayer build -c contentlayer.notion.config.js && contentlayer build -c contentlayer.config.js && node ./scripts/build.mjs && next build",
     "serve": "cross-env INIT_CWD=$PWD next start",
     "analyze": "cross-env INIT_CWD=$PWD ANALYZE=true next build",
     "lint": "cross-env INIT_CWD=$PWD next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
