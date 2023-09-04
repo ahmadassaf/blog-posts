@@ -7,7 +7,7 @@ const Post = ({ frontMatter }) => (
       <div className='space-y-3 xl:col-span-3'>
         <Link href={ `/blog/${frontMatter.slug}` } className='text-gray-900 dark:text-gray-100 group-hover:text-blue-700'>
           <div>
-            <h3 className='text-2xl font-bold leading-8 tracking-tight'>
+            <h3 className='text-2xl font-bold leading-8 tracking-tight max-sm:text-lg'>
               {frontMatter.title}
               {frontMatter.draft && <span className='bg-yellow-500 text-white p-1 text-sm align-middle mx-2 uppercase'>Draft</span>}
             </h3>
@@ -18,7 +18,7 @@ const Post = ({ frontMatter }) => (
             </dd>
           </div>
         </Link>
-        <div className='prose max-w-none text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white'>
+        <div className='prose max-w-none text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white max-sm:hidden'>
           {frontMatter.summary}
         </div>
       </div>

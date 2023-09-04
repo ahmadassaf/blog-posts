@@ -89,13 +89,6 @@ module.exports = () => {
         'use': [ '@svgr/webpack' ]
       });
 
-      if (!dev && !isServer) Object.assign(config.resolve.alias, {
-        'react': 'preact/compat',
-        'react-dom': 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-        'react/jsx-runtime.js': 'preact/compat/jsx-runtime'
-      });
-
       return config;
     }
   });

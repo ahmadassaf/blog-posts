@@ -9,7 +9,7 @@ import { sortPosts } from '@/lib/utils/contentlayer';
 const Footer = () => (
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200'>
     <div className='mx-auto max-w-7xl py-12 lg:py-16'>
-      <div className='xl:grid xl:grid-cols-4 xl:gap-8'>
+      <div className='xl:grid xl:grid-cols-4 xl:gap-8 max-sm:hidden'>
         <div className='grid grid-cols-1 gap-8 xl:col-span-2'>
           <div className='grid md:grid-cols-3 gap-8'>
             {categories.length && (
@@ -60,7 +60,7 @@ const Footer = () => (
         {siteMetadata.newsletter.provider !== '' && <NewsletterForm />}
 
       </div>
-      <div className='mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between'>
+      <div className='mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between max-sm:border-none max-sm:p-0 max-sm:m-0'>
 
         <div className='flex space-x-6 md:order-2 sm:justify-center'>
           <Icon kind='mail' href={ `mailto:${siteMetadata.email}` } />
