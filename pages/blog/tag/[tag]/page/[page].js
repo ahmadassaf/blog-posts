@@ -6,13 +6,12 @@ import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
 import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
-import kebabCase from '@/lib/utils/kebabCase';
 
 export async function getStaticPaths() {
 
   const paths = tags.map((tag) => {
     const tagPages = Math.ceil(allPosts.filter(
-      (post) => post.tags.map((_tag) => kebabCase(_tag)).includes(tag.slug)
+      (post) => post.tags.map((_tag) => _tag.replace(' ', '-').toLowerCase()).includes(tag.slug)
     ).length / POSTS_PER_PAGE);
     const tagPaths =  Array.from({ 'length': tagPages }, (_, index) => {
       return { 'page': (index + 1).toString(), 'tag': tag.slug };
@@ -37,7 +36,7 @@ export async function getStaticProps(context) {
   const { 'params': { page, tag } } = context;
 
   const posts = coreContent(sortPosts(allPosts));
-  const filteredPosts = posts.filter((post) => post.tags.map((_tag) => kebabCase(_tag)).includes(tag));
+  const filteredPosts = posts.filter((post) => post.tags.map((_tag) => _tag.replace(' ', '-').toLowerCase()).includes(tag));
 
   const pageNumber = parseInt(page);
   const pagePosts = filteredPosts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
