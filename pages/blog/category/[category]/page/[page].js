@@ -6,10 +6,11 @@ import { PageSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
 import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
+import kebabCase from '@/lib/utils/kebabCase';
 
 export async function getStaticPaths() {
   const paths = categories.map((category) => {
-    const categoryPages = Math.ceil(allPosts.filter((post) => post.category.replace(' ', '-').toLowerCase() === category.slug).length / POSTS_PER_PAGE);
+    const categoryPages = Math.ceil(allPosts.filter((post) => kebabCase(post.category) === category.slug).length / POSTS_PER_PAGE);
     const categoryPaths =  Array.from({ 'length': categoryPages }, (_, index) => {
       return { 'category': category.slug, 'page': (index + 1).toString() };
     });
@@ -33,7 +34,7 @@ export async function getStaticProps(context) {
   const { 'params': { page, category } } = context;
 
   const posts = coreContent(sortPosts(allPosts));
-  const filteredPosts = posts.filter((post) => post.category.replace(' ', '-').toLowerCase() === category);
+  const filteredPosts = posts.filter((post) => kebabCase(post.category) === category);
   const pageNumber = parseInt(page);
   const pagePosts = filteredPosts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber);
   const pagination = {

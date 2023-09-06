@@ -1,6 +1,8 @@
+'use client';
+
 import { React, useState } from 'react';
 import { allPosts, allProjects } from 'contentlayer/generated';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
 import categories from '@/app/content/categories';
 import tags from '@/app/content/tags';
@@ -17,8 +19,7 @@ import NavigationMetadata from '@/data/meta/navigationMetadata';
 import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
 
 const Menu = () => {
-  const router = useRouter();
-  const path = router?.asPath;
+  const path = usePathname();
   const sortedPosts = sortPosts(allPosts);
   const posts = coreContent(sortedPosts);
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);

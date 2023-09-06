@@ -5,6 +5,7 @@ import { TagSEO } from '@/components/utils/SEO';
 import siteMetadata from '@/data/meta/metadata';
 import ListLayout from '@/layouts/ListLayout';
 import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
+import kebabCase from '@/lib/utils/kebabCase';
 
 export async function getStaticPaths() {
   return {
@@ -21,7 +22,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const sortedPosts = coreContent(sortPosts(allPosts));
-  const filteredPosts = sortedPosts.filter((post) => post.category.replace(' ', '-').toLowerCase() === params.category);
+  const filteredPosts = sortedPosts.filter((post) => kebabCase(post.category) === params.category);
 
   return { 'props': { 'category': params.category, 'posts': filteredPosts } };
 }

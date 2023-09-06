@@ -1,3 +1,6 @@
+
+'use client';
+
 import { useRef, useState } from 'react';
 
 import siteMetadata from '@/data/meta/metadata';

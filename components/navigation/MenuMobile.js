@@ -35,7 +35,7 @@ const MenuMobile = ({ categories, links, setMobileMenuOpen, setLauncherOpen }) =
 
               <div className='mt-2 space-y-2' id='disclosure-1'>
                 {categories.map((category) => (
-                  <a key={ category.id } href={ `/blog/category/${category.id}` } className='group capitalize block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{category.title.replace('-', ' ')}
+                  <a key={ category.id } href={ `/blog/categories/${category.id}` } className='group capitalize block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{category.title.replace('-', ' ')}
                     <p className='mt-1 text-gray-600 font-light text-s dark:text-gray-100 dark:group-hover:text-gray-600'>{category.description}</p>
                   </a>
                 ))}

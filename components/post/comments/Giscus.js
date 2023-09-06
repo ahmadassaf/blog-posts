@@ -1,5 +1,8 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-shadow */
+
+'use client';
+
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 
