@@ -19,7 +19,7 @@ const MenuMain = ({ categories, allPosts }) => {
             {categories.map((category) => (
               <div key={ category.id } className='group relative flex rounded-lg px-3 py-2 hover:bg-gray-50'>
                 <div>
-                  <a href={ `/blog/categories/${category.id}` } className='font-semibold text-gray-900 hover:text-blue-600 capitalize'>
+                  <a href={ `/blog/category/${category.id}` } className='font-semibold text-gray-900 hover:text-blue-600 capitalize'>
                     {category.title.replace('-', ' ')}
                     <span className='absolute inset-0'></span>
                     <p className='mt-1 text-gray-600 font-light text-s'>{category.description}</p>
@@ -38,7 +38,7 @@ const MenuMain = ({ categories, allPosts }) => {
               {allPosts.slice(0, 3).map((post) => (
                 <li key={ post.slug } className='relative'>
                   <time dateTime={ post.date } className='block text-xs leading-6 text-gray-600 font-light'>{formatDate(post.date)}</time>
-                  <a href={ `/${post.slug}` } className='block truncate text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600'>
+                  <a href={ `/blog/${post.slug}` } className='block truncate text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600'>
                     {post.title}
                     <span className='absolute inset-0'></span>
                   </a>

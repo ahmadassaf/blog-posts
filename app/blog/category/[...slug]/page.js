@@ -5,18 +5,19 @@ import PostLayout from '@/layouts/PostLayout';
 import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
 
 export const generateStaticParams = async() => {
-  const paths = allPosts.map((p) => {
-    return { 'slug': p.slug.split('/') };
+  const paths = allPosts.map((post) => {
+    return { 'slug': post.slug.split('/') };
   });
 
   return paths;
 };
 
 export default async function Page({ params }) {
+  console.log(params);
   const slug = decodeURI(params.slug.join('/'));
   const posts = coreContent(sortPosts(allPosts));
-  const postIndex = posts.findIndex((_post) => _post.slug === slug);
-  const post = allPosts.filter((_post) => _post.slug === slug)[0];
+  const postIndex = posts.findIndex((_post) => _post.slug.replace('category/', '') === slug);
+  const post = allPosts[postIndex];
 
   return (
     <>
