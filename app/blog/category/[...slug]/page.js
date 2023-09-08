@@ -13,7 +13,6 @@ export const generateStaticParams = async() => {
 };
 
 export default async function Page({ params }) {
-  console.log(params);
   const slug = decodeURI(params.slug.join('/'));
   const posts = coreContent(sortPosts(allPosts));
   const postIndex = posts.findIndex((_post) => _post.slug.replace('category/', '') === slug);

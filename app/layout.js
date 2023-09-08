@@ -1,4 +1,6 @@
 
+import { Inter } from 'next/font/google';
+
 import Analytics from '@/components/analytics';
 import ShapeContainer from '@/components/containers/ShapeContainer';
 import Footer from '@/components/elements/Footer';
@@ -9,9 +11,12 @@ import '@/css/tailwind.css';
 import '@/css/prism.css';
 import 'katex/dist/katex.css';
 
+// eslint-disable-next-line quote-props, sort-keys, sort-keys-fix/sort-keys-fix
+export const font = Inter({ subsets: [ 'latin' ], weight: [ '400', '500', '600', '700', '800' ], variable: '--font-space-inter' });
+
 export default function RootLayout({ children }) {
   return (
-    <html className='scroll-smooth' suppressHydrationWarning>
+    <html className={ `${font.variable} scroll-smooth` } suppressHydrationWarning>
       <link rel='apple-touch-icon' sizes='76x76' href='/static/favicons/apple-touch-icon.png' />
       <link rel='icon' type='image/png' sizes='32x32' href='/static/favicons/favicon-32x32.png'/>
       <link rel='icon' type='image/png' sizes='16x16' href='/static/favicons/favicon-16x16.png'/>
@@ -22,7 +27,7 @@ export default function RootLayout({ children }) {
       <meta name='theme-color' media='(prefers-color-scheme: light)' content='#fff' />
       <meta name='theme-color' media='(prefers-color-scheme: dark)' content='#000' />
       <link rel='alternate' type='application/rss+xml' href='/feed.xml' />
-      <body className='bg-white text-black antialiased dark:bg-gray-900 dark:text-white border-t-10 border-blue-600 min-w-[414px]'>
+      <body className='bg-white text-black antialiased dark:bg-gray-900 dark:text-white min-w-[414px]'>
         <ThemeProviders>
           <Analytics/>
           <div className='relative isolate overflow-x-hidden'>

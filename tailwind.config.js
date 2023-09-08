@@ -3,6 +3,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   'content': [
+    './app/**/*.js',
     './pages/**/*.js',
     './components/**/*.js',
     './layouts/**/*.js',
@@ -24,7 +25,7 @@ module.exports = {
         'primary': colors.blue
       },
       'fontFamily': {
-        'sans': [ 'Inter Variable', ...defaultTheme.fontFamily.sans ]
+        'sans': [ 'var(--font-space-inter)', ...defaultTheme.fontFamily.sans ]
       },
       'lineHeight': {
         '11': '2.75rem',
