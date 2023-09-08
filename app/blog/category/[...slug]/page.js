@@ -18,11 +18,11 @@ export default async function Page({ params }) {
   const postIndex = posts.findIndex((_post) => _post.slug.replace('category/', '') === slug);
   const post = allPosts[postIndex];
 
-  return (
+  return post ? (
     <>
       <PostLayout content={ coreContent(post) } next={ posts[postIndex - 1] || null } prev={ posts[postIndex + 1] || null } toc={ post.toc }>
         <MDXLayoutRenderer code={ post.body.code } components={ MDXComponents } />
       </PostLayout>
     </>
-  );
+  ) : <></>;
 }
