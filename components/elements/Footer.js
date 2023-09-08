@@ -18,7 +18,7 @@ const Footer = () => (
                 <ul role='list' className='mt-4 space-y-4'>
                   {categories.slice(0, 4).reverse().map((category) => (
                     <li key={ category.id }>
-                      <a href={ category.href } className='text-base capitalize text-gray-500 hover:text-blue-700'>
+                      <a href={ category.href } className='text-base capitalize text-gray-500 dark:text-white hover:text-blue-700'>
                         {category.title.replace('-', ' ')}
                       </a>
                     </li>
@@ -32,7 +32,7 @@ const Footer = () => (
               <ul role='list' className='mt-4 space-y-4'>
                 {sortPosts(allProjects).slice(0, 4).map((project) => (
                   <li key={ project.slug }>
-                    <a href={ project.path } className='text-base text-gray-500 hover:text-blue-700'>
+                    <a href={ project.path } className='text-base text-gray-500 hover:text-blue-700 dark:text-white'>
                       {project.title}
                     </a>
                   </li>
@@ -44,13 +44,13 @@ const Footer = () => (
               <h3 className='text-base font-medium text-gray-900 dark:text-white'>About</h3>
               <ul role='list' className='mt-4 space-y-4'>
                 <li key='summary'>
-                  <a href={ '/about' } className='text-base text-gray-500 hover:text-blue-700'>Summary</a>
+                  <a href={ '/about' } className='text-base text-gray-500 dark:text-white hover:text-blue-700'>Summary</a>
                 </li>
                 <li key='press'>
-                  <a href={ '/press' } className='text-base text-gray-500 hover:text-blue-700'>Press</a>
+                  <a href={ '/press' } className='text-base text-gray-500 dark:text-white hover:text-blue-700'>Press</a>
                 </li>
                 <li key='pub'>
-                  <a href={ '/publications' } className='text-base text-gray-500 hover:text-blue-700'>Publications</a>
+                  <a href={ '/publications' } className='text-base text-gray-500 dark:text-white hover:text-blue-700'>Publications</a>
                 </li>
               </ul>
             </div>
