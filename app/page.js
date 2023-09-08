@@ -1,3 +1,4 @@
+import categories from '@/app/content/categories';
 import LauncherShortcut from '@/components/cmd/CmdLauncherShortcut';
 import Link from '@/components/elements/Link';
 import siteMetadata from '@/data/meta/metadata';
@@ -18,7 +19,17 @@ export default function Home() {
           <h2>A driven AI and Machine Learning (ML) leader with a passion for discovering solutions to create the future of work through my current role as <strong >VP of AI and Data <Link className='text-blue-600' href='https://beamery.com'>@Beamery</Link></strong>. As a founding Engineer @Beamery, I have experience building and scaling engineering and data science teams as well as the ability to translate complex business requirements into execution plans.</h2>
           <h2>I am a Knowledge Graph and Semantic Web Enthusiast (<strong>PhD in Semantic Web and Information Retrieval</strong>) with publications on Linked Data, Data Quality and Recommender Systems.</h2>
           <h2>Ahmad is leading the team working on various exciting AI and Machine Learning technologies, including recommender systems and personalization, Natural Language Processing methods such as text understanding and generation, entity disambiguation and reconciliation, and Large Language Models (LLMs). His team employs deep learning methods such as Convolutional Neural Networks (CNNs) and Generative Adversarial Networks (GANs).</h2>
+
           <LauncherShortcut />
+          <div className='flex'>
+            {categories.map((category) => (
+              <div key={ category.id } className='mt-2 mb-2 mr-5'>
+                <Link href={ `blog/categories/${category.slug}` } className='bg-blue-600 text-white p-1 rounded'>
+                  {category.title.replace('-', ' ')}
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
         <div className='pt-10'>
           <h1 className='pb-6 text-4xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-4xl md:leading-14'>From the blog ...</h1>
