@@ -23,7 +23,7 @@ export default function Home() {
           <h2>{`${siteMetadata.description}`}</h2>
           <h2>A driven AI and Machine Learning (ML) leader with a passion for discovering solutions to create the future of work through my current role as <strong >VP of AI and Data <Link className='text-blue-600' href='https://beamery.com'>@Beamery</Link></strong>. As one of the founding engineers, I have built and scaled engineering and data science teams and helped Beamery become one of the latest tech unicorns.</h2>
           <h2>I am a Knowledge Graph and Semantic Web Enthusiast (<strong>PhD in Semantic Web and Information Retrieval</strong>) with publications on Linked Data, Data Quality and Recommender Systems.</h2>
-          <h2>I am currently leading the team working on various exciting AI and Machine Learning technologies, including recommender systems and personalization, Natural Language Processing methods such as text understanding and generation, entity disambiguation and reconciliation, and Large Language Models (LLMs). His team employs deep learning methods such as Convolutional Neural Networks (CNNs) and Generative Adversarial Networks (GANs).</h2>
+          <h2>I am currently leading the team working on various exciting AI and Machine Learning technologies, including recommender systems and personalization, Natural Language Processing methods such as text understanding and generation, entity disambiguation and reconciliation, and Large Language Models (LLMs). The team employs deep learning methods such as Convolutional Neural Networks (CNNs) and Generative Adversarial Networks (GANs).</h2>
 
           <LauncherShortcut />
         </div>
