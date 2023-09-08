@@ -7,12 +7,12 @@ export default function ListLayout() {
 
   const posts = coreContent(sortPosts(allPosts));
 
-  const featuredPost = posts.slice(0, 1)[0];
-  const displayPosts = posts.slice(1, 3);
+  const featuredPost = posts.filter((post) => post.featured).slice(0, 1)[0];
+  const displayPosts = posts.filter((post) => post.featured).slice(1, 3);
 
   return (
-    <div className='mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-12 sm:gap-y-16 lg:grid-cols-2 border-none'>
-      <article className='mx-auto w-full max-w-2xl lg:mx-0 lg:max-w-lg'>
+    <div className='mx-auto grid grid-cols-1  lg:grid-cols-2 border-none py-10'>
+      <article className='mx-auto w-full lg:mx-0 lg:max-w-lg'>
         <time dateTime={ formatDate(featuredPost.date) } className='block text-sm leading-6 text-gray-600 dark:text-white'>
           {formatDate(featuredPost.date)}
         </time>
@@ -26,11 +26,11 @@ export default function ListLayout() {
           </div>
         </div>
       </article>
-      <div className='mx-auto w-full max-w-2xl border-t border-gray-900/10 dark:border-gray-300/10 pt-12 sm:pt-16 lg:mx-0 lg:max-w-none lg:border-t-0 lg:pt-0'>
+      <div className='mx-auto w-full border-t border-gray-900/10 dark:border-gray-300/10 pt-12 sm:pt-16 lg:mx-0 lg:max-w-none lg:border-t-0 lg:pt-0'>
         <div className='-my-12 divide-y divide-gray-900/10 dark:border-gray-300/10'>
           {displayPosts.map((post) => (
             <article key={ post.slug } className='py-10'>
-              <div className='group relative max-w-xl'>
+              <div className='group relative'>
                 <time dateTime={ post.datetime } className='block text-sm leading-6 text-gray-600 dark:text-white'>
                   {formatDate(post.date)}
                 </time>
@@ -40,7 +40,7 @@ export default function ListLayout() {
                     {post.title}
                   </a>
                 </h2>
-                <p className='mt-4 text-sm leading-6 text-gray-600 dark:text-white'>{post.summary}</p>
+                <p className='mt-4 text-md leading-6 text-gray-600 dark:text-white'>{post.summary}</p>
               </div>
             </article>
           ))}

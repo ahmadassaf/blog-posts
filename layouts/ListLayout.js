@@ -25,7 +25,7 @@ export default function ListLayout({ posts, listTitle, linkAllPosts = false, bas
     <>
       <div className='divide-y divide-gray-200 dark:divide-gray-700'>
         <div className='space-y-2 pt-6 md:space-y-5'>
-          <h1 className='font-extrabold capitalize leading-9 tracking-tight text-gray-900 dark:text-gray-100 text-3xl sm:text-3xl sm:leading-10 md:text-5xl md:leading-14'>
+          <h1 className='font-extrabold capitalize leading-9 tracking-tight text-gray-900 dark:text-gray-100 text-3xl sm:text-3xl sm:leading-10 md:text-4xl md:leading-14'>
             {listTitle}
           </h1>
         </div>
