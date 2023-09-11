@@ -2,10 +2,12 @@
 import SocialIcon from '@/components/elements/Icon';
 import Link from '@/components/elements/Link';
 
-const PostSharing = ({ siteMetadata, slug, fileName }) => {
+const PostSharing = ({ siteMetadata, slug, fileName, title }) => {
 
   const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`;
-  const discussUrl = (slug) => `https://mobile.twitter.com/search?q=${encodeURIComponent(
+  const discussUrl = (slug, title) => `https://twitter.com/intent/tweet?text=${title}
+  
+  ${encodeURIComponent(
     `${siteMetadata.siteUrl}/blog/${slug}`
   )}`;
 
