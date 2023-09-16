@@ -50,7 +50,7 @@ const Footer = () => (
                   <a href={ '/press' } className='text-base text-gray-500 dark:text-white hover:text-blue-700'>Press</a>
                 </li>
                 <li key='pub'>
-                  <a href={ '/publications' } className='text-base text-gray-500 dark:text-white hover:text-blue-700'>Publications</a>
+                  <a href={ '/blog/publications' } className='text-base text-gray-500 dark:text-white hover:text-blue-700'>Publications</a>
                 </li>
               </ul>
             </div>

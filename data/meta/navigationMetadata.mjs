@@ -18,6 +18,11 @@ const NavigationMetadata = {
       'title': 'Tags'
     },
     {
+      'href': '/blog/publications',
+      'showInPath': '*',
+      'title': 'Publications'
+    },
+    {
       'href': '/blog/projects',
       'showInPath': '*',
       'title': 'Projects'

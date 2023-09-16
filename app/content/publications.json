@@ -1,71 +1,67 @@
 [
     {
       "title": "An Objective Assessment Framework & Tool for Linked Data Quality",
-      "authors": "<span class=\"me\">A Assaf</span>, R Troncy, A Senart",
+      "authors": "A Assaf, R Troncy, A Senart",
       "venue": "International Journal on Semantic Web and Information Systems IJSWIS",
-      "year": 2015
-    },
-    {
-      "title": "3cixty@Expo Milano 2015 enabling visitors to explore a smart city",
-      "authors": "G Rizzo, R Troncy, O Corcho, A Jameson, J Plu, JCB Hermida, <span class=\"me\">A Assaf</span>",
-      "venue": "ISWC 2015, 14th International Semantic Web Conference, Semantic Web Challenge",
-      "year": 2015
-    },
-    {
-      "title": "The 3cixty Knowledge Base for Expo Milano 2015 - Enabling Visitors to Explore the City",
-      "authors": "G Rizzo, O Corcho, R Troncy, J Plu, JCB Hermida, <span class=\"me\">A Assaf</span>",
-      "venue": "K-CAP'15, 8th International Conference on Knowledge Capture",
-      "award": "Best poster Award",
-      "year": 2015
+      "year": 2015,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/IJSWIS%20-%20Towards%20An%20Objective%20Assessment%20Framework%20for%20Linked%20Data%20Quality%20-%20Enriching%20Dataset%20Profiles%20with%20Quality%20Indicators/DQ.pdf"
     },
     {
       "title": "What's up LOD Cloud - Observing The State of Linked Open Data Cloud Metadata",
-      "authors": "<span class=\"me\">A Assaf</span>, R Troncy, A Senart",
+      "authors": "A Assaf, R Troncy, A Senart",
       "venue": "2nd Workshop on Linked Data Quality (LDQ2015) , ESWC15",
       "award": "Best paper Award",
-      "year": 2015
+      "year": 2015,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/LDQ'15%20-%20What's%20up%20LOD%20Cloud%20-%20Observing%20The%20State%20of%20Linked%20Open%20Data%20Cloud%20Metadata/SUP.pdf"
     },
     {
       "title": "HDL - Towards A Harmonized Dataset Model for Open Data Portals, PROFILES'15",
-      "authors": "<span class=\"me\">A Assaf</span>, R Troncy, A Senart",
+      "authors": "A Assaf, R Troncy, A Senart",
       "venue": "2nd International Workshop on Dataset PROFIling & fEderated Search for Linked Data",
-      "year": 2015
+      "year": 2015,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/PROFILES'15%20-%20HDL%20-%20Towards%20A%20Harmonized%20Dataset%20Model%20for%20Open%20Data%20Portals/HDL.pdf"
     },
     {
       "title": "An Extensible Framework to Validate and Build Dataset Profiles, PROFILES'15",
-      "authors": "<span class=\"me\">A Assaf</span>, R Troncy, A Senart",
+      "authors": "A Assaf, R Troncy, A Senart",
       "venue": "2nd International Workshop on Dataset PROFIling & fEderated Search for Linked Data",
       "award": "Best paper Award",
-      "year": 2015
+      "year": 2015,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/PROFILES'15%20-%20An%20Extensible%20Framework%20to%20Validate%20and%20Build%20Dataset%20Profiles/SOLD.pdf"
     },
     {
       "title": "Roomba - Automatic Validation, Correction and Generation of Dataset Metadata",
-      "authors": "<span class=\"me\">A Assaf</span>, R Troncy, A Senart",
+      "authors": "A Assaf, R Troncy, A Senart",
       "venue": "International World Wide Web Conference (Demo Track) WWW15",
-      "year": 2015
+      "year": 2015,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/WWW'15%20-%20Automatic%20Validation%2C%20Correction%20and%20Generation%20of%20Dataset%20Metadata%20-%20Enhancing%20Dataset%20Search%20and%20Spam%20Detection/www15-demo.pdf"
     },
     {
       "title": "What are the Important Properties of an Entity? Comparing Users and Knowledge Graph Point of View",
-      "authors": "<span class=\"me\">A Assaf</span>, GA Atemezing, R Troncy, E Cabrio",
+      "authors": "A Assaf, GA Atemezing, R Troncy, E Cabrio",
       "venue": "European Semantic Web Conference (Demo & Poster Track) ESWC 2014",
-      "year": 2014
+      "year": 2014,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Posters/ESWC'14%20-%20What%20are%20the%20Important%20Properties%20of%20an%20Entity%20-%20Comparing%20Users%20and%20Knowledge%20Graph%20Point%20of%20View/eswc2014-poster.pdf"
     },
     {
       "title": "SNARC - An Approach for Aggregating and Recommending Contextualized Social Content",
-      "authors": "<span class=\"me\">A Assaf</span>, R Troncy, A Senart",
+      "authors": "A Assaf, R Troncy, A Senart",
       "venue": "10th International Conference, ESWC 2013",
-      "year": 2013
+      "year": 2013,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/ESWC'13%20-%20SNARC%20An%20Approach%20for%20Aggregating%20and%20Recommending%20Contextualized%20Social%20Content/SNARC.pdf"
     },
     {
       "title": "RUBIX, A Framework for Improving Data Integration with Linked Data",
-      "authors": "<span class=\"me\">A Assaf</span>, E Louw, A Senart, C Follenfant, R Troncy, D Trastour",
+      "authors": "A Assaf, E Louw, A Senart, C Follenfant, R Troncy, D Trastour",
       "venue": "WOD '12 Proceedings of the First International Workshop on Open Data",
-      "year": 2012
+      "year": 2012,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/WOD'12%20-%20Improving%20Schema%20Matching%20with%20Linked%20Data/Improving%20Schema%20Matching%20with%20Linked%20Data.pdf"
     },
     {
       "title": "Data Quality Principles in the Semantic Web",
-      "authors": "<span class=\"me\">A Assaf</span>, R Troncy, A Senart",
+      "authors": "A Assaf, R Troncy, A Senart",
       "venue": "International Workshop on Data Quality Management and Semantic Technologies",
-      "year": 2012
+      "year": 2012,
+      "link": "https://github.com/ahmadassaf/PhD/blob/master/Papers/DQMST'12%20-%20Data%20Quality%20Principles%20in%20the%20Semantic%20Web/Data%20Quality%20Principles%20in%20the%20Semantic%20Web.pdf"
     }
   ]
