@@ -6,7 +6,7 @@ export const prepareLauncherCollection = (collection, type) => {
     item.id = item.slug;
     item.type = type;
     item.showType = false;
-    item.href = `/blog/${item.slug}`;
+    item.href = type === 'publication' ? item.href : `/blog/${item.slug}`;
     item.children = item.title;
 
     collection[key] = omit(item, [ 'featured', 'filePath', 'readingTime' ]);

@@ -10,7 +10,7 @@ const PostHeader = ({ frontMatter, siteMetadata }) => (
     {frontMatter.draft && (
       <span className='font-small mr-2 inline-flex items-center rounded-sm bg-yellow-500 px-2.5 py-0.5 text-sm text-white uppercase'>Draft</span>
     )}
-    <div className='py-4 xl:py-4'>
+    <div className='py-4 xl:py-4 xl:hidden'>
       <dt className='sr-only'>Published on</dt>
       <dd className='text-base font-medium leading-6 text-gray-500 dark:text-gray-400'>
         <time dateTime={ frontMatter.date }>
@@ -27,7 +27,7 @@ const PostHeader = ({ frontMatter, siteMetadata }) => (
       </h3>
 
     </div>
-    <h4 className='text-gray-500'>{frontMatter.readingTime.text}</h4>
+    <h4 className='text-gray-500 xl:hidden'>{frontMatter.readingTime.text}</h4>
 
     {frontMatter.tags && (
       <div className='my-4 flex flex-wrap'>

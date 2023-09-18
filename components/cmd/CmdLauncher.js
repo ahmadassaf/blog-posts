@@ -5,18 +5,20 @@ import { useTheme } from 'next-themes';
 
 import CmdFooter from '@/components/cmd/CmdLauncherFooter';
 import PostsCmd from '@/components/cmd/CmdLauncherPosts';
+import PublicationsCmd from '@/components/cmd/CmdLauncherPublications';
 import SearchCmd from '@/components/cmd/CmdLauncherSearch';
 import SocialCmd from '@/components/cmd/CmdLauncherSocial';
 import TagsCmd from '@/components/cmd/CmdLauncherTags';
 import ProjectsCmd from '@/components/cmd/CmdLaunherProjects';
 import CmdPost from '@/components/cmd/types/CmdPost';
 import CmdProject from '@/components/cmd/types/CmdProject';
+import CmdPublication from '@/components/cmd/types/CmdPublication';
 import CmdTag from '@/components/cmd/types/CmdTag';
 import { prepareLauncherCollection }  from '@/components/cmd/utils';
 
 import '@tmikeladze/react-cmdk/dist/cmdk.css';
 
-const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
+const CommandLauncher = ({ projects, posts, publications, tags, open, setOpen }) => {
   const [ page, setPage ] = useState('root');
   const [ search, setSearch ] = useState('');
   const [ showType ] = useState(true);
@@ -25,6 +27,7 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
 
   prepareLauncherCollection(posts, 'post');
   prepareLauncherCollection(projects, 'project');
+  prepareLauncherCollection(publications, 'publication');
 
   React.useEffect(() => {
     const down = (event) => {
@@ -75,6 +78,16 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
             'id': 'posts',
             'onClick': () => {
               setPage('posts');
+              setSearch('');
+            }
+          },
+          {
+            'children': 'Publications',
+            'closeOnSelect': false,
+            'icon': 'NewspaperIcon',
+            'id': 'publications',
+            'onClick': () => {
+              setPage('publications');
               setSearch('');
             }
           },
@@ -136,6 +149,13 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
         'options': { 'filterOnListHeading': true }
       },
       {
+        'heading': 'Publications',
+        'hidden': true,
+        'id': 'publications',
+        'items': publications,
+        'options': { 'filterOnListHeading': true }
+      },
+      {
         'heading': 'Tags',
         'hidden': true,
         'id': 'tags',
@@ -179,6 +199,8 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
                             return <CmdTag title={ title } count={ count } CmdTag={ CmdTag }/>;
                           case 'project':
                             return <CmdProject title={ title } subtitle={ subtitle } showType={ showType }/>;
+                          case 'publications':
+                            return <CmdPublication title={ title } subtitle={ subtitle } showType={ showType }/>;
                           default:
                             return <div>{children}</div>;
                           }
@@ -197,6 +219,7 @@ const CommandLauncher = ({ projects, posts, tags, open, setOpen }) => {
         <PostsCmd setPage={ setPage } search={ search } setSearch={ setSearch } posts= { posts } />
         <TagsCmd setPage={ setPage } search={ search } setSearch={ setSearch } tags= { tags } />
         <SocialCmd setPage={ setPage } search={ search } setSearch={ setSearch } />
+        <PublicationsCmd setPage={ setPage } search={ search } setSearch={ setSearch } publications= { publications } />
 
       </CommandPalette>
     </div>

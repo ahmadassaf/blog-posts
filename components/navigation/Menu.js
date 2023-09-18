@@ -5,6 +5,7 @@ import { allPosts, allProjects } from 'contentlayer/generated';
 import { usePathname } from 'next/navigation';
 
 import categories from '@/app/content/categories';
+import publications from '@/app/content/publications';
 import tags from '@/app/content/tags';
 import CommandLauncher from '@/components/cmd/CmdLauncher';
 import Link from '@/components/elements/Link';
@@ -80,7 +81,7 @@ const Menu = () => {
 
         </div>
       </div>
-      <CommandLauncher className='min-w-[300px]' tags={ tags } projects={ coreContent(sortPosts(allProjects)) } posts={ posts } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
+      <CommandLauncher className='min-w-[300px]' tags={ tags } projects={ coreContent(sortPosts(allProjects)) } posts={ posts } publications={ publications } open={ LauncherOpen } setOpen={ LauncherSetOpen }/>
     </div>
   </nav>
   );

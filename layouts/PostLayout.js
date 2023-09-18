@@ -6,6 +6,7 @@ import PostNavigation from '@/components/post/PostNavigation';
 import siteMetadata from '@/data/meta/metadata';
 
 export default function PostLayout({ content, next, prev, toc, children }) {
+  console.log('=>', content);
 
   return (
     <SectionContainer>
@@ -23,7 +24,7 @@ export default function PostLayout({ content, next, prev, toc, children }) {
               </div>
 
             </div>
-            { toc.length > 3 && <TableOfContents toc={ toc }/>}
+            { toc.length > 3 && <TableOfContents toc={ toc } date={ content.date } readingTime={ content.readingTime.text }/>}
           </div>
           <PostNavigation next={ next } prev={ prev }></PostNavigation>
           <Comments frontMatter={ content } />

@@ -26,14 +26,14 @@ export default function Publications() {
                 </tr>
               </thead>
               <tbody className='divide-y divide-gray-200'>
-                {publications.map((person) => (
-                  <tr key={ person.title }>
+                {publications.map((paper) => (
+                  <tr key={ paper.title }>
                     <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0'>
-                      <Link className='hover:text-blue-600' href='https://github.com/'><IconPaper className='inline mr-2 baseline'/>{person.title}</Link>
+                      <Link className='hover:text-blue-600' href={ paper.href }><IconPaper className='inline mr-2 baseline'/>{paper.title}</Link>
                     </td>
-                    <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>{person.venue}</td>
-                    <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>{person.authors}</td>
-                    <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>{person.year}</td>
+                    <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>{paper.venue}</td>
+                    <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>{paper.authors}</td>
+                    <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>{paper.year}</td>
                   </tr>
                 ))}
               </tbody>
