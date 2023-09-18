@@ -1,0 +1,66 @@
+---
+type: 'Post'
+title: 'Introduction to Semantic Web'
+tags: ['Semantic Web', 'Knowledge Representation', 'Linked Data']
+summary: 'In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application'
+subtitle: 'A Semantic Web series'
+featured: true
+date: '2014-04-21'
+category: 'semantic-web'
+---
+
+The model behind the Web could be roughly summarized as a way to publish documents represented in a standard way (HTML), containing links to other documents and accessible through the Internet using standard protocols ([TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)/[IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) and [HTTP](https://en.wikipedia.org/wiki/HTTP)). The result is a worldwide, distributed file system of interconnected documents humans can read, exchange and discuss.
+
+- Before the Web, people used to write documents, cite references and then check the reference and go and look search for it in the library or look in the library ... etc.
+- The great invention of the Web is the hyperlink; click on that link, and you get to the next document in the chain .. you can easily go to the reference !! so the **web 1.0** was the web of documents
+- **Web 2.0** was application silos .. social stuff .. it is not only about the data .. by the problem is that these systems do not interoperate (update Facebook profile doesn't affect your linkedin ) .. data are not linked -> this was not only in the Web but also inside enterprise data
+- **[Web 3.0](http://www.w3.org/standards/semanticweb/ 'Semantic Web')** is all about connecting the data .. not the documents but the data at lower levels
+
+In summary, the great advantage of [Web 1.0](http://en.wikipedia.org/wiki/Web_1.0 'Web 1.0') was that it abstracted away the physical storage and networking layers involved in information exchange between two machines. This breakthrough enabled documents to appear to be directly connected to one another. Click a link, and you're there—even if that link goes to a different document on a different machine on another network on another continent! So, in the same way that Web 1.0 abstracts away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information.
+
+The Semantic Web connects facts so that rather than linking to a specific document or application, you can instead refer to a specific piece of information contained in that document or application. If that information is ever updated, you can automatically take advantage of the update. The word semantic itself implies meaning or understanding. As such, the fundamental difference between Semantic Web technologies and other technologies related to data (such as [relational databases](https://en.wikipedia.org/wiki/Relational_database) or the World Wide Web itself) is that the <Highlight>Semantic Web is concerned with the meaning and not the structure of data</Highlight>. This fundamental difference engenders an entirely different outlook on how storing, querying, and displaying information might be approached. Some applications, such as those that refer to a large amount of data from many different sources, benefit enormously from this feature. Others, such as storing high volumes of highly structured transactional data, do not.
+
+What "semantic" means in the Semantic Web is not that computers will understand the meaning of anything but that the logical pieces of meaning can be mechanically manipulated by a machine to valuable ends. So now imagine a new Web where the actual content can be manipulated by computers. For now, picture it as a web of databases. One "semantic" website publishes a database about a product line, with products and descriptions, while another publishes a database of product reviews. A third site for a retailer publishes a database of products in stock. What standards would make writing an application to mesh distributed databases together easier so that a computer could use the three data sources to help an end user make better purchasing decisions? The semantic Web does not deal with unstructured content; instead, it represents not only structured data and links but also the meaning of the underlying concepts and relationships. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. But standards facilitate building applications, especially in a decentralized system. 
+
+**From a technical point of view, the Semantic Web consists of:**
+
+- **Data Model**: [Resource Description Framework (RDF)](http://en.wikipedia.org/wiki/Resource_Description_Framework 'Resource Description Framework'): The data modeling language for the Semantic Web. All Semantic Web information is stored and represented in the RDF. It is a flexible and abstract model meaning that there is more than one representation of RDF.
+- **Query Language**: ([SPARQL](http://en.wikipedia.org/wiki/SPARQL 'SPARQL')): The query language of the Semantic Web. It is specifically designed to query data across various systems.
+- **Schema and Ontology Languages**: [Web Ontology Language (OWL)](http://en.wikipedia.org/wiki/Web_Ontology_Language 'Web Ontology Language') - [RDF Schema (RDFS)](https://en.wikipedia.org/wiki/RDF_Schema) The schema language, or knowledge representation (KR) language, of the Semantic Web. They enable you to define concepts in a composable way so that these concepts can be reused as much and as often as possible. Composability means that each concept is carefully defined to be selected and assembled in various combinations with other concepts as needed for many different applications and purposes.
+
+Semantic technologies represent a fairly diverse family of technologies that have existed for a long time and seek to help derive meaning from information. Some examples of semantic technologies include natural language processing (NLP), data mining, [Artificial Intelligence (AI)](http://en.wikipedia.org/wiki/Artificial_intelligence 'Artificial intelligence'), category tagging, and semantic search. The goal of semantic technologies is separating signal from noise. **Some examples of existing semantic technologies being used today include:**
+
+- **Natural-language processing (NLP)**:  NLP technologies attempt to process unstructured text content and extract the names, dates, organizations, events, etc., discussed within the text. There are many extensions of NLP, and they include:
+
+  - **Search**: Semantic Search often requires NLP parsing of source documents. The specific technique used is Entity Extraction, which identifies proper nouns (e.g., people, places, companies) and other specific information to search. For example, consider the query, "Find me all documents that mention Barack Obama." Some documents might contain "Barack Obama," others "President Obama," and still others "Senator Obama." Extractors will map all these terms to a single concept when used correctly.
+  - **Auto-categorization**: Imagine you have 100,000 news articles and want to sort them based on specific criteria. That would take humans ages, but a computer can do it quickly.
+  - **[Sentiment Analysis](http://en.wikipedia.org/wiki/Sentiment_analysis 'Sentiment analysis')**: Sentiment Analysis measures the "sentiment" of an article, typically meaning whether the article's tone is positive, negative, or neutral. This application of NLP technology is often used in conjunction with search, but it can also be used in other contexts, such as alerting. For example, a business owner might ask an application to "alert me when someone says something negative regarding my company on Facebook."
+  - **Summarization**: Often used in conjunction with research applications, summaries of topics are created automatically so that people do not have to wade through many long-winded articles (perhaps such as this one!).
+  - **Question Answering**: This is the new hot topic in NLP, as evidenced by Siri and Watson. However, long before these tools, we had Ask Jeeves (now Ask.com) and later Wolfram Alpha, which specialized in question-answering. The idea here is to ask a computer a question and have it answer you (Star Trek-style! "Computer…").
+
+- **Data mining**: Data mining technologies employ pattern-matching algorithms to tease trends and correlations within large data sets. Data mining can be used, for example, to identify suspicious and potentially fraudulent trading behavior in large databases of financial transactions.
+- **Artificial intelligence or expert systems**: AI or expert systems technologies automatically use elaborate reasoning models to answer complex questions. These systems often include machine-learning algorithms that can improve the system's decision-making capabilities over time.
+- **Classification**: Classification technologies use heuristics and rules to tag data with categories to help search and analyze information.
+- **Semantic search**: Semantic search technologies allow people to locate information by concept instead of keyword or keyphrase. With semantic search, people can easily distinguish between searching for John F. Kennedy, the airport, and John F. Kennedy, the president.
+
+The main goal behind knowing these technologies is that they help us assemble the Semantic Web's building blocks. For example, NLP can extract structured data from unstructured documents (flat files like text documents). This data is then linked via Semantic Web technologies to other published data. This bridges the gap between documents (unstructured data) and structured data.
+
+# Linked Data
+
+One of the most important movements in the Semantic Web community is Linked Data, which strives to expose and connect all of the world's data in a readily queryable and consumable form. Linked Data aims to publish structured data so that it can be easily consumed and combined with other Linked Data.
+
+## The Four Rules of Linked Data
+
+In a way, Linked Data is the Semantic Web realized via four best practice principles.
+
+- Use URIs as names for things. An example of a URI is any URL. For example, http://assaf.website is the URI that refers to Ahmad Assaf.
+- Use HTTP URIs so that people can look up those names.
+- When someone looks up a URI, provide useful information using the standards such as RDF and SPARQL.
+- Include links to other URIs so that they can discover more things.
+
+### The Four Rules Applied
+
+1. Instead of using application-specific identifiers—database keys, UUIDs, incremental numbers, etc.—you map them to a set of URIs. Each identifier must map to one single URI. For example, each row of those two tables is uniquely identifiable using its URI.
+2. Make your URIs dereferenceable. This roughly means making them accessible via HTTP as we do for every human-readable Web page. This is a crucial aspect of Linked Data: every row of our tables is now fetchable and uniquely identifiable anywhere on the Web.
+3. Have our web server reply with some structured data when invoked. This is the Semantic Web "juicy" part. Model your data with RDF. Here is where you must shift from a relational data model to a graph one.
+4. Once all the rows of our tables have been uniquely identified, made dereferenceable through HTTP, and described with RDF, the last step is providing links between different rows across different tables. The main aim here is to make those implicit links explicit before shifting to the Linked data approach.
