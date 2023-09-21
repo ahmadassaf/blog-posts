@@ -82,24 +82,6 @@ Jekyll is, at its core, a text transformation engine. The concept behind the sys
 - **index.md**: The main landing page/homepage
 - **posts**: This is an extra page defined with a permalink and will act as my paginated archive
 
-```
-├── _data # Custom data files
-├── _includes # Snippets of code that can be used throughout your templates
-├── _layouts # The main layouts defined for various pages and posts
-├── _pages # Any special pages that are not of type posts
-├── _plugins # Any defined ruby plugins if you have any
-├── _posts # The main folder than contains the markdown posts
-├── _script # Contains any additional scripts you would like to run and define in your config file
-├── assets # The main container for .js,scss,css,etc. files. Also contains any font file definitions
-│   ├── _sass
-│   ├── css
-│   ├── fonts
-│   └── js
-├── images
-├── posts # This is an extra page defined with a permalink and will act as my paginated archive
-└── _site # This is the destination of Jekyll build process | The static website
-```
-
 ## Files you need to know about!
 
 - **\_config.dev.yml**: Jekyll configuration overrides for local dev environment
@@ -188,16 +170,27 @@ This is straightforward as I just specify that I want to enable them on both cat
 Another special page I created is a tags archive page. This is done by creating a page in `/_pages` and a `tags-archive` template. The main code to bring all the blog tags and their posts is:
 
 ```html
-{% raw %}{% capture site_tags %}{% for tag in site.tags %}{{ tag | first }}{% unless forloop.last
-%},{% endunless %}{% endfor %}{% endcapture %} {% assign tags = site_tags | split:',' | sort %} {%
-for item in (0..site.tags.size) %}{% unless forloop.last %} {% capture tag %}{{ tags[item] |
-strip_newlines }}{% endcapture %}
-<h2 id="{{ tag }}" class="tag-heading">{{ tag }}</h2>
-<ul class="archive">
-  {% for post in site.tags[tag] %}{% if post.title != null %} {% include partials/post.html %} {%
-  endif %}{% endfor %}
-</ul>
-{% endunless %}{% endfor %}{% endraw %}
+{% raw %}
+  {% capture site_tags %}
+    {% for tag in site.tags %}
+      {{ tag | first }}
+      {% unless forloop.last%},{% endunless %}
+    {% endfor %}{% endcapture %} 
+  {% assign tags = site_tags | split:',' | sort %}
+  {% for item in (0..site.tags.size) %}
+    {% unless forloop.last %}
+      {% capture tag %}{{ tags[item] | strip_newlines }}{% endcapture %}
+      <h2 id="{{ tag }}" class="tag-heading">{{ tag }}</h2>
+      <ul class="archive">
+        {% for post in site.tags[tag] %}
+          {% if post.title != null %}
+            {% include partials/post.html %} 
+          {%endif %}
+        {% endfor %}
+      </ul>
+    {% endunless %}
+  {% endfor %}
+{% endraw %}
 ```
 
 ## Data Files
