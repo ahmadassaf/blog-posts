@@ -3,11 +3,13 @@ type: 'Post'
 title: 'Everything you need to know about RDF'
 tags: ['Semantic Web', 'RDF', 'RDFS', 'OWL', 'Linked Data']
 summary: 'Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. This post discusses the Resource Description Framework (RDF) which is the main data modeling block of the Semantic Web'
-subtitle: 'A Semantic Web Series'
 featured: true
 date: '2014-02-22'
 category: 'semantic-web'
 bibliography: 'meta/references.bib'
+series:
+  order: 1
+  title: "A Semantic Web series"
 ---
 
 Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. Lets take for example the fact that **I (Ahmad) have (owner of ) a blog (http://assaf.website/blog)**. In natural language I can easily express that. If I want to convert this into [XML](http://en.wikipedia.org/wiki/XML 'XML') which is one of the most popular data representation (markup) language, I can have the following representations:
@@ -47,14 +49,20 @@ RDF graph is a collection of triples. A node in a RDF graph can be one of the fo
 
 ## URIs
 
-A Unique referenceable URI. A [URI reference](http://en.wikipedia.org/wiki/Uniform_resource_identifier "Uniform resource identifier") is a Unicode string that does not contain any control characters and would produce a valid URI character sequence representing an absolute URI with optional [fragment identifier](http://en.wikipedia.org/wiki/Fragment_identifier "Fragment identifier") when subjected to the encoding thatconsists of:
+A unique Uniform Resource Identifier [(URI reference)](http://en.wikipedia.org/wiki/Uniform_resource_identifier "Uniform resource identifier") is assigned to any resource or thing that needs to be described. A URI can be a URL or some other kind of unique identifier. Unlike URLs, URIs do not necessarily enable access to the resource they describe, i.e, in most cases they do not represent actual web pages.
+
+URI schemes are versatile and not limited to web addresses; they can also serve as identifiers for a wide range of entities, including telephone numbers, ISBN numbers, and geographic coordinates. In essence, we consider a URI as a way to uniquely identify a resource, and it can be utilized as either the focal point or the object in a statement. Once a URI is associated with a subject, it can be regarded as a resource, allowing us to make additional statements about it.
+
+This concept of employing URIs to label 'entities' and their interconnections holds significant significance. This approach contributes significantly to establishing a global, distinctive naming system. The adoption of such a system effectively mitigates the problem of homonyms that has historically hindered the representation of distributed data.
+
+A URI is a Unicode string that does not contain any control characters and would produce a valid URI character sequence representing an absolute URI with optional [fragment identifier](http://en.wikipedia.org/wiki/Fragment_identifier "Fragment identifier") when subjected to the encoding thatconsists of:
 
 *   encoding the Unicode string as [UTF-8](http://en.wikipedia.org/wiki/UTF-8 "UTF-8") giving a sequence of octet values.
 *   %-escaping octets that do not correspond to permitted [US-ASCII](http://en.wikipedia.org/wiki/ASCII "ASCII") characters.
 
 ## Literals
 
-Simple Strings that describe data values that do not have a separate existence. They can be plain (simple string combined with an optional language tag) or typed (string combined with a datatype URI and an optional language tag). Typed Literals are expressed via the XML Schema data types. Whenever we are using URIs to describe things in RDF we try as much as we can to reuse existing namespaces and for literals we use the XML Schema defined in[http://www.w3.org/2001/XMLSchema#](http://www.w3.org/2001/XMLSchema#). So for example if I want to define a literal as a [String](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") I use the following syntax :
+Simple Strings that describe data values that do not have a separate existence. They can be plain (simple string combined with an optional language tag) or typed (string combined with a datatype URI and an optional language tag). Typed Literals are expressed via the XML Schema data types. Whenever we are using URIs to describe things in RDF we try as much as we can to reuse existing namespaces and for literals we use the XML Schema defined in [http://www.w3.org/2001/XMLSchema#](http://www.w3.org/2001/XMLSchema#). So for example if I want to define a literal as a [String](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") I use the following syntax :
 
 ```
 "Semantics"^^<http://www.w3.org/2001/XMLSchema#String>
@@ -63,6 +71,8 @@ Simple Strings that describe data values that do not have a separate existence. 
 We should note that literals are wrapped with quotations marks. The hash after the `XMLSchema` URI denotes the fragment identifier that points to String. In addition to these I can specify a language tag the describes the "natural" language of the text. For example, `"Semantic"@en` which means that this literal is an English world.
 
 Literals are written either using double-quotes when they do not contain linebreaks like `"simple literal"` or `"long literal"` when they may contain linebreaks. Datatypes are a bit tricky. Let's think of the datatype for [floating-point numbers](http://en.wikipedia.org/wiki/Floating_point "Floating point"). At an abstract level, the floating-point numbers themselves are different from the text we use to represent them on paper. For instance, the text “5.1” represents the number 5.1, but so does “5.1000” and “05.10”. Here there are multiple textual representations — what are called lexical representations — for the same value.
+
+<Callout type='info'>RDF/XML uses the namespace mechanism of XML, but in an expanded way. In XML, namespaces are only used for disambiguation purposes. In RDF/XML, external namespaces are expected to be RDF documents defining resources, which are then used in the importing RDF document. This mechanism allows the reuse of resources by other people who may decide to insert additional features into these resources. The result is the emergence of large, distributed collections of knowledge.</Callout>
 
 A datatype tells us how to map lexical representations to values, and vice versa. RDF reuses the `XML Schema (W3C)"` datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date` RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. If you omit a datatype declaration it be considered as a plain literal by many RDF tools, **which is not the same thing as a string**. However, as of RDF 1.1 (still in development at the time of writing) this distinction is going away, so going forward you should be able to treat `"Rob Gonzalez"` and `"Rob Gonzalez^^xsd:string` as equivalent, and many tools already do.
 
