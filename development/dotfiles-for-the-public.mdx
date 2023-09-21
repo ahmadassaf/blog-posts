@@ -9,11 +9,13 @@ date: '2015-05-21'
 category: 'development'
 ---
 
+<Callout type='warning'>This post is old and for an up-to-date instructions in setting up your machine and dealing with dotfiles, head over to my article about my bash framwork [**gaudi**](https://github.com/g-udi)</Callout>
+
 # What are Dotfiles?
 
-If you're not familiar with the concept of dotfiles, check out Github's dotfiles page to learn more about them. Essentially, when someone says "dotfiles" they mean maintaining your command-line preferences in a Git repository (sort of like how I use Dropbox to manage my preference files for TextExpander, etc.) that you install on every computer.
+If you're not familiar with the concept of dotfiles, check out [Github's dotfiles page](https://dotfiles.github.io/) to learn more about them. Essentially, when someone says "dotfiles" they mean maintaining your command-line preferences in a versioned repository like Github, Dropbox, etc. that you install on every computer.
 
-The name dotfiles refers to the fact that most of the files that perform this sort of configuration start with a dot. The Zsh configuration file, for example, is `.zshrc` The SSH configuration folder is `.ssh` And so on. So the concept of "dotfiles" just means "versioning your configuration files."
+The name dotfiles refers to the fact that most of the files that perform this sort of configuration start with a dot (which also means these files are hidden by default). The Zsh configuration file, for example, is `.zshrc` The SSH configuration folder is `.ssh` And so on. So the concept of "dotfiles" just means "versioning your configuration files."
 
 Your dotfiles will help you create powerful and consistent shell shortcuts and functions, settings for your editors, color coding and layouts for your shell, preferences and authentication for ssh and mysql and other protocols, and more.
 
@@ -21,7 +23,7 @@ Your dotfiles will help you create powerful and consistent shell shortcuts and f
 
 ## Superhero Dotfiles and Their Super Powers
 
-Dotfiles are split into two main types. Those that contain a set of commands and only run once, .osx for example runs a list of commands and gives OS X super powers. Other files such as .bash_profile and .bashrc run each time you open a new Terminal session and gives your Terminal super powers.
+Dotfiles are split into two main types. Those that contain a set of commands and only run once, `.osx` for example runs a list of commands and gives OS X super powers. Other files such as `.bash_profile` and `.bashrc` run each time you open a new Terminal session and gives your Terminal super powers.
 
 Here's a run down of the dotfiles in my repo and a description of what they can do.
 
@@ -38,7 +40,10 @@ This file speeds up the process of running executable files. Rather than having 
 Generally, this file isn't held in the public repo as it can contain sensitive information.
 
 Here’s an example `~/.path` file that adds `~/utils` to the `$PATH:
-export PATH="$HOME/utils:$PATH"``
+
+```shell
+export PATH="$HOME/utils:$PATH"
+```
 
 #### .bash_prompt
 
