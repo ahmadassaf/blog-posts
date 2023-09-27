@@ -1,0 +1,70 @@
+---
+type: 'Post'
+title: 'Introduction to Multidimensional Databases'
+subtitle: 'Introducing the terms and concepts around multidimensional databases and data warehouses'
+tags: ['Multimodal Databases', 'Data Warehouse', 'Databases']
+summary: 'The multidimensional model presents data as facts with associated numerical values called measures or dimensions that characterize the facts and they are “mostly” textual. In this post, we talk about the databases that allow us to store and manipulate complex multidimensional data.'
+featured: true
+date: '2015-04-22'
+category: 'data'
+---
+
+# Multidimensional Model
+The multidimensional data model emerged as it was found out that the previously wide spread model (the [relational model](http://en.wikipedia.org/wiki/Relational_model)) was efficient is performing “online” transactions but did not perform well when the objective was to analyze data (especially on large scale). So, the multidimensional model was designed specifically to express support for data analysis and is the core component in the Business Intelligence (BI) industry.
+
+The multidimensional model presents data as facts with associated numerical values called measures or dimensions that characterize the facts and they are “mostly” textual. Queries on the model usually aggregate measure values over a range of dimension values to produce results such as sale per month and city. Multidimensional models have three important application areas, they are:
+
+Data warehousing: A data warehouse is typically a large repository of integrated data obtained from different resources for the purpose of data analysis ([Data marts](http://en.wikipedia.org/wiki/Data_mart) are subsets of a [Data Warehouse](http://en.wikipedia.org/wiki/Data_warehouse)). Feeding data into the warehouse is done using the [Extract-Transform-Load (ETL)](http://en.wikipedia.org/wiki/Extract%2C_transform%2C_load) process: First the data is extracted from the operational source systems (ERP, CRM … etc.) and the then the transformation process is applied in order to unify the data into the warehouse format; most of the data integration techniques are done in this phase (cleansing, matching … etc.). Finally the loading is process is applied to import the data to the warehose. ETL can sometimes be referred to as ETT (Extract-Transform-Transport).
+[Online Analytical Processing (OLAP)](http://en.wikipedia.org/wiki/Online_analytical_processing) Systems: Systems that provide fast answers to queries that aggregate large amounts of data to find overall trends; the results are presented in multidimensional fashion. As opposed to the well known [Online Analytical Transaction Processing (OLTP)](http://en.wikipedia.org/wiki/Online_transaction_processing) the focus is on data analysis rather than transactions.Moreover, when doing OLTP the focus is on a single transaction whereas OLAP systems keep track of each individual transaction. OLAP systems generally never delete nor update its data; only additions of new data takes place periodically, thus OLAP systems are optimized for retrieving and summarizing large amounts of data.   OLAP systems come mainly in three broad categories:
+ - [ROLAP](http://en.wikipedia.org/wiki/ROLAP): systems that are based on relational database management technology
+ - [MOLAP](http://en.wikipedia.org/wiki/MOLAP): systems that utilizes non-relational multidimensional technologies
+ - [HOLAP](http://en.wikipedia.org/wiki/HOLAP): a hybrid systems that combines these technologies
+
+ # Fundamental Concepts
+
+ ## Dimensions
+
+Dimensions are used for three purposes; the labeling, selection(filtering) and the grouping of data at a desired level of detail (they are often textual and considered as labels for data). A dimension is organized into a containment-like hierarchy composed of number of levels, each of which represents a specific level of details. The instances of the dimensions are typically called dimension values or members; each value or member belongs to a particular level.
+
+## Measures
+A measure has two components, a numerical property and a formula (usually an aggregation function such as sum or average). Measures generally represent the properties of a chosen fact. There are three classes of measures:
+
+ - **Additive measures**: can be combined meaningfully along any dimension (ex: sales over location and time) this causes no overlap between the real world phenomena that caused the individual values.
+ - **Semi-additive measures**: values cannot be combined along one or more of the dimensions (usually the time dimension); for example it doesn’t make sense to sum inventory over time as the same inventory item may be counted several times.
+ - **Non-additive measures**: Cannot be combined along any dimension usually because of the chosen formula; for example when averages for lower level values cannot be combined with averages of higher level values.
+
+## Facts
+Facts are the objects that present the subject of the analysis. They are mostly defined by their combination of dimension values. a fact has a certain granularity which is determined by the levels from which its dimension values are drawn. There are mainly two types of facts:
+
+ 1. **Event Facts**: they usually model events in the real world; meaning that there is exactly one fact for each unique event in the overall real-world process that is captures. For example with a fine granularity there will be one fact for each particular sale of a specific item; with a coarser granularity there would be one fact for each day when one or more sale of a specific item occurred  If event facts did not have any measures they are called  measurelss facts or factless facts, for example the record that represents a contact with a customer to inform him about a new offer.
+ 2. **Snapshot Facts (state Facts)**: models the stats of a given process at a certain point in time.
+Event facts are made to represent events that can happen unpredictably in time; however snapshot facts are typically made to represent the states at predefined times.
+
+## Cubes
+A cube is a multidimensional data structure for capturing and analyzing data. It generalizes the tabular spreadsheet such as there can be any number of dimensions (in contrast to only two in the tabular spreadsheets). The terms hypercube and cube are used interchangeably as sometimes the term cube can infer that it hold only three dimensions. A collection of related cubes is commonly referred to as a multidimensional database or multidimensional data warehouse.
+
+A cube consists of a set of cells at each of the dimensions intersections; a non empty cell is a fact. A fact has a number of measures associated with it. A sparse cube is one with high percentage of empty cells; a dense cube is one with high percentage of facts. Cubes tend to become increasingly sparse with increasing dimensionality and with increasingly finer granularities of the dimension value.
+
+## Pivot Tables
+A pivot table is a two dimensional table of data with associated subtotals and totals. It may also allow the user to use hierarchies to drill down or roll up. It can be also nested into several dimensions on one axis. It can be also pivoted such as the dimensions can be rotated (swapping x and y).
+
+## Multidimensional Querying (MDX)
+Dedicated querying languages that offers a number of ranking and sorting function on multidimensional data
+
+# Relational Representations
+There are two principal ways of representing dimensions:
+
+## Star Schema
+A star schema has one dimension table for each dimension, this table has a key column and one column for each level of the dimension (except T). Furthermore, a star schema has a Fact Table that hold a row for each multidimensional fact, it has a column for each dimension. They primary key in the dimension tables is typically a surrogate key (ID), this will result in better storage, prevention of key-reuse problems and more efficient query processing. However, we notice that there is redundancy in higher level data, however it is not a problem space-wise and it does not cause any update problems thus it is often good idea to use such redundant dimensions tables to optimize performance.
+
+## Snowflake Schema
+It is much similar to the star schema, however it contains several dimension tables for each dimension; this will result in removing the redundancy found in star schemas.  The result of this is that querying the schema is now harder since several joins must be applied; it is also more time consuming to compute the results.
+
+# Analysis and Querying
+The support for analysis and querying on cubes is done using these operations:
+
+ - **Rolling up**: Rolling up causes the data view to go up to a higher cross grained view
+ - **Drilling down and Drilling Out**: The opposite of rolling up, the data view becomes more fine grained and detailed  it offers more details by expanding one or more dimensions from a non-T level to a lower level. Drilling out occurs when a drill down is done by including an additional dimension at a non-t level, after a drill out the measure values are spread out among more cells.
+ - **Slicing and Dicing**: This happens when an analyst wishes to consider a subset of the cube, so he selects a specific value for a dimension; this is a slice. It is possible to slice the resulting slice further in what is called  a dice. Slicing generally refer to filtering out data, and dicing refers to grouping out the filtered data.
+ - **Drill Across**: This is done when we do operation on more than one cube that share one or more conformed dimensions. The data from these cubes is combines by these shared dimensions, this in relational terms corresponds to a Full Outer-join.
+ - **Pivot**: allows an analyst to rotate the cube in space to see its various face
