@@ -1,0 +1,128 @@
+---
+type: 'Post'
+title: 'Transcribing Audio Using OpenAI Whisper API'
+tags: ['OpenAI', 'Generative AI', 'Audio Transcription', 'LLM']
+summary: 'Audio transcription using OpenAI Generative AI model is not supported yet via the UI. To do this, you need to use the API and this comes with its own set of challenges. This post will show you how to do this task using OpenAI with a bit of Python'
+featured: false
+date: '2024-05-23'
+category: 'development'
+---
+
+Transcribing audio has become an essential task in various fields, from creating subtitles for videos to converting meetings and interviews into text. OpenAI's Whisper API offers a powerful solution for this, providing high-accuracy speech-to-text capabilities. However, it's important to note that Whisper's transcription service is only accessible via the API and not through a graphical user interface (UI). This guide will walk you through using the Whisper API for transcribing audio, including handling file size restrictions by chunking the audio and aggregating the transcriptions.
+
+# Understanding the Whisper API
+
+OpenAI's Whisper API is designed to convert speech to text with impressive accuracy. The API can handle various languages and accents, making it a versatile tool for global applications. However, the API comes with some limitations, particularly concerning the size of the audio files it can process. Currently, the Whisper API can handle audio files up to a specific size, which means longer recordings need to be split into smaller segments before transcription.
+
+# Restrictions and Limitations
+
+The primary restriction of the Whisper API is its file size limit. It is generally recommended to keep audio files relatively small. This ensures smooth processing and avoids timeouts or errors during the transcription process. For longer recordings, you will need to divide the audio into smaller chunks, transcribe each chunk individually, and then combine the results.
+
+<Callout type="info">By default, the Whisper API only supports files that are <strong>less than 25 MB</strong>. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB’s or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost.</Callout>
+
+# Preparing Your Audio Files
+
+To transcribe a long audio file using the Whisper API, you need to break it into smaller, manageable segments. This can be done using Python, which provides libraries for audio processing and API interaction. Here's a step-by-step guide on how to do this.
+
+# Step-by-Step Guide to Transcribing Audio with Whisper API
+
+## 1. Install Required Libraries
+
+First, you need to install the necessary Python libraries. You can do this using pip:
+
+```python
+pip install openai pydub
+```
+
+The [pydub](https://github.com/jiaaro/pydub) library is used for audio processing, and openai is the official library to interact with OpenAI’s APIs.
+
+## 2. Chunking the Audio File
+
+You can use the pydub library to split your audio file into smaller chunks. Here's a Python script to do that:
+
+```python
+import os
+from pydub import AudioSegment
+
+script_dir = os.path.dirname(__file__)
+
+def chunk_audio(file_path, chunk_length_ms=60000):
+    audio = AudioSegment.from_file(file_path)
+    audio_length_ms = len(audio)
+    chunks = []
+
+    for i in range(0, audio_length_ms, chunk_length_ms):
+        chunk = audio[i:i+chunk_length_ms]
+        chunks.append(chunk)
+
+    return chunks
+
+chunks = chunk_audio(os.path.join(script_dir, "<FILE_NAME>.mp3"))
+for i, chunk in enumerate(chunks):
+    chunk.export(f'chunk_{i+1}.mp3', format='mp3')
+```
+
+This script divides the audio into 1-minute chunks. You can adjust the `split_length_ms` variable based on your needs as follows:
+
+```python
+....
+# create 45-minute chunks
+split_length_ms = 45 * 60 * 1000
+chunks = chunk_audio(os.path.join(script_dir, "<FILE_NAME>.mp3"), split_length_ms)
+```
+
+## 3. Transcribing Each Chunk
+
+Next, you need to transcribe each chunk using the Whisper API:
+
+```python
+from openai import OpenAI
+
+openai = OpenAI(api_key='<OPENAI_API_KEY>')
+
+def transcribe_audio(file_path):
+    audio_file = open(file_path, 'rb')
+    response = openai.audio.transcriptions.create( model="whisper-1", file=audio_file)
+    return response.text
+```
+
+## 4. Putting it all together
+
+Finally, you can aggregate the transcriptions from each chunk into a single text file:
+
+```python
+import os
+from openai import OpenAI
+from pydub import AudioSegment
+
+openai = OpenAI(api_key='<OPENAI_API_KEY>')
+script_dir = os.path.dirname(__file__)
+
+transcriptions = []
+
+def transcribe_audio(file_path):
+    audio_file = open(file_path, 'rb')
+    response = openai.audio.transcriptions.create( model="whisper-1", file=audio_file)
+    return response.text
+
+def chunk_audio(file_path, chunk_length_ms=60000):
+    audio = AudioSegment.from_file(file_path)
+    audio_length_ms = len(audio)
+    chunks = []
+
+    for i in range(0, audio_length_ms, chunk_length_ms):
+        chunk = audio[i:i+chunk_length_ms]
+        chunks.append(chunk)
+
+    return chunks
+
+chunks = chunk_audio(os.path.join(script_dir, "<FILE_NAME>.mp3"))
+for i, chunk in enumerate(chunks):
+    chunk.export(f'chunk_{i+1}.mp3', format='mp3')
+    transcription = transcribe_audio(f'chunk_{i+1}.mp3')
+    transcriptions.append(transcription)
+
+# Combine all transcriptions
+full_transcription = ' '.join(transcriptions)
+print(full_transcription)
+```
