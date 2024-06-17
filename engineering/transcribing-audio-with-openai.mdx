@@ -5,7 +5,7 @@ tags: ['OpenAI', 'Generative AI', 'Audio Transcription', 'LLM']
 summary: 'Audio transcription using OpenAI Generative AI model is not supported yet via the UI. To do this, you need to use the API and this comes with its own set of challenges. This post will show you how to do this task using OpenAI with a bit of Python'
 featured: false
 date: '2024-05-23'
-category: 'development'
+category: 'engineering'
 ---
 
 Transcribing audio has become an essential task in various fields, from creating subtitles for videos to converting meetings and interviews into text. OpenAI's Whisper API offers a powerful solution for this, providing high-accuracy speech-to-text capabilities. However, it's important to note that Whisper's transcription service is only accessible via the API and not through a graphical user interface (UI). This guide will walk you through using the Whisper API for transcribing audio, including handling file size restrictions by chunking the audio and aggregating the transcriptions.
@@ -18,7 +18,7 @@ OpenAI's Whisper API is designed to convert speech to text with impressive accur
 
 The primary restriction of the Whisper API is its file size limit. It is generally recommended to keep audio files relatively small. This ensures smooth processing and avoids timeouts or errors during the transcription process. For longer recordings, you will need to divide the audio into smaller chunks, transcribe each chunk individually, and then combine the results.
 
-<Callout type="info">By default, the Whisper API only supports files that are <strong>less than 25 MB</strong>. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB’s or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost.</Callout>
+<Callout type="info">By default, the Whisper API only supports files that are less than 25 MB. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB’s or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost.</Callout>
 
 # Preparing Your Audio Files
 
@@ -126,3 +126,5 @@ for i, chunk in enumerate(chunks):
 full_transcription = ' '.join(transcriptions)
 print(full_transcription)
 ```
+
+For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/audio).
