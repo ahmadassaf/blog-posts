@@ -6,7 +6,6 @@ summary: 'Audio transcription using OpenAI Generative AI model is not supported 
 featured: false
 date: '2024-05-23'
 category: 'engineering'
-hideToC: true
 ---
 
 Transcribing audio has become an essential task in various fields, from creating subtitles for videos to converting meetings and interviews into text. OpenAI's Whisper API offers a powerful solution for this, providing high-accuracy speech-to-text capabilities. However, it's important to note that Whisper's transcription service is only accessible via the API and not through a graphical user interface (UI). This guide will walk you through using the Whisper API for transcribing audio, including handling file size restrictions by chunking the audio and aggregating the transcriptions.
@@ -32,13 +31,9 @@ To transcribe a long audio file using the Whisper API, you need to break it into
 
 First, you need to install the necessary Python libraries. You can do this using pip:
 
-```python
+```
 pip install openai pydub
 ```
-
-<pre data-line="1"><code>
-pip install openai pydub
-</code></pre>
 
 The [pydub](https://github.com/jiaaro/pydub) library is used for audio processing, and openai is the official library to interact with OpenAI’s APIs.
 
