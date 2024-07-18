@@ -1,0 +1,185 @@
+---
+type: 'Post'
+title: 'Theme Switcher in Next.js'
+tags: ['Next.js', 'React']
+summary: 'In web applications, theming enhances user experience by offering personalization and visual appeal. Typically, a ThemeProvider Context manages themes throughout the application. This works well for fully client-side apps. However, developers need a solution for apps that combine client and server components, where theming depends on color-schema or className. With Next.js 14+, wrapping children in a Context automatically makes them client components. This blog post explores how to implement a ThemeProvider that avoids the need to wrap the entire application in a Context provider, addressing the challenges of mixed client-server environments.'
+subtitle: 'Toggle between dark and light theme without wrapping children in context'
+featured: false
+date: '2024-06-11'
+category: 'engineering'
+---
+
+In web applications, theming enhances user experience by offering personalization and visual appeal. Typically, a `ThemeProvider` context manages themes throughout the application. This works well for fully client-side apps. However, developers need a solution for apps that combine client and server components, where theming depends on `color-schema` or `className`.
+
+With [Next.js 14+](https://nextjs.org/blog/next-14), wrapping children in a Context automatically makes them client components. This blog post explores how to implement a `ThemeProvider` that avoids the need to wrap the entire application in a context provider, addressing the challenges of mixed client-server environments.
+
+Generally speaking; implementing a theme switcher involves three main steps:
+
+ 1. **Create Theme Provider Component**: Develop a custom `ThemeProvider` component that handles theme switching and <Tooltip text="This will be needed to persist theme choice">cookie management</Tooltip>
+ 2. **Use Theme Switcher**: Integrate the `ThemeProvider` component into your application to switch theme.
+ 3. **Integrate Theme Provider**: Integrate the `ThemeProvider` component into your application layout to make sure client theming is synced with server on hydration.
+
+# The old way
+
+## 1. Create Theme Provider Component
+
+In a typical React application, you would wrap the entire application in a `ThemeProvider` context provider. This approach works well for client-side applications but can be cumbersome for Next.js applications that combine client and server components.
+
+```jsx caption="ThemeProviders.js" {1}
+'use client';
+
+import { ThemeProvider } from 'next-themes';
+
+import siteMetadata from '@/data/meta/metadata';
+
+export function ThemeProviders({ children }) {
+  return (
+    <ThemeProvider attribute='class' defaultTheme={ siteMetadata.theme }>
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+## 2. Use Theme Switcher
+To accompany the `ThemeProvider`, you would need a `ThemeSwitcher` component to toggle between themes. You can already see the relianse on `useTheme` hook from `next-themes` package to get the current theme and toggle it.
+
+```jsx caption="ThemeSwitcher.js"
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+
+import IconDarkMode from '@/static/icons/darkMode.svg';
+import IconLightMode from '@/static/icons/lightMode.svg';
+
+const ThemeSwitch = () => {
+  const [ mounted, setMounted ] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <button type='button' onClick={ () => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark') }>
+        {mounted && (theme === 'dark' || resolvedTheme === 'dark') ? (<IconDarkMode />) : (<IconLightMode />)}
+    </button>
+  );
+};
+
+export default ThemeSwitch;
+```
+
+## 3. Integrate Theme Provider
+What happens now is that in our application we will need to wrap all of our content with the `ThemeProvider` as shown below.
+
+```jsx caption="App.js" {9,11}
+...
+import { ThemeProviders } from '@/components/utils/ThemeProviders';
+...
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <ThemeProviders>
+            <main className='mb-8'>{children}</main>
+        </ThemeProviders>
+      </body>
+    </html>
+  );
+}
+```
+
+# The new way
+
+## 1. Create Theme Provider Component
+
+You can notice the integration of the `useEffect` hook to set the cookie with the theme choice. This will make sure that the theme choice is persisted even after the user refreshes the page.
+
+```jsx caption="ThemeProviders.js"
+'use client';
+
+import { useEffect } from 'react';
+import { setCookie } from 'cookies-next';
+import { ThemeProvider, useTheme } from 'next-themes';
+
+// Application theme provider
+function AppThemeProvider({ children, ...props }) {
+  return (
+    <ThemeProvider enableColorScheme { ...props }>
+      <AppThemeProviderHelper />
+      {children}
+    </ThemeProvider>
+  );
+}
+
+function AppThemeProviderHelper() {
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    setCookie('__theme__', theme, {
+      'expires': new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+      'path': '/'
+    });
+  }, [ theme ]);
+
+  return null;
+}
+
+export default AppThemeProvider;
+```
+
+## 2. Use Theme Switcher
+
+The `ThemeSwitcher` component is now simplified and does not require the `useEffect` hook to check if the component is mounted. This is because the `ThemeProvider` component automatically makes its children client components. You can also notice the use of the `useTheme` hook to get the current theme and toggle it.
+
+```jsx caption="ThemeSwitcher.js"
+"use client";
+
+import ThemeProvider from "@/components/utils/ThemeProvider";
+import { RiMoonClearFill, RiSunFill } from 'react-icons/ri';
+import { useTheme } from "next-themes";
+
+function Provider() {
+  const { setTheme, theme } = useTheme();
+  return (
+    <button type='button' style={{ 'outline': 'none' }} onClick={ () => setTheme(theme === 'dark' ? 'light' : 'dark') }>
+        {theme === 'dark'  ? (<RiMoonClearFill />) : (<RiSunFill />)}
+    </button>
+  );
+}
+
+function ThemeSwitch() {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <Provider />
+    </ThemeProvider>
+  );
+}
+
+export default ThemeSwitch;
+```
+
+## 3. Integrate Theme Provider
+
+In the `App.js` file, you can see that the `ThemeProvider` component is now dynamically imported using the `dynamic` function from `next/dynamic`. This ensures that the `ThemeProvider` component is only rendered on the client-side. Moreover, the theme choice is now persisted in a cookie. This offers a cleaner and more efficient way to manage themes in your application without making complete application a client component.
+
+
+```jsx caption="App.js" {2,3,6,7,8,11,14}
+...
+import dynamic from "next/dynamic";
+import { cookies } from 'next/headers'
+...
+
+const ThemeProvider = dynamic(() => import("@/components/utils/ThemeProvider"), {
+  ssr: false,
+});
+
+export default function LayoutContainer({ children }) {
+  const theme = cookies().get("__theme__")?.value || "system";
+  return (
+    <>
+     <ThemeProvider attribute="class"  defaultTheme={theme} enableSystem/>
+     <main>{children}</main>
+    </>
+  );
+}
+```

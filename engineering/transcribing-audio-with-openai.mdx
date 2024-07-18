@@ -3,6 +3,7 @@ type: 'Post'
 title: 'Transcribing Audio Using OpenAI Whisper API'
 tags: ['OpenAI', 'Generative AI', 'Audio Transcription', 'LLM']
 summary: 'Audio transcription using OpenAI Generative AI model is not supported yet via the UI. To do this, you need to use the API and this comes with its own set of challenges. This post will show you how to do this task using OpenAI with a bit of Python'
+subtitle: 'Manage large audio files with pydub and OpenAI'
 featured: false
 date: '2024-05-23'
 category: 'engineering'
@@ -35,7 +36,7 @@ First, you need to install the necessary Python libraries. You can do this using
 pip install openai pydub
 ```
 
-The <Preview url="https://github.com/jiaaro/pydub"/> library is used for audio processing, and openai is the official library to interact with OpenAI’s APIs.
+The [pydub](https://github.com/jiaaro/pydub) library is used for audio processing, and openai is the official library to interact with OpenAI’s APIs.
 
 ## 2. Chunking the Audio File
 
@@ -128,4 +129,4 @@ full_transcription = ' '.join(transcriptions)
 print(full_transcription)
 ```
 
-For more information on the Whisper API and its capabilities, check the <Preview title="OpenAI API documentation" url="https://platform.openai.com/docs/api-reference/audio"/>
+For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/audio)

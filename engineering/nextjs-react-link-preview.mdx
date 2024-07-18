@@ -1,0 +1,88 @@
+---
+type: 'Post'
+title: 'Embed/Preview inline links with React/Next.js and Rehype/MDX'
+tags: ['Next.js', 'MDX', 'React', 'Rehype']
+summary: 'Embedding links in your content can be a powerful way to provide additional context or information. In this post, we explore how to create a custom MDX component to embed/preview inline links in your React/Next.js application using Rehype and MDX.'
+subtitle: 'Create blog posts with Advanced MDX Dynamic Content, React components and APIs'
+featured: true
+date: '2024-07-11'
+category: 'engineering'
+---
+
+In today's content-driven world, enhancing user experience by providing rich link previews can significantly improve engagement. With [MDX](https://mdxjs.com/) (Markdown for JSX), we can seamlessly combine Markdown with React components to create dynamic, interactive content. In this blog post, I'll walk through creating a custom MDX component to automatically embed and preview inline links using [React](https://reactjs.org/), [Next.js](https://nextjs.org/), and [Remark](https://github.com/remarkjs/remark). The component is already implemented in this blog, so you can see it in action as you read through the post.
+
+### What do we want to achieve?
+
+ - Expand inline links with the favicon and title (optional) of the linked page using a custom MDX component
+ - Preview the link on hover; it will be any image that is found in the meta tags of the linked page or otherwise a screenshot of the page
+ - Ability to change all links in the content to use the new component by using custom Rehype plugin
+
+
+## Setting Up a Next.js Project with MDX Support
+
+First, ensure you have Node.js installed, then create a new Next.js project:
+
+```bash
+npx create-next-app link-preview-mdx
+cd link-preview-mdx
+```
+
+Next, add the necessary packages for MDX support:
+
+```bash
+npm install @next/mdx @mdx-js/loader
+```
+
+Create a next.config.js file in the root of your project and configure MDX support:
+
+```javascript caption="next.config.js
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    rehypePlugins: [],
+    remarkPlugins: [],
+  },
+});
+module.exports = withMDX({
+  pageExtensions: ['js', 'jsx', 'md', 'mdx'],
+});
+```
+
+# Understanding MDX, Rehype, and Remark
+
+In the modern web development ecosystem, tools like MDX, [Rehype](https://github.com/rehypejs/rehype), and Remark have become essential for creating rich, dynamic content. Each of these tools serves a unique purpose and, when combined, they offer powerful capabilities for content management and rendering. Let's dive deeper into what these tools are, why they are used, and how they fit into the larger picture of web development.
+
+## What is MDX?
+
+MDX is a syntax that combines Markdown with <Tooltip text="JSX is an extension to JavaScript that looks like HTML but makes it convenient to use components (reusable things)">JSX</Tooltip>, enabling you to use React components within your Markdown content. This blend allows for a more dynamic and interactive approach to writing content. MDX is particularly popular in the context of static site generators and documentation sites, where both rich content and interactivity are crucial.
+
+## Key Features of MDX:
+- **Markdown Syntax**: Write content using the familiar Markdown syntax.
+- **JSX Integration**: Embed React components directly in your Markdown.
+- **Interactivity**: Enhance static content with interactive elements.
+- **Custom Components**: Use custom React components to extend Markdown functionality.
+
+Nonstandard markdown features (such as GFM, frontmatter, math, syntax highlighting) can be enabled with remark plugins.
+
+```jsx
+import {Chart} from './snowfall.js'
+export const year = 2013
+
+# Last year’s snowfall
+
+In {year}, the snowfall was above average.
+It was followed by a warm spring which caused
+flood conditions in many of the nearby rivers.
+
+<Chart year={year} color="#fcb32c" />
+```
+
+What is Rehype?
+
+Rehype is a powerful HTML processor built on the Unified ecosystem. It allows you to transform HTML content through a series of plugins. Rehype is highly flexible and can be used to manipulate HTML in various ways, such as parsing, transforming, and stringifying.
+
+Key Features of Rehype:
+HTML Parsing: Convert HTML strings into an Abstract Syntax Tree (AST) for manipulation.
+Plugin System: Apply transformations using a wide range of plugins.
+Output Control: Convert the transformed AST back into HTML strings.
+Integration: Works seamlessly with other Unified ecosystem tools.
