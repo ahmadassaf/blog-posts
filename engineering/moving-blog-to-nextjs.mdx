@@ -7,7 +7,6 @@ summary: 'Migrating from Jekyll to Next.js and Tailwind CSS has been a game-chan
 featured: false
 date: '2021-01-12'
 category: 'engineering'
-tableOfContents: true
 ---
 
 
@@ -38,8 +37,8 @@ I believe in reusing existing solutions to save time and effort, and a quick sea
 This is a [Next.js](https://nextjs.org/) <Tooltip text="In version 13, Next.js introduced a new App Router built on React Server Components, which supports shared layouts, nested routing, loading states, error handling, and more. The App Router works in a new directory named app. The app directory works alongside the pages directory to allow for incremental adoption. This allows you to opt some routes of your application into the new behavior while keeping other routes in the pages directory for previous behavior. If your application uses the pages directory, please also see the Pages Router documentation.">13+</Tooltip>, [Tailwind CSS](https://tailwindcss.com/) blogging starter template. Probably the most feature-rich Next.js markdown blogging template out there. Comes out of the box configured with the latest technologies to make technical writing a breeze. Easily configurable and customizable. Perfect as a replacement to existing Jekyll and Hugo individual blogs. The main features that I relied and extended on are:
 
 - Easy styling customization and Mobile-friendly view with [Tailwind 3.0](https://tailwindcss.com/blog/tailwindcss-v3) and primary color attribute
-- Near perfect lighthouse score - [Lighthouse report](https://www.webpagetest.org/result/210111_DiC1_08f3670c3430bf4a9b76fc3b927716c5/)
 - [MDX - write JSX in markdown documents!](https://mdxjs.com/)
+- [ContentLayer](https://contentlayer.dev/) for managing content
 - Server-side syntax highlighting with line numbers and line highlighting via [rehype-prism-plus](https://github.com/timlrx/rehype-prism-plus)
 - Math display supported via [KaTeX](https://katex.org/)
 - Citation and bibliography support via [rehype-citation](https://github.com/timlrx/rehype-citation)
@@ -47,6 +46,65 @@ This is a [Next.js](https://nextjs.org/) <Tooltip text="In version 13, Next.js i
 - Flexible data retrieval with [mdx-bundler](https://github.com/kentcdodds/mdx-bundler)
 - Preconfigured security headers
 - SEO friendly with RSS feed, sitemaps
+
+## The Template Structure
+
+First, lets understand the different folders/components of the template:
+
+### `static`
+
+Next.js can serve static files, like images, under a folder called public in the root directory. Files inside `public` can then be referenced by your code starting from the base URL `/`. 
+
+For our template, we have a `static` folder that contains images to be used in the blog, logos,icons and favicons.
+
+### `scripts`
+
+This folder contains scripts to help with the development and maintenance of the blog. 
+
+ - The `build.mjs` script is used to perform a bunch of steps post the `yarn run build` command. It is used to generate the RSS feed and the tags and categories pages.
+ - The `rss.mjs` script is used to generate the RSS feed for the blog.
+
+> [!NOTE]
+> **Why `.mjs` extension?**
+>
+> Since Node.js was created, the ECMAScript module system (which uses import and export) has become standard and Node.js has added support for it. However, Node. will treat .js files as CommonJS (which is the default module system for the project) unless package.json says `"type": "module"` or the file extension is `.mjs`.
+
+### `layouts`
+
+The `layouts` folder contains the main templates used in the pages. The main layout is `MainLayout.js` which is used to wrap all the pages. The `PostLayout.js` is used to wrap all the blog posts.
+
+### `lib`
+
+The `lib` folder contains utility functions and configurations used throughout the blog. 
+
+ - `contentLayer`: contains the content layer "plugins"/"scripts" for the blog posts and projects.
+   - `computedFields.js`: contains the computed fields for the blog posts. Those are fields that are generated based on the content of the blog post or its metadata like the `readingTime` or `toc` (table of contents).
+   - `contentFields.js`: defined the fields that appear in the frontmatter for the different types of content (author, post, project, etc.).
+   - `generatedCategories.mjs`: Loops through all the posts and generates the categories for the blog posts.
+   - `generatedTags.mjs` - generates the tags for the blog posts.
+   - `projectFields.js` - contains the project fields for the projects page.
+   - `structuredData.js` - contains the structured data for the blog posts.
+ - `mdx` - contains the utility functions for the MDX files.
+   - `remark-code-title.js` - adds a title to the code blocks.
+   - `rehype-citation.js` - adds citation support to the MDX files.
+   - `rehype-katex.js` - adds math display support to the MDX files.
+
+
+### `data`
+
+The `data` folder contains the site metadata, authors, and blog posts. The `markdownToHtml` function is used to convert markdown to HTML.
+
+### `components`
+
+The `components` folder contains the React components used in the blog. The `MDXComponents.js` file contains the components used to render the MDX files. The `social-icons` folder contains the SVG icons for social media.
+
+### `css`
+
+The `css` folder contains the tailwind.css file which contains the tailwind stylesheet. The `prism.css` file contains the styles associated with the code blocks.
+
+### `app`
+
+The `app` folder contains the main application files. The `pages` folder contains the pages to route to. The `api` folder contains the API routes. The `components` folder contains the components used in the pages. The `styles` folder contains the global styles.
 
 
 ## Sample posts
