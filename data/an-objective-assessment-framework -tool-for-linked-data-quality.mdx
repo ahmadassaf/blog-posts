@@ -99,15 +99,7 @@ Consistency implies lack of contradictions and conflicts. The objective indicato
 
 ## Freshness
 
-Freshness is a measure for the recency of data. The basic assumption is that old information is more likely to be outdated and unreliable [@Flouris:EvoDyn:12]. Dataset freshness can be identified if the dataset contains timestamps that can keep track of its modifications. Data freshness could be considered as a subjective measure. However, our concern is the existence of temporal information allowing dataset consumers to subjectively decide its freshness for their scenario.
-
-## Provenance
-
-Provenance can be achieved at the dataset level by including metadata that describes its authoritative information (author, maintainer, creation date, etc.), versioning information and verifying if the dataset uses a provenance vocabulary like PROV [@Lebo:W3C:13].
-
-## Licensing
-
-Licensing is a quality attribute that is measured on the dataset level. It includes the availability of machine readable license information [@Hogan:WebSemJorunal:12], human readable license information in the documentation of the dataset or its source [@Hogan:WebSemJorunal:12] and the indication of permissions, copyrights and attributions specified by the author [@Zaveri:SemWebJorunal:12].
+Freshness is a measure for the recency of data. The basic assumption is that old information is more likely to be outdated and unreliable [@Flouris:EvoDyn:12]. Dataset freshness can be identified if the dataset contains timeThese shortcomings are mainly due to the limitations in the CKAN dataset model. However, due to the modualirty of Roomba, syntactic checkers and additional modules to examine vocabularies usage can be easily integrated in Roomba to fix **[QI.27]** **[QI.8]** and **[QI.45]**. Roomba's metadata quality profiler can fix **[QI.23]** as we have manually created a mapping file standardizing the set of possible [license names and their information](https://github.com/ahmadassaf/opendata-checker/blob/master/util/licenseMappings.json). We have also used the [open source and knowledge license information](https://github.com/okfn/licenses) to normalize license information and add extra metadata like the domain, maintainer and open data conformance.ation in the documentation of the dataset or its source [@Hogan:WebSemJorunal:12] and the indication of permissions, copyrights and attributions specified by the author [@Zaveri:SemWebJorunal:12].
 
 ## Comprehensibility
 
