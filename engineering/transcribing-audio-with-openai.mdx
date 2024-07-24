@@ -19,8 +19,7 @@ OpenAI's Whisper API is designed to convert speech to text with impressive accur
 
 The primary restriction of the Whisper API is its file size limit. It is generally recommended to keep audio files relatively small. This ensures smooth processing and avoids timeouts or errors during the transcription process. For longer recordings, you will need to divide the audio into smaller chunks, transcribe each chunk individually, and then combine the results.
 
-> [!NOTE]
-> By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB’s or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost
+<Callout type='settings'>By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB’s or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost</Callout>
 
 # Preparing Your Audio Files
 

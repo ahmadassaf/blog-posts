@@ -13,6 +13,7 @@ category: 'engineering'
 After a few years of [running my blog](/blog/category/engineering/power-up-a-hero-blog-with-jekyll) on [Jekyll](https://jekyllrb.com), I decided it was time for an upgrade. Jekyll served me well, but as my needs evolved, I found myself wanting more flexibility, better performance, and a more modern development workflow. Enter [Next.js](https://nextjs.org), [Tailwind CSS](https://tailwindcss.com), and a host of other modern web development tools that have transformed my blogging experience. Here's a rundown of the migration process and the benefits I’ve enjoyed since making the switch.
 
 # Why Migrate from Jekyll?
+
 Jekyll is a static site generator that is simple, reliable, and supported by GitHub Pages. However, it has its limitations:
 
 - **Performance**: While Jekyll is fast for simple blogs, it can become sluggish as your content grows.
@@ -69,6 +70,14 @@ This folder contains scripts to help with the development and maintenance of the
 >
 > Since Node.js was created, the ECMAScript module system (which uses import and export) has become standard and Node.js has added support for it. However, Node. will treat .js files as CommonJS (which is the default module system for the project) unless package.json says `"type": "module"` or the file extension is `.mjs`.
 
+### `data`
+
+The `data` folder contains the site metadata, authors, and blog posts in `.mdx`. The `markdownToHtml` function is used to convert markdown `.mdx` to HTML.
+
+ - `authors`: contains the author information for the blog posts and is used to populate the `about` page. This can be extended to allow multiple authors.
+ - `blog`: contains the blog posts in `mdx` format. The folders are used to categorize the blog posts.
+ - `metadata`: contains the site metadata like navigation links, site title, description, etc. We will discuss this in more details in the <a href="#metadata">metadata section</a>
+
 ### `layouts`
 
 The `layouts` folder contains the main templates used in the pages. The main layout is `MainLayout.js` which is used to wrap all the pages. The `PostLayout.js` is used to wrap all the blog posts.
@@ -88,11 +97,6 @@ The `lib` folder contains utility functions and configurations used throughout t
    - `remark-code-title.js` - adds a title to the code blocks.
    - `rehype-citation.js` - adds citation support to the MDX files.
    - `rehype-katex.js` - adds math display support to the MDX files.
-
-
-### `data`
-
-The `data` folder contains the site metadata, authors, and blog posts. The `markdownToHtml` function is used to convert markdown to HTML.
 
 ### `components`
 
