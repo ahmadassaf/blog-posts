@@ -5,7 +5,7 @@ tags: ['Semantic Web', 'Knowledge Representation', 'Linked Data']
 summary: 'In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application'
 subtitle: 'A gentle introduction to the new paradigm in the Web'
 featured: false
-date: '2014-04-21'
+date: '2023-04-21'
 category: 'data'
 series:
   order: 0
@@ -15,19 +15,26 @@ series:
 
 > The model behind the Web could be roughly summarized as a way to publish documents represented in a standard way ([HTML](https://en.wikipedia.org/wiki/HTML)), containing links to other documents and accessible through the Internet using standard protocols ([TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)/[IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) and [HTTP](https://en.wikipedia.org/wiki/HTTP)). The result is a worldwide, distributed file system of interconnected documents humans can read, exchange and discuss.
 
+# tldr;
+
 - Before the Web, people used to write documents, cite references and then check the reference and go and look search for it in the library or look in the library ... etc.
 - The great invention of the Web is the hyperlink; click on that link, and you get to the next document in the chain .. you can easily go to the reference !! so the **web 1.0** was the web of documents
-- **Web 2.0** was application silos .. social stuff .. it is not only about the data .. by the problem is that these systems do not interoperate (update Facebook profile doesn't affect your linkedin ) .. data are not linked -> this was not only in the Web but also inside enterprise data
+- **Web 2.0** was application silos .. social stuff .. it is not only about the data but the problem is that these systems do not interoperate (update Facebook profile doesn't affect your linkedin ) .. data are not linked -> this was not only in the Web but also inside enterprise data
 - **[Web 3.0](http://www.w3.org/standards/semanticweb)** is all about connecting the data .. not the documents but the data at lower levels
 
 In summary, the great advantage of [Web 1.0](http://en.wikipedia.org/wiki/Web_1.0) was that it abstracted away the physical storage and networking layers involved in information exchange between two machines. This breakthrough enabled documents to appear to be directly connected to one another. Click a link, and you're there—even if that link goes to a different document on a different machine on another network on another continent! So, in the same way that Web 1.0 abstracts away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information.
 
-> [!NOTE]
-> The aim of the Semantic Web is to solve the most problematic issues that come with the growth of the non-semantic (HTML-based or similar) Web that results in a high level of human effort for finding, retrieving and exploiting information
+<Callout type="info">The aim of the Semantic Web is to solve the most problematic issues that come with the growth of the non-semantic (HTML-based or similar) Web that results in a high level of human effort for finding, retrieving and exploiting information</Callout>
 
-The Semantic Web connects facts so that rather than linking to a specific document or application, you can instead refer to a specific piece of information contained in that document or application. If that information is ever updated, you can automatically take advantage of the update. The word semantic itself implies meaning or understanding. As such, the fundamental difference between Semantic Web technologies and other technologies related to data (such as [relational databases](https://en.wikipedia.org/wiki/Relational_database) or the World Wide Web itself) is that the <Highlight>Semantic Web is concerned with the meaning and not the structure of data.</Highlight> This fundamental difference engenders an entirely different outlook on how storing, querying, and displaying information might be approached. Some applications, such as those that refer to a large amount of data from many different sources, benefit enormously from this feature. Others, such as storing high volumes of highly structured transactional data, do not.
+The Semantic Web connects facts so that rather than linking to a specific document or application, you can instead refer to a specific piece of information contained in that document or application. If that information is ever updated, you can automatically take advantage of the update. 
 
-What "semantic" means in the Semantic Web is not that computers will understand the meaning of anything but that the logical pieces of meaning can be mechanically manipulated by a machine to valuable ends. So now imagine a new Web where the actual content can be manipulated by computers. For now, picture it as a web of databases. One "semantic" website publishes a database about a product line, with products and descriptions, while another publishes a database of product reviews. A third site for a retailer publishes a database of products in stock. What standards would make writing an application to mesh distributed databases together easier so that a computer could use the three data sources to help an end user make better purchasing decisions? The semantic Web does not deal with unstructured content; instead, it represents not only structured data and links but also the meaning of the underlying concepts and relationships. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. But standards facilitate building applications, especially in a decentralized system.
+The word semantic itself implies meaning or understanding. As such, the fundamental difference between Semantic Web technologies and other technologies related to data (such as [relational databases](https://en.wikipedia.org/wiki/Relational_database) or the World Wide Web itself) is that the <Highlight>Semantic Web is concerned with the meaning and not the structure of data.</Highlight> This fundamental difference engenders an entirely different outlook on how storing, querying, and displaying information might be approached. Some applications, such as those that refer to a large amount of data from many different sources, benefit enormously from this feature. Others, such as storing high volumes of highly structured transactional data, do not.
+
+What "semantic" means in the Semantic Web is not that computers will understand the meaning of anything but that the logical pieces of meaning can be mechanically manipulated by a machine to valuable ends. 
+
+So now imagine a new Web where the actual content can be manipulated by computers. For now, picture it as a web of databases. One "semantic" website publishes a database about a product line, with products and descriptions, while another publishes a database of product reviews. A third site for a retailer publishes a database of products in stock. What standards would make writing an application to mesh distributed databases together easier so that a computer could use the three data sources to help an end user make better purchasing decisions?
+
+The semantic Web does not deal with unstructured content; instead, it represents not only structured data and links but also the meaning of the underlying concepts and relationships. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. But standards facilitate building applications, especially in a decentralized system.
 
 The Semantic Web addresses the discoverabiligy challenges through the adoption of distinct identifiers for concepts and their relationships. These identifiers, referred to as Universal Resource Identifiers (URIs), resemble web page URLs but are not restricted to identifying web documents. Instead, their primary purpose is to provide unique identification for objects and concepts, as well as their interconnections.
 
@@ -35,7 +42,7 @@ Utilizing URIs significantly reduces the ambiguity in information. However, the 
 
 **From a technical point of view, the Semantic Web consists of:**
 
-- **Data Model**: [Resource Description Framework (RDF)](/blog/category/semantic-web/everything-you-need-to-know-about-rdf): The data modeling language for the Semantic Web. All Semantic Web information is stored and represented in the RDF. It is a flexible and abstract model meaning that there is more than one representation of RDF.
+- **Data Model**: [Resource Description Framework (RDF)](/blog/category/data/introduction-to-semantic-web): The data modeling language for the Semantic Web. All Semantic Web information is stored and represented in the RDF. It is a flexible and abstract model meaning that there is more than one representation of RDF.
 - **Query Language**: ([SPARQL](http://en.wikipedia.org/wiki/SPARQL 'SPARQL')): The query language of the Semantic Web. It is specifically designed to query data across various systems.
 - **Schema and Ontology Languages**: [Web Ontology Language (OWL)](http://en.wikipedia.org/wiki/Web_Ontology_Language 'Web Ontology Language') - [RDF Schema (RDFS)](https://en.wikipedia.org/wiki/RDF_Schema) The schema language, or knowledge representation (KR) language, of the Semantic Web. They enable you to define concepts in a composable way so that these concepts can be reused as much and as often as possible. Composability means that each concept is carefully defined to be selected and assembled in various combinations with other concepts as needed for many different applications and purposes.
 
@@ -56,15 +63,23 @@ Semantic technologies represent a fairly diverse family of technologies that hav
 
 The main goal behind knowing these technologies is that they help us assemble the Semantic Web's building blocks. For example, NLP can extract structured data from unstructured documents (flat files like text documents). This data is then linked via Semantic Web technologies to other published data. This bridges the gap between documents (unstructured data) and structured data.
 
-# Linked Data
+# What does that all mean in practice?
 
-One of the most important movements in the Semantic Web community is Linked Data, which strives to expose and connect all of the world's data in a readily queryable and consumable form. Linked Data aims to publish structured data so that it can be easily consumed and combined with other Linked Data.
+The Semantic Web is a vision about an extension of the existing World Wide Web, which provides software programs with machine-interpretable metadata of the published information and data. In other words, we add further data descriptors to otherwise existing content and data on the Web. As a result, computers are able to make meaningful interpretations similar to the way humans process information to achieve their goals.
+
+What’s behind the original vision of the Semantic Web comes under the umbrella of three things: **Automation of information retrieval**, the **Internet of Things** and **Personal Assistants**. You can read more about all three in the seminal article by Tim Berners-Lee, James Hendler and Ora Lassila, published in Scientific American: [The Semantic Web](https://www-sop.inria.fr/acacia/cours/essi2006/Scientific%20American_%20Feature%20Article_%20The%20Semantic%20Web_%20May%202001.pdf).
+
+The ultimate ambition of the Semantic Web, as its founder Tim Berners-Lee sees it, is to enable computers to better manipulate information on our behalf. He further explains that, in the context of the Semantic Web, the word “semantic” indicates machine-processable or what a machine is able to do with the data. Whereas “web” conveys the idea of a navigable space of interconnected objects with mappings from URIs to resources.
+
+# Linked _Open_ Data (LOD)
+
+One of the most important movements in the Semantic Web community is Linked Open Data, which strives to expose and connect all of the world's data in a readily queryable and consumable form. Linked Data aims to publish structured data so that it can be easily consumed and combined with other Linked Data.
 
 ## The Four Rules of Linked Data
 
 In a way, Linked Data is the Semantic Web realized via four best practice principles.
 
-- Use URIs as names for things. An example of a URI is any URL. For example, http://assaf.website is the URI that refers to Ahmad Assaf.
+- Use URIs as names for things. An example of a URI is any URL. For example, `http://assaf.website` is the URI that refers to Ahmad Assaf.
 - Use HTTP URIs so that people can look up those names.
 - When someone looks up a URI, provide useful information using the standards such as RDF and SPARQL.
 - Include links to other URIs so that they can discover more things.
@@ -75,3 +90,50 @@ In a way, Linked Data is the Semantic Web realized via four best practice princi
 2. Make your URIs dereferenceable. This roughly means making them accessible via HTTP as we do for every human-readable Web page. This is a crucial aspect of Linked Data: every row of our tables is now fetchable and uniquely identifiable anywhere on the Web.
 3. Have our web server reply with some structured data when invoked. This is the Semantic Web "juicy" part. Model your data with RDF. Here is where you must shift from a relational data model to a graph one.
 4. Once all the rows of our tables have been uniquely identified, made dereferenceable through HTTP, and described with RDF, the last step is providing links between different rows across different tables. The main aim here is to make those implicit links explicit before shifting to the Linked data approach.
+
+Because of their linking, these datasets form a giant web of data or a knowledge graph, which connects a vast amount of descriptions of entities and concepts of general importance. This interconnectedness allows for the discovery of new relationships and insights that would be difficult to uncover otherwise.
+
+# Semantic Metadata
+
+Searching websites using keywords has been a long-standing method for finding information online. However, we're just beginning to fully leverage the vast amount of knowledge available on the global web. New standards for Structured Data help inform search engines about the actual entities a webpage contains, beyond just keywords, transitioning from a web of keywords to a more powerful web of things.
+
+## From a Web of Keywords to a Web of Things
+
+However, relying solely on words to determine the content of a page can be limiting. It restricts the potential use of the information on your page. Structured data on web pages embodies Tim Berners-Lee's vision of the semantic web, allowing machines, not just humans, to understand web knowledge.
+
+<Callout type="warning">
+Don't confuse **'web of things'** with **'internet of things'**. The **'internet of things'** typically refers to connecting electronic devices over the web, not to embedding structured data in web pages.
+</Callout>
+
+Consider a typical web page, such as the one you're reading. A search engine typically analyzes the text to determine the content, identifying phrases like structured data and knowledge graph. While useful, these words alone don't tell the search engine about the real entities the page discusses. Examples of entities might include: People (e.g., names, photos, contact details), Places (e.g., businesses, cities, parks), Events (e.g., event listings with time and location), Articles on various topics, etc.
+
+Search engines cannot automatically extract these entities and their associated facts from text alone. Structured data provides the necessary tools and standards to help search engines identify these entities, creating an index not just of keywords, but of the entities and facts they contain. This approach is powerful and opens new possibilities for how web information can be used.
+
+## Examples of Using Structured Data
+
+### Rich Snippets
+Structured data enables rich snippets, where search engines display key facts about a search query directly in the results. For example, searching for "Mary Poppins" on Google shows not just a list of web pages, but also key information like the movie's IMDb rating, extracted because it was embedded as structured data.
+
+### Global Knowledge Graphs
+Search engines like Google and Bing use structured data to build knowledge graphs. These graphs provide a rich set of facts about entities, such as information about William Shakespeare when you search for him. This data is partly sourced from structured data on web pages.
+
+## Structured Data Standards
+
+To publish information in a way that search engines can understand the entities a page contains, we use structured data standards. While we won't dive into the specifics here, some key terms you should be familiar with include:
+
+- **[Schema.org](https://schema.org/)**: A standard vocabulary of entities defined by major search engines like Google.
+- **[Microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata)**: Embedding structured data within HTML markup.
+- **[JSON-LD](https://json-ld.org/)**: A syntax for embedding structured data, typically in the page header.
+- **[RDFa](https://www.w3.org/TR/rdfa-primer/)**: A version of RDF designed for embedding in HTML.
+- **Knowledge Graph**: A large structured index of entities on the web, such as the Google Knowledge Graph.
+
+
+# Knowledge Graphs: The Next Frontier of the Semantic Web
+
+Knowledge graphs emerged later but quickly became a key factor in the adoption of Semantic Web standards and the technologies that support them. They brought the Semantic Web concept into enterprises by using semantic metadata to enhance data and content management, breaking down silos and facilitating integration with various knowledge management practices.
+
+Enterprise knowledge graphs employ ontologies to explicitly define the different conceptual models (such as schemas, taxonomies, and vocabularies) used within various systems. In enterprise data management terms, knowledge graphs are considered a sophisticated form of semantic reference data, comprising interconnected descriptions of entities like objects, events, or concepts.
+
+Thus, knowledge graphs enable organizations to enhance their proprietary information by providing a global context for interpretation and serving as a resource for data enrichment.
+
+You can read more information about Knowledge Graphs in my [post here](/blog/category/data/intro-knowledge-graphs).
