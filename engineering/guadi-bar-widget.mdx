@@ -1,0 +1,104 @@
+---
+type: 'Post'
+title: 'Developing gaudiBar'
+tags: ['Übersicht', 'gaudi', 'OSX', 'Widget']
+summary: 'gaudiBar is an extensible, adaptive, and responsive system information bar for Übersicht, designed to provide a customizable desktop experience. It features modular widgets, smart context adaptation, and a flexible layout system, allowing users to easily personalize their macOS desktop with real-time system information and external data feeds'
+subtitle: 'My Journey Creating an Extensible System Information Bar'
+featured: false
+date: '2024-09-19'
+category: 'engineering'
+---
+
+As a developer and customization enthusiast, I've always been fascinated by the idea of having a sleek, informative system bar on my desktop. That's why I created [gaudiBar](https://github.com/g-udi/gaudiBar.widget/), an extensible, adaptive, and responsive system information bar for [Übersicht](http://tracesof.net/uebersicht/). In this post, I'll walk you through my development process and the key features that make gaudiBar stand out.
+
+The main decision behind developing gaudi was to allow usage of adaptive widgets. If you have been using Übersicht you will know that to customize the location of any widget, you had to dig into the code and position it most probably with absolute position. For the case of information bars, I did not find that to be a good experience especially when the information is dynamic e.g.,
+
+Display Wi-Fi information where the network SSID can be long (you can work around this with a maximum width and text overflow .. but really?)
+System Information, application and opened window names of varying lengths
+... etc.
+
+To overcome this, I have designed gaudi utilizing flex layout capabilities and using modules for each widget allowing the content to be:
+
+ - **Extensible**: You can add/remove widgets using a centralized configuration file.
+ - **Adaptive**: Information or appearance adapt to the context (e.g., location) of the user. For example, the weather widget automatically detects your location and shows the relevant weather condition for you or the battery widget background color changes to reflect the amount of charge left.
+ - **Responsive**: The flex layout allows gaudi to adapt to different screen widths and number of widgets so that you can have a consistent look and feel to your desktop.
+
+Using a flex layout was a game-changer. It allowed gaudiBar to adapt seamlessly to different screen widths and numbers of widgets. This ensures a consistent look and feel across various setups.
+
+## The Inspiration
+
+Like many developers, I've used various system information tools over the years. However, I often found myself frustrated by their lack of flexibility and the need to dig into code just to reposition widgets. I wanted something more dynamic and user-friendly, especially for information bars that display varying lengths of content.
+
+[Übersicht](http://tracesof.net/uebersicht/) provided the perfect foundation for what I had in mind. It allows you to run system commands and display their output on your desktop in customizable widgets. This was exactly the flexibility I needed to bring my vision to life.
+
+## Installation
+
+Make sure you have [Übersicht](http://tracesof.net/uebersicht/) installed.
+
+Then clone this repository.
+
+```bash
+# Make sure that this points to your widgets folder
+$WIDGETS_HOME=$HOME/Library/Application\ Support/Übersicht/widgets/
+git clone https://github.com/ahmadassaf/gaudi.widgets $WIDGETS_HOME/gaudi.widgets
+```
+or to your current widget directory if you have changed it.
+> You can always know your widgets folder by clicking on the Übersicht menu bar icon and clicking on *Open widgets folder*
+
+Some widgets may require installing some additional packages, they are all documented under each widgets README.
+
+
+## The Development Process
+
+[Übersicht](http://tracesof.net/uebersicht/) creates a webview and places it on your desktop, just above the wallpaper but behind everything else. Übersicht widgets are written as `.coffee` or `.js` <sup>and other flavors like `.jsx`</sup>  files which let you format elements with html, style them with css and manipulate data with javascript and coffeescript. For dynamic widgets, Übersicht let's you run terminal commands and insert the output into html, so just about any language can be used to write scripts for widgets.
+
+### Layout Design
+
+I started by designing a flexible layout. The main container spans the entire desktop, with primary bars at the top and bottom. Each primary bar is divided into three secondary regions (left, middle, right), which can contain multiple widgets.
+
+![gaudi-layout](https://user-images.githubusercontent.com/550726/67003279-844f4a80-f0d5-11e9-888d-7c35400b6183.png)
+
+The image above shows how gaudi overlays on your desktop: 
+ - The main container covering the whole desktop
+ - Two main `primary-bar` components on the top and bottom of the screen
+ - Each `primary-bar` has three `secondary-bar` region (top, middle, right)
+ - Each `secondary-bar` can contain N widgets that are distributed evenly
+
+ ## Setting up the layout (widgets configuration)
+
+The widgets are defined inside the `lib/plugins` folder and are loaded via the `lib.index.js` that exposes them.
+
+```js
+module.exports = {
+    battery: require('./battery/index.jsx'),
+    chunkwm: require('./chunkwm/index.jsx'),
+    date: require('./date/index.jsx'),
+    istats: require('./istats/index.jsx')
+    ...
+}
+```
+
+### Widget Development
+
+For each widget, I focused on creating a clean, modular structure. This typically involved:
+
+1. Defining the widget's refresh frequency
+2. Creating a `render` function to output JSX
+3. Implementing any necessary API calls or system commands
+4. Styling the widget to fit the overall aesthetic
+
+### Configuration System
+
+To make gaudiBar truly customizable, I implemented a configuration system using a `configs.js` file. This allows users to easily rearrange widgets or add new ones without diving into the core code.
+
+### Challenges and Solutions
+
+One of the biggest challenges was ensuring that widgets with varying content lengths could coexist harmoniously. The flex layout proved invaluable here, allowing widgets to expand or contract as needed while maintaining overall balance.
+
+Another hurdle was managing API keys and sensitive information for widgets that pull data from external sources. I solved this by implementing a system of `keys.secret.js` files, keeping sensitive data separate from the main codebase.
+
+## Conclusion
+
+Developing gaudiBar has been an exciting journey of problem-solving and creativity. It's grown from a personal project into a tool that I hope other developers and customization enthusiasts will find useful. The modular, extensible nature of gaudiBar means it can continue to evolve with new widgets and features.
+
+If you're interested in trying gaudiBar or contributing to its development, check out the [GitHub repository](https://github.com/yourusername/gaudiBar). I'm always open to suggestions and contributions to make gaudiBar even better!
