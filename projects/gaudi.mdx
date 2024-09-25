@@ -3,10 +3,65 @@ type: 'Project'
 title: 'Gaudi'
 tags: ['bash', 'dotfiles']
 summary: 'A collection of tools and services to boost developers productivity from bash frameworks and tools to OSX widgets and dotfiles'
-subtitle: 'A collection of tools and services to boost developers productivity from bash frameworks and tools to OSX widgets and dotfiles'
+subtitle: 'Automate and Simplify New Machine Setups'
 layout: ProjectLayout
 github: 'g-udi/gaudi'
 featured: false
 date: '2018-08-07'
 category: 'projects'
 ---
+
+As a developer or tech enthusiast, you’ve probably experienced the frustration of setting up a new machine. Whether it’s for a fresh install of the operating system or a brand-new device, the process of reinstalling your go-to applications, configuring development environments, and getting everything to run smoothly can feel like a tedious chore. I know this pain all too well. That’s why I created [**Gaudi**](https://github.com/g-udi/gaudi)—a tool designed to make setting up a new machine efficient, consistent, and hassle-free.
+
+# The Problem: Time-Consuming Setup
+
+Anyone who's had to reconfigure a new system from scratch understands the pain. You’re faced with hours of:
+
+- Installing software and tools ([**brew**](https://brew.sh/), [**npm**](https://www.npmjs.com/), [**mas**](https://github.com/mas-cli/mas) or others)
+- Customizing system preferences
+- Setting up your favorite applications
+- Re-configuring settings to match your old system
+
+It’s a repetitive, manual process, and even worse, there’s a chance you’ll forget one or two critical steps, leaving your environment not quite right. Multiply that by each new device, and you’re looking at a major time sink.
+
+# The Inspiration: Repeatability and Consistency
+
+I needed a solution that could provide a **repeatable process**—a way to automate the mundane tasks of installing and configuring software, ensuring that each new machine setup would be as consistent and effortless as possible.
+
+# What is Gaudi?
+
+[Gaudi](https://github.com/g-udi/gaudi) is a tool that simplifies the process of setting up a new machine by using template files to save your applications, their installation methods, and the configurations you need. Whether it’s software installed via [**brew**](https://brew.sh/), [**npm**](https://www.npmjs.com/), [**mas**](https://github.com/mas-cli/mas) or others! Gaudi allows you to capture this information once and reuse it whenever you set up a new machine.
+
+In essence, Gaudi acts as a personal guide for your system setup. Rather than manually running through the installation of each individual program, you create templates that Gaudi can use to automate the process. Gaudi will walk you through the setup, ensuring you have everything you need in place—without the manual hassle.
+
+## Key Features of Gaudi:
+
+1. **Template-Based Setup**: Gaudi leverages simple template files that define:
+   - Applications and tools (and where they come from—brew, npm, mas, etc.)
+   - System configurations and settings
+   - Any additional steps or scripts
+
+2. **One-Click Process**: Once you've created your template, Gaudi allows you to execute the setup process on any new machine with a single command. The tool will install your programs, restore your configurations, and guide you through any manual steps if needed.
+
+3. **Flexible and Customizable**: Gaudi supports a wide variety of package managers and installation methods. Whether you're installing Mac App Store apps, homebrew packages, npm modules, or custom scripts, Gaudi’s templates are adaptable to your unique tech stack.
+
+4. **Guided Process**: Instead of completely automating everything, Gaudi provides a guided process for steps that can’t be automated (yet). It ensures you don’t miss any important configurations along the way, while still allowing flexibility.
+
+## Why Use Gaudi?
+
+- **Consistency**: Each new setup is identical, minimizing discrepancies and missed steps.
+- **Time-Saving**: What would take hours now takes minutes, freeing you up for more important tasks.
+- **Customizable**: Tailor your setup for different environments—work machines, personal laptops, or specific projects.
+
+# Who is Gaudi For?
+
+Gaudi is perfect for developers, tech enthusiasts, IT professionals, and anyone who regularly deals with new machines or system reinstalls. Whether you're setting up your personal development environment, preparing a workstation for a new job, or just tired of reconfiguring the same settings, Gaudi will save you time and frustration.
+
+I envision expanding Gaudi’s capabilities to include more advanced automation features, such as managing cloud-based backups of settings, supporting more package managers, and potentially even incorporating cross-platform capabilities. The goal is to make Gaudi the go-to tool for automating and simplifying the entire machine setup process.
+
+---
+
+If you’re tired of the time-consuming process of setting up new machines, give Gaudi a try. It’s designed to make your life easier, so you can focus on what really matters—getting things done.
+
+Let Gaudi do the heavy lifting. Ready to get started? Check out the project repository and give it a spin!
+
