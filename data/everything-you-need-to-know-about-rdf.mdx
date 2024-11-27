@@ -7,9 +7,9 @@ summary: 'Humans share, consume and produce knowledge using natural language; ho
 featured: true
 date: '2014-02-22'
 category: 'data'
-bibliography: 'meta/references.bib'
+bibliography: ['meta/bibliography/references.bib']
 series:
-  order: 1
+  order: 2
   title: "A Semantic Web series"
 ---
 
@@ -49,7 +49,8 @@ RDF is an intuitive knowledge representation using directed graphs, where the su
 
 | **Subject** | **Predicate** |        **Object**         |
 | :---------: | :-----------: | :-----------------------: |
-|    Ahmad    |  has a blog   | http://assaf.website/blog |
+|    Ahmad    |  has a blog   | assaf.website/blog |
+
 
 In plain English, an RDF statement states facts, relationships and data by linking resources of different kinds. With the help of an RDF statement, just about anything can be expressed by a uniform structure, consisting of three linked data pieces.
 
@@ -604,7 +605,7 @@ So far we have talked about several RDF representations (A serialization format 
 
 *   **TriG**: TriG is Turtle but with support for named graphs. It's the de facto standard for serializing RDF with named graphs.
 *   **RDFa (RDF embedded in HTML)**: You can embed RDF data within normal web pages by using RDFa.
-*   **N-Triples**: is a very basic RDF serialization. Its key feature is that only one triple exists per line so that it's very quick to parse and so that Unix command-line tools can easily manipulate it. It's also highly compressible, so large, public RDF sources like[DBpedia](http://dbpedia.org)often publish data in N-Triples form.
+*   **N-Triples**: is a very basic RDF serialization. Its key feature is that only one triple exists per line so that it's very quick to parse and so that Unix command-line tools can easily manipulate it. It's also highly compressible, so large, public RDF sources like [DBpedia](http://dbpedia.org) often publish data in N-Triples form.
 
 What sets RDF apart from XML is that RDF is designed to represent knowledge in a distributed world. That RDF is designed for knowledge, and not data, means RDF is particularly concerned with meaning. Everything at all mentioned in RDF means something. It may be a reference to something in the world, like a person or movie, or it may be an abstract concept, like the state of being friends with someone else. And by putting three such entities together, the RDF standard says how to arrive at a fact. The second key aspect of RDF is that it works well for distributed information. That is, RDF applications can put together RDF files posted by different people around the Internet and easily learn from them new things that no single document asserted. It does this in two ways, first by linking documents together by the common vocabularies they use, and second by allowing any document to use any vocabulary. This allows enormous flexibility in expressing facts about a wide range of things, drawing on information from a wide range of sources.
 

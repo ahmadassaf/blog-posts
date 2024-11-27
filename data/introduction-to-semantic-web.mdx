@@ -12,17 +12,16 @@ series:
   title: "A Semantic Web series"
 ---
 
-
-> The model behind the Web could be roughly summarized as a way to publish documents represented in a standard way ([HTML](https://en.wikipedia.org/wiki/HTML)), containing links to other documents and accessible through the Internet using standard protocols ([TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)/[IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) and [HTTP](https://en.wikipedia.org/wiki/HTTP)). The result is a worldwide, distributed file system of interconnected documents humans can read, exchange and discuss.
+The model behind the Web could be roughly summarized as a way to publish documents represented in a standard way ([HTML](https://en.wikipedia.org/wiki/HTML)), containing links to other documents and accessible through the Internet using standard protocols ([TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)/[IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) and [HTTP](https://en.wikipedia.org/wiki/HTTP)). The result is a worldwide, distributed file system of interconnected documents humans can read, exchange and discuss.
 
 # tldr;
 
 - Before the Web, people used to write documents, cite references and then check the reference and go and look search for it in the library or look in the library ... etc.
 - The great invention of the Web is the hyperlink; click on that link, and you get to the next document in the chain .. you can easily go to the reference !! so the **web 1.0** was the web of documents
-- **Web 2.0** was application silos .. social stuff .. it is not only about the data but the problem is that these systems do not interoperate (update Facebook profile doesn't affect your linkedin ) .. data are not linked -> this was not only in the Web but also inside enterprise data
-- **[Web 3.0](http://www.w3.org/standards/semanticweb)** is all about connecting the data .. not the documents but the data at lower levels
+- **Web 2.0** was application silos .. social stuff .. it is not only about the data but the problem is that these systems do not interoperate (update Facebook profile doesn't affect your linkedin ) .. data are not linked -> <Highlight>this was not only in the Web but also inside enterprise data</Highlight>
+- **[Web 3.0](http://www.w3.org/standards/semanticweb)** is all about connecting the data .. <Highlight>not the documents but the data at lower levels</Highlight>
 
-In summary, the great advantage of [Web 1.0](http://en.wikipedia.org/wiki/Web_1.0) was that it abstracted away the physical storage and networking layers involved in information exchange between two machines. This breakthrough enabled documents to appear to be directly connected to one another. Click a link, and you're there—even if that link goes to a different document on a different machine on another network on another continent! So, in the same way that Web 1.0 abstracts away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information.
+In summary, the great advantage of [Web 1.0](http://en.wikipedia.org/wiki/Web_1.0) was that it abstracted away the physical storage and networking layers involved in information exchange between two machines. This breakthrough enabled documents to appear to be directly connected to one another. Click a link, and you're there—even if that link goes to a different document on a different machine on another network on another continent! So, in the same way that Web 1.0 abstracts away the network and physical layers,<Highlight> the Semantic Web abstracts away the document and application layers involved in the exchange of information.</Highlight>
 
 <Callout type="info">The aim of the Semantic Web is to solve the most problematic issues that come with the growth of the non-semantic (HTML-based or similar) Web that results in a high level of human effort for finding, retrieving and exploiting information</Callout>
 
@@ -30,11 +29,11 @@ The Semantic Web connects facts so that rather than linking to a specific docume
 
 The word semantic itself implies meaning or understanding. As such, the fundamental difference between Semantic Web technologies and other technologies related to data (such as [relational databases](https://en.wikipedia.org/wiki/Relational_database) or the World Wide Web itself) is that the <Highlight>Semantic Web is concerned with the meaning and not the structure of data.</Highlight> This fundamental difference engenders an entirely different outlook on how storing, querying, and displaying information might be approached. Some applications, such as those that refer to a large amount of data from many different sources, benefit enormously from this feature. Others, such as storing high volumes of highly structured transactional data, do not.
 
-What "semantic" means in the Semantic Web is not that computers will understand the meaning of anything but that the logical pieces of meaning can be mechanically manipulated by a machine to valuable ends. 
+<Callout type='optimize'>What "semantic" means in the Semantic Web is not that computers will understand the meaning of anything but that the logical pieces of meaning can be mechanically manipulated by a machine to valuable ends. </Callout>
 
 So now imagine a new Web where the actual content can be manipulated by computers. For now, picture it as a web of databases. One "semantic" website publishes a database about a product line, with products and descriptions, while another publishes a database of product reviews. A third site for a retailer publishes a database of products in stock. What standards would make writing an application to mesh distributed databases together easier so that a computer could use the three data sources to help an end user make better purchasing decisions?
 
-The semantic Web does not deal with unstructured content; instead, it represents not only structured data and links but also the meaning of the underlying concepts and relationships. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. But standards facilitate building applications, especially in a decentralized system.
+The semantic Web not only represents structured data and links but also the meaning of the underlying concepts and relationships. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. <Highlight>But standards facilitate building applications, especially in a decentralized system.</Highlight>
 
 The Semantic Web addresses the discoverabiligy challenges through the adoption of distinct identifiers for concepts and their relationships. These identifiers, referred to as Universal Resource Identifiers (URIs), resemble web page URLs but are not restricted to identifying web documents. Instead, their primary purpose is to provide unique identification for objects and concepts, as well as their interconnections.
 
@@ -65,7 +64,7 @@ The main goal behind knowing these technologies is that they help us assemble th
 
 # What does that all mean in practice?
 
-The Semantic Web is a vision about an extension of the existing World Wide Web, which provides software programs with machine-interpretable metadata of the published information and data. In other words, we add further data descriptors to otherwise existing content and data on the Web. As a result, computers are able to make meaningful interpretations similar to the way humans process information to achieve their goals.
+<Highlight>The Semantic Web is a vision about an extension of the existing World Wide Web</Highlight>, which provides software programs with machine-interpretable metadata of the published information and data. In other words, we add further data descriptors to otherwise existing content and data on the Web. As a result, computers are able to make meaningful interpretations similar to the way humans process information to achieve their goals.
 
 What’s behind the original vision of the Semantic Web comes under the umbrella of three things: **Automation of information retrieval**, the **Internet of Things** and **Personal Assistants**. You can read more about all three in the seminal article by Tim Berners-Lee, James Hendler and Ora Lassila, published in Scientific American: [The Semantic Web](https://www-sop.inria.fr/acacia/cours/essi2006/Scientific%20American_%20Feature%20Article_%20The%20Semantic%20Web_%20May%202001.pdf).
 
