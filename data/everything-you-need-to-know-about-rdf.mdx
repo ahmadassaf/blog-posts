@@ -5,7 +5,7 @@ subtitle: 'A comprehensive guide to the Resource Description Framework'
 tags: ['Semantic Web', 'RDF', 'RDFS', 'OWL', 'Linked Data']
 summary: 'Humans share, consume and produce knowledge using natural language; however presenting this knowledge in a machine readable and understandable format can be difficult. This post discusses the Resource Description Framework (RDF) which is the main data modeling block of the Semantic Web'
 featured: true
-date: '2014-02-22'
+date: '2014-11-22'
 updated: '2021-09-22'
 category: 'data'
 bibliography: ['meta/bibliography/references.bib']
@@ -111,7 +111,7 @@ A URI is a Unicode string that does not contain any control characters and would
 
 Simple Strings that describe data values that do not have a separate existence. They can be plain (simple string combined with an optional language tag) or typed (string combined with a datatype URI and an optional language tag). Typed Literals are expressed via the XML Schema data types. Whenever we are using URIs to describe things in [RDF](https://www.w3.org/RDF/) we try as much as we can to reuse existing namespaces and for literals we use the XML Schema defined in [http://www.w3.org/2001/XMLSchema#](http://www.w3.org/2001/XMLSchema#). So for example if I want to define a literal as a [String](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") I use the following syntax :
 
-```
+```xml
 "Semantics"^^<http://www.w3.org/2001/XMLSchema#String>
 ```
 
@@ -126,16 +126,20 @@ A datatype tells us how to map lexical representations to values, and vice versa
 
 The semantics of [RDF](https://www.w3.org/RDF/) takes language tags and datatypes into account. This means two things. First, a literal value without either a language tag or datatype is different from a literal with a language tag and is different from a literal with a datatype. These four statements say four different things and none can be inferred from the others:
 
-```
-    #ahmad foaf:name "ahmad assaf"          ahmad's name is a lanaguage-less,datatype-less raw text value.
-    #ahmad foaf:name "ahmad assaf"@en        ahmad's name, in English, is ahmad assaf.
-    #ahmad foaf:name "ahmed assef"@fr        ahmad's name, in French, is ahmed assef.
-    #ahmad foaf:name "ahmad assaf"^^xsd:string    ahmad's name is a string.
+```xml
+    <!-- ahmad's name is a lanaguage-less, datatype-less raw text value -->
+    #ahmad foaf:name "ahmad assaf"
+    <!-- ahmad's name, in English, is ahmad assaf -->
+    #ahmad foaf:name "ahmad assaf"@en
+    <!-- ahmad's name, in French, is ahmed assef -->
+    #ahmad foaf:name "ahmed assef"@fr
+    <!-- ahmad's name is a string -->
+    #ahmad foaf:name "ahmad assaf"^^xsd:string
 ```
 
 So, an untyped literal with or without a language tag is not the same as a typed literal. The second part of the semantics of literals is that two typed literals that appear different may be the same if their datatype maps their**lexical representations**to the same value. The following statements are equivalent (at least for an [RDF](https://www.w3.org/RDF/) application that has been given the semantics of the XSD datatypes):
 
-```
+```xml
     #ahmad ex:age "20"^^xsd:float
     #ahmad ex:age "20.000"^^xsd:float
 ```
@@ -162,10 +166,13 @@ Subjects or Objects can be modeled as blank nodes. They denote the existence of 
 
 ## Labeled Directed Graph
 
-This is a visual way of modeling RD as a Node-Edge-Node Triple. Its directed as the direction of the edge is significant and always points towards the object
+This is a visual way of modeling RD as a Node-Edge-Node Triple. Its directed as the direction of the edge is significant and always points towards the object. 
 
 <Image className='dark:hidden mx-auto' width={800} height={800} src="/static/images/posts/everything-rdf-1.svg"/>
 <Image className='hidden dark:block mx-auto' width={800} height={800} src="/static/images/posts/everything-rdf-1-dark.svg"/>
+
+<Highlight>Directionality matters in RDF triples. Defining reverse relationships is possible, but not always necessary</Highlight> We will see later in my post about [Web Ontology Language (OWL)](), that there is a simple way to define the “opposite” property using the `inverseOf` relationship. Although it's not strictly necessary to define reverse properties.
+
 
 ## XML RDF Notation
 
@@ -256,7 +263,7 @@ A simplified of the N3 notation. URIs are wrapped in angle brackets and Literals
 
 We have talked about namespaces and base URIs in XML. The same concepts are transfered into the turtle notation:
 
-```
+```turtle
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix aa: <http://assaf.website/Personal#>.
 @prefix ex: <http://example.org/stuff/1.0/>.
@@ -265,7 +272,7 @@ We have talked about namespaces and base URIs in XML. The same concepts are tran
 
 so in my example I will have:
 
-```
+```turtle
 :AhmadAssaf
 aa:hasBlog <http://assaf.website/blog> ;
 ex:fullname "Ahmad Assaf"^^xsd.string .
@@ -273,7 +280,7 @@ ex:fullname "Ahmad Assaf"^^xsd.string .
 
 Note that we have used a semi colon to express that we want to keep stating facts about the same subject which is `<http://assaf.website>` We will go to more details about this notation a bit forward. In Turtle the referring to URIs in the base ID is done in a similar way of using the `rdf:ID` tag as the hash is complemented with the usage of colons `:` and the fragment URI ex: `:AhmadAssaf` The current base URI may be altered in a Turtle document using the `@base` directive. It allows further abbreviation of URIs but is usually for simplifying the URIs in the data, where the prefix directives are for vocabularies that describe the data. For example:
 
-```
+```turtle
 # Here the scope base URI is the document URI
 <a1> <b1> <c1> .
 @base <http://example.org/ns/> .
@@ -289,7 +296,7 @@ Note that we have used a semi colon to express that we want to keep stating fact
 *   Comments in Turtle take the form of `#`, outside a relative URI or strings, and continue to the end of line
 *   The `,` symbol may be used to repeat the subject and predicate of triples that only differ in the object [RDF](https://www.w3.org/RDF/) term.
 
-```
+```turtle
 # this is not a complete turtle document
 :a :b :c ,
 :d .
@@ -298,7 +305,7 @@ Note that we have used a semi colon to express that we want to keep stating fact
 
 *   The `;` symbol may be used to repeat the subject of of triples that vary only in predicate and object [RDF](https://www.w3.org/RDF/) terms.
 
-```
+```turtle
 # this is not a complete turtle document
 :a :b :c ;
 :d :e .
@@ -333,7 +340,7 @@ Now how can we represent Blank Nodes in **XML RDF** and **Turtle** notation ?!
 
 In **XML RDF** the blank nodes are denoted by the`rdf:parseType="Resource"`, in **Turtle** its much more easier:
 
-```
+```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix aa: <http://assaf.website/Personal#> .
 
@@ -357,7 +364,7 @@ we simply introduce blank nodes in Turtle by using the brackets`[ ]`. So far we 
 
 In Turtle we use the underscore`_`followed by a colon that denotes the default namespace and then the Blank Node name
 
-```
+```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix aa: <http://assaf.website/Personal#> .
 
@@ -382,7 +389,7 @@ An open list of elements possibly including duplicate members where new entries 
 
 We notice that collection node has a type of rdf:type rdf:seq which means that this is a sequential collection or list and the order of the items is important. Each item in the list have a unique property `rdf:_1, rdf:_2 ...` etc. In **Turtle**, sequential collections are represented as:
 
-```
+```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix aa: <http://assaf.website/Personal#> .
 @base <http://assaf.website/>
@@ -397,7 +404,7 @@ rdf:_3 <C>.
 
 **Or it can be written as:**
 
-```
+```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix aa: <http://assaf.website/Personal#> .
 @base <http://assaf.website/>
@@ -411,7 +418,7 @@ rdf:_3 <C>.
 
 **or written as:**
 
-```
+```turtle
 :blog aa:hasAdmins:administrators.
 :administrators rdf:type rdf:Seq;
 rdf:_1<A>;
@@ -452,7 +459,7 @@ These are closed lists where there is no extension possible. Elements of the lis
 
 Each of the blank nodes forming this list structure is implicitly of type `rdf:List` that is, each of these nodes implicitly has an `rdf:type` property whose value is the predefined type `rdf:List` although this is not explicitly shown in the graph.
 
-```
+```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix aa: <http://assaf.website/Personal#> .
 @base <http://assaf.website/>
@@ -467,7 +474,7 @@ Each of the blank nodes forming this list structure is implicitly of type `rdf:L
 
 However, in Turtle there are shortcuts to ease the simplify the syntax. We do that by using a new type of brackets `( )`
 
-```
+```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix aa: <http://assaf.website/Personal#> .
 @base <http://assaf.website/>
@@ -502,13 +509,13 @@ Semantic Web practitioners found it very difficult to deal with large amounts of
 
 At first the community tried using reification to solve this data segmentation problem, but today everyone has converged on using named graphs. A Named Graph is a collection of [RDF](https://www.w3.org/RDF/) statement that are given an identifier (URI). When referring to triple in a name graph we often use a 4-tuple notation (often referred to as quad) instead of the standard 3-tuple one:
 
-```
+```turtle
 <Named Graph>, <Subject>, <Predicate>, <Object>
 ```     
 
 When using named graphs,`TriG` is the de facto serialization. It's the same as Turtle except that statements in a single graph are grouped with`{}`
 
-```
+```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix aa: <http://assaf.website/Personal#> .
 @base <http://assaf.website/>
@@ -533,14 +540,14 @@ This trivial example puts all the statements in the document into a single named
  - `rdf:predicate`: the original property
  - `rdf:object`: the value of the property
 
-```
+```turtle
     ex:Gardener ex:hasKilled ex:Butler
     ex:Sherlock ex:deduces ex: ????
 ```
 
 The use of reification makes it fairly simple to represent this information:
 
-```
+```turtle
 ex:Sherlock ex:deduces ex:StatementOnGardener .
 ex:statementOnGardener a rdf:Statement ;
     rdf:subject ex:Gardener ;
@@ -550,18 +557,19 @@ ex:statementOnGardener a rdf:Statement ;
 
 However, while [RDF](https://www.w3.org/RDF/) provides this reification vocabulary, care is needed in using it, because it is easy to imagine that the vocabulary defines some things that are not actually defined.for example, lets take the statement:
 
-```
+```turtle
 :blog aa:hasAdmins :ahmadassaf
 ```
 
 Using the reification vocabulary, a reification of the statement about the blog's administrator would be given by assigning the statement a URIref such as `:triple12345` (so statements can be written describing it), and then describing the statement using the statements:
 
-```
+```turtle
 :triple12345 rdf:type rdf:Statement.
 :triple12345 rdf:subject :blog.
 :triple12345 rdf:predicate aa:hasAdmin.
 :triple12345 rdf:object :ahmadassaf.
 ```
+
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -612,13 +620,13 @@ The subject of these reification triples is a URI ref formed by concatenating th
 
 In this case, specifying the attribute `rdf:ID="triple12345"` in the aa:hasAdmins element results in the original triple describing the blog administrator:
 
-```
+```turtle
 http://ahmadassaf/blog aa:hasAdmins http://assaf.website/triples#ahmadassaf
 ```
 
 plus the reification triples:
 
-```
+```turtle
 http://assaf.website/triples#triple12345 rdf:type rdf:Statement.
 http://assaf.website/triples#triple12345 rdf:subject :blog.
 http://assaf.website/triples#triple12345 rdf:predicate aa:hasAdmin.

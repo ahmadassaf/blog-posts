@@ -3,7 +3,7 @@ type: 'Post'
 title: 'Transcribing Audio & Video Using OpenAI Whisper API'
 tags: ['OpenAI', 'Generative AI', 'Audio Transcription', 'LLM']
 summary: 'Audio transcription using OpenAI Generative AI model is not supported yet via the UI. To do this, you need to use the API and this comes with its own set of challenges. This post will show you how to do this task using OpenAI with a bit of Python'
-subtitle: 'Manage large audio files with pydub and OpenAI'
+subtitle: 'Manage large audio or video files with pydub and OpenAI'
 featured: false
 date: '2024-05-23'
 updated: '2024-11-21'
@@ -130,3 +130,32 @@ print(full_transcription)
 ```
 
 For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/audio)
+
+# Update: How to transcribe video files
+
+Transcribing video files is similar to transcribing audio files. You can extract the audio from the video file and then follow the same process as described above. Here's a Python script to extract audio from a video file using the `moviepy` library:
+
+```python
+from moviepy.editor import VideoFileClip
+
+script_dir = os.path.dirname(__file__)
+
+# Define the input video file and output audio file
+mp4_file = os.path.join(script_dir, "movie.mov")
+mp3_file = "audio.mp3"
+
+# Load the video clip
+video_clip = VideoFileClip(mp4_file)
+
+# Extract the audio from the video clip
+audio_clip = video_clip.audio
+
+# Write the audio to a separate file
+audio_clip.write_audiofile(mp3_file)
+
+# Close the video and audio clips
+audio_clip.close()
+video_clip.close()
+
+print("Audio extraction successful!")
+```
