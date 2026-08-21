@@ -125,20 +125,23 @@ const RdfContainerExplorer = ({
             const memberWidth = 210;
             const memberHeight = 68;
             const memberHalfWidth = memberWidth / 2;
-            const edgeEndX = x - memberHalfWidth - 10;
+            const edgeEndX = x - memberHalfWidth;
+            const edgeSpanX = edgeEndX - 568;
+            const edgeControlAX = 568 + (edgeSpanX * 0.35);
+            const edgeControlBX = 568 + (edgeSpanX * 0.55);
             const labelProgress = 0.55;
             const routedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 2;
-            const edgePath = routedAlternative ? `M 568 250 C 650 250, 700 155, 800 155 C 895 155, 920 250, ${edgeEndX} 250` : `M 568 250 C 690 250, 760 ${y}, ${edgeEndX} ${y}`;
             const separatedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 1;
-            let labelX = cubicCoordinate(568, 690, 760, edgeEndX, labelProgress);
+            const edgePath = separatedAlternative ? `M 568 250 C 625 205, 760 95, ${edgeEndX} 95` : routedAlternative ? `M 568 250 C 650 250, 700 175, 800 175 C 875 175, 910 215, ${edgeEndX} 250` : `M 568 250 C ${edgeControlAX} 250, ${edgeControlBX} ${y}, ${edgeEndX} ${y}`;
+            let labelX = cubicCoordinate(568, edgeControlAX, edgeControlBX, edgeEndX, labelProgress);
             let labelY = cubicCoordinate(250, 250, y, y, labelProgress) - 20;
 
             if (routedAlternative) {
               labelX = 850;
-              labelY = 145;
+              labelY = 155;
             } else if (separatedAlternative) {
-              labelX = 735;
-              labelY = 125;
+              labelX = 700;
+              labelY = 120;
             }
 
             return (

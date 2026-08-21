@@ -15,14 +15,14 @@
 }
 
 .title {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 750;
   line-height: 1.35;
 }
 
 .description {
   color: var(--ds-color-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.55;
 }
 
@@ -73,8 +73,8 @@
 .graph {
   display: block;
   width: 100%;
-  max-width: 70rem;
-  min-width: 56rem;
+  max-width: 60rem;
+  min-width: 50rem;
   height: auto;
   margin-inline: auto;
   font-family: var(--ds-font-sans);
@@ -279,7 +279,7 @@
 .inspector {
   display: grid;
   width: 100%;
-  max-width: 70rem;
+  max-width: 60rem;
   margin-inline: auto;
   padding-top: 1rem;
   grid-template-columns: minmax(0, 1fr) auto;
