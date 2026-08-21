@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'Developing gaudiBar'
-tags: ['Übersicht', 'gaudi', 'OSX', 'Widget']
+tags: ['macOS', 'Developer Tools', 'System Monitoring', 'Widgets', 'Übersicht']
 summary: 'gaudiBar is an extensible, adaptive, and responsive system information bar for Übersicht, designed to provide a customizable desktop experience. It features modular widgets, smart context adaptation, and a flexible layout system, allowing users to easily personalize their macOS desktop with real-time system information and external data feeds'
 subtitle: 'My Journey Creating an Extensible System Information Bar'
 featured: false
@@ -57,13 +57,12 @@ Some widgets may require installing some additional packages, they are all docum
 
 I started by designing a flexible layout. The main container spans the entire desktop, with primary bars at the top and bottom. Each primary bar is divided into three secondary regions (left, middle, right), which can contain multiple widgets.
 
-<Image className='dark:hidden mx-auto' width={800} height={800} src="/static/images/posts/gaudi.svg"/>
-<Image className='hidden dark:block mx-auto' width={800} height={800} src="/static/images/posts/gaudi-dark.svg"/>
+<GaudiBarLayout />
 
-The image above shows how gaudi overlays on your desktop: 
+The interactive diagram above shows how gaudi overlays on your desktop:
  - The main container covering the whole desktop
  - Two main `primary-bar` components on the top and bottom of the screen
- - Each `primary-bar` has three `secondary-bar` region (top, middle, right)
+ - Each `primary-bar` has three `secondary-bar` regions (left, middle, right)
  - Each `secondary-bar` can contain N widgets that are distributed evenly
 
  ## Setting up the layout (widgets configuration)
@@ -103,4 +102,4 @@ Another hurdle was managing API keys and sensitive information for widgets that 
 
 Developing gaudiBar has been an exciting journey of problem-solving and creativity. It's grown from a personal project into a tool that I hope other developers and customization enthusiasts will find useful. The modular, extensible nature of gaudiBar means it can continue to evolve with new widgets and features.
 
-If you're interested in trying gaudiBar or contributing to its development, check out the [GitHub repository](https://github.com/yourusername/gaudiBar). I'm always open to suggestions and contributions to make gaudiBar even better!
+If you're interested in trying gaudiBar or contributing to its development, check out the [GitHub repository](https://github.com/g-udi/gaudiBar.ubersicht.widget). I'm always open to suggestions and contributions to make gaudiBar even better!

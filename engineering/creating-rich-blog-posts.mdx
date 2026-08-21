@@ -1,0 +1,272 @@
+---
+type: 'Post'
+title: 'Creating Rich & Interactive Blog Posts'
+tags: ['MDX', 'unified', 'mdast', 'remark', 'rehype']
+summary: 'We explore how to create engaging content with interactive elements using unifiedJS, mdast, rehype, remark, and MDX'
+subtitle: 'Understanding unifiedJS, mdast, rehype, remark, mdx'
+featured: false
+date: '2025-01-22'
+category: 'engineering'
+tableOfContents: true
+---
+
+Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words-they seek engaging, interactive, and visually rich content. For developers and content creators, the challenge lies in creating blog posts that are both easy to write and maintain while also offering interactivity and customization. This is where the [Unified.js](https://github.com/unifiedjs/unified) ecosystem-along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com)-shines.
+
+Markdown has many different flavors and different people have different requirements for features they expect from it. [Unified.js](https://github.com/unifiedjs/unified) provides a powerful and flexible framework for parsing, transforming, and rendering content in various formats, including Markdown, HTML, and JSX.  It takes a string and turns it into structured data (syntax tree) that other plugins can work with. Plugins can do anything, from spellcheck to linting or transforming from one format to another (e.g. Markdown → HTML). Unified on its own doesn’t do much. It acts as a unifying package for all the other plugins out there.
+
+By leveraging these tools, we can create interactive and engaging blog posts that combine the simplicity of Markdown with the capabilities of modern JavaScript frameworks.
+
+## MDX: Markdown Meets JSX
+
+[MDX](https://mdxjs.com) takes blogging to a new level by combining Markdown with JSX, allowing you to embed React components directly within your content. This enables interactive and dynamic elements, such as charts, forms, and widgets, to coexist with Markdown’s simplicity.
+
+For instance, an MDX file might look like this:
+
+```mdx
+# My Interactive Blog
+
+This is a regular Markdown paragraph.
+
+<Chart data={[1, 2, 3, 4]} />
+
+Another paragraph follows the chart.
+```
+
+In this example, the `<Chart />` component is a React element that renders an interactive chart. With [MDX](https://mdxjs.com), you can seamlessly integrate such components into your posts without sacrificing readability or maintainability.
+
+## The Foundation: Unified.js
+
+At the core of this ecosystem is [Unified.js](https://github.com/unifiedjs/unified), a library that simplifies content processing by representing it as abstract syntax trees ([ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree)) using [unist](https://github.com/syntax-tree/unist) specification. These trees serve as structured representations of content, whether it's written in Markdown, HTML, or even JSX. By standardizing how content is processed, [Unified.js](https://github.com/unifiedjs/unified) makes it possible to build reusable and extensible tools for transforming and manipulating text.
+
+One of the standout features of [Unified.js](https://github.com/unifiedjs/unified) is its pipeline architecture. A pipeline processes input content (such as Markdown) through various stages, including parsing, transforming, and stringifying. Each stage can be enhanced with plugins to introduce new functionality, making it easy to customize your content workflow.
+
+<Callout type="info">
+Syntax trees are representations of source code or even natural language. These trees are abstractions that make it possible to analyze, transform, and generate code.
+
+- **Concrete Syntax Trees (CST)** : structures that represent every detail (such as white-space in white-space insensitive languages)
+- **Abstract Syntax Trees (AST)**: structures that only represent details relating to the syntactic structure of code (such as ignoring whether a double or single quote was used in languages that support both, such as JavaScript).
+
+</Callout>
+
+## Remark: Markdown Processing Made Easy
+
+[Remark](https://github.com/remarkjs/remark) is a [Unified.js](https://github.com/unifiedjs/unified) processor specifically designed for working with Markdown. It transforms Markdown text into a Markdown Abstract Syntax Tree (MDAST), which provides a structured format for analyzing and manipulating the content.
+
+<UnifiedProcessorExplorer view="remark" />
+
+For example, consider a blog post written in Markdown:
+
+::: code-group labels=[Markdown, MDAST/JSON]
+
+```markdown
+# My Interactive Blog
+
+This is a regular Markdown paragraph.
+
+<Chart data={[1, 2, 3, 4]} />
+
+Another paragraph follows the chart.
+```
+
+```json
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "heading",
+      "depth": 1,
+      "children": [
+        {
+          "type": "text",
+          "value": "My Interactive Blog"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "value": "Welcome to my blog. Here's an interactive chart:"
+        }
+      ]
+    },
+    {
+      "type": "jsx",
+      "value": "<Chart data={[1, 2, 3, 4]} />"
+    }
+  ]
+}
+
+
+```
+
+:::
+
+[Remark](https://github.com/remarkjs/remark) parses this text into an MDAST, where each element (heading, paragraph, etc.) becomes a node in the tree. Plugins can then be applied to modify the structure-perhaps to add links, convert headings to anchor links, or inject custom elements. Once transformations are complete, [Remark](https://github.com/remarkjs/remark) can convert the MDAST back into Markdown or directly to HTML.
+
+By combining [Remark](https://github.com/remarkjs/remark) with plugins, you can:
+
+- Enforce consistent Markdown formatting.
+- Automatically generate tables of contents.
+- Convert Markdown into enriched formats such as HTML or MDX.
+
+<Callout type="info">Any package that starts with `remark-*` is operating on the markdown syntax tree (MDAST)</Callout>
+
+### Breakdown of MDAST Structure
+
+- **Root Node**: The root node represents the entire document.
+- **Heading Node**: The first child is a heading (indicated by the `#` symbol in Markdown). It has a `depth` of 1, indicating that it is a top-level heading.
+- **Paragraph Node**: The next child is a paragraph, as indicated by the plain text following the heading. The paragraph is further broken down into text nodes for each segment of text.
+- **JSX Node**: Represents the JSX component `<Chart data={[1, 2, 3, 4]} />`.
+
+Each of the Markdown elements (headings, paragraphs, etc.) is mapped to a specific node in the MDAST. This enables manipulation, transformation, or further processing of the content in a programmatic way.
+
+## Rehype: HTML and Beyond
+
+While [Remark](https://github.com/remarkjs/remark) excels at handling Markdown, [Rehype](https://github.com/rehypejs/rehype) is the go-to tool for working with HTML. Like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype) parses content into an abstract syntax tree, known as HAST (HTML Abstract Syntax Tree). This tree is ideal for making HTML-specific transformations, such as adding classes, optimizing images, or embedding scripts.
+
+[Rehype](https://github.com/rehypejs/rehype) becomes particularly useful when converting Markdown to HTML. Using the `remark-rehype` plugin, you can transform an MDAST into a HAST, enabling a seamless transition from Markdown to HTML. From there, [Rehype](https://github.com/rehypejs/rehype) plugins can be used to enhance the HTML output, ensuring that your blog post is optimized for performance and accessibility.
+
+<Callout type="info">Any package that starts with `rehype-*` is operating on the HTML syntax tree (HAST)</Callout>
+
+<UnifiedProcessorExplorer view="rehype" />
+
+::: code-group labels=[Markdown, MDAST/JSON, HAST/JSON]
+
+```markdown
+# My Interactive Blog
+
+This is a regular Markdown paragraph.
+
+<Chart data={[1, 2, 3, 4]} />
+
+Another paragraph follows the chart.
+```
+
+```json
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "heading",
+      "depth": 1,
+      "children": [
+        {
+          "type": "text",
+          "value": "My Interactive Blog"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "value": "Welcome to my blog. Here's an interactive chart:"
+        }
+      ]
+    },
+    {
+      "type": "jsx",
+      "value": "<Chart data={[1, 2, 3, 4]} />"
+    }
+  ]
+}
+```
+
+```json
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "element",
+      "tagName": "h1",
+      "children": [
+        {
+          "type": "text",
+          "value": "My Interactive Blog"
+        }
+      ]
+    },
+    {
+      "type": "element",
+      "tagName": "p",
+      "children": [
+        {
+          "type": "text",
+          "value": "Welcome to my blog. Here's an interactive chart:"
+        }
+      ]
+    },
+    {
+      "type": "element",
+      "tagName": "div",
+      "properties": {
+        "className": ["chart"]
+      },
+      "children": [
+        {
+          "type": "text",
+          "value": "Chart component"
+        }
+      ]
+    }
+  ]
+}
+````
+:::
+
+### Breakdown of HAST Structure:
+
+- **Root Node**: Represents the HTML structure.
+- **Element Node**: Each `h1` (heading) and `p` (paragraph) in the original MDX content is converted to corresponding HTML elements (`<h1>` and `<p>`).
+- **JSX Converted to `div`**: The JSX component `<Chart />` is converted to a `div` element (for simplicity in this example). It could also be rendered dynamically via React, but in the HAST tree, it’s represented as a `div` for static rendering.
+
+In a real-world scenario, the `div` would likely be rendered into a functional component or React element when integrated into a frontend framework like [React](https://react.com).
+
+## Rehype vs. Remark: Choosing the Right Tool
+
+There are several advantages to working with **MDAST** (Markdown Abstract Syntax Tree) over **HAST** (HTML Abstract Syntax Tree) in certain contexts, especially when you’re dealing with Markdown content and need to perform transformations or custom processing. Here are some reasons why MDAST might be preferable in specific use cases:
+
+### 1. **Markdown-Centric Workflow**
+- **Designed for Markdown**: MDAST is specifically tailored for representing Markdown content, which means it’s optimized for the structure and elements found in Markdown (headings, paragraphs, lists, links, etc.). This makes it more intuitive and efficient when you are working directly with Markdown content.
+
+- **Parsing and Transforming Markdown**: If your starting point is Markdown, MDAST allows you to work directly with the parsed tree in a way that aligns closely with the way Markdown is structured. For example, it simplifies handling Markdown-specific elements like frontmatter, links, code blocks, and lists.
+
+### 2. **Flexibility for Custom Transformations**
+- **Ease of Transformation**: Since MDAST is abstracted at a higher level (closer to the semantic structure of the content), it’s easier to perform transformations on the content. You can apply plugins to rewrite or extend Markdown content in a way that is agnostic of the eventual output format.
+
+  - For example, you might want to automatically add anchors to all headings, or lint Markdown to ensure it follows certain formatting rules, which can be more straightforward using MDAST.
+
+- **Simplifies Markdown-to-HTML Conversion**: While MDAST focuses on the structure of Markdown, you can later convert it to HTML (or any other format) with tools like `remark-rehype` or other plugins. This gives you greater control over the transformation process.
+
+### 3. **Preserving the Semantic Structure**
+- **Better Content Integrity**: MDAST allows you to maintain the integrity of the semantic structure of the content, such as distinguishing between different heading levels, paragraphs, and other semantic elements. This is crucial if you need to manipulate or analyze content while preserving its structure before converting it to another format like HTML.
+
+  - For example, when working with Markdown, you can easily identify the headings, lists, and other elements that are important for tasks such as content generation, indexing, or creating table of contents.
+
+### When HAST Might Be Better
+- **HTML-Centric Transformations**: If your main goal is to manipulate the HTML output directly (such as optimizing the final HTML for SEO or adding specific HTML elements like classes or ids), HAST might be more suited to your needs. HAST provides a detailed representation of the HTML structure, which is better for fine-tuning HTML attributes and working with HTML-specific content.
+
+- **Final Output Target**: If your main concern is producing high-quality, optimized HTML for rendering in browsers, then HAST is a natural choice. This is especially true if you're working in a more web-focused environment where your output needs to be fine-tuned for performance, accessibility, or other HTML-specific factors.
+
+## Building a Workflow for Interactive Blog Posts
+
+The real power of these tools emerges when they are used together. Here’s a typical workflow for creating an interactive blog post:
+
+1. **Write Content in Markdown:** Start with simple Markdown to draft your content.
+2. **Enhance with Remark:** Use [Remark](https://github.com/remarkjs/remark) plugins to lint your Markdown, generate a table of contents, or add custom syntax transformations.
+3. **Transform to HTML with Rehype:** Convert Markdown to HTML and apply [Rehype](https://github.com/rehypejs/rehype) plugins to add interactivity or optimize the output.
+4. **Integrate JSX with MDX:** Embed React components to introduce dynamic and interactive elements.
+5. **Render in Your Application:** Use a framework like Next.js to render your [MDX](https://mdxjs.com) content as part of a blog or documentation site.
+
+<UnifiedProcessorExplorer />
+
+## Conclusion
+
+[Unified.js](https://github.com/unifiedjs/unified) offers a robust toolkit for creating modern, interactive, and engaging blog posts. The tools there not only simplify content creation but also enable rich customization and interactivity.
+
+**MDAST** and [Remark](https://github.com/remarkjs/remark) are ideal for working directly with Markdown content, providing a flexible and high-level way to transform and manipulate it without having to worry about the specifics of HTML. It's easier to perform content-centric operations like linting, generation of TOCs, and custom syntax extensions. **HAST** and [Rehype](https://github.com/rehypejs/rehype) on the other hand, shine when you need to work with HTML content or require a final output optimized for web rendering. For those working within the Markdown ecosystem, MDAST provides a much smoother workflow and is better suited for manipulating the semantic structure of the content before rendering it to HTML.
+
+By leveraging this ecosystem, you can transform static posts into vibrant experiences that captivate your audience while maintaining a smooth and efficient writing workflow. Start exploring these tools today and redefine how you create content!

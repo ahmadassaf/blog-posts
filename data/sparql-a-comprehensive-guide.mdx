@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'How to Query RDF: A Comprehensive Guide to SPARQL'
 tags: ['Semantic Web', 'Knowledge Representation', 'Linked Data', 'RDF', 'SPARQL']
-summary: 'Lets dive into how to query RDF data, enabling you to extract meaningful insights from RDF graphs efficiently. This guide will cover the basics, common querying tools, advanced querying techniques, and best practices, ensuring you’re well-equipped to handle RDF data'
+summary: 'Learn how to query RDF data and extract useful insights from RDF graphs. This guide covers query fundamentals, common tools, advanced techniques, and practical guidance.'
 featured: false
 date: '2024-11-21'
 category: 'data'
@@ -21,7 +21,7 @@ Querying RDF data allows you to retrieve meaningful subsets of data, answer comp
 
 
 
-# SPARQL: The Standard Query Language for RDF
+## SPARQL: The Standard Query Language for RDF
 
 [SPARQL](https://www.w3.org/TR/sparql11-query/) is designed to work seamlessly with RDF data. It supports a wide range of features, including data retrieval, filtering, aggregation, and updates to [RDF](https://www.w3.org/TR/rdf11-primer) graphs. [SPARQL](https://www.w3.org/TR/sparql11-query/) can be used for:
 - **Retrieving Data**: Extract specific nodes, edges, or patterns from the graph.
@@ -37,7 +37,7 @@ A [SPARQL](https://www.w3.org/TR/sparql11-query/) query generally consists of th
 3. **WHERE**: Specifies the graph patterns to match.
 4. **ORDER BY/LIMIT/OFFSET**: Controls result sorting and pagination.
 
-# Basic SPARQL Queries
+## Basic SPARQL Queries
 
 Assume we have the following RDF triples in our database
 
@@ -197,7 +197,7 @@ WHERE {
 
 This query will return the name of the person who is not based near London, which is `Ahmad`.
 
-<Callout type="code">
+<Callout type="info">
 
 ### Negation in SPARQL 1.0
 
@@ -260,9 +260,11 @@ WHERE {
 
 A recommended read to learn more about SPARQL 1.1 is the [W3C Recommendation](https://www.w3.org/TR/sparql11-overview/) and [Learning SPARQL Book](https://learningsparql.com/).
 
-# Extensions of SPARQL
+## Extensions of SPARQL
 
 SPARQL is more than a query language for RDF data; it is a comprehensive framework with various extensions and enhancements. These extensions significantly expand its capabilities, allowing it to handle complex operations, integrate with diverse data types, and provide advanced querying features. Below, we explore some of the key extensions and their applications.
+
+<Callout type="info">[SPARQL.Anything](https://github.com/SPARQL-Anything/sparql.anything) is a system for Semantic Web re-engineering that allows users to query anything with SPARQL. In [their video about streamlining Knowledge Graph Construction with a façade: the SPARQL Anything project](https://www.youtube.com/watch?v=Ak3bykN2dgI), Enrico Daga one of the key SPARQL Anything developers gives some good background on the philosophy of Facade-X. To summarize, it models things as lists of lists. Blank nodes, play a large role in this system. </Callout>
 
 ## SPARQL UPDATE
 
