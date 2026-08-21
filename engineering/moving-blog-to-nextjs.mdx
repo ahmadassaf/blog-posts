@@ -2,17 +2,16 @@
 type: 'Post'
 title: 'Migrating My Blog from Jekyll to Next.js and Tailwind CSS'
 subtitle: 'A modern web development workflow for blogging, Introducing Tailwind Nextjs Starter Blog'
-tags: ['Next.js', 'Tailwind', 'MDX', 'React', 'Rehype', 'Remark', 'Jekyll']
+tags: ['Next.js', 'Jekyll', 'Tailwind CSS', 'MDX', 'React']
 summary: 'Migrating from Jekyll to Next.js and Tailwind CSS has been a game-changer for my blog. The modern development practices, improved performance, and flexibility have significantly enhanced my workflow and the overall user experience.'
 featured: false
-date: '2021-01-12'
+date: '2025-01-12'
 category: 'engineering'
+tableOfContents: true
 ---
 
 
 After a few years of [running my blog](/blog/category/engineering/power-up-a-hero-blog-with-jekyll) on [Jekyll](https://jekyllrb.com), I decided it was time for an upgrade. Jekyll served me well, but as my needs evolved, I found myself wanting more flexibility, better performance, and a more modern development workflow. Enter [Next.js](https://nextjs.org), [Tailwind CSS](https://tailwindcss.com), and a host of other modern web development tools that have transformed my blogging experience. Here's a rundown of the migration process and the benefits I’ve enjoyed since making the switch.
-
-# Why Migrate from Jekyll?
 
 Jekyll is a static site generator that is simple, reliable, and supported by GitHub Pages. However, it has its limitations:
 
@@ -20,20 +19,15 @@ Jekyll is a static site generator that is simple, reliable, and supported by Git
 - **Customization**: Advanced customization often requires diving into Liquid templates and custom plugins, which can be cumbersome.
 - **Modern Workflow**: Jekyll lacks some modern development features like hot-reloading and advanced state management.
 
-# Choosing Next.js and Tailwind CSS
+I decided to use a more "modern"stack with Next.js, which is a React-based framework that offers the perfect balance of flexibility and performance with the following features:
 
-Next.js, a React-based framework, offers the perfect balance of flexibility and performance:
-
-- **Server-Side Rendering (SSR) and Static Site Generation (SSG)**: Next.js allows you to choose between SSR and SSG, optimizing performance and SEO.
-- **Dynamic Routing**: Easy creation of dynamic routes without complex configuration.
+- **[Server-Side Rendering (SSR)](https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering)** and **[Static Site Generation (SSG)](https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation)**: Next.js allows you to choose between SSR and SSG, optimizing performance and SEO.
+- [**Dynamic Routing**](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes): Easy creation of dynamic routes without complex configuration.
 - **API Routes**: Built-in API routes simplify backend logic integration.
-- **Tailwind CSS** complements Next.js by providing a utility-first CSS framework that speeds up styling and ensures consistency.
 
+## Tailwind Nextjs Starter Blog
 
-# Tailwind Nextjs Starter Blog
-
-I believe in reusing existing solutions to save time and effort, and a quick search led me to an amazing starting point: the <Preview url='https://github.com/timlrx/tailwind-nextjs-starter-blog'/> . This starter template provided a solid foundation, integrating Next.js and Tailwind CSS with additional features like MDX support, theme switching, and pre-configured styles.
-
+I believe in reusing existing solutions to save time and effort, and a quick search led me to an amazing starting point: the <Preview url='https://github.com/timlrx/tailwind-nextjs-starter-blog' title="Tailwind Next.js Start Blog"/> . This starter template provided a solid foundation, integrating Next.js and Tailwind CSS with additional features like MDX support, theme switching, and pre-configured styles.
 
 This is a [Next.js](https://nextjs.org/) <Tooltip text="In version 13, Next.js introduced a new App Router built on React Server Components, which supports shared layouts, nested routing, loading states, error handling, and more. The App Router works in a new directory named app. The app directory works alongside the pages directory to allow for incremental adoption. This allows you to opt some routes of your application into the new behavior while keeping other routes in the pages directory for previous behavior. If your application uses the pages directory, please also see the Pages Router documentation.">13+</Tooltip>, [Tailwind CSS](https://tailwindcss.com/) blogging starter template. Probably the most feature-rich Next.js markdown blogging template out there. Comes out of the box configured with the latest technologies to make technical writing a breeze. Easily configurable and customizable. Perfect as a replacement to existing Jekyll and Hugo individual blogs. The main features that I relied and extended on are:
 
@@ -43,7 +37,7 @@ This is a [Next.js](https://nextjs.org/) <Tooltip text="In version 13, Next.js i
 - Server-side syntax highlighting with line numbers and line highlighting via [rehype-prism-plus](https://github.com/timlrx/rehype-prism-plus)
 - Math display supported via [KaTeX](https://katex.org/)
 - Citation and bibliography support via [rehype-citation](https://github.com/timlrx/rehype-citation)
-- Automatic image optimization via [next/image](https://nextjs.org/docs/basic-features/image-optimization)
+- Automatic image optimization via [next/image](https://nextjs.org/docs/app/getting-started/images)
 - Flexible data retrieval with [mdx-bundler](https://github.com/kentcdodds/mdx-bundler)
 - Preconfigured security headers
 - SEO friendly with RSS feed, sitemaps
@@ -52,73 +46,38 @@ This is a [Next.js](https://nextjs.org/) <Tooltip text="In version 13, Next.js i
 
 First, lets understand the different folders/components of the template:
 
-### `static`
+ - `static`: Next.js can serve static files, like images, under a folder called public in the root directory. Files inside `public` can then be referenced by your code starting from the base URL `/`.
+  For our template, we have a `static` folder that contains images to be used in the blog, logos,icons and favicons.
+ - `scripts`: This folder contains scripts to help with the development and maintenance of the blog.
+    - The `build.mjs` script is used to perform a bunch of steps post the `yarn run build` command. It is used to generate the RSS feed and the tags and categories pages.
+    - The `rss.mjs` script is used to generate the RSS feed for the blog.
 
-Next.js can serve static files, like images, under a folder called public in the root directory. Files inside `public` can then be referenced by your code starting from the base URL `/`. 
+<Aside>
+**Why `.mjs` extension?**
+Since Node.js was created, the ECMAScript module system (which uses import and export) has become standard and Node.js has added support for it. However, Node. will treat .js files as CommonJS (which is the default module system for the project) unless package.json says `"type": "module"` or the file extension is `.mjs`.
+</Aside>
 
-For our template, we have a `static` folder that contains images to be used in the blog, logos,icons and favicons.
-
-### `scripts`
-
-This folder contains scripts to help with the development and maintenance of the blog. 
-
- - The `build.mjs` script is used to perform a bunch of steps post the `yarn run build` command. It is used to generate the RSS feed and the tags and categories pages.
- - The `rss.mjs` script is used to generate the RSS feed for the blog.
-
-> [!NOTE]
-> **Why `.mjs` extension?**
->
-> Since Node.js was created, the ECMAScript module system (which uses import and export) has become standard and Node.js has added support for it. However, Node. will treat .js files as CommonJS (which is the default module system for the project) unless package.json says `"type": "module"` or the file extension is `.mjs`.
-
-### `data`
-
-The `data` folder contains the site metadata, authors, and blog posts in `.mdx`. The `markdownToHtml` function is used to convert markdown `.mdx` to HTML.
-
- - `authors`: contains the author information for the blog posts and is used to populate the `about` page. This can be extended to allow multiple authors.
- - `blog`: contains the blog posts in `mdx` format. The folders are used to categorize the blog posts.
- - `metadata`: contains the site metadata like navigation links, site title, description, etc. We will discuss this in more details in the <a href="#metadata">metadata section</a>
-
-### `layouts`
-
-The `layouts` folder contains the main templates used in the pages. The main layout is `MainLayout.js` which is used to wrap all the pages. The `PostLayout.js` is used to wrap all the blog posts.
-
-### `lib`
-
-The `lib` folder contains utility functions and configurations used throughout the blog. 
-
- - `contentLayer`: contains the content layer "plugins"/"scripts" for the blog posts and projects.
-   - `computedFields.js`: contains the computed fields for the blog posts. Those are fields that are generated based on the content of the blog post or its metadata like the `readingTime` or `toc` (table of contents).
-   - `contentFields.js`: defined the fields that appear in the frontmatter for the different types of content (author, post, project, etc.).
-   - `generatedCategories.mjs`: Loops through all the posts and generates the categories for the blog posts.
-   - `generatedTags.mjs` - generates the tags for the blog posts.
-   - `projectFields.js` - contains the project fields for the projects page.
-   - `structuredData.js` - contains the structured data for the blog posts.
+- `data`: The `data` folder contains the site metadata, authors, and blog posts in `.mdx`. The `markdownToHtml` function is used to convert markdown `.mdx` to HTML.
+  - `authors`: contains the author information for the blog posts and is used to populate the `about` page. This can be extended to allow multiple authors.
+  - `blog`: contains the blog posts in `mdx` format. The folders are used to categorize the blog posts.
+  - `metadata`: contains the site metadata like navigation links, site title, description, etc. We will discuss this in more details in the <a href="#metadata">metadata section</a>
+- `layouts`: The `layouts` folder contains the main templates used in the pages. The main layout is `MainLayout.js` which is used to wrap all the pages. The `PostLayout.js` is used to wrap all the blog posts.
+- `lib`: The `lib` folder contains utility functions and configurations used throughout the blog.
+   - `contentLayer`: contains the content layer "plugins"/"scripts" for the blog posts and projects.
+      - `computedFields.js`: contains the computed fields for the blog posts. Those are fields that are generated based on the content of the blog post or its metadata like the `readingTime` or `toc` (table of contents).
+      - `contentFields.js`: defined the fields that appear in the frontmatter for the different types of content (author, post, project, etc.).
+      - `generatedCategories.mjs`: Loops through all the posts and generates the categories for the blog posts.
+      - `generatedTags.mjs` - generates the tags for the blog posts.
+      - `projectFields.js` - contains the project fields for the projects page.
+      - `structuredData.js` - contains the structured data for the blog posts.
  - `mdx` - contains the utility functions for the MDX files.
    - `remark-code-title.js` - adds a title to the code blocks.
    - `rehype-citation.js` - adds citation support to the MDX files.
    - `rehype-katex.js` - adds math display support to the MDX files.
 
-### `components`
+- `packages/design-system`: The local design-system package contains the reusable React components, MDX components, design tokens, Tailwind preset, global CSS entrypoint, and Storybook stories used by the blog.
+- `app`: The `app` folder contains the main application routes and application shell. Shared UI is imported from the design-system package instead of living in a root-level components folder.
 
-The `components` folder contains the React components used in the blog. The `MDXComponents.js` file contains the components used to render the MDX files. The `social-icons` folder contains the SVG icons for social media.
-
-### `css`
-
-The `css` folder contains the tailwind.css file which contains the tailwind stylesheet. The `prism.css` file contains the styles associated with the code blocks.
-
-### `app`
-
-The `app` folder contains the main application files. The `pages` folder contains the pages to route to. The `api` folder contains the API routes. The `components` folder contains the components used in the pages. The `styles` folder contains the global styles.
-
-
-## Sample posts
-
-- [A markdown guide](https://tailwind-nextjs-starter-blog.vercel.app/blog/github-markdown-guide)
-- [Learn more about images in Next.js](https://tailwind-nextjs-starter-blog.vercel.app/blog/guide-to-using-images-in-nextjs)
-- [A tour of math typesetting](https://tailwind-nextjs-starter-blog.vercel.app/blog/deriving-ols-estimator)
-- [Simple MDX image grid](https://tailwind-nextjs-starter-blog.vercel.app/blog/pictures-of-canada)
-- [Example of long prose](https://tailwind-nextjs-starter-blog.vercel.app/blog/the-time-machine)
-- [Example of Nested Route Post](https://tailwind-nextjs-starter-blog.vercel.app/blog/nested-route/introducing-multi-part-posts-with-nested-routing)
 
 ## Quick Start Guide
 
@@ -182,13 +141,13 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 `public/static` - store assets such as images and favicons.
 
-`tailwind.config.js` and `css/tailwind.css` - contain the tailwind stylesheet which can be modified to change the overall look and feel of the site.
+`packages/design-system` - contains the local design-system package, including reusable components, tokens, Tailwind preset, Storybook stories, and global design-system CSS exports.
 
-`css/prism.css` - controls the styles associated with the code blocks. Feel free to customize it and use your preferred prismjs theme e.g. [prism themes](https://github.com/PrismJS/prism-themes).
+`tailwind.config.js` - consumes the design-system Tailwind preset and scans the app and design-system package for classes.
 
-`components/social-icons` - to add other icons, simply copy an svg file from [Simple Icons](https://simpleicons.org/) and map them in `index.js`. Other icons use [heroicons](https://heroicons.com/).
+`packages/design-system/src/global.css` - design-system global entrypoint imported by the app. It owns Tailwind and base browser compatibility only; component and MDX rendering styles live beside their owning design-system components.
 
-`components/MDXComponents.js` - pass your own JSX code or React component by specifying it over here. You can then call them directly in the `.mdx` or `.md` file. By default, a custom link and image component is passed.
+`packages/design-system/src/components/mdx/index.js` - exposes the JSX components available inside `.mdx` and `.md` content.
 
 `layouts` - main templates used in pages.
 
@@ -239,21 +198,3 @@ canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/introducing-t
 Run `node ./scripts/compose.js` to bootstrap a new post.
 
 Follow the interactive prompt to generate a post with pre-filled front matter.
-
-## Deploy
-
-**Vercel**  
-The easiest way to deploy the template is to use the [Vercel Platform](https://vercel.com) from the creators of Next.js. Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-**Netlify / GitHub Pages / Firebase etc.**  
-As the template uses `next/image` for image optimization, additional configurations have to be made to deploy on other popular static hosting websites like [Netlify](https://www.netlify.com/) or [GitHub Pages](https://pages.github.com/). An alternative image optimization provider such as Imgix, Cloudinary or Akamai has to be used. Alternatively, replace the `next/image` component with a standard `<img>` tag. See [`next/image` documentation](https://nextjs.org/docs/basic-features/image-optimization) for more details.
-
-The API routes used in the newsletter component cannot be used in a static site export. You will need to use a form API endpoint provider and substitute the route in the newsletter component accordingly. Other hosting platforms such as Netlify also offer alternative solutions - please refer to their docs for more information.
-
-## Support
-
-Using the template? Support this effort by giving a star on GitHub, sharing your own blog and giving a shoutout on Twitter or be a project [sponsor](https://github.com/sponsors/timlrx).
-
-## Licence
-
-[MIT](https://github.com/timlrx/tailwind-nextjs-starter-blog/blob/master/LICENSE) © [Timothy Lin](https://www.timrlx.com)

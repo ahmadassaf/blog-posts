@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'Whats up LOD Cloud?'
-tags: ['Semantic Web', 'LOD', 'LOD Cloud', 'Linked Data']
+tags: ['LOD Cloud', 'Linked Data', 'Open Data', 'Data Quality', 'Metadata']
 summary: 'We have created a tool that automatically validates, corrects and generates dataset metadata for CKAN based data portals. In this post, I present the results of running it on the LOD cloud hosted on the DataHub and comparing the results with those of Africas largest open data portal, openAfrica.'
 subtitle: 'Observing The State of Linked Open Data Cloud Metadata'
 date: '2014-08-21'
@@ -9,10 +9,11 @@ category: 'data'
 bibliography: ['meta/bibliography/references.bib']
 ---
 
-> [!NOTE]
-> This work has been [published](https://link.springer.com/chapter/10.1007/978-3-319-25639-9_40) in The Semantic Web: ESWC 2015 Satellite Events
+<Callout type="info">
+This work has been [published](https://link.springer.com/chapter/10.1007/978-3-319-25639-9_40) in The Semantic Web: ESWC 2015 Satellite Events
+</Callout>
 
-# Introduction
+## Introduction
 
 From 12 datasets cataloged in 2007, the [Linked Open Data (LOD) cloud](https://lod-cloud.net/) has grown to nearly 1000 datasets containing more than 82 billion triples [@Bizer:IJSWIS:09]. Data is being published by both public and private sectors and covers a diverse set of domains from life sciences to media or government data. The Linked Open Data cloud is potentially a gold mine for organizations and individuals who are trying to leverage external data sources in order to produce more informed business decisions [@Boyd:Article:11]. However, the heterogeneous nature of data sources reflects directly on the data quality as these sources often contain inconsistent as well as misinterpreted and incomplete metadata information. Considering the significant variation in size, the languages used and the freshness of the data, one realizes that finding useful datasets without prior knowledge is increasingly complicated.
 
@@ -24,13 +25,13 @@ Data portals expose a set of information about each dataset as metadata. The mod
  - **Ownership information**: Information about the ownership of the dataset. e.g. organization details, maintainer details, author, etc. The existence of this information is important to identify the authority on which the generated report and the newly corrected profile will be sent to.
  - **Provenance information**: Temporal and historical information on the dataset and its resources. For example, creation and update dates, version information, version, etc. Most of this information can be automatically filled and tracked.
 
-# Experiment Details
+## Experiment Details
 
 The results discussed below are based on the LOD cloud hosted on [CKAN](http://ckan.org). It contained 259 datasets at the time of writing this poster. For comparison, we have also profiled the [openAfrica data portal](http://africaopendata.org/) containing 1653 datasets.
 
 A CKAN dataset metadata describes three main sections in addition to the core datasets properties. Those are the groups, tags and resources. Each section contains a set of metadata corresponding to one or more metadata type. For example, a dataset resource will have general information such as the resource name, access information such as the resource url and provenance information such as creation date. Our tool generates a report aggregating all the problems in all these sections, fixing field values when possible. Errors can be the result of missing metadata fields, undefined field values or field value errors e.g. unreachable URL or incorrect email address.
 
-# Results and Evaluation
+## Results and Evaluation
 
 We discovered that the general state of the LOD datasets needs attention as most of them lack informative access information and their resources suffer low availability. These two metrics are of high importance for enterprises looking to integrate and use external linked data. We found out that the most erroneous information for the dataset core information were ownership related as 41% were missing or undefined. Datasets resources have the poorest metadata. 64% of the general metadata, all the access information and 80% of the provenance information contained missing or undefined values.
 

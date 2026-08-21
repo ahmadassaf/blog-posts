@@ -1,7 +1,7 @@
 ---
 type: 'Project'
 title: 'Micromanage'
-tags: ['Microservices', 'bash']
+tags: ['Microservices', 'Bash', 'Developer Tools', 'Git']
 summary: 'Developing features affect very often more than one of these repos. Changing branches, syncing and development is hard as you have to keep flipping between multiple terminal tabs to make sure all the repos are in order. Beamery Micro-services Helpers are shell helper functions that will automate and facilitate manipulating micro-services repos and in general any multiple folders in a certain directory'
 subtitle: 'A Micro-services Helpers Framework | Easily manage multiple repositories and projects'
 layout: ProjectLayout
@@ -70,12 +70,14 @@ plugins=(brew git npm nvm node osx pyenv python scala sublime tmux beamery)
 
 If you do not use any shell halpers but still want to take advantage of these helper functions, you can still install them manually. Basically all what you need to do is source the main entry file which is in `manual/beamery.sh` from your `.bash_profile` or `.bashrc` depending on your OSX. Basically, i create a new folder in my `$HOME` and i call it `.beamery` so thats its hidden, and i copy the contents of `manual` inside so that i have:
 
-```
-├── .beamery
-    ├── beamery.sh
-    ├── plugins
-    └── pluginsInterface.sh
-```
+<FileTree data={[
+  { name: '.beamery', isFolder: true, childrenProp: [
+    { name: 'beamery.sh', isFolder: false },
+    { name: 'plugins', isFolder: true },
+    { name: 'pluginsInterface.sh', isFolder: false }
+  ]}
+]} />
+
 then i add the line `source $HOME/.beamery/beamery.sh` inside my `$HOME/.bash_profile` as i am on OSX but can be inside your `.bashrc` as well. Simply, reload by re-sourcing these files and you are good to go.
 
 ## What does it do ?

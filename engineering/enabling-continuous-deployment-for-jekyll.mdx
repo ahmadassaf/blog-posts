@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'Enabling Continuous Deployment for Jekyll'
-tags: ['Jekyll', 'Continuous Deployment', 'Continuous Integration', 'Travis-CI']
+tags: ['Jekyll', 'Continuous Integration', 'Continuous Deployment', 'Static Site Generation', 'Automation']
 summary: 'Having open sourced my blog on Github, deploying a new version of it live happens very often, and to do that manually every time is a daunting task. This post talks about my experience enabling Continuous Deployment (CD) using Github, TravisCI and my server on DigitalOcean and discuss what I tried and how I failed trying other methods'
 subtitle: 'Making Digital Ocean, Jekyll, Github and TravisCI all work'
 date: '2016-02-03'
@@ -16,13 +16,13 @@ Static sites are great and have various advantages. However, I am aware of how m
 
 Although I have moved huge hidden parts like compressing images and compressing files and HTML to grunt tasks, there are still steps needed to easily deploy changes locally to the live server.
 Another problem with this workflow is that the GitHub repo sometimes wouldn’t be up to date with the content I was serving, or vice versa, because I had to make shortcuts here and there (edit content directly on the live server, push a change locally but forget to deploy that live and so on). Basically, you want the code on GitHub to actually represent what you are serving.
-All of the above has led me to set up automatic deployments to my server. This means that my workflow now just consists of creating content and committing it — the rest is done automatically. Travis CI builds the site, compresses assets, runs a few tests, and deploys it all to DigitalOcean, where a web server (Apache, Nginx) serves it.
+All of the above has led me to set up automatic deployments to my server. This means that my workflow now just consists of creating content and committing it - the rest is done automatically. Travis CI builds the site, compresses assets, runs a few tests, and deploys it all to DigitalOcean, where a web server (Apache, Nginx) serves it.
 
 ## Failed experiments
 
 I have my Jekyll instance running on a Digital Ocean Droplet, to configure one, you can easily follow [their great tutorial](https://www.digitalocean.com/community/tutorials/how-to-get-started-with-jekyll-on-an-ubuntu-vps).
 
-Jekyll website has nice [articles on continuous integration](http://jekyllrb.com/docs/continuous-integration/) and [Deployment](https://jekyllrb.com/docs/deployment-methods/). In a nutshell, serving Jekyll can be done in two ways:
+Jekyll website has nice [articles on continuous integration](https://jekyllrb.com/docs/deployment/automated/) and [Deployment](https://jekyllrb.com/docs/deployment-methods/). In a nutshell, serving Jekyll can be done in two ways:
 
 - It is a static website, so just have a web server like Apache running and point that to the `_site`
 - Run the `jekyll serve` process on your server and proxy your web server e.g., Apache to point to your `http://0.0.0.0:4000`
@@ -108,12 +108,31 @@ I have tried to add a remote in my web server called `production` so that I can 
 
 As a result of my failed attempts, I had to try another approach and I decided to go and try [TravisCI](travis-ci.org).
 
-# Going the Travis way
+## Going the Travis way
 
 The first step to achieving this new workflow was to have rigorous rules set up on the server. No more deployments as root, from now on we’re doing things correctly.
 
-<Image className='dark:hidden mx-auto' width={600} height={600} src="/static/images/posts/jekyll-ci.svg"/>
-<Image className='hidden dark:block mx-auto' width={600} height={600} src="/static/images/posts/jekyll-ci-dark.svg"/>
+<PipelineDiagram
+  title='Continuous deployment with Travis CI'
+  description='A push to GitHub triggers a build, validation, and deployment pipeline. Failed stages stop early; a successful deployment publishes the site and returns its link to GitHub.'
+  source={{ label: 'Local changes', action: 'Push changes' }}
+  platform={{
+    label: 'GitHub',
+    detail: 'Push to a branch or open a pull request',
+    success: 'Build passes',
+    feedback: 'Link to deployed site'
+  }}
+  pipeline={{
+    label: 'Travis CI',
+    trigger: 'Trigger Travis',
+    stages: [
+      { label: 'Build', failure: 'Broken build' },
+      { label: 'Validate', failure: 'Broken build' },
+      { label: 'Deploy', action: 'Upload', output: 'Server' }
+    ]
+  }}
+  destination={{ label: 'Server' }}
+/>
 
 ## Setting up the server
 

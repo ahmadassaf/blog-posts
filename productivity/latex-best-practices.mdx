@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'LaTeX Tips and Best Practices'
-tags: ['LaTEX']
+tags: ['LaTeX', 'Academic Writing', 'Research', 'Productivity', 'Writing']
 summary: 'Completing a Ph.D. can be a hell of a task. It took me lots of time to come up with a framework to optimize how I do research and write and execute deliverables. This post can help you in completing yours.'
 subtitle: 'A guide for a smooth completion of your thesis'
 featured: false
@@ -13,7 +13,7 @@ Completing a Ph.D. can be a hell of a task. It took me lots of time to develop a
 
 I hope this post can help you complete your PhD smoothly.
 
-<Callout type='code'>You can head to my [PhD Github repository](https://github.com/ahmadassaf/PhD) to see all my LaTEX recommendations in action</Callout>
+<Callout type='info'>You can head to my [PhD Github repository](https://github.com/ahmadassaf/PhD) to see all my LaTEX recommendations in action</Callout>
 
 ## Mendeley and Bibliography Management
 
@@ -25,16 +25,39 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
 - I had a root folder for conferences, journals and workshops that contained a separate folder for each relevant venue for my research. For example, i had:
 - I also had a separate folder foe even paper i have made. That folder contained all the papers i have read that influenced my research for that paper and/or have been referenced in it.
 
-```
-├── Conferences
-    ├── ISWC'13 - International Semantic Web conference 2013
-    ├── ESWC'13 - Extended Semantic Web conference 2013
-├── Workshops
-	├── PROFILES'15 - International Workshop on Dataset PROFIling and fEderated Search for Linked Data
-├── Posters
-    ├── Semantic Web Journal
-    ├── IJSWIS - International Journal on Semantic Web and Information Systems
-```
+<FileTree
+  data={[
+    {
+      name: "Research Library",
+      isFolder: true,
+      childrenProp: [
+        {
+          name: "Conferences",
+          isFolder: true,
+          childrenProp: [
+            { name: "ISWC'13 - International Semantic Web conference 2013", isFolder: false },
+            { name: "ESWC'13 - Extended Semantic Web conference 2013", isFolder: false }
+          ]
+        },
+        {
+          name: "Workshops",
+          isFolder: true,
+          childrenProp: [
+            { name: "PROFILES'15 - International Workshop on Dataset PROFIling and fEderated Search for Linked Data", isFolder: false }
+          ]
+        },
+        {
+          name: "Posters",
+          isFolder: true,
+          childrenProp: [
+            { name: "Semantic Web Journal", isFolder: false },
+            { name: "IJSWIS - International Journal on Semantic Web and Information Systems", isFolder: false }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
 
 ## General Organisations
 
@@ -45,36 +68,102 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
 
 #### An Example of my folders structure
 
-```
-├── Papers
-    ├── ESWC'13 - SNARC A Semantic Social News Aggregator
-    │   ├── figures
-    │   └── presentation
-    ├── IJSWIS - Towards An Objective Assessment Framework for Linked Data Quality
-    │   ├── figures
-    │   └── tables
-    ├── PROFILES'15 - An Extensible Framework to Validate and Build Dataset Profiles
-    │   └── figures
-├── Posters
-    ├── ESWC'14 - What are the Important Properties of an Entity - Comparing Users and Knowledge Graph Point of View
-    │   └── poster
-    └── WWW'15 - Observing The State of Linked Open Data Cloud Metadata
-        └── figures
-├── Presentations
-├── Progress Reports CIFRE & Workplans
-    ├── CIFRE Activity Reports
-    ├── Conferences Attestations
-    ├── EDITE Progress Reports
-    ├── EURECOM PhD Scientific Council
-    │   ├── EURECOM PhD Day 2013
-    │   └── EURECOM PhD Day 2014
-    └── PhD Interim Report
-        ├── figures
-        └── presentation
-└── Util
-    ├── Bibliography
-    └── LaTEX
-```
+<FileTree
+  data={[
+    {
+      name: "PhD Research",
+      isFolder: true,
+      childrenProp: [
+        {
+          name: "Papers",
+          isFolder: true,
+          childrenProp: [
+            {
+              name: "ESWC'13 - SNARC A Semantic Social News Aggregator",
+              isFolder: true,
+              childrenProp: [
+                { name: "figures", isFolder: true },
+                { name: "presentation", isFolder: true }
+              ]
+            },
+            {
+              name: "IJSWIS - Towards An Objective Assessment Framework for Linked Data Quality",
+              isFolder: true,
+              childrenProp: [
+                { name: "figures", isFolder: true },
+                { name: "tables", isFolder: true }
+              ]
+            },
+            {
+              name: "PROFILES'15 - An Extensible Framework to Validate and Build Dataset Profiles",
+              isFolder: true,
+              childrenProp: [
+                { name: "figures", isFolder: true }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Posters",
+          isFolder: true,
+          childrenProp: [
+            {
+              name: "ESWC'14 - What are the Important Properties of an Entity - Comparing Users and Knowledge Graph Point of View",
+              isFolder: true,
+              childrenProp: [
+                { name: "poster", isFolder: true }
+              ]
+            },
+            {
+              name: "WWW'15 - Observing The State of Linked Open Data Cloud Metadata",
+              isFolder: true,
+              childrenProp: [
+                { name: "figures", isFolder: true }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Presentations",
+          isFolder: true
+        },
+        {
+          name: "Progress Reports CIFRE & Workplans",
+          isFolder: true,
+          childrenProp: [
+            { name: "CIFRE Activity Reports", isFolder: true },
+            { name: "Conferences Attestations", isFolder: true },
+            { name: "EDITE Progress Reports", isFolder: true },
+            {
+              name: "EURECOM PhD Scientific Council",
+              isFolder: true,
+              childrenProp: [
+                { name: "EURECOM PhD Day 2013", isFolder: true },
+                { name: "EURECOM PhD Day 2014", isFolder: true }
+              ]
+            },
+            {
+              name: "PhD Interim Report",
+              isFolder: true,
+              childrenProp: [
+                { name: "figures", isFolder: true },
+                { name: "presentation", isFolder: true }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Util",
+          isFolder: true,
+          childrenProp: [
+            { name: "Bibliography", isFolder: true },
+            { name: "LaTEX", isFolder: true }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
 
 #### Special Organisation
 
@@ -85,22 +174,39 @@ For special reports (or thesis), when you have multiple `.tex` files and things 
   - All package inclusions `\usepackage{}`, command declarations, etc. required for the paper are included in `include.tex`
   - Formatting and special stylings are included in `format.tex` file.
 
-```
-├── Thesis
-    ├── Part1
-    │   └── Chapter1
-    ├── abstract
-    ├── acknowledgement
-    ├── acronyms
-    ├── appendix
-    ├── background
-    ├── conclusions
-    ├── introduction
-    └── util
-        └── figures
-        └── include.tex
-        └── format.tex
-```
+<FileTree
+  data={[
+    {
+      name: "Thesis",
+      isFolder: true,
+      childrenProp: [
+        {
+          name: "Part1",
+          isFolder: true,
+          childrenProp: [
+            { name: "Chapter1", isFolder: true }
+          ]
+        },
+        { name: "abstract", isFolder: true },
+        { name: "acknowledgement", isFolder: true },
+        { name: "acronyms", isFolder: true },
+        { name: "appendix", isFolder: true },
+        { name: "background", isFolder: true },
+        { name: "conclusions", isFolder: true },
+        { name: "introduction", isFolder: true },
+        {
+          name: "util",
+          isFolder: true,
+          childrenProp: [
+            { name: "figures", isFolder: true },
+            { name: "include.tex", isFolder: false },
+            { name: "format.tex", isFolder: false }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
 
 ## Environment Setup
 
@@ -179,7 +285,7 @@ I have also kept a bunch of bookmarks for all the relevant conferences, journals
 - [ACM Digital Library](http://dl.acm.org/)
 - [IEEE Xplore Digital Library](http://ieeexplore.ieee.org/Xplore/home.jsp)
 - [DBLP Bibliography](https://dblp.org/)
-- [Springer](http://link.springer.com/)
+- [Springer](https://link.springer.com/)
 - [Google Scholar](http://scholar.google.com/)
 - [ResearchGate](http://www.researchgate.net/)
 - [Academia](http://www.academia.edu/)

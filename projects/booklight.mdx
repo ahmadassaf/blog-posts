@@ -1,8 +1,8 @@
 ---
 type: 'Project'
 title: 'Booklight'
-tags: ['Open Data', 'Semantic Web', 'Data Quality']
-summary: 'If you are: Obsessed with organization; Have a couple hundreds (or thousands) of folders in your bookmarks; You like to keep things tidy and every page has to be in its "perfect" place'
+tags: ['Browser Extensions', 'Productivity', 'Search', 'JavaScript', 'Developer Tools']
+summary: 'Booklight helps people with hundreds or thousands of bookmarks keep every saved page organized and easy to find.'
 subtitle: 'Booklight is a clean Chrome Extension to ease the way of adding a bookmark'
 layout: 'ProjectLayout'
 github: 'ahmadassaf/booklight'
@@ -11,11 +11,11 @@ date: '2018-08-07'
 category: 'projects'
 ---
 
-# Booklight
+## Booklight
 
 I got fed up wasting my time trying to navigate my way through bunch of bookmarks folder to arrange them. So if you are:
 - Obsessed with organization
-- Have a couple hundreds (or thousands) of folders in your bookmarks
+- Have hundreds or thousands of folders in your bookmarks
 - You like to keep things tidy and every page has to be in its "perfect" place
 
 then you came to the right place. **Booklight** is a clean Chrome Extension to ease the way of adding a bookmark.
@@ -23,10 +23,10 @@ then you came to the right place. **Booklight** is a clean Chrome Extension to e
 - To launch press (ctrl/Control + b)
 - To enable bookmarks search mode hit `space` after booklight is launched
 
-[Download from Github](https://github.com/ahmadassaf/booklight) |
+[Download from Github](https://github.com/ahmadassaf/booklight)
 [Watch YouTube Video](https://www.youtube.com/watch?v=fxqaToLRLNo)
 
-# Features
+## Features
 
 - Filter bookmarks based on manual entry
 - Show the path of the current selected folder
@@ -44,7 +44,7 @@ To switch to the url search mode just hit `space` and then you will see that you
 To launch a url in the current window, simply hit `enter` and to open it in a new tab hit `ctr\control + enter`
 
 
-# Booklight Performance
+## Booklight Performance
 I currently have over 1000 folders and 20,000 bookmarked urls. Booklight is blazing fast, to achieve this i implement various hacks to minimize DOM manipulations and most importantly lazy-loading of urls. The lazy loading happens in the following function:
 
 ```javascript
@@ -79,7 +79,7 @@ lazyloader: function lazyloader(elements){
 ```
 You can tweak the number of elements you want to show on every iteration and it works for both searching and filtering.
 
-# Things i would like to do
+## Things i would like to do
 
 - Add mouse interactions
 - Add better logic to the star icon (at the moment it only shows when the page is successfully bookmarked) but it will not update if remove the bookmark ... etc.
@@ -88,7 +88,7 @@ You can tweak the number of elements you want to show on every iteration and it 
 - ~~Remember last location when going back to main screen or removing filters~~ **done**
 
 
-# Thoughts
+## Thoughts
 
  - [Google Chrome’s awful new bookmark manager (and how to switch it off)](http://blog.garethjmsaunders.co.uk/2015/04/19/google-chromes-awful-new-bookmark-manager-and-how-to-switch-it-off/)
- - [Chrome users roast Google on spit of hate over revamped bookmarks manager](http://www.computerworld.com/article/2913426/web-browsers/chrome-users-roast-google-on-spit-of-hate-over-revamped-bookmarks-manager.html)
+ - [Chrome users roast Google on spit of hate over revamped bookmarks manager](https://www.computerworld.com/article/1364190/chrome-users-roast-google-on-spit-of-hate-over-revamped-bookmarks-manager.html)

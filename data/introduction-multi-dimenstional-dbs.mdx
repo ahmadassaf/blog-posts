@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Introduction to Multidimensional Databases'
 subtitle: 'Introducing the terms and concepts around multidimensional databases and data warehouses'
-tags: ['Multimodal Databases', 'Data Warehouse', 'Databases']
+tags: ['Multidimensional Databases', 'Data Warehousing', 'OLAP', 'Databases', 'Data Modeling']
 summary: 'The multidimensional model presents data as facts with associated numerical values called measures or dimensions that characterize the facts and they are “mostly” textual. In this post, we talk about the databases that allow us to store and manipulate complex multidimensional data.'
 featured: false
 date: '2015-04-22'
@@ -50,7 +50,7 @@ A cube is a multidimensional data structure for capturing and analyzing data. It
 A cube consists of a set of cells at each of the dimensions intersections; a non empty cell is a fact. A fact has a number of measures associated with it. A sparse cube is one with high percentage of empty cells; a dense cube is one with high percentage of facts. Cubes tend to become increasingly sparse with increasing dimensionality and with increasingly finer granularities of the dimension value.
 
 
-# Operations in a Multidimensional Data Model
+## Operations in a Multidimensional Data Model
 
 Multidimensional data models allow for a range of powerful operations that make it easier to explore data and extract insights:
 
@@ -61,7 +61,7 @@ Multidimensional data models allow for a range of powerful operations that make 
  - **Pivot**: allows an analyst to rotate the cube in space to see its various face
 
 
-# Multidimensional Representations
+## Multidimensional Representations
 There are two principal ways of representing dimensions:
 
 ## Star Schema

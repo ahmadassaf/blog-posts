@@ -1,13 +1,12 @@
 ---
 type: 'Post'
 title: 'Theme Switcher in Next.js'
-tags: ['Next.js', 'React']
+tags: ['Next.js', 'React', 'Theming', 'Dark Mode']
 summary: 'In web applications, theming enhances user experience by offering personalization and visual appeal. Typically, a ThemeProvider Context manages themes throughout the application. This works well for fully client-side apps. However, developers need a solution for apps that combine client and server components, where theming depends on color-schema or className. With Next.js 14+, wrapping children in a Context automatically makes them client components. This blog post explores how to implement a ThemeProvider that avoids the need to wrap the entire application in a Context provider, addressing the challenges of mixed client-server environments.'
 subtitle: 'Toggle between dark and light theme without wrapping children in context'
 featured: false
 date: '2024-06-11'
 category: 'engineering'
-draft: true
 ---
 
 In web applications, theming enhances user experience by offering personalization and visual appeal. Typically, a `ThemeProvider` context manages themes throughout the application. This works well for fully client-side apps. However, developers need a solution for apps that combine client and server components, where theming depends on `color-schema` or `className`.
@@ -20,7 +19,7 @@ Generally speaking; implementing a theme switcher involves three main steps:
  2. **Use Theme Switcher**: Integrate the `ThemeProvider` component into your application to switch theme.
  3. **Integrate Theme Provider**: Integrate the `ThemeProvider` component into your application layout to make sure client theming is synced with server on hydration.
 
-# The old way
+## The old way
 
 ## 1. Create Theme Provider Component
 
@@ -89,7 +88,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-# The new way
+## The new way
 
 ## 1. Create Theme Provider Component
 
@@ -130,17 +129,33 @@ export default AppThemeProvider;
 
 ## 2. Use Theme Switcher
 
-The `ThemeSwitcher` component is now simplified and does not require the `useEffect` hook to check if the component is mounted. This is because the `ThemeProvider` component automatically makes its children client components. You can also notice the use of the `useTheme` hook to get the current theme and toggle it.
+The `ThemeSwitcher` component now handles theme switching with proper hydration handling. Note that we still need a mounted state check to prevent hydration mismatches between server and client renders.
 
 ```jsx caption="ThemeSwitcher.js"
 "use client";
 
+import { useEffect, useState } from 'react';
 import ThemeProvider from "@/components/utils/ThemeProvider";
 import { RiMoonClearFill, RiSunFill } from 'react-icons/ri';
 import { useTheme } from "next-themes";
 
 function Provider() {
   const { setTheme, theme } = useTheme();
+  const [ mounted, setMounted ] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by showing a placeholder until mounted
+  if (!mounted) {
+    return (
+      <button type='button' style={{ 'outline': 'none' }}>
+        <RiSunFill />
+      </button>
+    );
+  }
+
   return (
     <button type='button' style={{ 'outline': 'none' }} onClick={ () => setTheme(theme === 'dark' ? 'light' : 'dark') }>
         {theme === 'dark'  ? (<RiMoonClearFill />) : (<RiSunFill />)}
@@ -161,26 +176,45 @@ export default ThemeSwitch;
 
 ## 3. Integrate Theme Provider
 
-In the `App.js` file, you can see that the `ThemeProvider` component is now dynamically imported using the `dynamic` function from `next/dynamic`. This ensures that the `ThemeProvider` component is only rendered on the client-side. Moreover, the theme choice is now persisted in a cookie. This offers a cleaner and more efficient way to manage themes in your application without making complete application a client component.
+In the layout container, the `ThemeProvider` is dynamically imported to ensure client-side rendering. A key improvement is reading the theme cookie on the server side to prevent flash of unstyled content (FOUC) during initial page load. This approach maintains theme consistency between server and client renders.
 
-
-```jsx caption="App.js" {2,3,6,7,8,11,14}
-...
+```jsx caption="layoutContainer.js" {2,3,6,10,11,14}
 import dynamic from "next/dynamic";
-import { cookies } from 'next/headers'
+import { cookies } from 'next/headers';
+import siteMetadata from '@/data/meta/metadata';
 ...
 
-const ThemeProvider = dynamic(() => import("@/components/utils/ThemeProvider"), {
-  ssr: false,
-});
+const ThemeProvider = dynamic(() => import("@/components/utils/ThemeProvider"));
 
-export default function LayoutContainer({ children }) {
-  const theme = cookies().get("__theme__")?.value || "system";
+export default async function LayoutContainer({ children }) {
+  // Read theme from cookie, fallback to site default
+  const themeCookie = await cookies();
+  const theme = themeCookie.get("__theme__")?.value || siteMetadata.theme;
+
   return (
     <>
-     <ThemeProvider attribute="class"  defaultTheme={theme} enableSystem/>
+     <ThemeProvider attribute="class" defaultTheme={theme} enableSystem/>
      <main>{children}</main>
     </>
   );
 }
 ```
+
+## Key Benefits
+
+This approach provides several advantages:
+
+1. **No Full App Client Wrapping**: Unlike traditional approaches, you don't need to wrap your entire application in a client component
+2. **Server-Side Theme Detection**: Reading the cookie on the server ensures the correct theme is applied immediately
+3. **No FOUC**: Prevents the flash of incorrect theme on initial load
+4. **Persistent Theme Selection**: Themes persist across sessions via cookies
+5. **Hydration Safety**: Proper handling of mounted state prevents hydration mismatches
+
+## Common Gotchas
+
+When implementing this pattern, watch out for:
+
+- **Cookie Reading**: Make sure to use `await cookies()` in Next.js 15+ as cookies are now async
+- **Dynamic Import**: Don't set `ssr: false` on the ThemeProvider dynamic import - we want SSR but with the correct theme from cookies
+- **Hydration Mismatches**: Always check mounted state before rendering theme-dependent content in your theme switcher
+- **Default Theme**: Have a sensible fallback theme in case the cookie doesn't exist

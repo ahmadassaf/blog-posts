@@ -1,17 +1,16 @@
 ---
 type: 'Post'
 title: 'Towards a Harmonized Dataset Model for Open Data Portals'
-tags: ['Semantic Web', 'Open Data', 'Linked Data', 'Data Portal']
+tags: ['Open Data', 'Metadata', 'Data Portals', 'Data Modeling', 'Linked Data']
 summary: 'We first conduct a unique and comprehensive survey of seven metadata models: CKAN, DKAN, Public Open Data, Socrata, VoID, DCAT and Schema.org. Next, we propose a Harmonized Dataset modeL (HDL) based on this survey'
 date: '2015-07-22'
 category: 'data'
 bibliography: ['meta/bibliography/references.bib']
 ---
 
-> [!NOTE]
-> This work has been [published](https://ceur-ws.org/Vol-1362/PROFILES2015_paper3.pdf) in the 2nd International Workshop on Dataset PROFIling & fEderated Search for Linked Data (PROFILES)
+<Callout type='info'>This work has been [published](https://ceur-ws.org/Vol-1362/PROFILES2015_paper3.pdf) in the 2nd International Workshop on Dataset PROFIling & fEderated Search for Linked Data (PROFILES)</Callout>
 
-# Introduction
+## Introduction
 
 Open data is the data that can be easily discovered, reused and redistributed by anyone. It can include anything from statistics, geographical data, meteorological data to digitized books from libraries. Open data should have both legal and technical dimensions. It should be placed in the public domain under liberal terms of use with minimal restrictions and should be available in electronic formats that are non-proprietary and machine readable. Open Data has major benefits for citizens, businesses, society and governments: it increases transparency and enables self-empowerment by improving the visibility of previously inaccessible information; it allows citizens to be better informed about policies, public spending and activities in the law making processes. Moreover, it is still considered as a gold mine for organizations which are trying to leverage external data sources in order to produce more informed business decisions [@Boyd:Article:11], despite the legal issues surrounding Linked Data licenses [@Prateek:Misc:13].
 
@@ -29,7 +28,7 @@ Data models vary across data portals. While exhaustively surveying the range of 
  - *License information*: businesses are always concerned with the legal implications of using external content. As a result, datasets should include both machine and human readable license information that indicates permissions, copyrights and attributions;
  - *Provenance information*: depending on the dataset license, the data might not be legally usable if there are no information describing its authoritative and versioning information. Current models under-specify these aspects limiting the usability of many datasets.
 
-# Data Portals and Dataset Models
+## Data Portals and Dataset Models
 
 There are many data portals that host a large number of private and public datasets. Each portal present the data based on a model used by the underlying software. In this section, we present the results of our landscape survey of the most common data portals and dataset models.
 
@@ -57,7 +56,7 @@ VoID [@Bohm:WebSemJournal:11] is another RDF vocabulary designed specifically t
 
 CKAN is a complete catalog system with an integrated data storage and powerful RESTful JSON API. It offers a rich set of visualization tools (e.g. maps, tables, charts) as well as an administration dashboard to monitor datasets usage and statistics. CKAN allows publishing datasets either via an import feature or through a web interface. Relevant metadata describing the dataset and its resources as well as organization related information can be added. A [Solr](http://lucene.apache.org/solr/) index is built on top of this metadata to enable search and filtering.
 
-The [CKAN data model](http://docs.ckan.org/en/ckan-1.8/domain-model.html/) contains information to describe a set of entities (dataset, resource, group, tag and vocabulary). CKAN keeps the core metadata restricted as a JSON file, but allows for additional information to be added via "extra" arbitrary key/value fields. CKAN supports Linked Data and RDF as it provides a complete and functional mapping of its model to Linked Data formats.
+The [CKAN data model](https://docs.ckan.org/en/latest/api/) contains information to describe a set of entities (dataset, resource, group, tag and vocabulary). CKAN keeps the core metadata restricted as a JSON file, but allows for additional information to be added via "extra" arbitrary key/value fields. CKAN supports Linked Data and RDF as it provides a complete and functional mapping of its model to Linked Data formats.
 
 ## DKAN
 
@@ -67,7 +66,7 @@ The DKAN [data model](http://docs.getdkan.com/dkan-documentation/dkan-developers
 
 ## Socrata
 
-[Socrata](http://socrata.com) is a commercial platform to streamline data publishing, management, analysis and reusing. It empowers users to review, compare, visualize and analyze data in real time. Datasets hosted in Socrata can be accessed using RESTful API that facilitates search and data filtering.
+[Socrata](https://support.socrata.com/) is a commercial platform to streamline data publishing, management, analysis and reusing. It empowers users to review, compare, visualize and analyze data in real time. Datasets hosted in Socrata can be accessed using RESTful API that facilitates search and data filtering.
 
 Socrata allows flexible data management by implementing various data governance models and ensuring compliance with metadata schema standards. It also enables administrators to track data usage and consumption through dashboards with real-time reporting. Socrata is very flexible when it comes to customizations. It has a consumer-friendly experience giving users the opportunity to tell their story with data. Socrata's data model is designed to represent tabular data: it covers a basic set of metadata properties and has good support for geospatial data.
 
@@ -83,7 +82,7 @@ Schema.org covers many domains. We are specifically interested in the `Dataset` 
 
 [The POD metadata model](https://project-open-data.cio.gov/v1.1/schema/) is based on DCAT. Similarly to DCAT-AP, POD defines three types of metadata elements: Required, Required-if(conditionally required) and Expanded (optional). The metadata model is presented in the JSON format and encourages publishers to extend their metadata descriptions using elements from the "Expanded Fields" list, or from any well-known vocabulary.
 
-# Metadata Classification
+## Metadata Classification
 
 A dataset metadata model should contain sufficient information so that consumers can easily understand and process the data that is described. After analyzing the models described in the section [2], we find out that a dataset can contain four main sections:
 
@@ -95,7 +94,7 @@ A dataset metadata model should contain sufficient information so that consumers
 Upon closed examination of the various data models, we group the metadata information into eight main types. Each section discussed above should contain one or more of these types. For example, resources have general, access, ownership and provenance information while tags have general and provenance information only. The eight information types are:
 
 -   **General information**: The core information about the dataset (e.g., title, description, ID). The most common vocabulary used to describe this information is [Dublin Core](http://dublincore.org/documents/dcmi-terms/).
--   **Access information**: Information about dataset access and usage (e.g., URL, license title and license URL). In addition to the properties in the models discussed above, there are several vocabularies designed specially to describe data access right e.g. [Linked Data Rights](http://oeg-dev.dia.fi.upm.es/licensius/static/ldr/), the [Open Digital Rights Language (ODRL)](http://www.w3.org/ns/odrl/2/).
+-   **Access information**: Information about dataset access and usage (e.g., URL, license title and license URL). In addition to the properties in the models discussed above, there are several vocabularies designed specially to describe data access right e.g. [Linked Data Rights](https://lov.linkeddata.es/dataset/lov/vocabs/ldr), the [Open Digital Rights Language (ODRL)](http://www.w3.org/ns/odrl/2/).
 -   **Ownership information**: Authoritative information about the dataset (e.g. author, maintainer and organization). The common vocabularies used to expose ownership information are [Friend-of-Friend (FOAF)](http://xmlns.com/foaf/spec) for people and relationships, vCard [@Iannella:W3C:14] for people and organizations and the Organization ontology [@Reynolds:W3C:14] designed specifically to describe organizational structures.
 -   **Provenance information**: Temporal and historical information about the dataset creation and update records, in addition to versioning information (e.g. creation data, metadata update data, latest version). Provenance information coverage varies across the modeled surveyed. However, its great importance lead to the development of various special vocabularies like the [Open Provenance Model](http://open-biomed.sourceforge.net/opmv/) and PROV-O [@Lebo:W3C:13]. DataID [@Brummer::ICSS:14] is an effort to provide semantically rich metadata with focus on providing detailed provenance, license and access information.
 -   **Geospatial information**: Information reflecting the geographical coverage of the dataset represented with coordinates or geometry polygons. There are several additional models and extensions specifically designed to express geographical information. The Infrastructure for Spatial Information in the [European Community (INSPIRE) directive](http://inspire.ec.europa.eu/) aims at establishing an infrastructure for spatial information. Mappings have been made between DCAT-AP and the INSPIRE metadata. CKAN provides as well a [spatial extension](https://github.com/ckan/ckanext-spatial) to add geospatial capabilities. It allows importing geospatial metadata from other resources and supports various standards (e.g. ISO 19139) and formats (e.g. GeoJSON).
@@ -104,7 +103,7 @@ Upon closed examination of the various data models, we group the metadata inform
 
 -   **Quality information**: Information that indicates the quality of the dataset on the metadata and instance levels. In addition to that, a dataset should include an openness score that measures its alignment with the Linked Data publishing standards [@Berners-Lee:W3C:06]. Quality information is only expressed in the POD metadata. However, `govdata.de` extends the there are various other vocabularies like daQ [@Debattista:WWW:14] that can be used to express datasets quality. The [RDF Review Vocabulary](http://vocab.org/review/) can also be used to express reviews and ratings about the dataset or its resources.
 
-# Towards A Harmonized Model
+## Towards A Harmonized Model
 
 Since establishing a common vocabulary or model is the key to communication, we identified the need for an harmonized dataset metadata model containing sufficient information so that consumers can easily understand and process datasets. To create the mappings between the different models, we performed various steps:
 
@@ -112,14 +111,12 @@ Since establishing a common vocabulary or model is the key to communication, we 
 -   Examine existing datasets using these models and vocabularies. `http://dataportals.org` provides a comprehensive list of Open Data Portals from around the world. It was our entry point to find out portals using CKAN or DKAN as their underlying DMS. We also investigated portals known to be using specific DMS. Socrata, for example, maintains a list of Open Data portals using their software on their homepage such as `http://pencolorado.org` and `http://data.maryland.gov`.
 -   Examine the source code of some portals. This was specifically the case for Socrata as their API returns the raw data serialized as JSON rather than the dataset's metadata. As a consequence, we had to investigate the [Socrata Open Data API (SODA) source code](https://github.com/socrata/soda-java/tree/master/src/main/java/com/socrata/model) and check the different classes and interfaces.
 
-```
-    CKAN           DKAN           POD            DCAT                                   VoID                                      Schema.org              Socrata  
-  -------------- -------------- -------------- -------------------------------------- ----------------------------------------- ----------------------- -------------
-  resources      resources      distribution   dcat:Distribution                      void:Dataset->void:dataDump                Dataset:distribution    attachments
-  tags           tags           keyword        dcat:Dataset->:keyword                 void:Dataset->:keyword                     CreativeWork:keywords   tags
-  groups         groups         theme          dcat:Dataset->:theme                                                              CreativeWork:about      category
-  organization   organization   publisher      dcat:Dataset->:publisher               void:Dataset->:publisher                           
-```
+| CKAN           | DKAN           | POD            | DCAT                           | VoID                            | Schema.org              | Socrata        |
+|----------------|----------------|----------------|--------------------------------|---------------------------------|-------------------------|----------------|
+| `resources`    | `resources`    | `distribution` | `dcat:Distribution`            | `void:Dataset->void:dataDump`  | `Dataset:distribution`  | `attachments`  |
+| `tags`         | `tags`         | `keyword`      | `dcat:Dataset->:keyword`       | `void:Dataset->:keyword`        | `CreativeWork:keywords` | `tags`         |
+| `groups`       | `groups`       | `theme`        | `dcat:Dataset->:theme`         |                                 | `CreativeWork:about`    | `category`     |
+| `organization` | `organization` | `publisher`    | `dcat:Dataset->:publisher`     | `void:Dataset->:publisher`      |                         |                |
 
 The first task is to map the four main information sections (resources, tags, groups and organization) across those models. Table 2 in our [paper](https://ceur-ws.org/Vol-1362/PROFILES2015_paper3.pdf) shows our proposed mappings. For the ontologies (DCAT, VoID), the first part represents the class and the part after $\rightarrow$ represents the property. For Schema.org, the first part refers to the schema and the second part after $:$ refers to the property.
 
@@ -131,7 +128,7 @@ Examining the different models, we noticed a lack of a complete model that cover
 
 HDL aims at filling this gap by taking the best from these models. HDL is currently modeled in [JSON](https://github.com/ahmadassaf/roomba/blob/master/model/hdl.json) but converting it to a standalone OWL ontology is part of our future work.
 
-The CKAN model controls the values to be used in describing some dataset properties. For example, the `resource_type` property can have the values: file: direct accessible bitstream, file.upload: file uploaded to the [CKAN FileStore](http://docs.ckan.org/en/ckan-1.8/filestore.html), api, visualization, code: the actual source code or a reference to a code repository and documentation. However, using the Roomba tool [@Assaf:WWW:15], we managed to generate portal-wide reports about the representation of various fields in CKAN portals. The goal behind these reports is to find what are the frequent fields data publishers are adding as `extras` fields.
+The CKAN model controls the values to be used in describing some dataset properties. For example, the `resource_type` property can have the values: file: direct accessible bitstream, file.upload: file uploaded to the [CKAN FileStore](https://docs.ckan.org/en/latest/maintaining/filestore.html), api, visualization, code: the actual source code or a reference to a code repository and documentation. However, using the Roomba tool [@Assaf:WWW:15], we managed to generate portal-wide reports about the representation of various fields in CKAN portals. The goal behind these reports is to find what are the frequent fields data publishers are adding as `extras` fields.
 
 We created two "key:object meta-field values" reports using Roomba. The first one aims to collect the list of `extras` values using the query string `extras>value:extras>name` and the second one is to list the file types specified for resources using the query string `resources>resource_type:resources>name`. We run the report generation process on two prominent data portals: the Linked Open Data (LOD) cloud hosted on the Datahub containing 259 datasets and the Africa's largest open data portal, [OpenAfrica](http://africaopendata.org/) that contains 1653 datasets.
 
