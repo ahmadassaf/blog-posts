@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Blog visualisation catalogue
  *
@@ -6,14 +8,16 @@
  * to compiled blog and project MDX through the local MDX renderer.
  */
 
-import GaudiBarLayout from './GaudiBarLayout';
-import LinkedDataQualityFramework from './LinkedDataQualityFramework';
-import PipelineDiagram from './PipelineDiagram';
-import RdfBlankNodeExplorer from './RdfBlankNodeExplorer';
-import RdfCollectionExplorer from './RdfCollectionExplorer';
-import RdfContainerExplorer from './RdfContainerExplorer';
-import RdfTripleExplorer from './RdfTripleExplorer';
-import UnifiedProcessorExplorer from './UnifiedProcessorExplorer';
+import dynamic from 'next/dynamic';
+
+const GaudiBarLayout = dynamic(() => import('./GaudiBarLayout'));
+const LinkedDataQualityFramework = dynamic(() => import('./LinkedDataQualityFramework'));
+const PipelineDiagram = dynamic(() => import('./PipelineDiagram'));
+const RdfBlankNodeExplorer = dynamic(() => import('./RdfBlankNodeExplorer'));
+const RdfCollectionExplorer = dynamic(() => import('./RdfCollectionExplorer'));
+const RdfContainerExplorer = dynamic(() => import('./RdfContainerExplorer'));
+const RdfTripleExplorer = dynamic(() => import('./RdfTripleExplorer'));
+const UnifiedProcessorExplorer = dynamic(() => import('./UnifiedProcessorExplorer'));
 
 export const VisualisationComponents = {
   GaudiBarLayout,

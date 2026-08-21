@@ -8,7 +8,7 @@ Posts and projects are grouped by category and authored as MDX. Frontmatter supp
 
 ## Custom MDX components
 
-Article-specific interactive work lives in [`visualisations/`](./visualisations). The catalogue exports a content-owned `MDXLayoutRenderer` that merges these components with the reusable Gaudi MDX primitives supplied by the host.
+Article-specific interactive work lives in [`visualisations/`](./visualisations). The catalogue exports a content-owned `MDXLayoutRenderer` that dynamically loads these components and registers the reusable Gaudi primitives used by the content.
 
 This keeps the responsibilities separate:
 
