@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'Auditing NPM Modules in Microservices'
-tags: ['Node.js', 'Optimization', 'NPM']
+tags: ['Node.js', 'npm', 'Microservices', 'Dependency Management', 'Software Maintenance']
 summary: 'Where I work at Beamery we follow Microservices Architecture and have a good 20+ git repositories. With time, these repos become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to easily audit and clean this mess.'
 subtitle: 'Clean-up some of the mess across your repositories'
 featured: false
@@ -19,9 +19,9 @@ I came across the great [npm-check](https://github.com/dylang/npm-check) that:
 - Works on your globally installed packages via `-g`.
 - **Interactive Update** for less typing and fewer typos via `-u`.
 - Supports public and private [@scoped/packages](https://docs.npmjs.com/getting-started/scoped-packages).
-- Supports ES6-style [`import from`](http://exploringjs.com/es6/ch_modules.html) syntax.
+- Supports ES6-style [`import from`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) syntax.
 - Upgrades your modules using your installed version of npm, including the new `npm@3`, so dependencies go where you expect them.
-- Works with any public npm registry, [private registries](https://www.npmjs.com/onsite), and alternate registries like [Sinopia](https://github.com/rlidwka/sinopia).
+- Works with any public npm registry, [private registries](https://docs.npmjs.com/cli/using-npm/registry), and alternate registries like [Sinopia](https://github.com/rlidwka/sinopia).
 - Does not query registries for packages with `private: true` in their package.json.
 - Emoji in a command-line app, because command-line apps can be fun too.
 - Works with `npm@2` and `npm@3`, as well as newer alternative installers like `ied` and `pnpm`.

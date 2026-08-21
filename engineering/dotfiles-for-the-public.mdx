@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'Dotfiles For The Public'
-tags: ['bash', 'dotfiles']
+tags: ['Dotfiles', 'Bash', 'Developer Environment', 'Shell']
 summary: 'Your dotfiles will help you create powerful and consistent shell shortcuts and functions, settings for your editors, color coding and layouts for your shell, preferences and authentication for ssh and mysql and other protocols, and more'
 subtitle: 'An Essential Introduction to powering up your machine'
 featured: false
@@ -9,7 +9,7 @@ date: '2015-05-21'
 category: 'engineering'
 ---
 
-# What are Dotfiles?
+## What are Dotfiles?
 
 If you're not familiar with the concept of dotfiles, check out [Github's dotfiles page](https://dotfiles.github.io/) to learn more about them. Essentially, when someone says "dotfiles" they mean maintaining your command-line preferences in a versioned repository like Github, Dropbox, etc. that you install on every computer.
 
@@ -37,7 +37,7 @@ This file speeds up the process of running executable files. Rather than having 
 
 Generally, this file isn't held in the public repo as it can contain sensitive information.
 
-Here’s an example `~/.path` file that adds `~/utils` to the `$PATH:
+Here’s an example `~/.path` file that adds `~/utils` to the `$PATH`:
 
 ```shell
 export PATH="$HOME/utils:$PATH"
@@ -117,7 +117,7 @@ For `vim` i have also included the [powerline](https://github.com/Lokaltog/power
 
 - I haven't included `powerline` in my main installation script, so if you wish to have it, then please proceed with installing it separately with the fonts dependency.
 - The `--user` parameter should be removed if you got an error while installation especially if you have python installed via Homebrew.
-- A dependency is the [powerline fonts](https://github.com/ahmadassaf/powerline-fonts) pack. Installation instructions can be found directly in the repository.
+- A dependency is the [powerline fonts](https://github.com/powerline/fonts) pack. Installation instructions can be found directly in the repository.
 
 after installing powerline enable it by adding to the `.vimrc`:
 
@@ -131,7 +131,7 @@ This can be change **depending on the path to the `python` directory**
 
 If you use wget, this adds additional settings such as changing the timeout to 60 seconds rather than the default 15 minutes. It also sets the retry to three, rather than the default 20!
 
-# Getting Started
+## Getting Started
 
 If you notice, some files that have mentioned above don't exist in this repo. This is because i am using the amazing [bash-it](http://github.com/ahmadassaf/bash-it) repo to organize those dotfiles.
 I recommend you head overthere and read how to use them.d
@@ -194,25 +194,25 @@ My `cask` file contains the following applications:
 There are a bunch of useful Node.js command line tools that can be installed globally. For that, the file `.npm_globals.sh` define an array of those applications. My global npm packages are:
 
 - [**amok**](https://www.npmjs.com/package/amok): A free open source, editor agnostic, cross-platform command line tool for fast incremental development, testing and debugging in web browsers
-- [**eslint**](https://www.npmjs.com/package/eslint): ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code
-- [**imageoptim**](https://www.npmjs.com/package/imageoptim): Node.js wrapper for some images compression algorithms
-- [**nodemon**](https://www.npmjs.com/package/nodemon): Nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
-- [**prettyjson**](https://www.npmjs.com/package/prettyjson): Package for formatting JSON data in a coloured YAML-style, perfect for CLI output
-- [**psi**](https://www.npmjs.com/package/psi): PageSpeed Insights with reporting
-- [**should**](https://www.npmjs.com/package/should): Should is an expressive, readable, framework-agnostic assertion library. The main goals of this library are to be expressive and to be helpful. It keeps your test code clean, and your error messages helpful.
-- [**slap**](https://www.npmjs.com/package/slap): Slap is a Sublime-like terminal-based text editor that strives to make editing from the terminal easier
-- [**sparkly**](https://www.npmjs.com/package/sparkly): Generate sparklines
-- [**tmi**](https://www.npmjs.com/package/tmi): Find out the image weight in your pages, compare to the BigQuery quantiles and discover what images you can optimize further
-- [**vtop**](https://www.npmjs.com/package/vtop): A graphical activity monitor for the command line
+- [**eslint**](https://github.com/eslint/eslint): ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code
+- [**imageoptim**](https://github.com/JamieMason/ImageOptim-CLI): Node.js wrapper for some images compression algorithms
+- [**nodemon**](https://github.com/remy/nodemon): Nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
+- [**prettyjson**](https://github.com/rafeca/prettyjson): Package for formatting JSON data in a coloured YAML-style, perfect for CLI output
+- [**psi**](https://github.com/GoogleChromeLabs/psi): PageSpeed Insights with reporting
+- [**should**](https://github.com/shouldjs/should.js): Should is an expressive, readable, framework-agnostic assertion library. The main goals of this library are to be expressive and to be helpful. It keeps your test code clean, and your error messages helpful.
+- [**slap**](https://github.com/slap-editor/slap): Slap is a Sublime-like terminal-based text editor that strives to make editing from the terminal easier
+- [**sparkly**](https://github.com/sindresorhus/sparkly): Generate sparklines
+- [**tmi**](https://github.com/addyosmani/tmi): Find out the image weight in your pages, compare to the BigQuery quantiles and discover what images you can optimize further
+- [**vtop**](https://github.com/MrRio/vtop): A graphical activity monitor for the command line
 
 <Callout type='info'>For an up-to-date instructions on how to set up your machine and deal with dotfiles, head over to my article about my bash framwork [**gaudi**](/blog/category/engineering/gaudi-my-bash-framework)</Callout>
 
-# References
+## References
 
 ## Tutorials
 
 - [Execution sequence for .bash_profile, .bashrc, .bash_login, .profile and .bash_logout](http://www.thegeekstuff.com/2008/10/execution-sequence-for-bash_profile-bashrc-bash_login-profile-and-bash_logout/)
-- [Setting Up a Mac Dev Machine From Zero to Hero With Dotfiles](http://code.tutsplus.com/tutorials/setting-up-a-mac-dev-machine-from-zero-to-hero-with-dotfiles--net-35449)
+- [Awesome dotfiles tutorials](https://github.com/webpro/awesome-dotfiles#tutorials)
 
 ## Other `dotfiles` repositories
 

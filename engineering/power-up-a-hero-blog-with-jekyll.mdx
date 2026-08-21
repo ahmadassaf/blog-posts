@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'Power-up a hero blog with Jekyll'
-tags: ['Jekyll']
+tags: ['Jekyll', 'Static Site Generation', 'Blogging', 'Markdown']
 summary: "Having had my blog on WordPress for a while now, I thought I need a lighter platform especially since my blog content is very lightweight and I don't need a fully-fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
 subtitle: 'Setting up a modular Jekyll blog with Continuous Integration and Deployment'
 featured: false
@@ -17,7 +17,7 @@ In dynamic websites, as in the case of WordPress, when a visitor gets to a websi
 
 A static site proposes to shift the heavy load from the moment visitors request the content to the moment content changes. When a visitor requests a page, the content is already rendered and ready to be served as the build process had been already executed at the build stage offline.
 
-<aside>In the case of a blog (or at least my blog), after the post is written, it is rarely changed except when major content updates are needed.</aside>
+<Aside>In the case of a blog (or at least my blog), after the post is written, it is rarely changed except when major content updates are needed.</Aside>
 
 This means that whenever the content is changed, the whole site has to be rebuilt. For small sites, the build time is minimal. Yet, for larger ones, the build time can be about 10 times as long. The build time depends on some factors, such as the number of loops and other code complexities you have going on.
 
@@ -35,7 +35,7 @@ Jekyll uses the [Liquid templates](https://shopify.github.io/liquid/) to process
 First, a YAML front-matter block is at the beginning of every content file. It specifies the layout of the page and other variables, like title, date and tags. It may include custom page variables that you’ve created, too.
 Liquid template tags are used to execute loops and conditional statements and to output content.
 
-# Setting up the environment
+## Setting up the environment
 
 Jekyll is a command-line executable built with Ruby and has a few commands we need to run from time to time. Ruby comes installed by default on various operating systems, the latest stable version is 2.3.1, but anything above 2.2 should be fine. If you need to upgrade, we recommend using something like rbenv to make it easy.
 
@@ -67,7 +67,7 @@ For more detailed instructions about setting up Jekyll sites, I recommend readin
 
 Jekyll is, at its core, a text transformation engine. The concept behind the system is this: you give it text written in your favorite markup language, be that Markdown, Textile, or just plain HTML, and it churns that through a layout or a series of layout files.
 
-<aside> You can refer to Jekyll docs [documentation](https://jekyllrb.com/docs/structure/) for more detailed descriptions about the files and folders structure </aside>
+<Aside> You can refer to Jekyll docs [documentation](https://jekyllrb.com/docs/structure/) for more detailed descriptions about the files and folders structure </Aside>
 
 - **\_data**: In addition to the built-in variables in the main config, you can specify your own custom data that can be accessed from here
 - **\_includes**: Snippets of code that can be used throughout your templates
@@ -89,7 +89,7 @@ Jekyll is, at its core, a text transformation engine. The concept behind the sys
 - **posts.json**: JSON file containing data
 - **gruntfile.js**: The main build file using Grunt.js
 
-# Configuration
+## Configuration
 
 `_config.yml` is [Jekyll’s configuration file](https://jekyllrb.com/docs/configuration/), containing all of the settings for your Jekyll website. The great thing about \_config.yml is that you can also specify all of your own variables here to be pulled in via template files across the website. Some notable configurations are:
 
@@ -110,12 +110,12 @@ What is notable about a **page** is the ability to define a `permalink` in the f
 
 ## Collaborating on Posts
 
-Since one of the reasons I moved to Jekyll and markdown-based blog is to enable people to contribute to my posts. To do so, I host the posts into a [separate Github repository](https://github.com/ahmadassaf/blog) and include that as a separate git submodule by configuring the `.gitmodules` as follows:
+Since one of the reasons I moved to Jekyll and markdown-based blog is to enable people to contribute to my posts. To do so, I host the posts into a [separate Github repository](https://github.com/ahmadassaf/blog-posts) and include that as a separate git submodule by configuring the `.gitmodules` as follows:
 
 ```
 [submodule "_posts"]
     path = _posts
-    url = https://github.com/ahmadassaf/blog.git
+    url = https://github.com/ahmadassaf/blog-posts.git
 ```
 
 ## Featured Posts
@@ -310,7 +310,7 @@ When using Kramdown `{: .notice}` can be added after a sentence to assign the `.
 I use rouge syntax highlighter that comes with Jekyll. Rouge can be installed if not already via `gem install rouge` then enabled in `configs.yml` with `highlighter: rouge`. I am using a custom theme that is defined in `/assets/_sass/_syntax.scss`. For various themes and presets you can check:
 
 - [Obsidian theme for rouge syntax highlighter](http://vgaidarji.github.io/blog/2016/02/27/obsidian-theme-for-rouge-syntax-highlighter/)
-- [Darkly Pygments CSS Theme](http://sourcey.com/darkly-pygments-css-theme/)
+- [Pygments styles gallery](https://pygments.org/styles/)
 - [jekyll-pygments-themes](https://github.com/jwarby/jekyll-pygments-themes)
 
 For any of the later, you can simply copy and replace the code in `/assets/_sass/_syntax.scss` and you should be good to go.
@@ -345,7 +345,7 @@ _.each(posts, function (post) {
 })
 ```
 
-# Putting it all together
+## Putting it all together
 
 To wrap up all these features together I have created a little build script using `Grunt.js`. The notable build actions are:
 
@@ -469,7 +469,7 @@ grunt.registerTask('local', ['build', 'newer:imagemin', 'minified', 'concurrent:
 grunt.registerTask('default', 'build')
 ```
 
-# References
+## References
 
 - [jekyll-now - Build a Jekyll blog in minutes, without touching the command line](https://github.com/barryclark/jekyll-now)
 - [Jekyll and Continuous Integration with Travis CI](http://distresssignal.org/jekyll-continuous-integration-travis-ci)

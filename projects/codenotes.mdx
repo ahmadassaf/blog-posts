@@ -1,7 +1,7 @@
 ---
 type: 'Project'
 title: 'Code-Notes'
-tags: ['Node.js']
+tags: ['Node.js', 'npm', 'CLI', 'Developer Tools', 'Code Quality']
 summary: 'code-notes is a node.js version of Rails rake notes functionality. It allows you to put comments in your code and then have them annotated across your whole project'
 subtitle: 'Tool to summarise all code annotation like TODO or FIXME'
 layout: 'ProjectLayout'
@@ -11,7 +11,7 @@ date: '2018-08-07'
 category: 'projects'
 ---
 
-# code-notes
+## code-notes
 
 code-notes is a node.js version of Rails' "rake notes" functionality. It allows you to put comments in your code and then have them annotated across your whole project.
 
@@ -106,7 +106,7 @@ For example, if a file contained these lines somewhere in it:
 Those comments would be annotated as:
 
 ```
-• path/to/your/directory/file.js [7 messages]:
+- path/to/your/directory/file.js [7 messages]:
   [Line   1]  ✐ NOTE: This is here because sometimes an intermittent issue appears.
   [Line   7]  ↻ OPTIMIZE: This could be reworked to not do a O(N2) lookup.
   [Line   9]  ✓ TODO from Mr Author: Add a check here to ensure these are always strings.

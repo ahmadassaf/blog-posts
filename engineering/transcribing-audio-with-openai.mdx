@@ -1,7 +1,7 @@
 ---
 type: 'Post'
 title: 'Transcribing Audio & Video Using OpenAI Whisper API'
-tags: ['OpenAI', 'Generative AI', 'Audio Transcription', 'LLM']
+tags: ['OpenAI', 'Whisper', 'Audio Transcription', 'Automation', 'Developer Tools']
 summary: 'Audio transcription using OpenAI Generative AI model is not supported yet via the UI. To do this, you need to use the API and this comes with its own set of challenges. This post will show you how to do this task using OpenAI with a bit of Python'
 subtitle: 'Manage large audio or video files with pydub and OpenAI'
 featured: false
@@ -12,21 +12,21 @@ category: 'engineering'
 
 Transcribing audio has become an essential task in various fields, from creating subtitles for videos to converting meetings and interviews into text. OpenAI's Whisper API offers a powerful solution for this, providing high-accuracy speech-to-text capabilities. However, it's important to note that Whisper's transcription service is only accessible via the API and not through a graphical user interface (UI). This guide will walk you through using the Whisper API for transcribing audio, including handling file size restrictions by chunking the audio and aggregating the transcriptions.
 
-# Understanding the Whisper API
+## Understanding the Whisper API
 
 OpenAI's Whisper API is designed to convert speech to text with impressive accuracy. The API can handle various languages and accents, making it a versatile tool for global applications. However, the API comes with some limitations, particularly concerning the size of the audio files it can process. Currently, the Whisper API can handle audio files up to a specific size, which means longer recordings need to be split into smaller segments before transcription.
 
-# Restrictions and Limitations
+## Restrictions and Limitations
 
 The primary restriction of the Whisper API is its file size limit. It is generally recommended to keep audio files relatively small. This ensures smooth processing and avoids timeouts or errors during the transcription process. For longer recordings, you will need to divide the audio into smaller chunks, transcribe each chunk individually, and then combine the results.
 
-<Callout type='settings'>By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB’s or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost</Callout>
+<Callout type='warning'>By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB's or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost</Callout>
 
-# Preparing Your Audio Files
+## Preparing Your Audio Files
 
 To transcribe a long audio file using the Whisper API, you need to break it into smaller, manageable segments. This can be done using Python, which provides libraries for audio processing and API interaction. Here's a step-by-step guide on how to do this.
 
-# Step-by-Step Guide to Transcribing Audio with Whisper API
+## Step-by-Step Guide to Transcribing Audio with Whisper API
 
 ## 1. Install Required Libraries
 
@@ -131,7 +131,7 @@ print(full_transcription)
 
 For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/audio)
 
-# Update: How to transcribe video files
+## Update: How to transcribe video files
 
 Transcribing video files is similar to transcribing audio files. You can extract the audio from the video file and then follow the same process as described above. Here's a Python script to extract audio from a video file using the `moviepy` library:
 

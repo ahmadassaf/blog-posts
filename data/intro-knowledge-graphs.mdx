@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'An Introduction to Knowledge Graphs'
 subtitle: 'A comprehensive guide to Knowledge Graphs and their applications'
-tags: ['Semantic Web', 'Knowledge Graphs', 'Linked Data']
+tags: ['Knowledge Graphs', 'Knowledge Representation', 'Semantic Web', 'Databases', 'Linked Data']
 summary: 'Knowledge Graphs are a powerful tool for organizing and representing information in a structured way. In this post, we explore the concept of Knowledge Graphs, their applications, and how they are transforming the way we interact with data.'
 featured: true
 date: '2021-02-22'
@@ -22,7 +22,7 @@ In traditional data systems, information is often stored in siloed databases, ma
 - **Poor Relationship Representation**: Conventional databases often fall short in modeling complex interconnections between entities.
 - **Search Limitations**: Searching across structured and unstructured data seamlessly is challenging.
 
-<Callout type='info'> In his presentation [The Rationale for Semantic Technologies](https://www.slideshare.net/mkbergman/the-rationale-for-semantic-technologies#4), Mike Bergman defines the nature of the world as messy, complicated, interconnected, diverse and everychanging. As a result, our knowledge of this world is never complete, exists in structured, semi-structured and unstructured formats and can be found everywhere. This knowledge is contextual and MUST be coherent!  This is the world we live in and the world we are trying to model with Knowledge Graphs.</Callout>
+<Callout type='info'>In his presentation [The Rationale for Semantic Technologies](https://www.slideshare.net/mkbergman/the-rationale-for-semantic-technologies#4), Mike Bergman defines the world as messy, complicated, interconnected, diverse, and ever-changing. Our knowledge of this world is never complete. It exists in structured, semi-structured, and unstructured formats and can be found everywhere. This knowledge is contextual and must be coherent. This is the world we live in and the world we are trying to model with knowledge graphs.</Callout>
 
 A knowledge graph addresses these problems by integrating data from various sources into a unified graph structure. It represents [entities](https://en.wikipedia.org/wiki/Named_entity) as (nodes) that connect to each other through various relationships (edges) in a format that is both human-readable and machine-interpretable. This framework acts as a database, enabling complex queries by understanding the context and connections between various pieces of information. <Highlight>Knowledge graphs enhance AI applications by improving information retrieval and reasoning capabilities across multiple data sources powering tasks like semantic search, recommendation systems, and more.</Highlight>
 
@@ -30,35 +30,24 @@ A knowledge graph addresses these problems by integrating data from various sour
 
 The term knowledge graph has been used frequently in research and business, usually in close association with Semantic Web technologies, linked data, large-scale data analytics and cloud computing. The term "knowledge graph" is often mistakenly thought to have originated in 2012, when Google adopted it to describe its structured entity-attribute information, prominently featured on its search results pages. While Google's use of the term has significantly boosted its visibility and marketing appeal, the concept dates back much further. The phrase "knowledge graph" itself can be traced to the 1970s, and the underlying ideas go back even earlier.
 
-<aside>
-A knowledge graph, also known as a semantic network, represents a network of real-world entities—such as objects, events, situations or concepts—and illustrates the relationship between them. This information is usually stored in a graph database and visualized as a graph structure, prompting the term knowledge “graph.”[^1]
-</aside>
+<Aside>
+A knowledge graph, also known as a semantic network, represents a network of real-world entities-such as objects, events, situations or concepts-and illustrates the relationship between them. This information is usually stored in a graph database and visualized as a graph structure, prompting the term knowledge "graph."[^1]
+</Aside>
 
 [^1]: [What Is a Knowledge Graph?](https://www.ibm.com/topics/knowledge-graph)
 
-There has been lots of efforts to clearly define [what a Knowledge Graph is](https://ceur-ws.org/Vol-1695/paper4.pdf) but to put it simply; a knowledge graph is a network-based representation of knowledge that organizes data from multiple sources and captures information about entities of interest and the relationships between them. They are:
+There have been many efforts to clearly define [what a knowledge graph is](https://ceur-ws.org/Vol-1695/paper4.pdf). Put simply, a knowledge graph is a network-based representation of knowledge that organizes data from multiple sources and captures information about entities of interest and the relationships between them. Knowledge graphs are:
 
 - **Graphs**: unlike knowledge bases, the content of KGs is organised as a graph, where nodes (entities of interest and their types), relationships between and attributes of the nodes are equally important. This makes it easy to integrate new datasets and formats and supports exploration by navigating from one part of the graph to the other through links.
 - **Semantic**: the meaning of the data is encoded for programmatic use in an ontology, which describes the types of entities in the graph and their characteristics and can be represented as a schema sub-graph. This means that the graph is both a place to organise and store data, and to reason what it is about and derive new information.
 
-Knowledge Graphs consists of:
+Knowledge graphs consist of:
 
 - **Nodes**: Representing entities like people, places, things, or abstract concepts
 - **Edges**: Connections between nodes showing relationships
 - **Labels**: Attributes that define the relationships and reasoning rules
 
-At its core, a knowledge graph is data structure that connects data in a semantic way, allowing both humans and machines to understand the context and meaning of the information. Some live examples of Knowledge Graphs are the [Google Knowledge Graph](https://blog.google/products/search/introducing-knowledge-graph-things-not/) that powers search results with contextual insights and [LinkedIn's Economic Graph](https://economicgraph.linkedin.com/) that models professional connections and job market trends.
-
-<details>
-  <summary>Extended Intro on Knowledge Graphs from the [KG Book](https://kgbook.org/)</summary>  
-  <div>
-Although the term “knowledge graph” has appeared in academic literature since at least 1972 [@Schneider72], its modern usage gained prominence following Google's 2012 announcement of the Google Knowledge Graph [@GoogleKG]. This was soon followed by similar announcements from other major companies, including Airbnb [@AirBnBKG], Amazon [@AmazonKG], eBay [@eBayKG], Facebook [@NoyGJNPT19], IBM [@IBMKG], LinkedIn [@LinkedInKG], Microsoft [@BingKG], and Uber [@UberKG]. The increasing adoption of knowledge graphs in industry has sparked a surge of academic interest, resulting in a growing body of scientific literature on the topic. This includes books (e.g., [@PVGW2017] [@QiCLWJW19] [@FenselSAHKPTUW20] [@KejriwalKS2021]), papers defining the concept (e.g., [@EhrlingerW16]), innovative methodologies (e.g., [@PujaraMGC13] [@wang2014knowledge] [@lin2015learning]), and surveys focusing on specific aspects of knowledge graphs (e.g., [@Paulheim17] [@Wang2017KGEmbedding]).
-
-Central to these developments is the fundamental principle of representing data as graphs, often augmented with explicit mechanisms to encode knowledge [@NoyGJNPT19]. This approach is commonly used in applications that require the integration, management, and extraction of value from large-scale, heterogeneous data sources [@NoyGJNPT19]. Graph-based knowledge representation offers several advantages compared to relational databases or NoSQL alternatives. Graphs provide an intuitive and compact abstraction for modeling diverse domains, with edges naturally capturing potentially cyclical relationships inherent in areas such as social networks, biological systems, bibliographic citations, transport networks, and more [@AnglesG08]. They also enable schema flexibility, allowing data and its scope to evolve dynamically, which is particularly valuable for handling incomplete knowledge [@Abiteboul97]. Unlike other NoSQL approaches, graph-specific query languages support not only traditional relational operations (e.g., joins, unions, projections) but also navigational queries to discover entities linked by paths of arbitrary lengths [@AnglesABHRV17].
-
-Additionally, standard knowledge representation frameworks—such as ontologies [@OWL2] [@RDFS] [@obof] and rule-based systems [@swrl] [@rif]—can define and reason about the semantics of the nodes and edges in the graph. Scalable frameworks for graph analytics [@MalewiczABDHLC10] [@XinGFS13] [@signalcollect] enable tasks like computing centrality, clustering, and summarization to derive insights about the domain. Furthermore, specialized graph representations have been developed to facilitate the application of machine learning techniques, both directly and indirectly, on graph data [@Wang2017KGEmbedding] [@abs-1901-00596].
-  </div>
-</details>
+At its core, a knowledge graph is a data structure that connects data semantically, allowing both humans and machines to understand the information's context and meaning. Examples include the [Google Knowledge Graph](https://blog.google/products/search/introducing-knowledge-graph-things-not/), which powers search results with contextual insights, and [LinkedIn's Economic Graph](https://economicgraph.linkedin.com/), which models professional connections and job-market trends.
 
 | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                    | Source                           |
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
@@ -69,7 +58,6 @@ Additionally, standard knowledge representation frameworks—such as ontologies 
 | "[...] systems exist, [...], which use a variety of techniques to extract new knowledge, in the form of facts, from the web. These facts are interrelated, and hence, recently this extracted knowledge has been referred to as a knowledge graph."                                                                                                                                                       | Pujara et al. [@Pujara:KnowledgeGI:13]              |
 
 <div className="caption">Table 1: Selected definitions of knowledge graph - Towards a Definition of Knowledge Graphs [@Ehrlinger:ICSS:16]</div>
-
 
 # Different Types of Information Management Systems
 
@@ -142,9 +130,9 @@ A Graph is a non-linear data structure consisting of vertices and edges. The ver
 
 you can have a mix of types between those types e.g., **Directed Cyclic Graphs, Directed Labeled Cyclic Graphs, Directed Labeled Cyclic Multigraph, etc.**
 
-<aside>
+<Aside>
 🌲 Trees are the restricted types of graphs, just with some more rules. Every tree will always be a graph but not all graphs will be trees. **Linked List**, **Trees**, and **Heaps** all are special cases of graphs.
-</aside>
+</Aside>
 
 # Graphs as data models
 
@@ -163,7 +151,7 @@ Everything in an [RDF](https://www.w3.org/RDF/) graph is called a resource. “E
     
 There is a standard query language for [RDF](https://www.w3.org/RDF/) Graphs called [SPARQL](https://www.w3.org/TR/sparql11-query/). It is both, a full featured query language and an HTTP protocol making it possible to send query requests to endpoints over HTTP. A key part of the [RDF](https://www.w3.org/RDF/) standard is the definition of serializations. The most commonly used serialization format is called Turtle. There is also a JSON serialization called [JSON-LD](https://json-ld.org/) as well as an XML serialization. All [RDF](https://www.w3.org/RDF/) databases are able to export and import graph content in standard serializations making it easy and seamless to interchange data.    
 
-<Callout type='formal'>A *directed edge-labelled graph* is a tuple $G = (V, E, L)$, where $V \subseteq \text{Con}$ is a set of nodes, $L \subseteq \text{Con}$ is a set of edge labels, and $E \subseteq V \times L \times V$ is a set of edges.</Callout>
+<Callout type='info'>A *directed edge-labelled graph* is a tuple $G = (V, E, L)$, where $V \subseteq \text{Con}$ is a set of nodes, $L \subseteq \text{Con}$ is a set of edge labels, and $E \subseteq V \times L \times V$ is a set of edges.</Callout>
 
 ## Heterogeneous Graphs
 
@@ -173,7 +161,7 @@ An edge is called *homogeneous* if it connects two nodes of the same type and *h
 
 In contrast, directed edge-labelled graphs support a more flexible model where nodes can have zero or multiple types.
 
-<Callout type='formal'>A *heterogeneous graph* is a tuple $G = (V, E, L, l)$, where $V \subseteq \text{Con}$ is a set of nodes, $L \subseteq \text{Con}$ is a set of edge/node labels, $E \subseteq V \times L \times V$ is a set of edges, and $l : V \rightarrow L$ maps each node to a label.</Callout>
+<Callout type='info'>A *heterogeneous graph* is a tuple $G = (V, E, L, l)$, where $V \subseteq \text{Con}$ is a set of nodes, $L \subseteq \text{Con}$ is a set of edge/node labels, $E \subseteq V \times L \times V$ is a set of edges, and $l : V \rightarrow L$ maps each node to a label.</Callout>
 
 
 ## **Property Graphs**
@@ -188,20 +176,20 @@ Generally, the property graph data model consists of three elements:
 
 Property values can have data types. Supported data types depend on the vendor. For example, Neo4j data types are similar, but not identical, to Java language data types.
 
-<Callout type='formal'>A *property graph* is a tuple $G = (V, E, L, P, U, e, l, p)$, where: $V \subseteq \text{Con}$ is a set of node IDs, $E \subseteq \text{Con}$ is a set of edge IDs $L \subseteq \text{Con}$ is a set of labels, $P \subseteq \text{Con}$ is a set of properties, $U \subseteq \text{Con}$ is a set of values, $e : E \rightarrow V \times V$ maps an edge ID to a pair of node IDs, $l : V \cup E \rightarrow 2^L$ maps a node or edge ID to a set of labels, $p : V \cup E \rightarrow 2^{P \times U}$ maps a node or edge ID to a set of property–value pairs.</Callout>
+<Callout type='info'>A *property graph* is a tuple $G = (V, E, L, P, U, e, l, p)$, where: $V \subseteq \text{Con}$ is a set of node IDs, $E \subseteq \text{Con}$ is a set of edge IDs $L \subseteq \text{Con}$ is a set of labels, $P \subseteq \text{Con}$ is a set of properties, $U \subseteq \text{Con}$ is a set of values, $e : E \rightarrow V \times V$ maps an edge ID to a pair of node IDs, $l : V \cup E \rightarrow 2^L$ maps a node or edge ID to a set of labels, $p : V \cup E \rightarrow 2^{P \times U}$ maps a node or edge ID to a set of property-value pairs.</Callout>
 
 A key part of any data model is having a query language available for working with it. After all, users need to have a way to access and manipulate the data in the graph. No industry standard query language exists for property graphs. Instead, each database offers their own, unique query language that is incompatible with others:
 
-- [Neo4J](https://neo4j.com/) offers [Cypher](https://en.wikipedia.org/wiki/Cypher_(query_language)) also known as CQL—its own query language that, to some extent, took SQL as an inspiration.
-- [TigerGraph](https://www.tigergraph.com/) offers GSQL—its own query language that also took SQL as an inspiration.
+- [Neo4J](https://neo4j.com/) offers [Cypher](https://en.wikipedia.org/wiki/Cypher_(query_language)) also known as CQL-its own query language that, to some extent, took SQL as an inspiration.
+- [TigerGraph](https://www.tigergraph.com/) offers GSQL-its own query language that also took SQL as an inspiration.
 - MS SQL Graph has their own extension to SQL to support graph query.
 - Some vendors, in addition to their own query language, also implement some subset of Cypher. For example, SAP Hana offers its own extensions to SQL and its own GraphScript language plus they support a subset of Cypher.
 
 There is also [Apache TinkerPop](https://tinkerpop.apache.org/); which is an open source graph computing framework that is integrated with some property graph and [RDF](https://www.w3.org/RDF/) graph databases. It offers the Gremlin language which is more of an API language than a query language.
 
-A key requirement for working with any data model is the ability to reference nodes, properties and relationships (edges). In the case of property graphs, internally, nodes and edges have IDs. IDs are assigned by a database and are internal to a database. Referencing is done by using text strings—node labels, relationship types, and property names.
+A key requirement for working with any data model is the ability to reference nodes, properties and relationships (edges). In the case of property graphs, internally, nodes and edges have IDs. IDs are assigned by a database and are internal to a database. Referencing is done by using text strings-node labels, relationship types, and property names.
 
-## [RDF](https://www.w3.org/RDF/) vs. Property Graph
+## RDF vs. Property Graph
 
 | Feature | [RDF](https://www.w3.org/RDF/) | Property Graph |
 | --- | --- | --- |
@@ -234,7 +222,7 @@ A Knowledge Graph is a connected data structure of data and associated metadata 
 
 Knowledge Graphs (KGs) have emerged as a compelling abstraction for organising the world’s structured knowledge, and as a way to integrate information extracted from multiple data sources. Knowledge graphs have started to play a central role in representing the information extracted using natural language processing and computer vision. Domain knowledge expressed in KGs is being input into machine learning models to produce better predictions.
 
-The heart of the knowledge graph is a **knowledge model** – a collection of interlinked descriptions of concepts, entities, relationships and events where:
+The heart of the knowledge graph is a **knowledge model** - a collection of interlinked descriptions of concepts, entities, relationships and events where:
 
 - Descriptions have formal semantics that allow both people and computers to process them in an efficient and unambiguous manner;
 - Descriptions contribute to one another, forming a network, where each entity represents part of the description of the entities related to it;
@@ -246,9 +234,9 @@ Knowledge graphs combine characteristics of several data management paradigms:
 - **Graph**, because they can be analysed as any other network data structure;
 - **Knowledge base**, because they bear formal semantics, which can be used to interpret the data and infer new facts.
 
-<aside> 
-💬 “By 2025, graph technologies will be used in 80% of data and analytics innovations, up from 10% in 2021, facilitating rapid decision making across the enterprise. [^2]”
-</aside>
+<Aside>
+💬 “By 2025, graph technologies will be used in 80% of data and analytics innovations, up from 10% in 2021, facilitating rapid decision making across the enterprise” [^2]
+</Aside>
 
 [^2]: [Gartner "Market Guide: Graph Database Management Solutions"](https://www.gartner.com/en/documents/4018220)
 
@@ -265,10 +253,10 @@ Knowledge graphs combine characteristics of several data management paradigms:
 
 Knowledge graphs, represented in RDF, provide the best framework for data integration, unification, linking and reuse, because they combine:
 
-- **Expressivity**: The standards in the Semantic Web stack – [RDF](https://www.w3.org/RDF/), [RDFS](https://www.w3.org/TR/rdf-schema/) and [OWL](https://www.w3.org/TR/owl-features/) – allow for a fluent representation of various types of data and content: data schema, taxonomies and vocabularies, all sorts of metadata, reference and master data. The [RDF*](https://www.w3.org/groups/wg/rdf-star/) extension makes it easy to model provenance and other structured metadata.
+- **Expressivity**: The standards in the Semantic Web stack - [RDF](https://www.w3.org/RDF/), [RDFS](https://www.w3.org/TR/rdf-schema/) and [OWL](https://www.w3.org/TR/owl-features/) - allow for a fluent representation of various types of data and content: data schema, taxonomies and vocabularies, all sorts of metadata, reference and master data. The [RDF*](https://www.w3.org/groups/wg/rdf-star/) extension makes it easy to model provenance and other structured metadata.
 - **Performance**: All the specifications have been thought out, and proven in practice, to allow for efficient management of graphs of billions of facts and properties.
 - **Interoperability**: There is a range of specifications for data serialization, access ([SPARQL](https://www.w3.org/TR/sparql11-query/) Protocol for end-points), management ([SPARQL](https://www.w3.org/TR/sparql11-query/) Graph Store) and federation. The use of globally unique identifiers facilitates data integration and publishing.
-- **Standardization**: All the above is standardized through the W3C community process, to make sure that the requirements of different actors are satisfied – all the way from logicians to enterprise data management professionals and system operations teams.
+- **Standardization**: All the above is standardized through the W3C community process, to make sure that the requirements of different actors are satisfied - all the way from logicians to enterprise data management professionals and system operations teams.
 
 ## What is NOT a Knowledge Graph?
 
@@ -301,7 +289,7 @@ One of the major problems in machine learning industry is explaining the predict
 | [AWS Amazon Neptune](https://aws.amazon.com/neptune/) | Native | Property, [RDF](https://www.w3.org/RDF/) | Cloud | TinkerPop, Gremlin, [SPARQL](https://www.w3.org/TR/sparql11-query/) | TinkerPop | Open source, managed service | On-demand instances, storage, I/O, backups, data transfer |
 | [Cambridge Semantics AnzoGraph DB Engine](https://www.cambridgesemantics.com/anzograph/) | Native | [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) (property) | On-premises, multicloud, hybrid | OpenCypher, [SPARQL](https://www.w3.org/TR/sparql11-query/) | Built-in | Freemium, subscription | vCPU cores |
 | [DataStax Enterprise](https://www.cambridgesemantics.com/anzograph/) and  [DataStax Astra](https://www.datastax.com/products/datastax-astra) | Multimodel | Property | On-premises, multicloud | TinkerPop, Gremlin, GraphQL | TinkerPop | Open core | Nodes and consumption |
-| [Dgraph](https://dgraph.io/enterprise/) | Native | GraphQL, JSON, [RDF](https://www.w3.org/RDF/) | On-premises, cloud | DQL, GraphQL | Built-in | Open source, Apache 2.0 | CPUs per node |
+| [Dgraph](https://docs.dgraph.io/admin/enterprise-features/) | Native | GraphQL, JSON, [RDF](https://www.w3.org/RDF/) | On-premises, cloud | DQL, GraphQL | Built-in | Open source, Apache 2.0 | CPUs per node |
 | [Franz AllegroGraph](https://allegrograph.com/products/allegrograph/) | Multimodel | Document, graph (JSON-LD), [OWL](https://www.w3.org/TR/owl-features/), [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) | On-premises, multicloud, hybrid | SPARQL, SPARQL*, FedShard-Parallel, SPARQL, GraphQL, Prolog/Datalog, Lisp, JIG/Gremlin, domain-specific languages | Built-in | Closed source | CPU cores |
 | [MarkLogic](https://www.marklogic.com/product/marklogic-database-overview/) | Multimodel | Triples | On-premises, multicloud, hybrid | JavaScript, Optic, Search, SPARQL, XQuery | Built-in | Closed source (free developer version) | Cores, consumption (free developer version) |
 | [Microsoft Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) | Multimodel | Property | Cloud | Gremlin | Built-in | Open source, Apache 2.0 | Throughput capacity, serverless consumption |
@@ -309,7 +297,7 @@ One of the major problems in machine learning industry is explaining the predict
 | [Ontotext GraphDB](https://www.ontotext.com/products/graphdb/) | Native | [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) OWL/[RDFS](https://www.w3.org/TR/rdf-schema/) | On-premises, multicloud | GraphQL, SPARQL, SPARQL*,SQL | Built-in | Perpetual, subscription, limited free version | per-CPU |
 | [OpenLink Software Virtuoso](https://virtuoso.openlinksw.com/) | Multimodel | [RDF](https://www.w3.org/RDF/) | On-premises, multicloud, hybrid | SPARQL, SQL | Built-in | Closed source | Concurrent users and CPU affinity, per node |
 | [Oracle Database](https://www.oracle.com/database/graph/) | Multimodel | Property, [RDF](https://www.w3.org/RDF/) | On-premises, multicloud, hybrid | PGQL, [SPARQL](https://www.w3.org/TR/sparql11-query/) | Built-in | Perpetual, subscription | Perpetual: user/server/enterprise; subscription: consumption |
-| [RedisGraph](https://oss.redislabs.com/redisgraph/) | Multimodel | Property | On-premises, multicloud, hybrid | Cypher | LAGraph | Perpetual, subscription | Consumption (RGUs based on memory and throughput) |
+| [RedisGraph](https://github.com/RedisGraph/RedisGraph) | Multimodel | Property | On-premises, multicloud, hybrid | Cypher | LAGraph | Perpetual, subscription | Consumption (RGUs based on memory and throughput) |
 | [SAP Graph](https://explore.graph.sap/) | Multimodel | Property |  | GraphScript (proprietary), openCypher, SQL, SQLScript | Built-in | Perpetual, subscription | Perpetual: users; subscription: consumption |
 | [Stardog Enterprise Knowledge Graph Platform](https://www.stardog.com/platform/) | Native | [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) | On-premises, multicloud, hybrid | GraphQL, SPARQL, SQL | Built-in | Subscription | Nodes, consumption |
 | [TIBCO Graph Database](https://www.tibco.com/products/tibco-graph-database) | Native | Property | On-premises, multicloud, hybrid | Gremlin | Built-in | Freemium, perpetual, subscription | On-premises: cores, connection; subscription: consumption |
@@ -334,12 +322,12 @@ The Anzo Knowledge Graph Platform adds capabilities for knowledge graph manageme
 ### DataStax
 [DataStax](https://www.datastax.com/) is based in Santa Clara, California, and added graph capabilities to [DataStax Enterprise (DSE)](https://www.datastax.com/products/datastax-enterprise) in 2015. The capabilities are also available in DataStax’s cloud DBMS offering, [Astra](https://www.datastax.com/products/datastax-astra). A nonrelational multimodel DBMS, it supports property graphs using [GraphQL](https://graphql.org/) and [Gremlin](https://tinkerpop.apache.org/gremlin.html) for a query language. With its history as the leading commercializer of [Apache Cassandra](https://cassandra.apache.org/), DataStax offers an open-core version of that DBMS, with added features in the enterprise version including graph support. Version 6.8 offers graph data models implemented natively within Cassandra.
 
-[DataStax Studio](https://docs.datastax.com/en/studio/) supports developers writing queries in Cassandra Query Language (CQL), Graph/Gremlin, and Spark SQL language, and offers a collaborative notebook interface as well as visual exploration of DSE graphs without requiring Gremlin skills. DataStax Enterprise also offers support for both Gremlin algorithms and [GraphFrames](https://graphframes.github.io/), which integrate with [Apache Spark MLlib](https://spark.apache.org/mllib/). This enables the multimodel aspect of the product to support combinations of technologies across a variety of data collections for analytics use cases and ML. Given Cassandra’s broad adoption for operational use cases, this provides DataStax market differentiation.
+[DataStax Studio](https://docs.datastax.com/en/studio/) supports developers writing queries in Cassandra Query Language (CQL), Graph/Gremlin, and Spark SQL language, and offers a collaborative notebook interface as well as visual exploration of DSE graphs without requiring Gremlin skills. DataStax Enterprise also offers support for both Gremlin algorithms and [GraphFrames](https://graphframes.io/index.html), which integrate with [Apache Spark MLlib](https://spark.apache.org/mllib/). This enables the multimodel aspect of the product to support combinations of technologies across a variety of data collections for analytics use cases and ML. Given Cassandra’s broad adoption for operational use cases, this provides DataStax market differentiation.
 
 ### Dgraph
 [Dgraph](https://dgraph.io/) is based in Palo Alto, California, and is a recent entrant to the graph DBMS market with the Dgraph product in 2016. The platform is entirely written in the Go language with features aimed at the application development community, which is increasingly using [GraphQL](https://graphql.org/) as an API layer on top of graph data structures, and enterprise customers that use GraphQL as a layer to collect data from multiple back ends and present a unified service or API. There is a community edition available for download, together with hosted public and private cloud solutions in AWS, [Microsoft Azure](https://azure.microsoft.com/), and [Google Cloud Platform (GCP)](https://cloud.google.com/) with pricing based on CPU nodes.
 
-Dgraph is a native graph DBMS that handles JSON data as well as [RDF](https://www.w3.org/RDF/) triples. Querying the database, however, is done using the [Dgraph Query Language (DQL)](https://dgraph.io/docs/query-language/) and [GraphQL](https://graphql.org/). The platform is designed for real-time transactional workloads utilizing relationship-based sharding to optimize queries and traversals across distributed clusters. Dgraph is optimized for transactional workloads. Its native support for graph algorithms includes recursive traversal of graph and k-shortest path algorithms. Dgraph plans to support [Gremlin](https://tinkerpop.apache.org/gremlin.html) in upcoming releases. The product fits into the GraphQL ecosystem, including tools for querying and visualization.
+Dgraph is a native graph DBMS that handles JSON data as well as [RDF](https://www.w3.org/RDF/) triples. Querying the database, however, is done using the [Dgraph Query Language (DQL)](https://docs.dgraph.io/dql/) and [GraphQL](https://graphql.org/). The platform is designed for real-time transactional workloads utilizing relationship-based sharding to optimize queries and traversals across distributed clusters. Dgraph is optimized for transactional workloads. Its native support for graph algorithms includes recursive traversal of graph and k-shortest path algorithms. Dgraph plans to support [Gremlin](https://tinkerpop.apache.org/gremlin.html) in upcoming releases. The product fits into the GraphQL ecosystem, including tools for querying and visualization.
 
 ### Franz
 [Franz](https://franz.com/) is based in Lafayette, California, and entered the graph database market in 2006 with [AllegroGraph](https://franz.com/agraph/), a multimodel triplestore supporting documents and graphs that implements RDF*, [SPARQL*](https://en.wikipedia.org/wiki/SPARQL), and [JSON-LD](https://json-ld.org/). The platform can be deployed in on-premises and cloud environments with pricing based on CPU cores.
@@ -355,7 +343,7 @@ Graph traversal, graph analytics, graph algorithms, and ML are all included nati
 
 The MarkLogic Semantics capability is built into the core product and sold as a license option. It enables direct querying in [SPARQL](https://en.wikipedia.org/wiki/SPARQL) and reasoning support for [RDFS](https://www.w3.org/TR/rdf-schema/) and [OWL Horst](https://en.wikipedia.org/wiki/Web_Ontology_Language) ontologies. Custom rules can be defined using MarkLogic’s own language, which is based on the [SPARQL](https://www.w3.org/TR/sparql11-query/) Construct operator.
 
-MarkLogic can be deployed on-premises, in the cloud, or in hybrid deployments, and has APIs for SPARQL, JavaScript, XQuery, Search, SQL, REST, Java, Node.js, and Optic queries. It offers a free developer version and pricing by cores and/or consumption. It provides tools focused on data curation and access — queries can be against both data and metadata within the same query, making it well-suited to building data hubs. It also supports [ONNX](https://onnx.ai/) and [PyTorch](https://pytorch.org/) for ML.
+MarkLogic can be deployed on-premises, in the cloud, or in hybrid deployments, and has APIs for SPARQL, JavaScript, XQuery, Search, SQL, REST, Java, Node.js, and Optic queries. It offers a free developer version and pricing by cores and/or consumption. It provides tools focused on data curation and access - queries can be against both data and metadata within the same query, making it well-suited to building data hubs. It also supports [ONNX](https://onnx.ai/) and [PyTorch](https://pytorch.org/) for ML.
 
 ### Microsoft
 [Microsoft](https://www.microsoft.com/), based in Redmond, Washington, provides graph capabilities in three offerings: [Azure SQL](https://azure.microsoft.com/en-us/services/sql-database/), SQL Server, and [Azure Cosmos DB](https://azure.microsoft.com/en-us/products/cosmos-db/). Azure Cosmos DB is a nonrelational multimodel DBMS deployed as a managed service in the cloud. It provides a property graph model and supports [Gremlin](https://tinkerpop.apache.org/gremlin.html) as a query language.
@@ -381,7 +369,7 @@ The Ontotext Platform adds capabilities for schema creation, text processing pip
 [Oracle](https://www.oracle.com/) entered the graph DBMS market in 2009 with graph capabilities in its multimodel Oracle DBMS. It supports [SPARQL](https://www.w3.org/TR/sparql11-query/) and [PGQL](https://pgql-lang.org/). The Oracle DBMS includes a library of graph algorithms and supports ML with frameworks like pandas and NumPy.
 
 ### Redis Labs
-[Redis Labs](https://redis.com/) offers [RedisGraph](https://redis.io/docs/stack/graph/), a graph database module for Redis supporting the [Cypher](https://neo4j.com/developer/cypher/) query language. It integrates with [RedisAI](https://redis.io/docs/stack/ai/) for ML applications.
+[Redis Labs](https://redis.com/) offers [RedisGraph](https://github.com/RedisGraph/RedisGraph), a graph database module for Redis supporting the [Cypher](https://neo4j.com/developer/cypher/) query language. It integrates with [RedisAI](https://github.com/RedisAI/redis-inference-optimization) for ML applications.
 
 ### SAP
 [SAP HANA](https://www.sap.com/products/technology-platform/hana.html) supports property graphs with query via [GraphScript](https://help.sap.com/viewer/), [openCypher](https://opencypher.org/), and SQL. It includes a library of graph algorithms and integrates with [TensorFlow](https://www.tensorflow.org/).

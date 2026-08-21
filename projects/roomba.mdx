@@ -1,7 +1,7 @@
 ---
 type: 'Project'
 title: 'Roomba'
-tags: ['Open Data', 'Data Quality', 'Semantic Web', 'Linked Data']
+tags: ['Open Data', 'Data Quality', 'Linked Data', 'Metadata', 'Data Portals']
 summary: 'Roomba is a scalable automatic approach for extracting, validating and generating descriptive linked dataset profiles. This approach applies several techniques to check the validity of the attached metadata as well as providing descriptive and statistical information of a certain dataset as well as a whole data portal. Using our framework on prominent data portals shows that the general state of the Linked Open Data needs attention as most of datasets suffer from bad quality metadata and lack additional informative metrics'
 subtitle: 'Automatic Validation, Correction and Generation of Dataset Metadata'
 layout: ProjectLayout
@@ -11,7 +11,7 @@ date: '2018-08-07'
 category: 'projects'
 ---
 
-# Roomba
+## Roomba
 ### Automatic Validation, Correction and Generation of Dataset Metadata
 
 Linked Open Data (LOD) has emerged as one of the largest collection of interlinked datasets on the web. Benefiting from this mine of data requires the existence of descriptive information about each dataset in the accompanying metadata. Such meta information is currently very limited to few data portals where they are usually provided manually thus giving little or bad quality insights. To address this issue, we propose a scalable automatic approach for extracting, validating and generating descriptive linked dataset profiles. This approach applies several techniques to check the validity of the attached metadata as well as providing descriptive and statistical information of a certain dataset as well as a whole data portal. Using our framework on prominent data portals shows that the general state of the Linked Open Data needs attention as most of datasets suffer from bad quality metadata and lack additional informative metrics.
@@ -21,8 +21,7 @@ This application is designed for the command line (CLI) and is built using [node
 
 ## Architecture
 
-<Image className='dark:hidden mx-auto' width={800} height={800} src="/static/images/posts/linked-data-quality.svg"/>
-<Image className='hidden dark:block mx-auto' width={800} height={800} src="/static/images/posts/linked-data-quality-dark.svg"/>
+<Image className='mx-auto' width={800} height={800} src="/static/images/posts/linked-data-quality.svg" darkSrc="/static/images/posts/linked-data-quality-dark.svg" alt="linked-data-quality" />
 
 ### Data Portal Identification
 
@@ -39,7 +38,7 @@ The identification process for each portal can be easily customized by overridin
 
 Data portals expose a set of information about each dataset as metadata. The model used varies across portals. However, a standard model should contain information about the dataset's title, description, maintainer email, update and creation date, etc.
 
-Although Roomba is generic and accepts any data model to check against, for the moment we have used the the [CKAN standard model](http://goo.gl/8RofC8).
+Although Roomba is generic and accepts any data model to check against, for the moment we have used the the [CKAN standard model](https://docs.ckan.org/en/latest/api/).
 
 After identifying the underlying portal software, we perform iterative queries to the API in order to fetch datasets metadata and persist them in a file-based cache system.
 Depending on the portal software we can issue specific extraction jobs. For example, in CKAN based portals, we are able to crawl and extract the metadata of a specific dataset, all the datasets in a specific group e.g. LOD Cloud or all the datasets in the portal.
