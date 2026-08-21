@@ -18,8 +18,9 @@ visualisations/
     index.js
 ```
 
-Add each component to `visualisations/index.js`. The content-owned MDX renderer merges
-that catalogue with Gaudi's generic MDX primitives, so articles can write
+Add each component to `visualisations/index.js` as a dynamic import. The content-owned
+MDX renderer combines that catalogue with only the Gaudi primitives used by this
+content, so articles can write
 `<ComponentName />` without local imports. The host mounts this repository at
 `data/blog`, then imports `visualisations/MDXLayoutRenderer` as its client rendering
 boundary.
