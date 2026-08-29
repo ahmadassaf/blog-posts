@@ -131,9 +131,11 @@ const RdfContainerExplorer = ({
             const deltaX = x - 500;
             const startX = 500 + Math.max(-36, Math.min(36, deltaX * 0.12));
             const startY = 210 + Math.sqrt((64 ** 2) - ((startX - 500) ** 2));
-            const controlX = startX + Math.max(-80, Math.min(80, deltaX * 0.25));
             const landingY = preferred ? memberTopY - 12 : memberTopY - 2;
-            const edgePath = routedAlternative ? `M 455 255 C 360 290, 345 380, ${x - memberHalfWidth - 6} ${y}` : `M ${startX} ${startY} C ${controlX} ${startY + 38}, ${x} ${landingY - 38}, ${x} ${landingY}`;
+
+            // Tidy-tree curve: both controls at mid-height, so edges leave and land vertically
+            const midY = (startY + landingY) / 2;
+            const edgePath = routedAlternative ? `M 455 255 C 360 290, 345 380, ${x - memberHalfWidth - 6} ${y}` : `M ${startX} ${startY} C ${startX} ${midY}, ${x} ${midY}, ${x} ${landingY}`;
 
             // Labels hang beside the near-vertical tail of each edge, above the pill
             let labelX = x === 500 ? x - 40 : x + (x < 500 ? -40 : 40);
