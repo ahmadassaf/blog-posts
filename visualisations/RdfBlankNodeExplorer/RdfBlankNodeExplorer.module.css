@@ -217,18 +217,18 @@
 }
 
 .sourceKind {
-  fill: color-mix(in srgb, var(--ds-color-accent-foreground) 75%, transparent);
+  fill: var(--ds-color-text-muted);
 }
 
 .sourceTitle {
   fill: var(--ds-color-accent-foreground);
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .sourceCode {
   fill: color-mix(in srgb, var(--ds-color-accent-foreground) 78%, transparent);
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .literalNode rect {

@@ -77,7 +77,7 @@ const RdfCollectionExplorer = ({
           </g>
 
           <path d='M 148 225 C 204 225, 230 135, 276 135' className={ styles.entryEdge } markerEnd='url(#rdf-collection-rest-arrow)' />
-          <text x='214' y='176' textAnchor='middle' className={ styles.entryLabel }>ex:hasAdmins</text>
+          <text x='204' y='158' textAnchor='middle' className={ styles.entryLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
             const { valueY, x, y } = nodePositions[index];
