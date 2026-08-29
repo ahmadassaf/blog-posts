@@ -37,12 +37,12 @@ const baseMembers = [ 'A', 'B', 'C' ];
 
 const getPositions = (type, count) => {
   if (type === 'seq')
-    return count === 4 ? [[ 172, 460 ], [ 391, 460 ], [ 609, 460 ], [ 828, 460 ]] : [[ 260, 460 ], [ 500, 460 ], [ 740, 460 ]];
+    return count === 4 ? [[ 172, 400 ], [ 391, 400 ], [ 609, 400 ], [ 828, 400 ]] : [[ 260, 400 ], [ 500, 400 ], [ 740, 400 ]];
 
   if (type === 'bag')
-    return count === 4 ? [[ 172, 435 ], [ 391, 485 ], [ 609, 435 ], [ 828, 485 ]] : [[ 270, 435 ], [ 500, 485 ], [ 730, 435 ]];
+    return count === 4 ? [[ 172, 380 ], [ 391, 425 ], [ 609, 380 ], [ 828, 425 ]] : [[ 270, 380 ], [ 500, 420 ], [ 730, 380 ]];
 
-  return count === 4 ? [[ 500, 390 ], [ 190, 470 ], [ 810, 470 ], [ 500, 500 ]] : [[ 500, 390 ], [ 240, 470 ], [ 760, 470 ]];
+  return count === 4 ? [[ 500, 342 ], [ 190, 410 ], [ 810, 410 ], [ 500, 436 ]] : [[ 500, 342 ], [ 240, 410 ], [ 760, 410 ]];
 };
 
 const RdfContainerExplorer = ({
@@ -94,7 +94,7 @@ const RdfContainerExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF container graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 570' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
+        <svg className={ styles.graph } viewBox='0 0 1000 500' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
           <title id='rdf-container-title'>Interactive RDF container graph</title>
           <desc id='rdf-container-description'>Ahmad Assaf’s Blog points to an open RDF container. The selected container type changes how member nodes A, B, C, and optional D are arranged.</desc>
 
@@ -104,17 +104,17 @@ const RdfContainerExplorer = ({
             </marker>
           </defs>
 
-          <rect x='60' y='136' width='880' height='404' rx='80' className={ styles.openBoundary } />
-          <text x='884' y='166' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
+          <rect x='60' y='114' width='880' height='356' rx='64' className={ styles.openBoundary } />
+          <text x='884' y='142' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
-          <path d='M 500 98 C 500 122, 500 140, 500 162' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
-          <text x='484' y='128' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
+          <path d='M 500 82 C 500 102, 500 118, 500 138' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
+          <text x='484' y='108' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];
             const preferred = activeTypeId === 'alt' && index === 0;
-            const memberWidth = 210;
-            const memberHeight = 68;
+            const memberWidth = 180;
+            const memberHeight = 56;
             const memberHalfWidth = memberWidth / 2;
             const memberTopY = y - (memberHeight / 2);
             const edgeEndY = memberTopY - 6;
@@ -125,20 +125,20 @@ const RdfContainerExplorer = ({
              */
             const routedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 3;
             const edgePath = routedAlternative
-              ? `M 472 310 C 350 350, 330 445, ${x - memberHalfWidth - 6} ${y}`
-              : `M 500 314 C 500 358, ${x} ${memberTopY - 52}, ${x} ${edgeEndY}`;
+              ? `M 476 258 C 360 290, 345 380, ${x - memberHalfWidth - 6} ${y}`
+              : `M 500 260 C 500 300, ${x} ${memberTopY - 44}, ${x} ${edgeEndY}`;
 
             // Labels hang beside the near-vertical tail of each edge, above the pill
-            let labelX = x === 500 ? x - 46 : x + (x < 500 ? -46 : 46);
-            let labelY = memberTopY - 20;
+            let labelX = x === 500 ? x - 40 : x + (x < 500 ? -40 : 40);
+            let labelY = memberTopY - 18;
 
             if (routedAlternative) {
-              labelX = 296;
-              labelY = 428;
+              labelX = 308;
+              labelY = 370;
             } else if (activeTypeId === 'bag' && members.length === 4 && index === 2) {
 
               // Keep rdf:_3 on the inner side of its edge, clear of the sweep toward D
-              labelX = x - 46;
+              labelX = x - 40;
             }
 
             return (
@@ -151,11 +151,11 @@ const RdfContainerExplorer = ({
                 <text x={ labelX } y={ labelY } textAnchor='middle' className={ styles.memberEdgeLabel }>rdf:_{index + 1}</text>
                 {preferred && (
                   <rect
-                    x={ x - memberHalfWidth - 14 }
-                    y={ y - (memberHeight / 2) - 14 }
-                    width={ memberWidth + 28 }
-                    height={ memberHeight + 28 }
-                    rx={ (memberHeight + 28) / 2 }
+                    x={ x - memberHalfWidth - 10 }
+                    y={ y - (memberHeight / 2) - 10 }
+                    width={ memberWidth + 20 }
+                    height={ memberHeight + 20 }
+                    rx={ (memberHeight + 20) / 2 }
                     className={ styles.preferredHalo }
                   />
                 )}
@@ -167,26 +167,26 @@ const RdfContainerExplorer = ({
                   rx={ memberHeight / 2 }
                   className={ styles.memberNode }
                 />
-                <text x={ x } y={ y - 5 } textAnchor='middle' className={ styles.memberName }>{member}</text>
-                <text x={ x } y={ y + 18 } textAnchor='middle' className={ styles.memberIri }>https://assaf.website/{member}</text>
-                {preferred && <text x={ x } y={ y + 66 } textAnchor='middle' className={ styles.preferredLabel }>PREFERRED</text>}
+                <text x={ x } y={ y - 4 } textAnchor='middle' className={ styles.memberName }>{member}</text>
+                <text x={ x } y={ y + 16 } textAnchor='middle' className={ styles.memberIri }>https://assaf.website/{member}</text>
+                {preferred && <text x={ x } y={ y + 54 } textAnchor='middle' className={ styles.preferredLabel }>PREFERRED</text>}
               </g>
             );
           })}
 
           <g className={ styles.subjectNode }>
-            <rect x='405' y='30' width='190' height='64' rx='32' />
-            <text x='500' y='18' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
-            <text x='500' y='57' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
-            <text x='500' y='79' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
+            <rect x='415' y='24' width='170' height='54' rx='27' />
+            <text x='500' y='14' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
+            <text x='500' y='47' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
+            <text x='500' y='67' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
           </g>
 
           <g className={ styles.hub } data-type={ activeTypeId }>
-            <circle cx='500' cy='246' r='78' className={ styles.hubHalo } />
-            <circle cx='500' cy='246' r='62' className={ styles.hubNode } />
-            <text x='500' y='230' textAnchor='middle' className={ styles.nodeKindInverse }>TYPE</text>
-            <text x='500' y='260' textAnchor='middle' className={ styles.hubTitle }>{activeType.term}</text>
-            <text x='500' y='285' textAnchor='middle' className={ styles.hubMeaning }>{activeType.meaning}</text>
+            <circle cx='500' cy='210' r='62' className={ styles.hubHalo } />
+            <circle cx='500' cy='210' r='50' className={ styles.hubNode } />
+            <text x='500' y='196' textAnchor='middle' className={ styles.nodeKindInverse }>TYPE</text>
+            <text x='500' y='216' textAnchor='middle' className={ styles.hubTitle }>{activeType.term}</text>
+            <text x='500' y='236' textAnchor='middle' className={ styles.hubMeaning }>{activeType.meaning}</text>
           </g>
         </svg>
       </div>

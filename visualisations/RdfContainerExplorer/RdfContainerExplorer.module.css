@@ -270,12 +270,12 @@
 
 .hubTitle {
   font-family: var(--ds-font-mono);
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 850;
 }
 
 .hubMeaning {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 650;
 }
 
@@ -298,13 +298,13 @@
 
 .memberName {
   fill: var(--ds-color-text);
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 850;
 }
 
 .memberIri {
   fill: var(--ds-color-text-muted);
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .preferredLabel {
