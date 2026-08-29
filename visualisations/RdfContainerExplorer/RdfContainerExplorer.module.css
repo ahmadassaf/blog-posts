@@ -229,7 +229,7 @@
   font-size: 12px;
 }
 
-.subjectNode circle {
+.subjectNode rect {
   fill: var(--ds-color-accent);
   stroke: var(--ds-color-accent-dark);
   stroke-width: 3;

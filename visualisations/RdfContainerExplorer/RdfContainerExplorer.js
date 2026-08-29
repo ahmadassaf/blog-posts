@@ -116,8 +116,8 @@ const RdfContainerExplorer = ({
           <rect x='340' y='25' width='820' height='450' rx='96' className={ styles.openBoundary } />
           <text x='750' y='54' textAnchor='middle' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
-          <path d='M 222 250 C 295 250, 360 250, 430 250' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
-          <text x='326' y='230' textAnchor='middle' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
+          <path d='M 259 250 C 315 250, 370 250, 430 250' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
+          <text x='344' y='230' textAnchor='middle' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];
@@ -183,11 +183,10 @@ const RdfContainerExplorer = ({
           })}
 
           <g className={ styles.subjectNode }>
-            <circle cx='160' cy='250' r='58' />
-            <text x='160' y='182' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
-            <text x='160' y='240' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s</text>
-            <text x='160' y='259' textAnchor='middle' className={ styles.subjectTitle }>Blog</text>
-            <text x='160' y='281' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
+            <rect x='65' y='216' width='190' height='68' rx='34' />
+            <text x='160' y='204' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
+            <text x='160' y='245' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
+            <text x='160' y='267' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
           </g>
 
           <g className={ styles.hub } data-type={ activeTypeId }>
