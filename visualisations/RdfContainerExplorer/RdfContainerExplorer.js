@@ -117,16 +117,23 @@ const RdfContainerExplorer = ({
             const memberHeight = 56;
             const memberHalfWidth = memberWidth / 2;
             const memberTopY = y - (memberHeight / 2);
-            const edgeEndY = memberTopY - 6;
 
             /*
              * The fourth alternative sits below the preferred member, so its
              * edge routes around the preferred halo instead of through it.
              */
             const routedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 3;
-            const edgePath = routedAlternative
-              ? `M 476 258 C 360 290, 345 380, ${x - memberHalfWidth - 6} ${y}`
-              : `M 500 260 C 500 300, ${x} ${memberTopY - 44}, ${x} ${edgeEndY}`;
+
+            /*
+             * Edges leave the hub along its rim, spread toward their target so
+             * the fan never braids, and land on the pill (or preferred halo).
+             */
+            const deltaX = x - 500;
+            const startX = 500 + Math.max(-36, Math.min(36, deltaX * 0.12));
+            const startY = 210 + Math.sqrt((64 ** 2) - ((startX - 500) ** 2));
+            const controlX = startX + Math.max(-80, Math.min(80, deltaX * 0.25));
+            const landingY = preferred ? memberTopY - 12 : memberTopY - 2;
+            const edgePath = routedAlternative ? `M 455 255 C 360 290, 345 380, ${x - memberHalfWidth - 6} ${y}` : `M ${startX} ${startY} C ${controlX} ${startY + 38}, ${x} ${landingY - 38}, ${x} ${landingY}`;
 
             // Labels hang beside the near-vertical tail of each edge, above the pill
             let labelX = x === 500 ? x - 40 : x + (x < 500 ? -40 : 40);
