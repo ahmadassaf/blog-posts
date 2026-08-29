@@ -84,7 +84,7 @@ const RdfBlankNodeExplorer = ({
 
             return (
               <g className={ styles.branch } data-active={ active } key={ branch.id }>
-                <path d={ `M 252 225 C 340 225, 350 ${branch.y}, 444 ${branch.y}` } className={ styles.influenceEdge } />
+                <path d={ `M 289 225 C 360 225, 355 ${branch.y}, 444 ${branch.y}` } className={ styles.influenceEdge } />
                 <g
                   className={ `${styles.edgeLabel} ${styles.influenceLabel}` }
                   transform={ `translate(340 ${influenceLabelY})` }
@@ -123,11 +123,10 @@ const RdfBlankNodeExplorer = ({
           })}
 
           <g className={ styles.sourceNode }>
-            <circle cx='190' cy='225' r='58' />
-            <text x='190' y='157' textAnchor='middle' className={ styles.sourceKind }>NAMED RESOURCE</text>
-            <text x='190' y='215' textAnchor='middle' className={ styles.sourceTitle }>Ahmad Assaf’s</text>
-            <text x='190' y='234' textAnchor='middle' className={ styles.sourceTitle }>Blog</text>
-            <text x='190' y='256' textAnchor='middle' className={ styles.sourceCode }>ex:Blog</text>
+            <rect x='95' y='191' width='190' height='68' rx='34' />
+            <text x='190' y='179' textAnchor='middle' className={ styles.sourceKind }>NAMED RESOURCE</text>
+            <text x='190' y='220' textAnchor='middle' className={ styles.sourceTitle }>Ahmad Assaf’s Blog</text>
+            <text x='190' y='242' textAnchor='middle' className={ styles.sourceCode }>ex:Blog</text>
           </g>
 
           <text x='68' y='471' className={ styles.readoutNode }>{activeBranch.node}</text>

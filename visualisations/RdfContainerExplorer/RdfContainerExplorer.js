@@ -35,23 +35,14 @@ const containerTypes = {
 
 const baseMembers = [ 'A', 'B', 'C' ];
 
-const cubicCoordinate = (start, controlA, controlB, end, progress) => {
-  const inverse = 1 - progress;
-
-  return (inverse ** 3 * start) +
-    (3 * inverse ** 2 * progress * controlA) +
-    (3 * inverse * progress ** 2 * controlB) +
-    (progress ** 3 * end);
-};
-
 const getPositions = (type, count) => {
   if (type === 'seq')
-    return count === 4 ? [[ 930, 90 ], [ 930, 195 ], [ 930, 300 ], [ 930, 405 ]] : [[ 930, 110 ], [ 930, 250 ], [ 930, 390 ]];
+    return count === 4 ? [[ 172, 545 ], [ 391, 545 ], [ 609, 545 ], [ 828, 545 ]] : [[ 260, 545 ], [ 500, 545 ], [ 740, 545 ]];
 
   if (type === 'bag')
-    return count === 4 ? [[ 825, 100 ], [ 1040, 190 ], [ 825, 400 ], [ 1040, 310 ]] : [[ 875, 110 ], [ 1040, 250 ], [ 875, 390 ]];
+    return count === 4 ? [[ 172, 510 ], [ 391, 565 ], [ 609, 510 ], [ 828, 565 ]] : [[ 270, 510 ], [ 500, 565 ], [ 730, 510 ]];
 
-  return count === 4 ? [[ 810, 250 ], [ 1030, 95 ], [ 1040, 250 ], [ 1030, 405 ]] : [[ 850, 250 ], [ 1030, 110 ], [ 1030, 390 ]];
+  return count === 4 ? [[ 500, 470 ], [ 190, 560 ], [ 810, 560 ], [ 500, 592 ]] : [[ 500, 470 ], [ 240, 560 ], [ 760, 560 ]];
 };
 
 const RdfContainerExplorer = ({
@@ -103,7 +94,7 @@ const RdfContainerExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF container graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 10 1200 480' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
+        <svg className={ styles.graph } viewBox='0 0 1000 660' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
           <title id='rdf-container-title'>Interactive RDF container graph</title>
           <desc id='rdf-container-description'>Ahmad Assaf’s Blog points to an open RDF container. The selected container type changes how member nodes A, B, C, and optional D are arranged.</desc>
 
@@ -113,11 +104,11 @@ const RdfContainerExplorer = ({
             </marker>
           </defs>
 
-          <rect x='340' y='25' width='820' height='450' rx='96' className={ styles.openBoundary } />
-          <text x='750' y='54' textAnchor='middle' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
+          <rect x='60' y='165' width='880' height='465' rx='96' className={ styles.openBoundary } />
+          <text x='884' y='198' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
-          <path d='M 259 250 C 315 250, 370 250, 430 250' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
-          <text x='344' y='230' textAnchor='middle' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
+          <path d='M 500 106 C 500 148, 500 180, 500 214' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
+          <text x='484' y='146' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];
@@ -125,28 +116,25 @@ const RdfContainerExplorer = ({
             const memberWidth = 210;
             const memberHeight = 68;
             const memberHalfWidth = memberWidth / 2;
-            const edgeEndX = x - memberHalfWidth;
-            const edgeSpanX = edgeEndX - 568;
-            const edgeControlAX = 568 + (edgeSpanX * 0.35);
-            const edgeControlBX = 568 + (edgeSpanX * 0.55);
-            const labelProgress = 0.55;
-            const routedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 2;
-            const separatedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 1;
-            const edgePath = separatedAlternative ? `M 568 250 C 625 205, 760 95, ${edgeEndX} 95` : routedAlternative ? `M 568 250 C 650 250, 700 175, 800 175 C 875 175, 910 215, ${edgeEndX} 250` : `M 568 250 C ${edgeControlAX} 250, ${edgeControlBX} ${y}, ${edgeEndX} ${y}`;
-            let labelX = cubicCoordinate(568, edgeControlAX, edgeControlBX, edgeEndX, labelProgress);
-            let labelY = cubicCoordinate(250, 250, y, y, labelProgress) - 20;
+            const memberTopY = y - (memberHeight / 2);
+            const edgeEndY = memberTopY - 6;
+
+            /*
+             * The fourth alternative sits below the preferred member, so its
+             * edge routes around the preferred halo instead of through it.
+             */
+            const routedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 3;
+            const edgePath = routedAlternative
+              ? `M 472 366 C 330 420, 320 510, ${x - memberHalfWidth - 6} ${y}`
+              : `M 500 368 C 500 424, ${x} ${memberTopY - 64}, ${x} ${edgeEndY}`;
+
+            // Labels hang beside the near-vertical tail of each edge, above the pill
+            let labelX = x === 500 ? x - 46 : x + (x < 500 ? -46 : 46);
+            let labelY = memberTopY - 22;
 
             if (routedAlternative) {
-              labelX = 850;
-              labelY = 155;
-            } else if (separatedAlternative) {
-              labelX = 700;
-              labelY = 120;
-            } else if (activeTypeId === 'alt' && members.length === 4 && index === 3) {
-
-              // Keep rdf:_4 below its curve, clear of the PREFERRED caption under member A
-              labelX = 700;
-              labelY = 356;
+              labelX = 296;
+              labelY = 508;
             }
 
             return (
@@ -183,18 +171,18 @@ const RdfContainerExplorer = ({
           })}
 
           <g className={ styles.subjectNode }>
-            <rect x='65' y='216' width='190' height='68' rx='34' />
-            <text x='160' y='204' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
-            <text x='160' y='245' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
-            <text x='160' y='267' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
+            <rect x='405' y='38' width='190' height='64' rx='32' />
+            <text x='500' y='26' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
+            <text x='500' y='65' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
+            <text x='500' y='87' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
           </g>
 
           <g className={ styles.hub } data-type={ activeTypeId }>
-            <circle cx='500' cy='250' r='78' className={ styles.hubHalo } />
-            <circle cx='500' cy='250' r='62' className={ styles.hubNode } />
-            <text x='500' y='234' textAnchor='middle' className={ styles.nodeKindInverse }>TYPE</text>
-            <text x='500' y='264' textAnchor='middle' className={ styles.hubTitle }>{activeType.term}</text>
-            <text x='500' y='289' textAnchor='middle' className={ styles.hubMeaning }>{activeType.meaning}</text>
+            <circle cx='500' cy='300' r='78' className={ styles.hubHalo } />
+            <circle cx='500' cy='300' r='62' className={ styles.hubNode } />
+            <text x='500' y='284' textAnchor='middle' className={ styles.nodeKindInverse }>TYPE</text>
+            <text x='500' y='314' textAnchor='middle' className={ styles.hubTitle }>{activeType.term}</text>
+            <text x='500' y='339' textAnchor='middle' className={ styles.hubMeaning }>{activeType.meaning}</text>
           </g>
         </svg>
       </div>
