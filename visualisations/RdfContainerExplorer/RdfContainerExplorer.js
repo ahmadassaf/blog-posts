@@ -37,12 +37,12 @@ const baseMembers = [ 'A', 'B', 'C' ];
 
 const getPositions = (type, count) => {
   if (type === 'seq')
-    return count === 4 ? [[ 172, 545 ], [ 391, 545 ], [ 609, 545 ], [ 828, 545 ]] : [[ 260, 545 ], [ 500, 545 ], [ 740, 545 ]];
+    return count === 4 ? [[ 172, 460 ], [ 391, 460 ], [ 609, 460 ], [ 828, 460 ]] : [[ 260, 460 ], [ 500, 460 ], [ 740, 460 ]];
 
   if (type === 'bag')
-    return count === 4 ? [[ 172, 510 ], [ 391, 565 ], [ 609, 510 ], [ 828, 565 ]] : [[ 270, 510 ], [ 500, 565 ], [ 730, 510 ]];
+    return count === 4 ? [[ 172, 435 ], [ 391, 485 ], [ 609, 435 ], [ 828, 485 ]] : [[ 270, 435 ], [ 500, 485 ], [ 730, 435 ]];
 
-  return count === 4 ? [[ 500, 470 ], [ 190, 560 ], [ 810, 560 ], [ 500, 592 ]] : [[ 500, 470 ], [ 240, 560 ], [ 760, 560 ]];
+  return count === 4 ? [[ 500, 390 ], [ 190, 470 ], [ 810, 470 ], [ 500, 500 ]] : [[ 500, 390 ], [ 240, 470 ], [ 760, 470 ]];
 };
 
 const RdfContainerExplorer = ({
@@ -94,7 +94,7 @@ const RdfContainerExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF container graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 660' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
+        <svg className={ styles.graph } viewBox='0 0 1000 570' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
           <title id='rdf-container-title'>Interactive RDF container graph</title>
           <desc id='rdf-container-description'>Ahmad Assaf’s Blog points to an open RDF container. The selected container type changes how member nodes A, B, C, and optional D are arranged.</desc>
 
@@ -104,11 +104,11 @@ const RdfContainerExplorer = ({
             </marker>
           </defs>
 
-          <rect x='60' y='165' width='880' height='465' rx='96' className={ styles.openBoundary } />
-          <text x='884' y='198' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
+          <rect x='60' y='136' width='880' height='404' rx='80' className={ styles.openBoundary } />
+          <text x='884' y='166' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
-          <path d='M 500 106 C 500 148, 500 180, 500 214' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
-          <text x='484' y='146' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
+          <path d='M 500 98 C 500 122, 500 140, 500 162' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
+          <text x='484' y='128' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];
@@ -125,16 +125,20 @@ const RdfContainerExplorer = ({
              */
             const routedAlternative = activeTypeId === 'alt' && members.length === 4 && index === 3;
             const edgePath = routedAlternative
-              ? `M 472 366 C 330 420, 320 510, ${x - memberHalfWidth - 6} ${y}`
-              : `M 500 368 C 500 424, ${x} ${memberTopY - 64}, ${x} ${edgeEndY}`;
+              ? `M 472 310 C 350 350, 330 445, ${x - memberHalfWidth - 6} ${y}`
+              : `M 500 314 C 500 358, ${x} ${memberTopY - 52}, ${x} ${edgeEndY}`;
 
             // Labels hang beside the near-vertical tail of each edge, above the pill
             let labelX = x === 500 ? x - 46 : x + (x < 500 ? -46 : 46);
-            let labelY = memberTopY - 22;
+            let labelY = memberTopY - 20;
 
             if (routedAlternative) {
               labelX = 296;
-              labelY = 508;
+              labelY = 428;
+            } else if (activeTypeId === 'bag' && members.length === 4 && index === 2) {
+
+              // Keep rdf:_3 on the inner side of its edge, clear of the sweep toward D
+              labelX = x - 46;
             }
 
             return (
@@ -171,18 +175,18 @@ const RdfContainerExplorer = ({
           })}
 
           <g className={ styles.subjectNode }>
-            <rect x='405' y='38' width='190' height='64' rx='32' />
-            <text x='500' y='26' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
-            <text x='500' y='65' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
-            <text x='500' y='87' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
+            <rect x='405' y='30' width='190' height='64' rx='32' />
+            <text x='500' y='18' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
+            <text x='500' y='57' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
+            <text x='500' y='79' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
           </g>
 
           <g className={ styles.hub } data-type={ activeTypeId }>
-            <circle cx='500' cy='300' r='78' className={ styles.hubHalo } />
-            <circle cx='500' cy='300' r='62' className={ styles.hubNode } />
-            <text x='500' y='284' textAnchor='middle' className={ styles.nodeKindInverse }>TYPE</text>
-            <text x='500' y='314' textAnchor='middle' className={ styles.hubTitle }>{activeType.term}</text>
-            <text x='500' y='339' textAnchor='middle' className={ styles.hubMeaning }>{activeType.meaning}</text>
+            <circle cx='500' cy='246' r='78' className={ styles.hubHalo } />
+            <circle cx='500' cy='246' r='62' className={ styles.hubNode } />
+            <text x='500' y='230' textAnchor='middle' className={ styles.nodeKindInverse }>TYPE</text>
+            <text x='500' y='260' textAnchor='middle' className={ styles.hubTitle }>{activeType.term}</text>
+            <text x='500' y='285' textAnchor='middle' className={ styles.hubMeaning }>{activeType.meaning}</text>
           </g>
         </svg>
       </div>
