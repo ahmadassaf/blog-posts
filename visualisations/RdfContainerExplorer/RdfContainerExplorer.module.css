@@ -181,9 +181,6 @@
   }
 }
 
-.arrowHead {
-  fill: var(--ds-color-accent);
-}
 
 .openBoundary {
   fill: color-mix(in srgb, var(--ds-color-accent) 4%, transparent);

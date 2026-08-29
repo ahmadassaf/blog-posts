@@ -37,12 +37,12 @@ const baseMembers = [ 'A', 'B', 'C' ];
 
 const getPositions = (type, count) => {
   if (type === 'seq')
-    return count === 4 ? [[ 172, 400 ], [ 391, 400 ], [ 609, 400 ], [ 828, 400 ]] : [[ 260, 400 ], [ 500, 400 ], [ 740, 400 ]];
+    return count === 4 ? [[ 172, 415 ], [ 391, 415 ], [ 609, 415 ], [ 828, 415 ]] : [[ 260, 415 ], [ 500, 415 ], [ 740, 415 ]];
 
   if (type === 'bag')
-    return count === 4 ? [[ 172, 380 ], [ 391, 425 ], [ 609, 380 ], [ 828, 425 ]] : [[ 270, 380 ], [ 500, 420 ], [ 730, 380 ]];
+    return count === 4 ? [[ 172, 390 ], [ 391, 440 ], [ 609, 390 ], [ 828, 440 ]] : [[ 270, 390 ], [ 500, 440 ], [ 730, 390 ]];
 
-  return count === 4 ? [[ 500, 342 ], [ 190, 410 ], [ 810, 410 ], [ 500, 436 ]] : [[ 500, 342 ], [ 240, 410 ], [ 760, 410 ]];
+  return count === 4 ? [[ 500, 360 ], [ 190, 430 ], [ 810, 430 ], [ 500, 458 ]] : [[ 500, 372 ], [ 240, 430 ], [ 760, 430 ]];
 };
 
 const RdfContainerExplorer = ({
@@ -94,20 +94,14 @@ const RdfContainerExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF container graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 500' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
+        <svg className={ styles.graph } viewBox='0 0 1000 520' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
           <title id='rdf-container-title'>Interactive RDF container graph</title>
           <desc id='rdf-container-description'>Ahmad Assaf’s Blog points to an open RDF container. The selected container type changes how member nodes A, B, C, and optional D are arranged.</desc>
 
-          <defs>
-            <marker id='rdf-container-arrow' viewBox='0 0 12 12' refX='10' refY='6' markerWidth='8' markerHeight='8' orient='auto'>
-              <path d='M 1 1 L 11 6 L 1 11 Z' className={ styles.arrowHead } />
-            </marker>
-          </defs>
-
-          <rect x='60' y='114' width='880' height='356' rx='64' className={ styles.openBoundary } />
+          <rect x='60' y='114' width='880' height='376' rx='64' className={ styles.openBoundary } />
           <text x='884' y='142' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
-          <path d='M 500 82 C 500 102, 500 118, 500 138' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
+          <path d='M 500 82 C 500 104, 500 126, 500 147' className={ styles.subjectEdge } />
           <text x='484' y='108' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
@@ -131,19 +125,23 @@ const RdfContainerExplorer = ({
             const deltaX = x - 500;
             const startX = 500 + Math.max(-36, Math.min(36, deltaX * 0.12));
             const startY = 210 + Math.sqrt((64 ** 2) - ((startX - 500) ** 2));
-            const landingY = preferred ? memberTopY - 12 : memberTopY - 2;
+            const landingY = preferred ? memberTopY - 10 : memberTopY;
 
-            // Tidy-tree curve: both controls at mid-height, so edges leave and land vertically
-            const midY = (startY + landingY) / 2;
-            const edgePath = routedAlternative ? `M 455 255 C 360 290, 345 380, ${x - memberHalfWidth - 6} ${y}` : `M ${startX} ${startY} C ${startX} ${midY}, ${x} ${midY}, ${x} ${landingY}`;
+            /*
+             * Tidy-tree curve (controls at mid-height) into a short straight
+             * drop, so the arrowhead always sits centered on a vertical line.
+             */
+            const tailTopY = landingY - 24;
+            const midY = (startY + tailTopY) / 2;
+            const edgePath = routedAlternative ? `M 455 255 C 360 300, 345 400, ${x - memberHalfWidth - 6} ${y}` : `M ${startX} ${startY} C ${startX} ${midY}, ${x} ${midY}, ${x} ${tailTopY} L ${x} ${landingY}`;
 
             // Labels hang beside the near-vertical tail of each edge, above the pill
             let labelX = x === 500 ? x - 40 : x + (x < 500 ? -40 : 40);
             let labelY = memberTopY - 18;
 
             if (routedAlternative) {
-              labelX = 308;
-              labelY = 370;
+              labelX = 302;
+              labelY = 392;
             } else if (activeTypeId === 'bag' && members.length === 4 && index === 2) {
 
               // Keep rdf:_3 on the inner side of its edge, clear of the sweep toward D
@@ -155,7 +153,6 @@ const RdfContainerExplorer = ({
                 <path
                   d={ edgePath }
                   className={ styles.memberEdge }
-                  markerEnd='url(#rdf-container-arrow)'
                 />
                 <text x={ labelX } y={ labelY } textAnchor='middle' className={ styles.memberEdgeLabel }>rdf:_{index + 1}</text>
                 {preferred && (
