@@ -186,10 +186,11 @@
 }
 
 .openBoundary {
-  fill: transparent;
-  stroke: color-mix(in srgb, var(--ds-color-accent) 55%, var(--ds-color-border));
-  stroke-dasharray: 9 8;
-  stroke-width: 2;
+  fill: color-mix(in srgb, var(--ds-color-accent) 4%, transparent);
+  stroke: color-mix(in srgb, var(--ds-color-accent) 45%, var(--ds-color-border));
+  stroke-dasharray: 0.5 11;
+  stroke-linecap: round;
+  stroke-width: 2.5;
 }
 
 .openLabel,
@@ -235,18 +236,18 @@
 }
 
 .nodeKind {
-  fill: var(--ds-color-accent-foreground);
+  fill: var(--ds-color-text-muted);
 }
 
 .subjectTitle {
   fill: var(--ds-color-accent-foreground);
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .nodeCode {
   fill: var(--ds-color-accent-foreground);
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .hubHalo {
@@ -290,10 +291,9 @@
 }
 
 .preferredHalo {
-  fill: transparent;
-  stroke: var(--ds-color-warning);
-  stroke-dasharray: 5 5;
-  stroke-width: 2;
+  fill: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+  stroke: color-mix(in srgb, var(--ds-color-warning) 55%, transparent);
+  stroke-width: 1.5;
 }
 
 .memberName {

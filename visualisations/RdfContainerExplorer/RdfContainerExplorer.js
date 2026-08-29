@@ -49,7 +49,7 @@ const getPositions = (type, count) => {
     return count === 4 ? [[ 930, 90 ], [ 930, 195 ], [ 930, 300 ], [ 930, 405 ]] : [[ 930, 110 ], [ 930, 250 ], [ 930, 390 ]];
 
   if (type === 'bag')
-    return count === 4 ? [[ 825, 100 ], [ 1040, 180 ], [ 825, 320 ], [ 1040, 400 ]] : [[ 875, 110 ], [ 1040, 250 ], [ 875, 390 ]];
+    return count === 4 ? [[ 825, 100 ], [ 1040, 190 ], [ 825, 400 ], [ 1040, 310 ]] : [[ 875, 110 ], [ 1040, 250 ], [ 875, 390 ]];
 
   return count === 4 ? [[ 810, 250 ], [ 1030, 95 ], [ 1040, 250 ], [ 1030, 405 ]] : [[ 850, 250 ], [ 1030, 110 ], [ 1030, 390 ]];
 };
@@ -59,7 +59,7 @@ const RdfContainerExplorer = ({
   description = 'Change the container type and watch the graph reorganize around order, equivalence, or preference.',
   className = ''
 }) => {
-  const [ activeTypeId, setActiveTypeId ] = useState('seq');
+  const [ activeTypeId, setActiveTypeId ] = useState('alt');
   const [ extended, setExtended ] = useState(false);
   const activeType = containerTypes[activeTypeId];
   const members = extended ? [ ...baseMembers, 'D' ] : baseMembers;
@@ -113,11 +113,11 @@ const RdfContainerExplorer = ({
             </marker>
           </defs>
 
-          <rect x='340' y='25' width='820' height='450' rx='72' className={ styles.openBoundary } />
+          <rect x='340' y='25' width='820' height='450' rx='96' className={ styles.openBoundary } />
           <text x='750' y='54' textAnchor='middle' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
-          <path d='M 246 250 C 310 250, 365 250, 430 250' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
-          <text x='338' y='218' textAnchor='middle' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
+          <path d='M 222 250 C 295 250, 360 250, 430 250' className={ styles.subjectEdge } markerEnd='url(#rdf-container-arrow)' />
+          <text x='326' y='230' textAnchor='middle' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];
@@ -142,6 +142,11 @@ const RdfContainerExplorer = ({
             } else if (separatedAlternative) {
               labelX = 700;
               labelY = 120;
+            } else if (activeTypeId === 'alt' && members.length === 4 && index === 3) {
+
+              // Keep rdf:_4 below its curve, clear of the PREFERRED caption under member A
+              labelX = 700;
+              labelY = 356;
             }
 
             return (
@@ -178,11 +183,11 @@ const RdfContainerExplorer = ({
           })}
 
           <g className={ styles.subjectNode }>
-            <circle cx='160' cy='250' r='76' />
-            <text x='160' y='226' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
-            <text x='160' y='257' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s</text>
-            <text x='160' y='280' textAnchor='middle' className={ styles.subjectTitle }>Blog</text>
-            <text x='160' y='303' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
+            <circle cx='160' cy='250' r='58' />
+            <text x='160' y='182' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
+            <text x='160' y='240' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s</text>
+            <text x='160' y='259' textAnchor='middle' className={ styles.subjectTitle }>Blog</text>
+            <text x='160' y='281' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
           </g>
 
           <g className={ styles.hub } data-type={ activeTypeId }>
