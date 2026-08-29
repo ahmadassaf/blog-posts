@@ -42,7 +42,7 @@ const getPositions = (type, count) => {
   if (type === 'bag')
     return count === 4 ? [[ 172, 390 ], [ 391, 440 ], [ 609, 390 ], [ 828, 440 ]] : [[ 270, 390 ], [ 500, 440 ], [ 730, 390 ]];
 
-  return count === 4 ? [[ 500, 360 ], [ 190, 430 ], [ 810, 430 ], [ 500, 458 ]] : [[ 500, 372 ], [ 240, 430 ], [ 760, 430 ]];
+  return count === 4 ? [[ 500, 360 ], [ 190, 430 ], [ 810, 430 ], [ 500, 462 ]] : [[ 500, 372 ], [ 240, 430 ], [ 760, 430 ]];
 };
 
 const RdfContainerExplorer = ({
@@ -94,15 +94,15 @@ const RdfContainerExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF container graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 520' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
+        <svg className={ styles.graph } viewBox='0 0 1000 534' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
           <title id='rdf-container-title'>Interactive RDF container graph</title>
           <desc id='rdf-container-description'>Ahmad Assaf’s Blog points to an open RDF container. The selected container type changes how member nodes A, B, C, and optional D are arranged.</desc>
 
-          <rect x='60' y='114' width='880' height='376' rx='64' className={ styles.openBoundary } />
+          <rect x='60' y='114' width='880' height='390' rx='64' className={ styles.openBoundary } />
           <text x='884' y='142' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
           <path d='M 500 82 C 500 104, 500 126, 500 147' className={ styles.subjectEdge } />
-          <text x='484' y='108' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
+          <text x='484' y='100' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];
@@ -133,7 +133,7 @@ const RdfContainerExplorer = ({
              */
             const tailTopY = landingY - 24;
             const midY = (startY + tailTopY) / 2;
-            const edgePath = routedAlternative ? `M 455 255 C 360 300, 345 400, ${x - memberHalfWidth - 6} ${y}` : `M ${startX} ${startY} C ${startX} ${midY}, ${x} ${midY}, ${x} ${tailTopY} L ${x} ${landingY}`;
+            const edgePath = routedAlternative ? `M 455 255 C 360 300, 345 405, ${x - memberHalfWidth + 1} ${y}` : `M ${startX} ${startY} C ${startX} ${midY}, ${x} ${midY}, ${x} ${tailTopY} L ${x} ${landingY}`;
 
             // Labels hang beside the near-vertical tail of each edge, above the pill
             let labelX = x === 500 ? x - 40 : x + (x < 500 ? -40 : 40);
