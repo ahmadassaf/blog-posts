@@ -38,6 +38,8 @@ Every chart below is genuinely useful, and every one of them can be gamed or mis
 
 The sprint burndown tracks remaining work through the sprint: time on the x-axis, work left (story points or hours) on the y-axis, ideally reaching zero by the sprint's end. A team that consistently meets its forecast is the best internal advertisement for agile there is.
 
+<AgileChartsExplorer chart='burndown' />
+
 How it lies: the numbers are easy to fudge. Declaring an item done before it really is makes the chart look great this sprint and destroys the learning it exists to produce. Watch for these patterns:
 
 - Finishing early sprint after sprint: the team is under-committing.
@@ -49,11 +51,15 @@ How it lies: the numbers are easy to fudge. Declaring an item done before it rea
 
 The same idea at a larger scale: progress across a body of work spanning many sprints. Here's the nuance that trips teams up: scope change at this level is *healthy*. As the team learns, the product owner should be adding and removing work. "Scope creep" is a problem inside a sprint; across an epic, it's the whole point of being agile. The chart's job is to keep that ebb and flow visible to everyone.
 
+<AgileChartsExplorer chart='epic' />
+
 How it lies: mostly by neglect. Forecasts that never get updated as the team churns through work, several iterations with no visible progress, scope growing faster than the team absorbs it, or an epic that never ships anything incrementally along the way. Chronic, unexamined scope growth usually means the product owner doesn't yet understand the problem the epic is meant to solve.
 
 ### Velocity
 
 Velocity is the team's average completed work per sprint, and it's the forecasting tool: if the backlog holds 500 points and the team averages 50 a sprint, you can reasonably plan around ten sprints. The more iterations behind the average, the better the forecast. New teams should expect velocity to climb as they gel; mature teams should expect it to hold steady, and a sustained drop is a retro topic, not a stick.
+
+<AgileChartsExplorer chart='velocity' />
 
 How it lies: velocity is only comparable to itself. Each team's estimation culture is unique, so team A at 50 points versus team B at 75 tells you *nothing* about who delivers more. The moment velocity is compared across teams or turned into a target, people re-inflate estimates and the number stops meaning anything. If velocity swings erratically, revisit estimation in the retro: were there challenges you couldn't see when estimating? Is outside pressure pushing commitments past reality? Are you simply forecasting with too much optimism?
 
@@ -61,11 +67,15 @@ How it lies: velocity is only comparable to itself. Each team's estimation cultu
 
 Cycle time is how long one item takes from "in progress" to "done", and the control chart plots it per issue with a rolling average. It's the primary Kanban metric, but Scrum teams benefit just as much. What you want is a short, *consistent* cycle time regardless of work type, because consistency is what makes delivery predictable. It's also the fastest feedback loop in this list: change your process this week, and cycle time reacts almost immediately.
 
+<AgileChartsExplorer chart='control' />
+
 How it lies: through outliers and noise. Don't chase every spike; look for trends. Rising cycle time saps agility and deserves a retro (with one honest exception: if you expanded your definition of done, cycle time expanding with it is correct, not a regression). Erratic cycle time for similarly-sized items points at estimation misses: filter the chart by story-point value and look at each band separately.
 
 ### Cumulative flow
 
 The cumulative flow diagram shows how many items sit in each workflow state over time, and healthy flow reads as smooth, roughly parallel bands. Bubbles or gaps in a band are shortages and bottlenecks made visible.
+
+<AgileChartsExplorer chart='flow' />
 
 How it lies: quietly, at the edges. A blocked band means backups in one state and starvation downstream, and items stuck in intermediate states like "In Review" aren't just idle: the longer they sit, the nastier the integration conflicts when they finally merge. The other classic: a backlog band growing forever because obsolete items never get closed. That's not demand, that's hoarding.
 

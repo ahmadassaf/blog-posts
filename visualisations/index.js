@@ -11,6 +11,7 @@
 import dynamic from 'next/dynamic';
 
 const AgileCadenceExplorer = dynamic(() => import('./AgileCadenceExplorer'));
+const AgileChartsExplorer = dynamic(() => import('./AgileChartsExplorer'));
 const GaudiBarLayout = dynamic(() => import('./GaudiBarLayout'));
 const LinkedDataQualityFramework = dynamic(() => import('./LinkedDataQualityFramework'));
 const PipelineDiagram = dynamic(() => import('./PipelineDiagram'));
@@ -22,6 +23,7 @@ const UnifiedProcessorExplorer = dynamic(() => import('./UnifiedProcessorExplore
 
 export const VisualisationComponents = {
   AgileCadenceExplorer,
+  AgileChartsExplorer,
   GaudiBarLayout,
   LinkedDataQualityFramework,
   PipelineDiagram,
