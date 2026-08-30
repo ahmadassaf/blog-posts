@@ -31,3 +31,135 @@ Metadata is essentially data about data. For a blog, this includes information a
 
 JSON-LD has been a W3C Standard since 2010. Structured data expressed in JSON-LD uses the familiar JSON structure but has been especially developed for expressing information using structured data (or, linked data) vocabularies - such as [schema.org](https://schema.org/), a collaborative project that provides a collection of shared vocabularies for marking up structured data on the internet.
 
+In practice, a JSON-LD block is just a `<script>` tag of type `application/ld+json` in the page's markup. A minimal description of a blog post looks like this:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Enabling Semantic Linked Data in Your Next.js Blog",
+  "datePublished": "2023-09-05",
+  "author": {
+    "@type": "Person",
+    "name": "Ahmad Assaf"
+  }
+}
+```
+
+Search engines parse these blocks independently of your visible HTML, so you can describe your content as richly as you like without touching the layout. The rest of this post walks through how this very blog wires that up, and every file referenced lives in the [public repository](https://github.com/ahmadassaf/blog) if you want to lift the structure wholesale.
+
+## How This Blog Implements JSON-LD
+
+The implementation is deliberately layered so that every fact lives in exactly one place:
+
+- [data/meta/metadata.js](https://github.com/ahmadassaf/blog/blob/main/data/meta/metadata.js) is the single source of identity truth: site title, description, canonical URL, and the author's social profiles. Every metadata surface (page metadata, JSON-LD, RSS, the manifest, and the sitemap) derives from this one object.
+- [data/meta/JSON-LD](https://github.com/ahmadassaf/blog/tree/main/data/meta/JSON-LD) holds the Schema.org entities as plain constants: the `Person`, the `WebSite`, the `Blog`, and the organisations the author is affiliated with.
+- [data/meta/generator/post.js](https://github.com/ahmadassaf/blog/blob/main/data/meta/generator/post.js) exports `linkedDataGenerator`, which turns a post's frontmatter into a full `BlogPosting` description at build time.
+
+### Describing the Author and the Site
+
+The static entities are just exported objects. The author is a Schema.org `Person` that pulls its identity values from the shared metadata module instead of hard-coding them:
+
+```js
+export const author = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  'affiliation': organisation,
+  'alumniOf': alumni,
+  'email': metadata.email,
+  'jobTitle': 'CTO at Mav9',
+  'name': metadata.author,
+  'sameAs': [ metadata.twitter, metadata.github, metadata.linkedin ],
+  'url': metadata.siteUrl
+};
+```
+
+The `WebSite` entity reuses the same values, and the `Blog` entity simply derives from it by spreading and overriding the fields that differ:
+
+```js
+export const blog = {
+  ...website,
+  '@type': 'Blog',
+  'mainEntityOfPage': {
+    '@id': metadata.siteUrl,
+    '@type': 'WebSite'
+  },
+  'url': `${metadata.siteUrl}/blog`
+};
+```
+
+Because these are plain constants that share one metadata source, a change like a new social profile or a domain move propagates to every JSON-LD block automatically.
+
+### Injecting the Site-Wide Entity
+
+The root layout hands the `WebSite` entity to the layout container, which serializes it into the document head for every page:
+
+```js
+import { website } from '@/data/meta/JSON-LD/website';
+
+<LayoutContainer jsonLd={ website } metadata={ siteMetadata } navigation={ NavigationMetadata }>
+  {children}
+</LayoutContainer>
+```
+
+Under the hood that renders the familiar script tag:
+
+```js
+<script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': jsonLdMarkup }} />
+```
+
+### Generating a BlogPosting per Article
+
+Each article page then adds its own `BlogPosting` block. The generator maps frontmatter onto Schema.org fields, including the tags as linked `Thing` entities, the reading-time word count, and the Open Graph image the post already generates for social cards:
+
+```js
+export function linkedDataGenerator(post) {
+  const postUrl = `${siteMetadata.siteUrl}${postPath(post)}`;
+  const ogImage = `${siteMetadata.siteUrl}/api/og?slug=${post.slug}`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    'about': (post.tags || []).map((tag) => ({
+      '@id': `${siteMetadata.siteUrl}/blog/tags/${slugify(tag)}`,
+      '@type': 'Thing',
+      'name': tag
+    })),
+    author,
+    'dateModified': post.updated || post.date,
+    'datePublished': post.date,
+    'headline': post.title,
+    'image': { '@type': 'ImageObject', 'url': ogImage, 'width': '1200', 'height': '630' },
+    'isPartOf': blog,
+    'keywords': post.tags || [],
+    'mainEntityOfPage': { '@id': postUrl, '@type': 'WebPage' },
+    'url': postUrl,
+    'wordCount': post.readingTime?.words || 0
+  };
+}
+```
+
+The [post page](https://github.com/ahmadassaf/blog/blob/main/app/blog/category/%5B...slug%5D/page.js) renders it next to the article content:
+
+```js
+<script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': JSON.stringify(linkedDataGenerator(post)) }} key='post-jsonld'/>
+```
+
+Since this runs in a server component at build time, the structured data ships as static HTML. There is no client-side JavaScript cost and crawlers see it on the first request.
+
+## Validating the Output
+
+Before trusting any of this, verify what actually ships:
+
+- **View source**: open any article, view the page source, and search for `ld+json`. You should find two blocks, the site-wide `WebSite` and the per-article `BlogPosting`.
+- **[Google Rich Results Test](https://search.google.com/test/rich-results)**: paste an article URL and confirm the `BlogPosting` is detected and eligible for rich results.
+- **[Schema.org validator](https://validator.schema.org/)**: a stricter, vendor-neutral check that surfaces typos in property names and malformed nesting that Google's tool quietly ignores.
+
+Run these once after wiring things up and again whenever the generator changes; a single misspelled property fails silently otherwise.
+
+## Wrapping Up
+
+Structured data is one of the cheapest SEO and interoperability wins available to a Next.js blog: a handful of constant objects, one generator function, and two script tags. The layering matters more than the volume, so keep identity facts in one module, derive the Schema.org entities from it, and generate per-article descriptions from the frontmatter you already maintain.
+
+The complete, working setup, from the metadata module to the generator and the injection points, is in the [blog's public repository](https://github.com/ahmadassaf/blog). Lift it, adapt the vocabulary to your content types, and let the machines finally understand what you write.
+
