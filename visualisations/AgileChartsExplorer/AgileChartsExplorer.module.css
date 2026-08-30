@@ -26,6 +26,71 @@
   line-height: 1.55;
 }
 
+.toolbar {
+  display: flex;
+  padding: 0.5rem 0 1rem;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.typeTabs {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3cqi, 2rem);
+}
+
+.typeTabs button {
+  position: relative;
+  display: flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0;
+  border: 0;
+  background: transparent;
+  align-items: baseline;
+  color: var(--ds-color-text-muted);
+  cursor: pointer;
+  font: inherit;
+  gap: 0.35rem;
+}
+
+.typeTabs button::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: transparent;
+  content: '';
+}
+
+.typeTabs button[data-active='true'] {
+  color: var(--ds-color-accent-dark);
+}
+
+.typeTabs button[data-active='true']::after {
+  background: var(--ds-color-accent);
+}
+
+.typeTabs button:hover {
+  color: var(--ds-color-accent-dark);
+}
+
+.typeTabs button:focus-visible {
+  outline: 2px solid var(--ds-color-accent);
+  outline-offset: 3px;
+}
+
+.typeTabs strong {
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.typeTabs span {
+  font-size: 0.6875rem;
+}
+
 .scrollHint {
   display: none;
   margin: 0;
@@ -259,6 +324,15 @@
 }
 
 @container (max-width: 38rem) {
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .typeTabs {
+    justify-content: space-between;
+  }
+
   .readoutPrimary {
     grid-template-columns: 1fr;
     gap: 0.25rem;
