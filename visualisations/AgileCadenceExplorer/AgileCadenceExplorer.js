@@ -20,9 +20,9 @@ const modes = {
     'stages': [
       { 'blurb': 'Priorities live here in strict order. The product owner can reshuffle it at any time without disturbing anyone, because nothing here is being worked on yet.', 'cards': 5, 'id': 'backlog', 'name': 'Backlog' },
       { 'blurb': 'The short runway of agreed next work. When someone frees up, they pull from the top. Nobody assigns work downward.', 'cards': 3, 'id': 'todo', 'name': 'To Do' },
-      { 'blurb': 'The heart of Kanban: capped work in progress. The limit is what turns a to-do list into a system, because a full column forces the team to finish before starting.', 'cards': 3, 'id': 'progress', 'name': 'In Progress', 'wip': 3 },
-      { 'blurb': 'A deliberately low limit. Reviews rot when they queue, so a full review column sends developers to review before they write more code.', 'cards': 2, 'id': 'review', 'name': 'Review', 'wip': 2 },
-      { 'blurb': 'Cards ship one at a time, whenever they land. There is no release ceremony to wait for, which is why Kanban pairs so naturally with continuous delivery.', 'cards': 4, 'id': 'done', 'name': 'Done' }
+      { 'blurb': 'Only three items may live here at once. When the column is full, the team’s attention has nowhere left to go but finishing something.', 'cards': 3, 'id': 'progress', 'name': 'In Progress', 'wip': 3 },
+      { 'blurb': 'Capped even lower, on purpose. A full column here blocks anything new from entering the board, so clearing it becomes the fastest route back to writing code.', 'cards': 2, 'id': 'review', 'name': 'Review', 'wip': 2 },
+      { 'blurb': 'Cards land here one at a time, and each one can go out the door the moment it arrives. The column is the release.', 'cards': 4, 'id': 'done', 'name': 'Done' }
     ],
     'term': 'Flow'
   },
@@ -32,9 +32,9 @@ const modes = {
     'meaning': 'fixed sprints',
     'stages': [
       { 'blurb': 'The team pulls what fits from the backlog and commits to a single sprint goal. The goal is the contract; the stories are just the current plan for reaching it.', 'id': 'plan', 'name': 'Sprint Planning' },
-      { 'blurb': 'A fixed time box, most commonly two weeks. The daily scrum keeps the plan honest: fifteen minutes to surface blockers, not to read out calendars.', 'id': 'sprint', 'name': 'The Sprint', 'sub': 'daily scrum inside' },
-      { 'blurb': 'The team demos the increment to stakeholders. What everyone learns here reshuffles the product backlog before the next planning session.', 'id': 'review', 'name': 'Sprint Review' },
-      { 'blurb': 'The team inspects itself rather than the product: what to keep, what to drop, what to try next sprint. Skipping this is how process debt accumulates.', 'id': 'retro', 'name': 'Retrospective' }
+      { 'blurb': 'A fixed time box, most commonly two weeks, with a daily scrum inside as its heartbeat. Nothing outside the sprint goal is allowed to interrupt it; that protection is what the box buys.', 'id': 'sprint', 'name': 'The Sprint', 'sub': 'daily scrum inside' },
+      { 'blurb': 'The increment meets its stakeholders. Whatever they say here becomes the raw material for the next pass over the product backlog.', 'id': 'review', 'name': 'Sprint Review' },
+      { 'blurb': 'The one ceremony aimed at the team itself. Its output is not a list of complaints; it is the single experiment the team will run next sprint.', 'id': 'retro', 'name': 'Retrospective' }
     ],
     'term': 'Cadence'
   }

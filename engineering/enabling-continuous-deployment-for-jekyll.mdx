@@ -8,6 +8,8 @@ date: '2016-02-03'
 category: 'engineering'
 ---
 
+*This post is from 2016. Travis CI's free tier for open source is long gone, and this exact setup would live in GitHub Actions today, but the pattern (build, validate, push the built site to the server over SSH) holds up unchanged.*
+
 Static sites are great and have various advantages. However, I am aware of how much easier to use WordPress is for lots of users. If we want to compare WordPress workflow to that of a static site: even though making changes to my Jekyll site may seem rather easy to me, it really isn’t that straightforward:
  - Write a post in Markdown
  - Commit changes to GitHub
@@ -86,12 +88,12 @@ The only thing I'd like to note if you are using the `jekyll serve` approach is 
 </VirtualHost>
 ```
 
-For various reason that I am still not sure what, this process failed to me as the website was not updating as I was pushing changes. For example, when I push to Github, the build triggers and the build is successful and is able to pull the latest for the main repo and the submodule but the git hooks seem to never be fired. However, I have tried to pull manually from the repo and indeed the hooks were triggered then.
+For reasons I am still not sure about, this process failed for me as the website was not updating as I was pushing changes. For example, when I push to Github, the build triggers and the build is successful and is able to pull the latest for the main repo and the submodule but the git hooks seem to never be fired. However, I have tried to pull manually from the repo and indeed the hooks were triggered then.
 
 What I tried as well was creating a new script called `deploy.sh` which will be called as well as part of the codeship custom script so that the script is:
 
 ```bash
-ssh -root@SERVER 'cd /var/www/blog; npm install; git pull origin master; git submodule foreach git pull origin master; bash /var/www/blog/deploy.sh'
+ssh root@SERVER 'cd /var/www/blog; npm install; git pull origin master; git submodule foreach git pull origin master; bash /var/www/blog/deploy.sh'
 ```
 
 And the `deploy.sh` has the correct permissions and is:
@@ -106,7 +108,7 @@ Where the file `deployment.txt` will contain a log of the latest commit messages
 
 I have tried to add a remote in my web server called `production` so that I can push directly to my server with git push production master .. the data is pushed indeed but I still dont get the hooks to be run at all.
 
-As a result of my failed attempts, I had to try another approach and I decided to go and try [TravisCI](travis-ci.org).
+As a result of my failed attempts, I had to try another approach and I decided to go and try [TravisCI](https://www.travis-ci.com).
 
 ## Going the Travis way
 
@@ -157,7 +159,7 @@ Which should output something like this:
 
 ```bash
 Generating public/private rsa key pair.
-Enter file in which to save the key (/Users/USNER_NAME/.ssh/id_rsa): deploy-key
+Enter file in which to save the key (/Users/USER_NAME/.ssh/id_rsa): deploy-key
 ```
 
 It will also ask for a passphrase; leave that blank. This process should leave you with two files in your `.ssh` folder: `deploy-key`, which is your private key (this is like a password, so protect it at all times!) and `deploy-key.pub`, your public key.
@@ -288,7 +290,7 @@ notifications:
 
 There are [various configurations that we can set up to customize the build](https://docs.travis-ci.com/user/customizing-the-build). Our configuration file defines Ruby as the main language, and version 2.2 as the version that should be installed on Travis with `rvm`.
 
-We define as well what files and folders to cache. This is of great important as it speeds up our build significantly. [Caches](https://docs.travis-ci.com/user/caching) lets Travis CI store directories between builds, which is useful for storing dependencies that take longer to compile or download. For us, we cache the dependencies for Jekyll with `bundler` and all of our `node_modules` as well.
+We define as well what files and folders to cache. This is of great importance as it speeds up our build significantly. [Caches](https://docs.travis-ci.com/user/caching) lets Travis CI store directories between builds, which is useful for storing dependencies that take longer to compile or download. For us, we cache the dependencies for Jekyll with `bundler` and all of our `node_modules` as well.
 
 We also add our server IP address as well as our SSH IP address (I did this as I have a different SSH port number that the default one) as known hosts so that I don’t get a warning when I try to connect to it.
 
@@ -303,7 +305,7 @@ Before starting any of the process we need to make sure that we have set up our 
 set -x # Show the output of the following commands (useful for debugging)
 
 # Import the SSH deployment key
-openssl aes-256-cbc -K $encrypted_7bbee2d42c21_key -iv $encrypted_7bbee2d42c21_iv -in deploy-key.enc -out deploy-key -d
+openssl aes-256-cbc -K $encrypted_22009518e18d_key -iv $encrypted_22009518e18d_iv -in deploy-key.enc -out deploy-key -d
 rm deploy-key.enc # Don't need it anymore
 chmod 600 deploy-key
 mv deploy-key ~/.ssh/id_rsa

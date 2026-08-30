@@ -1,65 +1,76 @@
 ---
 type: 'Post'
 title: 'Using ContentLayer with Next.js'
-subtitle: 'Leveraging the power of ContentLayer to manage my blog content'
+subtitle: 'What Contentlayer dying under my blog taught me about content infrastructure'
 tags: ['Contentlayer', 'Next.js', 'MDX', 'Static Site Generation']
-summary: 'I have been using ContentLayer for a while now and I am loving it. It is a powerful tool that allows me to manage my blog content with ease. Here is how I am using it with Next.js'
+summary: 'I built this blog on Contentlayer, and then the project was abandoned. This is a short honest post about what Contentlayer did well, how this blog now runs on the contentlayer2 community fork, and what the whole episode taught me about picking content infrastructure.'
 featured: false
 date: '2023-11-15'
+updated: '2026-08-30'
 category: 'engineering'
 tableOfContents: true
-draft: true
+draft: false
 ---
 
 <Callout type="error">
 
-ContentLayer is effectively unmaintained. In its current state, the project cannot be used with next.js 14 due to dependency conflicts. You can see more info [here](https://github.com/contentlayerdev/contentlayer/issues/429#issuecomment-1974928678)or some alternatives like [Content Collections](https://www.content-collections.dev/).
+ContentLayer is effectively unmaintained. In its current state, the project cannot be used with next.js 14 due to dependency conflicts. You can see more info [here](https://github.com/contentlayerdev/contentlayer/issues/429#issuecomment-1974928678) or some alternatives like [Content Collections](https://www.content-collections.dev/).
 
 There are [news](https://github.com/contentlayerdev/contentlayer/issues/651#issuecomment-2030335434) that Netlify is working on a new version of ContentLayer, but no release date has been announced yet.
 
 </Callout>
 
-Contentlayer integrates your content with your code, enhancing efficiency and reducing bugs by separating website code from content. It works with front-end frameworks like <Tooltip text="Contentlayer is now optimized for use with React server components (RSC) within the app directory, which was introduced in Next 13">Next.js</Tooltip> and content from headless CMSs like Contentful and Sanity or local files.
+I built this blog on Contentlayer. Then the project stalled, its maintainer moved on, and the Callout above is what I had to prepend to my own enthusiastic draft about it. So instead of paraphrasing its documentation, this is the shorter, more honest post: what Contentlayer actually did for me, what runs this blog today, and what I took away from the experience.
 
-Some of the uses of Contentlayer include transforming content into data, structuring loose data, and defining data types. For example:
+## What Contentlayer did well
 
-## Transforming Content into Data
+The pitch was simple: your MDX files become typed, importable data. You describe your content schema in code, and the build turns every file into a validated document you can `import { allPosts } from 'contentlayer/generated'` anywhere in your app. This blog still works exactly that way. Here is a trimmed excerpt of its real config:
 
-Contentlayer's primary job is to transform your content into data that can be imported into the pages of your web project. To do that effectively, Contentlayer has to know the shape of your content - your content schema.
+```js caption="contentlayer.config.js"
+import { defineDocumentType, makeSource } from 'contentlayer2/source-files';
 
-This is handled differently depending on whether you're working with a local source (Files) or a remote source. With remote sources - i.e. headless CMS - the content schema is pulled in automatically from the source's API. When using a local source, your schema must be explicitly defined so Contentlayer [knows how to handle the local files](https://contentlayer.dev/docs/sources/files).
+export const Post = defineDocumentType(() => ({
+  'contentType': 'mdx',
+  'fields': contentFields.post,     // title, date, category (required); tags, summary, series, draft, ...
+  'computedFields': computedFields, // slug, readingTime, toc, externalLink
+  'filePathPattern': 'blog/**/*.mdx',
+  'name': 'Post'
+}));
 
-You can transform content from various sources into importable JavaScript files, enabling seamless integration with your code. This approach treats content as code, facilitating real-time updates and <Tooltip text="Content live reload should work out-of-the-box with Next.js when using the next-contentlayer plugin and importing your content directly in your page app/components.">[hot module reloading (HMR)](https://nextjs.org/docs/architecture/fast-refresh)</Tooltip>.
+export default makeSource({
+  'contentDirPath': 'data',
+  'documentTypes': [ Author, Project, Post ],
+  'mdx': { 'rehypePlugins': [ /* ... */ ], 'remarkPlugins': [ /* ... */ ] }
+});
+```
 
-You can for instance pull content from Notion and transform it into a JavaScript file that can be imported into your code and thus deal with [Notion](https://contentlayer.dev/docs/sources/notion-b2ce5957) as your content CMS.
+The two ideas that earned their keep:
 
-## Structuring Loose Data
-External data sources typically have defined schemas, ensuring predictable data structures. For local files, Contentlayer allows schema definition, preventing code breakages and ensuring data consistency.
+- **Schema as code**: every post is validated at build time against field definitions (`category` and `date` are required, `draft` is a boolean, a `series` is a nested type with a title and an order). A typo in frontmatter fails the build instead of silently rendering wrong.
+- **Computed fields**: values derived from the content rather than written by hand. This blog computes each post's `slug` from its file path, `readingTime` from the raw body, and the table of contents from the headings:
 
-You can also define computed fields that are derived from the content, allowing you to create dynamic content that is updated in real-time. For example, you can define a computed field that calculates the reading time of a blog post based on the content length.
+```js caption="lib/contentLayer/computedFields.js"
+const computedFields = {
+  'readingTime': { 'resolve': (doc) => readingTime(doc.body.raw), 'type': 'json' },
+  'slug': { 'resolve': (doc) => `category/${relPath(doc)}`, 'type': 'string' },
+  'toc': { 'resolve': (doc) => extractTocHeadings(doc.body.raw), 'type': 'json' }
+};
+```
 
-## Defining Data Types
+The MDX pipeline (remark and rehype plugins for code titles, link previews, citations, footnotes) hangs off the same config, so the whole content layer lives in a couple of files.
 
-For TypeScript users, Contentlayer generates type definitions for content, allowing you to introspect data structure within your code, enhancing reliability akin to writing programmatic tests.
+## Then it died
 
-<Callout type="warning">Image processing with Contentlayer is not currently supported. The current recommendation is to place images in the public directory, and then use a string field to store the path to that image. Alternatively, you can store your images in an asset service like Cloudinary or Imgix </Callout>
+Contentlayer's development stopped, and Next.js 14 exposed hard dependency conflicts that were never going to be fixed upstream. For a blog whose entire content pipeline sat on top of it, that was uncomfortable: the thing worked, but every Next.js upgrade from then on was a gamble.
 
-## `ContentLayer` Concepts
+## What I use now
 
-Contentlayer is not a framework. It is a tool for processing content. Contentlayer can generally be considered a complement to most headless API-driven solutions today like [Contentful](https://www.contentful.com/), [Sanity](https://www.sanity.io/), and others.
+This blog runs on [contentlayer2](https://github.com/timlrx/contentlayer2), a community fork maintained by Timothy Lin. The migration was almost embarrassingly small: swap `contentlayer` and `next-contentlayer` for `contentlayer2` and `next-contentlayer2` in `package.json`, and update the import paths (`contentlayer2/source-files`, as in the excerpt above). The schema, the computed fields, and every page that imports from `contentlayer/generated` carried over unchanged.
 
-### Documents vs Nested
+## What I learned about picking content infrastructure
 
-There are two types of objects - documents and nested (documents).
+- **Judge the bus factor, not the demo.** Contentlayer was a beautifully designed single-maintainer project. That is a risk profile, and I signed up for it without thinking about it.
+- **Schema-in-code is what saved me.** Because the contract between content and code was explicit and small, moving to a fork was an import rename rather than a rewrite. The more of your pipeline lives in declarative config, the cheaper the exit.
+- **Abandoned is not the end when the tool is simple enough to fork.** If I were starting today I would look at contentlayer2 or [Content Collections](https://www.content-collections.dev/), which exists specifically as a successor for this use case. Both prove the idea outlived the original project.
 
-**Documents** are objects generated by Contentlayer, according to a document type definition. Think of a document type like a model or a table in a database. A document is then an instance of that model - i.e. the result of a database query.
-
-Contentlayer writes documents to individual JSON files, which can then be imported into your project's pages.
-
-**Nested documents** are objects that are embedded directly in a document. They are defined as nested types and are primarily used for repeatable shapes.
-
-For example, suppose you had an SEO object that you wanted included on various models. You could define the nested document type once, and then use it within any model that requires it.
-
-### Content References
-
-Just like in a database, content can be associated with other content. For example, a post document type can reference tag documents.
+The irony is that Contentlayer dying turned out to be the best endorsement of its design: it was replaceable precisely because it was well factored.

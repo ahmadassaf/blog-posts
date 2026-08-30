@@ -4,10 +4,10 @@ title: 'Embed/Preview inline links with React/Next.js and Rehype/MDX'
 tags: ['Next.js', 'React', 'MDX', 'rehype', 'Link Previews']
 summary: 'Embedding links in your content can be a powerful way to provide additional context or information. In this post, we explore how to create a custom MDX component to embed/preview inline links in your React/Next.js application using Rehype and MDX.'
 subtitle: 'Create blog posts with Advanced MDX Dynamic Content, React components and APIs'
-featured: true
+featured: false
 date: '2024-11-14'
 category: 'engineering'
-draft: true
+draft: false
 tableOfContents: true
 ---
 
@@ -19,81 +19,98 @@ One feature I love is the ability to preview links seamlessly. Much like Notionâ
 
  - Expand inline links with the favicon and title (optional) of the linked page using a custom MDX component
  - Preview the link on hover; it will be any image that is found in the meta tags of the linked page or otherwise a screenshot of the page
- - Ability to change all links in the content to use the new component by using custom Rehype plugin
+ - Ability to change all links in the content to use the new component automatically, using custom remark and rehype plugins
 
-<Aside>With [MDX](https://mdxjs.com/) (Markdown for JSX), we can seamlessly combine Markdown with React components to create dynamic, interactive content. In this blog post, I'll walk through creating a custom MDX component to automatically embed and preview inline links using [React](https://reactjs.org/), [Next.js](https://nextjs.org/), and [Remark](https://github.com/remarkjs/remark). The component is already implemented in this blog, so you can see it in action as you read through the post.</Aside>
+<Aside>With [MDX](https://mdxjs.com/) (Markdown for JSX), we can seamlessly combine Markdown with React components to create dynamic, interactive content. In this blog post, I'll walk through how this blog automatically embeds and previews inline links using [React](https://reactjs.org/), [Next.js](https://nextjs.org/), and a pair of [remark](https://github.com/remarkjs/remark) and [rehype](https://github.com/rehypejs/rehype) plugins. The component is already implemented in this blog, so you can see it in action as you read through the post.</Aside>
 
+## How the pieces fit together
 
-## Understanding MDX, Rehype, and Remark
+People sometimes ask whether this should be a remark plugin (operating on the markdown AST) or a rehype plugin (operating on the HTML AST). The honest answer from this blog's implementation: it is both, and each one earns its stage.
 
-In the modern web development ecosystem, tools like MDX, [Rehype](https://github.com/rehypejs/rehype), and Remark have become essential for creating rich, dynamic content. Each of these tools serves a unique purpose and, when combined, they offer powerful capabilities for content management and rendering.
+1. A **remark plugin** rewrites every external `http(s)` link in a post into a `<Preview>` JSX element while the document is still markdown
+2. A **rehype plugin** rewrites internal `/blog/category/...` links into `<Preview internal>` elements after the markdown has become HTML (by then, autolinked headings and other transforms have settled, and links exist as plain `<a>` elements)
+3. An **API route** (`/api/preview`) fetches and caches the metadata for a URL: title, description, favicon, and a preview image
+4. The **Preview component** renders the inline favicon and title, and a rich hover card with the image or post metadata
 
-## What is MDX?
+Both plugins are registered in [contentlayer.config.js](https://github.com/ahmadassaf/blog/blob/main/contentlayer.config.js), so every post gets this treatment with zero per-post effort. The markdown stays plain markdown; `[Visit OpenAI](https://openai.com)` is all an author ever writes.
 
-MDX is a language that's . The easiest way to get started is to use an integration for your bundler
+## Step 1: The remark plugin for external links
 
-MDX is a language that combines Markdown with <Tooltip text="JSX is an extension to JavaScript that looks like HTML but makes it convenient to use components (reusable things)">JSX</Tooltip>, enabling you to use React components within your Markdown content. This blend allows for a more dynamic and interactive approach to writing content.
+The plugin ([lib/mdx/remark-links.js](https://github.com/ahmadassaf/blog/blob/main/lib/mdx/remark-links.js)) visits every `link` node in the markdown tree and, if it is a public external URL, swaps the node for an MDX JSX element. Loopback hosts are skipped since the preview endpoint could never fetch them safely:
 
-MDX is compiled to JavaScript, which can be executed by a JavaScript runtime. This makes it easy to integrate with modern web development tools and frameworks, such as React, Next.js, and Gatsby. MDX is highly extensible and can be customized with plugins to add additional features and functionality making it particularly popular in the context of static site generators and documentation sites, where both rich content and interactivity are crucial.
+```js caption="lib/mdx/remark-links.js (trimmed)"
+export function remarkLinks() {
+  return (tree) => {
+    visit(tree, 'link', (node, index, parent) => {
+      if (isExternalPreviewUrl(node.url)) {
+        const previewNode = {
+          'attributes': [{ 'name': 'url', 'type': 'mdxJsxAttribute', 'value': node.url }],
+          'children': node.children,
+          'name': 'Preview',
+          'type': 'mdxJsxTextElement'
+        };
 
-## Key Features of MDX:
+        // Add title attribute if link has text content
+        if (node.children[0]?.type === 'text') previewNode.attributes.push({
+          'name': 'title', 'type': 'mdxJsxAttribute', 'value': node.children[0].value
+        });
 
-- **Markdown Syntax**: Write content using the familiar Markdown syntax.
-- **JSX Integration**: Embed React components directly in your Markdown.
-- **Interactivity**: Enhance static content with interactive elements.
-- **Custom Components**: Use custom React components to extend Markdown functionality.
-
-<Aside>Nonstandard markdown features (such as GFM, frontmatter, math, syntax highlighting) can be enabled with remark plugins.</Aside>
-
-```jsx
-import {Chart} from './snowfall.js'
-export const year = 2013
-
-# Last yearâ€™s snowfall
-
-In {year}, the snowfall was above average.
-It was followed by a warm spring which caused
-flood conditions in many of the nearby rivers.
-
-<Chart year={year} color="#fcb32c" />
+        if (parent) parent.children[index] = previewNode;
+      }
+    });
+  };
+}
 ```
 
-## What is Rehype?
+## Step 2: The rehype plugin for internal links
 
-Rehype is a powerful HTML processor built on the Unified ecosystem. It allows you to transform HTML content through a series of plugins. Rehype is highly flexible and can be used to manipulate HTML in various ways, such as parsing, transforming, and stringifying.
+Internal links get their own pass ([lib/rehype-internal-links.js](https://github.com/ahmadassaf/blog/blob/main/lib/rehype-internal-links.js)). It matches anchors whose `href` fits the blog's URL shape, extracts the link text (which becomes the inline title), and replaces the `<a>` with a `<Preview internal>` element:
 
-Key Features of Rehype:
-HTML Parsing: Convert HTML strings into an Abstract Syntax Tree (AST) for manipulation.
-Plugin System: Apply transformations using a wide range of plugins.
-Output Control: Convert the transformed AST back into HTML strings.
-Integration: Works seamlessly with other Unified ecosystem tools.
+```js caption="lib/rehype-internal-links.js (trimmed)"
+const INTERNAL_BLOG_PATTERN = /^\/blog\/(?<category>[^/]+)\/(?<slug>.+)$/;
 
-## Setting Up a Next.js Project with MDX Support
+function rehypeInternalLinks() {
+  return (tree) => {
+    visit(tree, 'element', (node, index, parent) => {
+      if (node.tagName !== 'a' || !node.properties?.href) return;
+      if (!node.properties.href.match(INTERNAL_BLOG_PATTERN)) return;
 
-First, ensure you have Node.js installed, then create a new Next.js project:
+      const linkText = extractTextFromNode(node);
 
-```bash
-npx create-next-app link-preview-mdx
-cd link-preview-mdx
+      if (!linkText?.trim()) return;
+
+      parent.children[index] = {
+        'children': [],
+        'properties': { 'internal': true, 'title': linkText.trim(), 'url': node.properties.href },
+        'tagName': 'Preview',
+        'type': 'element'
+      };
+    });
+  };
+}
 ```
 
-Next, add the necessary packages for MDX support:
+The `internal` flag matters downstream: internal previews never hit the network for metadata scraping. The API route resolves them straight from the contentlayer documents instead.
 
-```bash
-npm install @next/mdx @mdx-js/loader
-```
+## Step 3: The preview API route
 
-Create a next.config.js file in the root of your project and configure MDX support:
+The component cannot fetch arbitrary pages from the browser (CORS, and I would rather not ship scraping logic to every reader), so metadata extraction lives in a Next.js route handler: [app/api/preview/route.js](https://github.com/ahmadassaf/blog/blob/main/app/api/preview/route.js). Given `?url=...` it:
 
-```javascript caption="next.config.js"
-const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/,
-  options: {
-    rehypePlugins: [],
-    remarkPlugins: [],
-  },
-});
-module.exports = withMDX({
-  pageExtensions: ['js', 'jsx', 'md', 'mdx'],
-});
-```
+- **Resolves internal URLs locally**: a `/blog/...` URL is looked up in the generated contentlayer documents and answered with the post's title, summary, category, tags, date, and reading time; no outbound request at all
+- **Fetches external URLs defensively**: through a `safeFetch` wrapper that validates every redirect hop (SSRF protection), with a 15 second timeout, a 1 MB response cap, and a reader that stops downloading as soon as `</head>` arrives, since that is where all the metadata lives
+- **Extracts metadata** with `node-html-parser`: `og:title` / `twitter:title` / `<title>` fallbacks for the title, the same cascade for description and image, and the favicon with Google's favicon service as a last resort. If no image is found, a [Microlink](https://microlink.io/) screenshot URL is synthesized so there is always something to show on hover
+- **Special-cases platforms**: YouTube links get the video thumbnail, GitHub repos get their OpenGraph card image, and Wikipedia articles get the first paragraph as a text excerpt instead of a screenshot
+- **Caches aggressively, including errors**: an in-memory map keeps successful lookups for an hour and failures for five minutes, so a dead link does not trigger a fetch storm but also does not stay marked dead forever. Error payloads are returned with HTTP 200 and an `error` flag for consistent client handling, but with `Cache-Control: no-store` so browsers never pin a transient failure
+
+## Step 4: The Preview component
+
+The client side lives in my design system: [Preview.js](https://github.com/ahmadassaf/design-system/blob/main/src/components/mdx/Preview/Preview.js) with its data layer in [usePreviewData.js](https://github.com/ahmadassaf/design-system/blob/main/src/components/mdx/Preview/usePreviewData.js). The hook does the unglamorous work: an LRU cache with TTLs (again shorter for errors), deduplication of concurrent requests for the same URL, abort-on-unmount, and a stale-response guard so a slow fetch for a previous URL can never overwrite the current one. npm package links are synthesized entirely locally because npmjs.com blocks metadata fetches.
+
+The component then renders one of a few states:
+
+- **Loading**: a small skeleton (a pulsing favicon square and title bar) holds the link's place inline
+- **Error**: the link still works, it just degrades. If the API confirmed the target is gone (400, 404, or 410), the link renders in red with a slashed-link icon; transient failures render as a plain neutral link
+- **Success (inline)**: the page's favicon (with an icon fallback if it fails to load) followed by the cleaned-up title. Titles get de-noised: `GitHub - owner/repo: description` becomes `owner/repo`, suffixes like `- Wikipedia` or `- Stack Overflow` are stripped, and everything is capped at 60 characters
+- **Hover card**: a [Radix UI hover card](https://www.radix-ui.com/primitives/docs/components/hover-card) (with a subtle framer-motion entrance that respects `prefers-reduced-motion`). External links show the preview image or Wikipedia excerpt plus description and site name; internal links show a richer post card with category, summary, published date, reading time, and tags
+
+Every link in this very post is going through that pipeline right now, which is the nicest property of the whole setup: the feature documents itself.

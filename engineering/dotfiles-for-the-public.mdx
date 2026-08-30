@@ -9,6 +9,8 @@ date: '2015-05-21'
 category: 'engineering'
 ---
 
+*This post is from 2015. The concepts hold up well, but many of the specific tools and apps named here have since died or been replaced, and my own setup has moved on to [gaudi-bash](/blog/category/engineering/gaudi-my-bash-framework).*
+
 ## What are Dotfiles?
 
 If you're not familiar with the concept of dotfiles, check out [Github's dotfiles page](https://dotfiles.github.io/) to learn more about them. Essentially, when someone says "dotfiles" they mean maintaining your command-line preferences in a versioned repository like Github, Dropbox, etc. that you install on every computer.
@@ -33,7 +35,7 @@ In some instances `.bashrc` can be loaded, so this file makes sure that .bash_pr
 
 ### .path
 
-This file speeds up the process of running executable files. Rather than having to cd back and forth across various paths to executable files, you can set the file paths in your .path dotilfe and then run executable files directly.
+This file speeds up the process of running executable files. Rather than having to cd back and forth across various paths to executable files, you can set the file paths in your .path dotfile and then run executable files directly.
 
 Generally, this file isn't held in the public repo as it can contain sensitive information.
 
@@ -59,7 +61,16 @@ This file contains useful aliases to help you write less. For example, instead o
 
 Similar to aliases, except functions can take arguments.
 
-Before when I mentioned I was looking over different dotfile repos, I did mkdir to create a directory. After that, I'd then need to cd into that directory.
+Before, when I mentioned I was looking over different dotfile repos, I did `mkdir` to create a directory. After that, I'd then need to `cd` into that directory. A function collapses those two steps into one command:
+
+```bash
+# Create a new directory and enter it
+mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
+```
+
+Once patterns like this live in your `.functions` file, they follow you to every machine.
 
 ### .gitconfig
 
@@ -75,7 +86,7 @@ A small file that improves readability for gvim.
 
 ### .hgignore
 
-Simliar to .gitignore for Mercurial.
+Similar to .gitignore for Mercurial.
 
 ### .hushlogin
 
@@ -111,7 +122,7 @@ If you use screen, this removes the startup message.
 
 I'm not that familiar with vim. However some of the things you can do with this file include enabling line numbers and adding syntax highlighting.
 
-For `vim` i have also included the [powerline](https://github.com/Lokaltog/powerline) visual styling which will include a status line.
+For `vim` I have also included the [powerline](https://github.com/Lokaltog/powerline) visual styling which will include a status line.
 
 **Important Notes**
 
@@ -125,7 +136,7 @@ after installing powerline enable it by adding to the `.vimrc`:
 set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
 ```
 
-This can be change **depending on the path to the `python` directory**
+This can be changed **depending on the path to the `python` directory**
 
 ### .wgetrc
 
@@ -133,8 +144,7 @@ If you use wget, this adds additional settings such as changing the timeout to 6
 
 ## Getting Started
 
-If you notice, some files that have mentioned above don't exist in this repo. This is because i am using the amazing [bash-it](http://github.com/ahmadassaf/bash-it) repo to organize those dotfiles.
-I recommend you head overthere and read how to use them.d
+Some of the files mentioned above don't live in my dotfiles repo itself. That is because I am using my fork of the amazing [bash-it](http://github.com/ahmadassaf/bash-it) framework to organize those dotfiles. I recommend you head over there and read how to use them.
 
 ## Installing the Scripts
 
@@ -150,14 +160,15 @@ When setting up a new Mac, you may want to set some sensible OS X defaults:
 
 ## Install Homebrew formulae
 
-When setting up a new Mac, you may want to install some common [Homebrew](http://brew.sh/) formulae (after installing Homebrew, of course).
-`brew bundle` has been deprecated, thus i converted the files into executable shell ones:
+When setting up a new Mac, you may want to install some common [Homebrew](http://brew.sh/) formulae (after installing Homebrew, of course). At the time I wrote this, `brew bundle` had been deprecated, so I converted my Brewfiles into plain executable shell scripts that call `brew install` line by line:
 
 ```bash
-brew install ~/.brewfile.sh
+./.brewfile.sh
 ```
 
-you can always remove or add files based on yor preferences. You can search for brew formulas [here](https://formulae.brew.sh/) in order to add or get more information about the ones I am using.
+Homebrew has since brought `brew bundle` back, and today a declarative `Brewfile` driven by `brew bundle` is the standard way to do this. If you are setting this up now, use that instead.
+
+You can always remove or add formulae based on your preferences. You can search for brew formulas [here](https://formulae.brew.sh/) in order to add or get more information about the ones I am using.
 
 My file contains the following `brew` formulas:
 
@@ -170,13 +181,13 @@ My file contains the following `brew` formulas:
 
 ## Install native apps with `brew cask`
 
-You could also install native apps with [`brew cask`](https://github.com/phinze/homebrew-cask):
+You could also install native apps with [`brew cask`](https://github.com/phinze/homebrew-cask). Same story as the Brewfile above, my cask list lived in an executable script:
 
 ```bash
-brew install ~/.caskfile.sh
+./.caskfile.sh
 ```
 
-you can always remove or add files based on yor preferences. You can search for cask formulas [here](https://brew.sh/) in order to add or get more information about the ones I am using.
+You can always remove or add apps based on your preferences. You can search for cask formulas [here](https://brew.sh/) in order to add or get more information about the ones I am using.
 
 My `cask` file contains the following applications:
 
@@ -205,11 +216,9 @@ There are a bunch of useful Node.js command line tools that can be installed glo
 - [**tmi**](https://github.com/addyosmani/tmi): Find out the image weight in your pages, compare to the BigQuery quantiles and discover what images you can optimize further
 - [**vtop**](https://github.com/MrRio/vtop): A graphical activity monitor for the command line
 
-<Callout type='info'>For an up-to-date instructions on how to set up your machine and deal with dotfiles, head over to my article about my bash framwork [**gaudi**](/blog/category/engineering/gaudi-my-bash-framework)</Callout>
+<Callout type='info'>For up-to-date instructions on how to set up your machine and deal with dotfiles, head over to my article about my bash framework [**gaudi**](/blog/category/engineering/gaudi-my-bash-framework)</Callout>
 
-## References
-
-## Tutorials
+## References and Tutorials
 
 - [Execution sequence for .bash_profile, .bashrc, .bash_login, .profile and .bash_logout](http://www.thegeekstuff.com/2008/10/execution-sequence-for-bash_profile-bashrc-bash_login-profile-and-bash_logout/)
 - [Awesome dotfiles tutorials](https://github.com/webpro/awesome-dotfiles#tutorials)

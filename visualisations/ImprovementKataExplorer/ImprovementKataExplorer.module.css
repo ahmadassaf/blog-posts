@@ -1,0 +1,324 @@
+.root {
+  container-type: inline-size;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-block: 2rem;
+  color: var(--ds-color-text);
+}
+
+.caption {
+  display: grid;
+  max-width: 72ch;
+  padding-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.description {
+  color: var(--ds-color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.scrollHint {
+  display: none;
+  margin: 0;
+  padding-bottom: 0.35rem;
+  color: var(--ds-color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.scrollFrame {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: color-mix(in srgb, var(--ds-color-accent) 52%, var(--ds-color-border)) transparent;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollFrame::-webkit-scrollbar {
+  height: 0.45rem;
+}
+
+.scrollFrame::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollFrame::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-color-accent) 52%, var(--ds-color-border));
+}
+
+.scrollFrame::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-color-accent);
+}
+
+.scrollFrame:focus-visible {
+  outline: 2px solid var(--ds-color-accent);
+  outline-offset: 3px;
+}
+
+.graph {
+  display: block;
+  width: 100%;
+  max-width: 58rem;
+  min-width: 48rem;
+  height: auto;
+  margin-inline: auto;
+  font-family: var(--ds-font-sans);
+}
+
+@container (max-width: 53.99rem) {
+  .scrollHint {
+    display: block;
+  }
+}
+
+/* The grey zone of unknown territory */
+.greyZone {
+  cursor: pointer;
+}
+
+.greyZone > rect {
+  fill: color-mix(in srgb, var(--ds-color-border) 18%, transparent);
+  stroke: color-mix(in srgb, var(--ds-color-text-muted) 55%, transparent);
+  stroke-dasharray: 2 8;
+  stroke-linecap: round;
+  stroke-width: 2;
+  transition: fill 120ms ease, stroke 120ms ease;
+}
+
+.greyZone[data-active='true'] > rect {
+  fill: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  stroke: var(--ds-color-warning);
+}
+
+.zoneLabel {
+  fill: var(--ds-color-text-subtle);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 1.1px;
+  pointer-events: none;
+}
+
+.zoneHint {
+  fill: var(--ds-color-text-muted);
+  font-family: var(--ds-font-mono);
+  font-size: 10.5px;
+  pointer-events: none;
+}
+
+.obstacle path {
+  fill: var(--ds-color-warning-muted);
+  stroke: var(--ds-color-warning);
+  stroke-linejoin: round;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+/* The walking path */
+.path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ds-color-accent) 55%, var(--ds-color-border));
+  stroke-dasharray: 0.5 9;
+  stroke-linecap: round;
+  stroke-width: 2.5;
+}
+
+.futurePath {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ds-color-accent) 30%, var(--ds-color-border));
+  stroke-dasharray: 0.5 11;
+  stroke-linecap: round;
+  stroke-width: 2.5;
+}
+
+/* Experiment loops */
+.experiments {
+  cursor: pointer;
+}
+
+.loop circle {
+  fill: var(--ds-color-surface-muted);
+  stroke: var(--ds-color-accent);
+  stroke-width: 2;
+  transition: fill 120ms ease;
+}
+
+.experiments[data-active='true'] .loop circle {
+  fill: color-mix(in srgb, var(--ds-color-accent) 12%, transparent);
+  stroke-width: 3;
+}
+
+.loopArrow {
+  fill: none;
+  stroke: var(--ds-color-accent-dark);
+  stroke-linecap: round;
+  stroke-width: 2.5;
+  pointer-events: none;
+}
+
+.loopHead {
+  fill: var(--ds-color-accent-dark);
+  pointer-events: none;
+}
+
+.loopLabel {
+  fill: var(--ds-color-text-muted);
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+}
+
+/* Stage pills */
+.stageNode {
+  cursor: pointer;
+}
+
+.stageNode rect {
+  fill: var(--ds-color-surface-muted);
+  stroke: var(--ds-color-accent);
+  stroke-width: 2;
+  transition: fill 120ms ease, stroke-width 120ms ease;
+}
+
+.stageNode[data-active='true'] rect {
+  fill: var(--ds-color-accent);
+  stroke: var(--ds-color-accent-dark);
+  stroke-width: 3;
+}
+
+.stageKind {
+  fill: var(--ds-color-text-subtle);
+  font-size: 9.5px;
+  font-weight: 850;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+.stageName {
+  fill: var(--ds-color-text);
+  font-size: 13.5px;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+.stageNode[data-active='true'] .stageKind {
+  fill: color-mix(in srgb, var(--ds-color-accent-foreground) 78%, transparent);
+}
+
+.stageNode[data-active='true'] .stageName {
+  fill: var(--ds-color-accent-foreground);
+}
+
+.stageNode:focus-visible,
+.greyZone:focus-visible,
+.experiments:focus-visible,
+.directionNode:focus-visible {
+  outline: 2px solid var(--ds-color-accent);
+  outline-offset: 3px;
+}
+
+/* Direction: the north star */
+.directionNode {
+  cursor: pointer;
+}
+
+.directionNode circle {
+  fill: var(--ds-color-dark);
+  stroke: var(--ds-color-accent);
+  stroke-width: 2;
+  transition: stroke-width 120ms ease;
+}
+
+.directionNode[data-active='true'] circle {
+  stroke: var(--ds-color-accent);
+  stroke-width: 4;
+}
+
+.star {
+  fill: var(--ds-color-text-inverse);
+  pointer-events: none;
+}
+
+.directionLabel {
+  fill: var(--ds-color-text);
+  font-size: 13.5px;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+/* Readout */
+.readout {
+  display: grid;
+  width: 100%;
+  max-width: 58rem;
+  margin-inline: auto;
+  padding-top: 1rem;
+  gap: 0.5rem;
+}
+
+.readoutPrimary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.readoutType {
+  color: var(--ds-color-accent-dark);
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.readoutText {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.readoutMeta {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+}
+
+.liveRegion {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@container (max-width: 38rem) {
+  .readoutPrimary {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stageNode rect,
+  .loop circle,
+  .greyZone > rect {
+    transition: none;
+  }
+}

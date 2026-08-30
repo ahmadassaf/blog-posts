@@ -8,3 +8,64 @@ featured: false
 date: '2024-02-21'
 category: 'engineering'
 ---
+
+If you have read my [post on dotfiles](/blog/category/engineering/dotfiles-for-the-public), you know I have been versioning and organizing my shell configuration for a long time. Back then, I was running a personal fork of [bash-it](https://github.com/Bash-it/bash-it) to keep my aliases, functions, and completions under control. Over the years, that fork drifted so far from upstream that it became its own project: [gaudi-bash](https://github.com/g-udi/gaudi-bash), which now lives in my [gaudi](https://github.com/g-udi) organization alongside the rest of my developer environment tooling.
+
+## What It Is
+
+Gaudi-bash is a fork of bash-it, rebuilt with opinionated changes for consistency, maintainability, and adherence to [bash best practices](http://mywiki.wooledge.org/BashPitfalls). Like its inspiration [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh), it provides autocompletion, themes, aliases, plugins, and custom functions for Bash. The pitch is simple: stop polluting your `~/bin` directory and your `.bashrc` file, and keep all those little scripts organized in a framework instead.
+
+The rework of the bash-it codebase focused on a few principles:
+
+- The core engine is separated from the components (aliases, completions, plugins, themes) so each can be updated independently.
+- Code is split into small, focused files rather than monolithic scripts.
+- Everything follows a single coding convention and complies with [shellcheck](http://shellcheck.net) wherever possible.
+- The core functions are covered by unit tests written with [bats](https://github.com/bats-core/bats-core).
+
+## How It Is Structured
+
+The core lives in `lib/`: a command dispatcher, logging, theming, history configuration, and helpers for enabling, disabling, and diagnosing components. The user-facing pieces live in `components/`, split into `aliases`, `completions`, `plugins`, and `themes`. Components are enabled by creating symlinks in `components/enabled/`, which a loader script walks and sources at shell startup. A `components/custom/` directory holds machine-local scripts that are ignored by git, so private tweaks never end up in the repository.
+
+Everything is managed through one `gaudi-bash` command:
+
+```bash
+gaudi-bash show plugins            # list installed and available plugins
+gaudi-bash enable plugin fzf       # enable a plugin
+gaudi-bash disable plugin fzf      # disable it again
+gaudi-bash search ruby rake gem    # find components by keyword
+gaudi-bash doctor                  # diagnose loading issues
+gaudi-bash update all              # update the core and all components
+```
+
+The search command is the feature I use most. If you want everything related to your daily stack, you search for it and enable the results in one go:
+
+```bash
+$ gaudi-bash search ruby rake gem bundle irb rails
+      aliases:  bundler rails
+      plugins:  chruby chruby-auto ruby
+  completions:  bundler gem rake
+```
+
+There is also a profiles system (`gaudi-bash profile save <name>` and `gaudi-bash profile load <name>`) that stores complete component configurations as plain text files, so I can keep separate setups for work and personal machines and switch between them.
+
+## The Gaudi Prompt Theme
+
+Gaudi-bash ships with the **gaudi** prompt theme, a modular, segment-based prompt with Nerd Font icons. The prompt is divided into three zones configured as plain Bash arrays: a left zone for core context like the working directory, a right zone for system information like battery and time, and an async zone for expensive checks like git status and language versions. Async segments render in the background after the prompt is drawn and overwrite the line when the result arrives, so a slow `git fetch` never blocks the shell. Each segment is a standalone file, and adding your own is a matter of dropping a small function into the theme's `segments/` directory:
+
+```bash
+GAUDI_PROMPT_LEFT=(cwd)
+GAUDI_PROMPT_RIGHT=(time user)
+GAUDI_PROMPT_ASYNC=(scm kubecontext docker node)
+```
+
+## Getting Started
+
+Installation is a one-liner that backs up your existing `~/.bash_profile` before touching anything:
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ahmadassaf/gaudi-bash/master/install.sh)"
+```
+
+As always with piped installers, read the script first. By default the installer only enables a sane set of components to keep your shell clean; the rest is there when you want it via `gaudi-bash enable`.
+
+I will not pretend gaudi-bash is for everyone: if you live in zsh, oh-my-zsh and its ecosystem are more active. But if you are a Bash holdout like me and want your shell configuration modular, tested, and consistent across machines, the [repository](https://github.com/g-udi/gaudi-bash) has everything you need to get going.

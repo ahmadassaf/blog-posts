@@ -2,9 +2,9 @@
 type: 'Project'
 title: 'Roomba'
 tags: ['Open Data', 'Data Quality', 'Linked Data', 'Metadata', 'Data Portals']
-summary: 'Roomba is a scalable automatic approach for extracting, validating and generating descriptive linked dataset profiles. This approach applies several techniques to check the validity of the attached metadata as well as providing descriptive and statistical information of a certain dataset as well as a whole data portal. Using our framework on prominent data portals shows that the general state of the Linked Open Data needs attention as most of datasets suffer from bad quality metadata and lack additional informative metrics'
+summary: 'Roomba automatically extracts, validates, and corrects the metadata of datasets on open data portals, and generates descriptive profiles that expose how poor the state of Linked Open Data metadata really is.'
 subtitle: 'Automatic Validation, Correction and Generation of Dataset Metadata'
-layout: ProjectLayout
+layout: 'ProjectLayout'
 github: 'ahmadassaf/roomba'
 featured: false
 date: '2018-08-07'
@@ -14,10 +14,9 @@ category: 'projects'
 ## Roomba
 ### Automatic Validation, Correction and Generation of Dataset Metadata
 
-Linked Open Data (LOD) has emerged as one of the largest collection of interlinked datasets on the web. Benefiting from this mine of data requires the existence of descriptive information about each dataset in the accompanying metadata. Such meta information is currently very limited to few data portals where they are usually provided manually thus giving little or bad quality insights. To address this issue, we propose a scalable automatic approach for extracting, validating and generating descriptive linked dataset profiles. This approach applies several techniques to check the validity of the attached metadata as well as providing descriptive and statistical information of a certain dataset as well as a whole data portal. Using our framework on prominent data portals shows that the general state of the Linked Open Data needs attention as most of datasets suffer from bad quality metadata and lack additional informative metrics.
+> **Status**: Research code from my PhD work around 2015, kept online as a record of the papers it supported. The [repo](https://github.com/ahmadassaf/roomba) still gets occasional housekeeping pushes (last in August 2026), but the tool is not actively developed.
 
-**Note**
-This application is designed for the command line (CLI) and is built using [node.js](http://nodejs.org)
+Linked Open Data (LOD) is one of the largest collections of interlinked datasets on the web. But benefiting from that mine of data depends on each dataset shipping descriptive metadata, and in practice such metadata is limited to a few portals, entered manually, and often wrong. I built Roomba to attack this problem automatically: it is a command-line [node.js](http://nodejs.org) tool that extracts dataset metadata from data portals, validates and corrects it where possible, and generates descriptive profiles. Running it against prominent data portals confirmed the suspicion: most datasets suffer from bad quality metadata, and the general state of Linked Open Data needs attention.
 
 ## Architecture
 
@@ -26,11 +25,11 @@ This application is designed for the command line (CLI) and is built using [node
 ### Data Portal Identification
 
 Data portals can be considered as data access points providing tools to facilitate data publishing, sharing, searching and visualization. [CKAN](http://ckan.org) is the world's leading open-source data portal platform powering websites like the DataHub, Europe's Public Data and the U.S Government's open data. Modeled on CKAN, [DKAN](http://drupal.org/project/dkan) is a standalone Drupal distribution that is used in various public data portals as well.
-Identifying the software powering data portals is a vital first step to understand the API calls structure. Web scraping is a technique for extracting data from Web pages. We rely on several scraping techniques in the identification process which includes a combination of the following:
+Identifying the software powering data portals is a vital first step to understand the API calls structure. Web scraping is a technique for extracting data from Web pages. Roomba relies on several scraping techniques in the identification process, combining:
 
 - **URL inspection**: Check the existence of certain URL patterns.
 - **Meta tags inspection**: For example, `meta[content*="ckan]` (all meta tags with the attribute content containing the string `CKAN`). This selector can identify CKAN portals whereas the `meta[content*="Drupal"]` can identify DKAN portals.
-- **Document Object Model (DOM) inspection**: Similar to the meta tags inspection, we check the existence of certain DOM elements or properties.
+- **Document Object Model (DOM) inspection**: Similar to the meta tags inspection, Roomba checks the existence of certain DOM elements or properties.
 
 The identification process for each portal can be easily customized by overriding the `prototype.check` function for each parser. Moreover, adding or removing steps from the identification process can be easily configured.
 
@@ -38,23 +37,23 @@ The identification process for each portal can be easily customized by overridin
 
 Data portals expose a set of information about each dataset as metadata. The model used varies across portals. However, a standard model should contain information about the dataset's title, description, maintainer email, update and creation date, etc.
 
-Although Roomba is generic and accepts any data model to check against, for the moment we have used the the [CKAN standard model](https://docs.ckan.org/en/latest/api/).
+Although Roomba is generic and accepts any data model to check against, I used the [CKAN standard model](https://docs.ckan.org/en/latest/api/).
 
-After identifying the underlying portal software, we perform iterative queries to the API in order to fetch datasets metadata and persist them in a file-based cache system.
-Depending on the portal software we can issue specific extraction jobs. For example, in CKAN based portals, we are able to crawl and extract the metadata of a specific dataset, all the datasets in a specific group e.g. LOD Cloud or all the datasets in the portal.
+After identifying the underlying portal software, Roomba performs iterative queries to the API in order to fetch datasets metadata and persist them in a file-based cache system.
+Depending on the portal software, specific extraction jobs can be issued. For example, in CKAN based portals, Roomba is able to crawl and extract the metadata of a specific dataset, all the datasets in a specific group e.g. LOD Cloud, or all the datasets in the portal.
 
 ### Instance and Resource Extraction
 
-From the extracted metadata we are able to identify all the resources associated with that dataset. They can have various types like a SPARQL endpoint, API, file, visualization ,etc. However, before extracting the resource instance(s) we perform the following steps:
+From the extracted metadata Roomba identifies all the resources associated with a dataset. They can have various types like a SPARQL endpoint, API, file, visualization, etc. Before extracting the resource instance(s), it performs the following steps:
 
-- **Resource metadata validation and enrichment**: Check the resource attached metadata values. Similar to the dataset metadata, each resource should include information about its mimetype, name, description, format, valid dereferenceable URL, size, type and provenance. The validation process issue an HTTP request to the resource and automatically fills up various missing information when possible, like the mimetype and size by extracting them from the HTTP response header. However, missing fields like name and description that needs manual input are marked as missing and will appear in the generated summary report.
+- **Resource metadata validation and enrichment**: Check the resource attached metadata values. Similar to the dataset metadata, each resource should include information about its mimetype, name, description, format, valid dereferenceable URL, size, type and provenance. The validation process issues an HTTP request to the resource and automatically fills up various missing information when possible, like the mimetype and size by extracting them from the HTTP response header. However, missing fields like name and description that need manual input are marked as missing and will appear in the generated summary report.
 - **Format validation**: Validate specific resource formats against a linter or a validator.
 
 ### Profile Validation
 
-Metadata validation process identifies missing information and the ability to automatically correct them. Each set of metadata (general, access, ownership and provenance) is validated and corrected automatically when possible. Each profiler task has a set of metadata fields to check against. The validation process check if each field is defined and if the value assigned is valid.
+The metadata validation process identifies missing information and, where possible, corrects it automatically. Each set of metadata (general, access, ownership and provenance) is validated and corrected automatically when possible. Each profiler task has a set of metadata fields to check against. The validation process checks if each field is defined and if the value assigned is valid.
 
-There exist a bunch of special validation steps for various fields. For example, for ownership information where the maintainer email has to be defined, the validator checks if the email field is an actual valid email address. A similar process is done to URLs whenever found. However, we also issue an HTTP `HEAD` request in order to check if that URL is reachable or not. For the dataset resources, we use the `content-header` information when the request is successfull in order to extract, compare and correct further metadata values like mimetype and content size.
+There are special validation steps for various fields. For example, for ownership information where the maintainer email has to be defined, the validator checks if the email field is an actual valid email address. A similar process is done to URLs whenever found, including an HTTP `HEAD` request to check if the URL is reachable. For the dataset resources, the `content-header` information from a successful request is used to extract, compare and correct further metadata values like mimetype and content size.
 
 ```json
 "author": "Raphael Troncy",
@@ -86,11 +85,11 @@ git clone --recursive http://github.com/ahmadassaf/roomba
 
 `git submodule update --init`
 
-Now, you will need to install the dependecies:
+Now, you will need to install the dependencies:
 
 ```shell
 # Install the required packages
-npm intall
+npm install
 # You may alternatively use yarn to install them
 yarn install
 # After the installation finish start the application
@@ -118,7 +117,7 @@ There are a set of options that you can customize. They can be edited from `opti
 
 ### Localization
 
-If you wish to translate the messages and prompts into other languages than English. You have to create a new language entry in the `util/messages.js` with the new locale code e.g. `fr`. Afterwards, you should keep the object keys intact by translate the values into the desired language. For example:
+If you wish to translate the messages and prompts into other languages than English, you have to create a new language entry in the `util/messages.js` with the new locale code e.g. `fr`. Afterwards, you should keep the object keys intact and translate the values into the desired language. For example:
 
 ```javascript
 var messages =   {
@@ -162,15 +161,17 @@ The generated profile contains the information spotted in the profile as well as
 
 ## Roomba Quality (Objective Linked Data Quality Assessment)
 
-The standardization of Semantic Web technologies and specifications has resulted in a staggering volume of data being published. The Linked Open Data (LOD) is a gold mine for organizations trying to leverage external data sources in order to produce more informed business decisions. However, the heterogeneous nature of data sources reflects directly on the data quality as these sources often contain inconsistent as well as misinterpreted and incomplete information. Traditional data quality is a thoroughly researched field with several benchmarks and frameworks to grasp its dimensions. Ensuring data quality in Linked Open Data is much more complex. It consists of structured information supported by models, ontologies and vocabularies and contains queryable endpoints and links. In this paper, we first propose an objective assessment framework for Linked Data quality. In a [previous work](https://hal.archives-ouvertes.fr/file/index/docid/823586/filename/Data_Quality_Principles_in_the_Semantic_Web_-_Camera_Ready_Version.pdf), we identified potential quality issues of Linked Data and listed quality principles for all stages of data management. We have built upon this work but focus only on the objective quality indicators based on metrics that can be automatically measured. We surveyed the landscape of Linked Data quality tools to discover that they only cover a subset of the proposed quality indicators. As a result, we present an extensible quality measurement tool that helps on one hand data owners to rate the quality of their datasets and get some hints on possible improvements, and on the other hand data consumers to choose their data sources from a ranked set.
+Roomba grew out of my research on Linked Data quality, and its quality-assessment layer follows the papers directly. In [earlier work](https://hal.archives-ouvertes.fr/file/index/docid/823586/filename/Data_Quality_Principles_in_the_Semantic_Web_-_Camera_Ready_Version.pdf), I identified potential quality issues of Linked Data and listed quality principles for all stages of data management. Building on that, I proposed an objective assessment framework: rather than trying to grade subjective qualities, it focuses only on quality indicators that can be measured automatically. Surveying the landscape of Linked Data quality tools showed they covered just a subset of those indicators, so Roomba Quality became the extensible measurement tool that fills the gap. It helps data owners rate the quality of their datasets and get hints on possible improvements, and helps data consumers choose their data sources from a ranked set.
+
+Traditional data quality is a thoroughly researched field, but ensuring quality in Linked Open Data is harder: the data is structured information supported by models, ontologies and vocabularies, and contains queryable endpoints and links, all of which can degrade independently.
 
 ### Quality Measures
 
-The **objective measures** we have identified are: completeness, availability, licensing, freshness, correctness, comprehensibility, provenance
+The **objective measures** identified are: completeness, availability, licensing, freshness, correctness, comprehensibility, provenance
 
 ### Quality Indicators
 
-The **objective quality indicators** we assess are:
+The **objective quality indicators** assessed are:
 
  - Supports multiple serializations
  - Has different data access points

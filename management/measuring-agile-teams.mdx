@@ -14,7 +14,7 @@ series:
 
 ## Why metrics are complicated
 
-Let me tell you about metrics: they're complicated. I've been on teams that tracked nothing, and it was like flying blind. Are we going to make the release date? Are we getting faster or slower? No idea. I've also been on teams where metrics were used as weapons: pitting teams against each other, or justifying why everyone should work the weekend. Neither extreme is healthy.
+I've been on teams that tracked nothing, and it was like flying blind. Are we going to make the release date? Are we getting faster or slower? No idea. I've also been on teams where metrics were used as weapons: pitting teams against each other, or justifying why everyone should work the weekend. Neither extreme is healthy.
 
 Used thoughtfully, metrics do three things for a team: they reduce confusion, they show where you're actually making progress, and they surface where you're struggling early enough to act. The key word is *thoughtfully*, and most of this post is about what that looks like for each of the classic agile charts.
 
@@ -25,7 +25,7 @@ One framing before the charts: every metric below measures the **process**, not 
 Something that took me a while to learn: you need to ship the *right* features at the *right* time for the *right* market, and no burndown chart will tell you whether you did.
 
 <Callout type='warning'>
-**Important**: Your business metrics should tie directly to your roadmap and business goals, not just development activity.
+**The difference in one example**: for a new search feature, "ships by March" is a process claim. "A third of sessions use search within a month of launch" is a business claim. Define the second kind up front, or the first kind quietly becomes the goal.
 </Callout>
 
 For each major initiative, set a few key performance indicators that matter to the business. For each feature, define success criteria upfront: adoption rate, coverage, whatever fits. These create the feedback loop your process metrics plug into. Without them, a team can be a model of agile hygiene while confidently building things nobody wants.
@@ -61,7 +61,7 @@ Velocity is the team's average completed work per sprint, and it's the forecasti
 
 <AgileChartsExplorer chart='velocity' />
 
-How it lies: velocity is only comparable to itself. Each team's estimation culture is unique, so team A at 50 points versus team B at 75 tells you *nothing* about who delivers more. The moment velocity is compared across teams or turned into a target, people re-inflate estimates and the number stops meaning anything. If velocity swings erratically, revisit estimation in the retro: were there challenges you couldn't see when estimating? Is outside pressure pushing commitments past reality? Are you simply forecasting with too much optimism?
+How it lies: velocity is only comparable to itself. Each team's estimation culture is unique, so team A at 50 points versus team B at 75 tells you *nothing* about who delivers more. The moment velocity is compared across teams or turned into a target, people re-inflate estimates and the number stops meaning anything. This is the sense in which I've [called velocity a vanity metric elsewhere](/blog/category/management/agile-project-management-evolution): as a score shown to outsiders it is vanity; as the team's private forecasting input it is the only legitimate use it has. If velocity swings erratically, revisit estimation in the retro: were there challenges you couldn't see when estimating? Is outside pressure pushing commitments past reality? Are you simply forecasting with too much optimism?
 
 ### Cycle time and the control chart
 
@@ -86,6 +86,18 @@ Two more families of metrics deserve a place, and they're the ones that keep pro
 **Quality**: how many defects are found during development versus after release versus by people outside the team? How many get deferred to a future release? What's the customer-support request volume doing? What percentage of testing is automated? A great velocity with a rotten defect trend is a team borrowing from its future.
 
 **Delivery**: how often do releases actually go out, and how many builds make it to production? How long does an emergency fix take to ship? Is a release routine, or does it require heroics? That last question is my favorite smell test: heroic releases are a process bug wearing a cape.
+
+## The cheat sheet
+
+| Metric family | The question it answers | The anti-pattern it catches |
+| --- | --- | --- |
+| Sprint burndown | Will we hit the sprint goal? | Over-committing, invisible big items |
+| Release burndown | When does this epic actually land? | Unexamined scope growth |
+| Velocity | How much can we plan next sprint? | Estimates inflating to meet a target |
+| Cycle time | How predictable is a single item? | Queues and rotting reviews |
+| Cumulative flow | Where is work piling up? | Bottlenecks and hoarded backlogs |
+| Quality metrics | Are we borrowing from the future? | Velocity bought with defects |
+| Delivery metrics | Is a release routine or a heroic act? | Process bugs wearing capes |
 
 ## Finding the balance
 

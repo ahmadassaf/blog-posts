@@ -56,10 +56,11 @@ Assume we have the following RDF triples in our database
 <http://example.org/Ahmad> foaf:based_near <http://example.org/Manchester> .
 ```
 
-## Query: Finding Blog Names and their Owners
-Find the names of all blog owners in the database.
+### Finding Blog Names and Their Owners
 
-::: code-group labels=[Finding Blog Names, Finding Blog Owners Names]
+Find all the names in the database, then narrow the results down to just the blog owners.
+
+::: code-group labels=[Finding All Names, Finding Blog Owners' Names]
 
 ```sparql
 SELECT ?name
@@ -78,22 +79,24 @@ WHERE {
 
 :::
 
-Let’s break down the first query that will get all the blog names from the beginning. The query starts with the keyword `SELECT` and afterwards are the variable names that we would like to project, which in this case is `?name`. <Highlight>Note that all variable names have a question mark in the beginning</Highlight>.  Afterwards, we find the `WHERE` keyword which is followed by a triple between curly braces. This triple is the most interesting part. The triple in the query must also consists of a **subject**, **predicate** and an **object** but in this case, either one can be a variable. In this case, the subject and the object are variables while the predicate is a constant value. This triple in the query is evaluated against all the RDF triples in your database. Constant values in the query triples are matched with constant values of the RDF triples in your database. For example, in our query triple, the only constant value is in the predicate which is `foaf:name`. Out of our four RDF triples, two of them have `foaf:name` as a constant in the predicate, therefore these two RDF triples match our query triples. 
+Let’s break down the first query, which gets every name in the database. The query starts with the keyword `SELECT` and afterwards are the variable names that we would like to project, which in this case is `?name`. <Highlight>Note that all variable names have a question mark in the beginning</Highlight>.  Afterwards, we find the `WHERE` keyword which is followed by a triple between curly braces. This triple is the most interesting part. The triple in the query must also consists of a **subject**, **predicate** and an **object** but in this case, either one can be a variable. In this case, the subject and the object are variables while the predicate is a constant value. This triple in the query is evaluated against all the RDF triples in your database. Constant values in the query triples are matched with constant values of the RDF triples in your database. For example, in our query triple, the only constant value is in the predicate which is `foaf:name`. Out of our eight RDF triples, four of them have `foaf:name` as a constant in the predicate, therefore these four RDF triples match our query triple. Note that nothing in the query restricts `?x` to blogs: anything with a `foaf:name`, blogs and owners alike, matches.
 
 ```shell
 ?x = http://example.org/blog1, ?name = "Ahmad's Blog"
+?x = http://example.org/Assaf, ?name = "Ahmad Assaf"
 ?x = http://example.org/blog2, ?name = "Overfit.in"
+?x = http://example.org/Ahmad, ?name = "Ahmad"
 ```
 
-Because our query is only selecting the values assigned to the variable `?name`, the final answer is **Ahmad's Blog** and **Overfit.in**.
+Because our query is only selecting the values assigned to the variable `?name`, the final answer is **Ahmad's Blog**, **Ahmad Assaf**, **Overfit.in** and **Ahmad**.
 
-### Chaining Queries - Getting Blog Owners Names
+### Chaining Queries: Getting Blog Owners' Names
 
-In the second query, we are chaining two triples. The first triple is the same as the first query, but the second triple is new. In this case, the predicate has a constant value of `aa:owner` and the object is a variable. This query will match the RDF triples that have the predicate `aa:owner` and will assign the value of the object to the variable `?owner`. The second triple will then match the RDF triples that have the predicate `foaf:name` and assign the value of the object to the variable `?ownerName`. 
+The second query shows how to narrow that down by chaining two triples. In the first triple, the predicate has a constant value of `aa:owner` and the object is a variable. This triple will match the RDF triples that have the predicate `aa:owner` and will assign the value of the object to the variable `?owner`. The second triple will then match the RDF triples that have the predicate `foaf:name` for those owners and assign the value of the object to the variable `?ownerName`. 
 
 The result will be two triples with the values `Ahmad Assaf` and `Ahmad` because these are the only owners of the blogs in our RDF triples.
 
-## 2. Filtering by Location
+### Filtering by Location
 
 Find the names of blog owners based near London.
 
@@ -106,22 +109,22 @@ WHERE {
 }
 ```
 
-In this query we have three triples. The first one is the same as our previous example and we already know the solution to it. Now lets look at the second query triple. In this case, the predicate has a constant value of `foaf:based_near` and the object has a constant value of `:London` which can only match to one of our RDF triples.
+In this query we have three triples. The first two are the same as in our previous example and we already know the solution to them. Now let's look at the third query triple. In this case, the predicate has a constant value of `foaf:based_near` and the object has a constant value of `<http://example.org/London>`, which can only match one of our RDF triples.
 
-where the result will be one treple with the value `Ahmad Assaf` because he is the only owner based near London.
+The result will be one row with the value `Ahmad Assaf` because he is the only owner based near London.
 
-## 3. Query for Relationships
+### Query for Relationships
 
 If you have a triple pattern in a query where the predicate is a variable, then you can explore the database to find relationships. For example, the query
 
 ```sparql
 SELECT ?p
 WHERE {
-  <http://example.org/Ahmad> ?p <http://example.org/blog1> .
+  <http://example.org/blog1> ?p <http://example.org/Assaf> .
 }
 ```
 
-The result will be one the type between **Ahmad** and **blog1** and is the triple with the value `aa:owner`! Magic ✨
+The result is a single binding that reveals the relationship between **blog1** and **Assaf**: the value `aa:owner`. Magic ✨
 
 ## Transform Data with CONSTRUCT
 
@@ -129,7 +132,7 @@ Through the `CONSTRUCT` operator, which is an alternative to `SELECT`, [SPARQL](
 
 ```sparql
 PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
-PREFIX aa: <http://assaf.website/Personal#> 
+PREFIX aa: <http://example.org/Personal#> 
 
 CONSTRUCT {
   ?blog foaf:maker ?owner .
@@ -142,8 +145,8 @@ WHERE {
 The result is a new RDF graph where `aa:owner` is replaced by `foaf:maker`.
 
 ```turtle
-<http://assaf.website/blog1> foaf:maker <http://assaf.website/Ahmad> .
-<http://assaf.website/blog2> foaf:maker <http://assaf.website/John> .
+<http://example.org/blog1> foaf:maker <http://example.org/Assaf> .
+<http://example.org/blog2> foaf:maker <http://example.org/Ahmad> .
 ```
 
 ## Using `OPTIONAL`
@@ -152,10 +155,10 @@ An interesting operator in [SPARQL](https://www.w3.org/TR/sparql11-query/) is `O
 
 ::: code-group labels=[Data/RDF, Query/SPARQL]
 
-```xml
-:id1 foaf:name "Ahmad Assaf"
-:id1 foaf: based_near :London
-:id2 foaf:name "Ahmad"
+```turtle
+:id1 foaf:name "Ahmad Assaf" .
+:id1 foaf:based_near :London .
+:id2 foaf:name "Ahmad" .
 ```
 
 ```sparql
@@ -183,11 +186,12 @@ This query can be read as: “find all the names, and oh by the way, if there is
 
 ## Negation Using `FILTER`
 
-The `FILTER` operator is used to filter results based on a condition. For example, if you want to find all the names of people who are not based near London, you can use the following query:
+The `FILTER` operator is used to filter results based on a condition. For example, if you want to find all the names of blog owners who are not based near London, you can use the following query:
 
 ```sparql
 SELECT ?name
 WHERE {
+  ?blog aa:owner ?x .
   ?x foaf:name ?name .
   FILTER NOT EXISTS {
     ?x foaf:based_near <http://example.org/London> .
@@ -195,22 +199,24 @@ WHERE {
 }
 ```
 
-This query will return the name of the person who is not based near London, which is `Ahmad`.
+This query will return the name of the owner who is not based near London, which is `Ahmad`.
 
 <Callout type="info">
 
 ### Negation in SPARQL 1.0
 
-Negation in SPARQL 1.0 is weird. It is based on Negation as Failure and it is implemented using `OPTIONAL`, the `bound` filter, and the `logical-not` operator. The `OPTIONAL` operator binds variables to the triples that we want to exclude, and the filter removes those cases. It is a bit convoluted, but it works
+Negation in SPARQL 1.0 is weird. It is based on Negation as Failure and it is implemented using `OPTIONAL`, the `bound` filter, and the `logical-not` operator. The `OPTIONAL` block tries to match the pattern we want to exclude and binds a fresh variable (here `?london`) only when it succeeds; the outer filter then keeps only the solutions where that variable stayed unbound. It is a bit convoluted, but it works and returns the same answer as the query above: `Ahmad`.
 
 ```sparql
 SELECT ?name
 WHERE {
+  ?blog aa:owner ?x .
   ?x foaf:name ?name .
   OPTIONAL {
-    ?x foaf:based_near <http://example.org/London> .
+    ?x foaf:based_near ?london .
+    FILTER (?london = <http://example.org/London>)
   }
-  FILTER (!bound(?x))
+  FILTER (!bound(?london))
 }
 ``` 
 
@@ -222,17 +228,17 @@ WHERE {
 
 ```sparql
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-PREFIX aa: <http://assaf.website/Personal#>
+PREFIX aa: <http://example.org/Personal#>
 
 SELECT ?blogName ?personName
 WHERE {
+  ?blog foaf:name ?blogName .
   {
     ?blog aa:owner ?person .
-    ?person foaf:name ?personName .
   } UNION {
     ?blog foaf:maker ?person .
-    ?person foaf:name ?personName .
   }
+  ?person foaf:name ?personName .
 }
 ```
 
@@ -247,39 +253,24 @@ WHERE {
 
 :::
 
+Against our sample data only the `aa:owner` branch matches, which produces the two rows above; the `foaf:maker` branch would additionally pick up data that uses the FOAF vocabulary directly, such as the graph produced by the `CONSTRUCT` query earlier.
 
-
-[SPARQL 1.1](https://www.w3.org/TR/sparql11-query/) which was chartered in 2009 came with a log of the features that were missing from the Sparaql 1.0 specification like aggregates, sub-queries, and a natural negation operator. 
+[SPARQL 1.1](https://www.w3.org/TR/sparql11-query/) which was chartered in 2009 came with a lot of the features that were missing from the SPARQL 1.0 specification like aggregates, sub-queries, and a natural negation operator. 
 
 - **Aggregates**: ability to group results and calculate aggregate values (e.g. count, min, max, avg, sum, …).
 - **Sub-queries**: allows a query to be embedded within another.
-- **Negation**: includes two negation operators: NOT EXIST and MINUS
+- **Negation**: includes two negation operators: NOT EXISTS and MINUS
 - **Property paths**: query arbitrary length paths of a graph via a regular-expression-like syntax
 - **Query Federation**: ability to split a single query and send parts of it to different SPARQL endpoints and then combining the results from each one
 - **Projected expressions**: ability for query results to contain values derived from constants, function calls, or other expressions in the SELECT list.
 
 A recommended read to learn more about SPARQL 1.1 is the [W3C Recommendation](https://www.w3.org/TR/sparql11-overview/) and [Learning SPARQL Book](https://learningsparql.com/).
 
-## Extensions of SPARQL
+## Beyond SELECT
 
-SPARQL is more than a query language for RDF data; it is a comprehensive framework with various extensions and enhancements. These extensions significantly expand its capabilities, allowing it to handle complex operations, integrate with diverse data types, and provide advanced querying features. Below, we explore some of the key extensions and their applications.
+SPARQL is more than a query language for RDF data; a whole ecosystem of extensions has grown around it, expanding what it can do well beyond reading triples. These are the ones I find worth knowing about:
 
-<Callout type="info">[SPARQL.Anything](https://github.com/SPARQL-Anything/sparql.anything) is a system for Semantic Web re-engineering that allows users to query anything with SPARQL. In [their video about streamlining Knowledge Graph Construction with a façade: the SPARQL Anything project](https://www.youtube.com/watch?v=Ak3bykN2dgI), Enrico Daga one of the key SPARQL Anything developers gives some good background on the philosophy of Facade-X. To summarize, it models things as lists of lists. Blank nodes, play a large role in this system. </Callout>
-
-## SPARQL UPDATE
-
-[`SPARQL_Update`](https://github.com/blazegraph/database/wiki/SPARQL_Update) introduces write capabilities to the otherwise read-only SPARQL query language. This extension enables users to manipulate RDF data by:
-
-1. **Inserting Data**: Adding new triples or graphs to the dataset.
-2. **Deleting Data**: Removing existing triples or graphs from the dataset.
-3. **Graph Manipulation**: Creating, clearing, or dropping entire named graphs.
-
-## GeoSPARQL
-
-[GeoSPARQL](https://www.ogc.org/publications/standard/geosparql/) is a standardized extension for querying geospatial data within RDF datasets. It allows for representing geometries and spatial relationships and performing geospatial queries such as distance, intersection, and containment.
-
-## SPARQL-Star `SPARQL*`
-
-RDF triplestores have historically been criticized for their inability to attach metadata to graph edges (predicates). This limitation, compared to Property Graphs, has been addressed with [RDF-Star (RDF*) and its querying counterpart SPARQL-Star (SPARQL*)](https://w3c.github.io/rdf-star/cg-spec/editors_draft.html). 
-
-`SPARQL*` allows for querying `RDF*` data, which includes triples with IRIs in the predicate position, enabling metadata-rich graph representations.
+- **[SPARQL Update](https://www.w3.org/TR/sparql11-update/)** introduces write capabilities to the otherwise read-only query language: inserting new triples, deleting existing ones, and creating, clearing, or dropping entire named graphs.
+- **[GeoSPARQL](https://www.ogc.org/publications/standard/geosparql/)** is a standardized extension for querying geospatial data within RDF datasets, covering the representation of geometries and spatial relationships and geospatial queries such as distance, intersection, and containment.
+- **[RDF-star and SPARQL-star](https://www.w3.org/groups/wg/rdf-star/)** address a long-standing criticism of RDF triplestores compared to Property Graphs: the inability to attach metadata to graph edges. RDF-star lets you make statements about triples themselves, and SPARQL-star lets you query them. What began as a Community Group draft has since moved to the W3C RDF-star Working Group, which is standardizing it as part of RDF 1.2 and SPARQL 1.2.
+- **[SPARQL.Anything](https://github.com/SPARQL-Anything/sparql.anything)** is a system for Semantic Web re-engineering that lets you query almost anything (CSV, JSON, HTML, spreadsheets, and more) with SPARQL through the Facade-X meta-model, which represents sources as lists of lists in which blank nodes play a large role. Enrico Daga, one of its key developers, gives a good background on the philosophy in [this talk about streamlining Knowledge Graph construction with a façade](https://www.youtube.com/watch?v=Ak3bykN2dgI).

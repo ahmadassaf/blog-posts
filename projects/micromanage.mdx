@@ -2,9 +2,9 @@
 type: 'Project'
 title: 'Micromanage'
 tags: ['Microservices', 'Bash', 'Developer Tools', 'Git']
-summary: 'Developing features affect very often more than one of these repos. Changing branches, syncing and development is hard as you have to keep flipping between multiple terminal tabs to make sure all the repos are in order. Beamery Micro-services Helpers are shell helper functions that will automate and facilitate manipulating micro-services repos and in general any multiple folders in a certain directory'
+summary: 'Shell helper functions built at Beamery to manage 50+ microservice repositories at once: switching branches, syncing remotes, and auditing npm modules across every repo from a single command.'
 subtitle: 'A Micro-services Helpers Framework | Easily manage multiple repositories and projects'
-layout: ProjectLayout
+layout: 'ProjectLayout'
 github: 'BeameryHQ/micromanage'
 featured: false
 date: '2018-08-07'
@@ -13,133 +13,49 @@ category: 'projects'
 
 ## Beamery Micromanage - A Micro-services Helpers Framework
 
-At [Beamery](http://beamery.com) we follow [Microservices Architecture](https://en.wikipedia.org/wiki/Microservices) which has various advantages from it being easier to scale, deploy independent services to elimination of any long-term commitment to a technology stack. However, Microservices Architecture also has its fair number of disadvantages as testing and inter-services communication become harder.
+> **Status**: This code lived in a former employer's GitHub organization and is no longer public; both the original repo and its install scripts 404 today. This page is kept as a retrospective on the design, which I still think holds up for anyone building shell tooling over many repos.
 
-We currently have a good 50+ git repository. Developing features affect very often more than one of these repos. Changing branches, syncing and development is hard as you have to keep flipping between multiple terminal tabs to make sure all the repos are in order. Beamery Micro-services Helpers are shell helper functions that will automate and facilitate manipulating micro-services repos and in general any multiple folders in a certain directory.
+At [Beamery](http://beamery.com) we followed a [microservices architecture](https://en.wikipedia.org/wiki/Microservices), which has real advantages: easier scaling, independently deployable services, no long-term commitment to a single technology stack. It also has a very mundane cost that architecture diagrams never show. We had over 50 git repositories, and developing a feature very often touched several of them at once. Changing branches, syncing remotes, and keeping every checkout in order meant endlessly flipping between terminal tabs.
 
-> supports bash (version >= 4.0) and zsh (>= 5.0)
+Micromanage was a set of shell helper functions (bash >= 4.0 and zsh >= 5.0) that automated operations across all the repos in a directory: one command, executed in every folder that qualified. It shipped as a plugin for both the [bash-it](https://github.com/Bash-it/bash-it) and [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh) plugin frameworks, with a manual fallback of sourcing a single entry script from your `.bash_profile` or `.bashrc`.
 
-These helper functions are configured out of the box to work [bash-it](https://github.com/Bash-it/bash-it) plugins framework for bash and [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) plugins framework for zsh.
+## What it did
 
-## Installation
+The helpers covered the daily rituals of multi-repo work:
 
-You can install the helpers using the installation script by executing `. install.sh` .. the script will then prompt to select the type of shell you are using, check for the existence of any shell helper and then install the relevant helpers accordingly.
+ - **audit_git_branches**: List all the branches of a git repository sorted by creation date
+ - **check_node_package_usage**: Check where a certain npm package is used across all the repos
+ - **clean_git_branches / clean_git_local_branches / clean_git_remote_branches**: Prune branches merged into master, locally and on remotes
+ - **clean_git_stash**: Clean stashed commits
+ - **clean_npm_modules / generate_npm_report / link_node_modules**: Audit, clean, and link node modules across every repo
+ - **list_git_active_branch**: List the current branch in each repo
+ - **switch_git_branch / switch_git_branch_and_update**: Switch every repo to a branch, optionally pulling the latest from the remote
+ - **track_all_remote_git_branches / update_git_branch**: Track untracked remote branches and update from origin
 
-### One-liner installation
-
-You can install this pugin via the command-line with either curl or wget:
-
-#### via `curl`
-
-```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/SeedJobs/beamery-micromanage/master/install.sh)"
-```
-
-#### via `wget`
-
-```bash
-bash -c "$(wget https://raw.githubusercontent.com/SeedJobs/beamery-micromanage/master/install.sh -O -)"
-```
-
-The manual installation details for these are:
-
-#### bash-it
-
-bash-it separates plugins, aliases and completion functions into three separate folders. To install the completion you will need to copy `bash-it/beamery.completion.bash` to `$BASH_IT/completion/available` which is usually is in `$HOME/.bash_it/completion/available`.
-
-To Install the plugin, you need to copy both the main plugin in `bash-it/beamery.plugin.bash` and the plugins folder in `bash-it/beamery/` to `$BASH_IT/plugins/available` which is usually is in `$HOME/.bash_it/plugins/available`
-
-Activating now the plugins and completion is done via executing both `bash-it enable completion beamery` and `bash-it enable plugin beamery` in the terminal and then reloading the sherll either by `reload` which is a bash-it alias or by sourcing `.bash_profile` or `.bashrc` depending on your OSX by executing `source $HOME/.bash_profile; source $HOME/.bashrc`
-
-#### oh-my-zsh
-
-oh-my-zsh have all their plugin in the plugins folder inside the installation directory of `oh-my-zsh` which is usually in `$HOMR/.oh-my-zsh/plugins`.
-
-Installing oh-my-zsh beamery plugin is done by copying beamery folder in `zsh/beamery/` to oh-my-zsh plugins directory and then activating the plugin by editing your `$HOME/.zshrc` and adding `beamery` to the list of plugins so that you have something similar to:
-
-```bash
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
-plugins=(brew git npm nvm node osx pyenv python scala sublime tmux beamery)
-```
-
-#### Manual
-
-If you do not use any shell halpers but still want to take advantage of these helper functions, you can still install them manually. Basically all what you need to do is source the main entry file which is in `manual/beamery.sh` from your `.bash_profile` or `.bashrc` depending on your OSX. Basically, i create a new folder in my `$HOME` and i call it `.beamery` so thats its hidden, and i copy the contents of `manual` inside so that i have:
-
-<FileTree data={[
-  { name: '.beamery', isFolder: true, childrenProp: [
-    { name: 'beamery.sh', isFolder: false },
-    { name: 'plugins', isFolder: true },
-    { name: 'pluginsInterface.sh', isFolder: false }
-  ]}
-]} />
-
-then i add the line `source $HOME/.beamery/beamery.sh` inside my `$HOME/.bash_profile` as i am on OSX but can be inside your `.bashrc` as well. Simply, reload by re-sourcing these files and you are good to go.
-
-## What does it do ?
-
-Currently the helper functions configured are:
-
- - **audit_git_branches**: List all the branches of a .git repository sorted by date creation
- - **check_node_package_usage**: Check the places a certain npm package is used across all the repos
- - **clean_git_branches**: Total cleaning on branches by first performing deletion of remote branches that have been merged into master
- - **clean_git_local_branches**: Clean any local branches that have been deleted on remote
- - **clean_git_remote_branches**: Clean remote branches that have been merged into master and delete them from remotes as well
- - **clean_git_stash**: Clean any stashed commits
- - **clean_npm_modules**: Clean unused NPM modules from each repo
- - **generate_npm_report**: Generate NPM report using the npm-check module to inspect the state of our npm modules
- - **link_node_modules**: Remove all node_modules from all the repos and run zelda to link and download all
- - **list_git_active_branch**: List the current branches on the repos
- - **switch_git_branch**: Switch the branches of .git repos into a specific branch
- - **switch_git_branch_and_update**: Switch the branches of .git repos into a specific branch and update from the latest remote origin
- - **track_all_remote_git_branches**: Track all remote branches that are not being tracked locally
- - **update_git_branch**: Update .git branches from the latest remote origin
-
-> For the all the plugins, any supported flag (-g, -n, -h, -s) that are described below will be ported as well and executed with each function. So for example, if you wish to only execute `clean_npm_modules` inside of any folder you can then execute `beamery clean_npm_modules -s`
-
-For git functions, there are default params set for `pull` and `push` which are `origin` for your remote and `master` for local branch. However, these can be easily overridden by passing the desired names to the appropriate function call. Example:
+Git functions defaulted to `origin` and `master` but accepted overrides positionally:
 
 ```bash
 beamery switch_git_branch_and_update
-# This will call the sub functions for example like `git checkout master` and `git pull origin master`
+# git checkout master && git pull origin master, in every repo
 beamery switch_git_branch_and_update development
-# This will call the sub functions for example like `git checkout development` and `git pull origin development`
+# git checkout development && git pull origin development
 beamery switch_git_branch_and_update development upstream
-# This will call the sub functions for example like `git checkout development` and `git pull upstream development`
+# git checkout development && git pull upstream development
 ```
 
-### Autocomplete
+Autocompletion worked in both shells: hitting tab after `beamery` listed the available plugins, and `beamery help PLUGIN_NAME` (or a `--help` flag on any call) printed the plugin's docs.
 
-Autocompletion is enabled by default and supports both zsh and bash. For zsh, hitting tab immediately after `beamery` will show the list of supported plugins to execute. Hitting a tab afterwards will add the `--help` flag which will show the help docs for that plugin.
+## The architecture: `execute` as the single primitive
 
-There is a dedicated `help` function that will be triggered by `beamery help PLUGIN_NAME` that will show the help docs for each plugin.
+The part of this project I'm still fond of is how little machinery it needed. Every helper reduced to the same prerequisite: run this function in every folder, but only where it makes sense. That lived in one dispatcher function, `execute`, which took the command to run plus flags describing what kind of folder qualified:
 
-> help can be also triggered by appending the `--help` flag after each call
-
-### Shell Helpers Architecture
-
-The most common prerequisite before executing any "helper" function is to be able to execute that function on every repository you have. Adding new plugins is very easy, you just need to create a new file with the desired function name inside the `plugins` folder. Then, you need to make sure that the file will have:
-
- - `source "${HOME}/PATH_TO_INTERFACE/pluginsInterface.sh"` this is done to load the main plugins "interface"
- - Properly have comments in the file as these will be extracted to show the help docs
- - Executing the code in every folder is done by calling the main `execute` function and passing the set of commands you need to execute to that function.
-
- #### What is `execute` ?
-
- Execute takes a folder type as an argument. This tells the function to verify the folder contents before executing the function. For example, you only want to execute a `git fetch` if the folder processed is a valid git repo. The supported flags passed are:
-
-  - **-s**: only execute the function selected in the current folder
-  - **-g**: git folders examined by the existence of a valid `.git` folder inside
-  - **-n**: node folders examined by the existence of a valid `package.json` folder inside
-  - **-h**: include as well hidden folders as they are not parsed by default
-  - **-p**: suppress the debug sentence when executing inside folders
+ - **-s**: only execute in the current folder
+ - **-g**: only in git folders, verified by the existence of a valid `.git` directory
+ - **-n**: only in node folders, verified by the existence of a `package.json`
+ - **-h**: include hidden folders, which are skipped by default
+ - **-p**: suppress the per-folder debug line
 
 ```bash
-
     # Check if the hidden flag is turned on with the -h param
     if [[ $IS_HIDDEN_FOLDER = 1 ]]; then
         find . -maxdepth 1 -type d \( ! -name . \) | while read -r SUBFOLDER; do cd "$PARENT_FOLDER/$SUBFOLDER" && printf "\nRepository: ${MAGENTA}$SUBFOLDER${NC}\n" && _execute $@; done;
@@ -164,15 +80,29 @@ The most common prerequisite before executing any "helper" function is to be abl
     }
 ```
 
-### Extending with your own plugins
+Because every plugin went through `execute`, the folder-type flags were automatically supported by every helper. `beamery clean_npm_modules -s` ran the cleanup only in the current folder, with no per-plugin code to make that work.
 
-Adding new plugins is fairly straightforward. You just need to create a new plugin in the `plugins/` folder. The guidelines for creating plugins are:
+## Plugins as files, help from comments
 
- - The plugin filename will be the same as the command you wish to be executed
- - Each plugin should source the `pluginInterface` e.g., `source "${HOME}/.beamery/beamery/pluginsInterface.sh"`. You can refer to existing plugins to know the path for the interface depending on your shell implementation
- - Documentation and help for each plugin will be extracted directly from the comments in the plugin file. **Note**: The first line of the comment should be the plugin name
- - To handle the `-s` flag, you might need to implement special logic if you want to block the execution of that function. For example, check the `update_git_branch` plugin
+New commands were added by dropping a file into the `plugins/` folder. The conventions were deliberately minimal:
 
-#### Updates
+ - The plugin filename **is** the command name
+ - Each plugin sources the shared `pluginsInterface.sh` to get access to `execute`
+ - Help docs are extracted directly from the comments at the top of the plugin file, with the first comment line being the plugin name; writing documentation and registering the command were the same act
+ - Plugins that needed special behavior for the `-s` flag implemented it themselves
 
-Since the plugin links itself to bash-it, oh-my-zsh and sits as a git repo, updating it to pull any new plugins or changes is as easy as executing `beamery update` or simply going to your installation folder and pulling the latest from remote.
+The installed layout, in the manual setup, was just:
+
+<FileTree data={[
+  { name: '.beamery', isFolder: true, childrenProp: [
+    { name: 'beamery.sh', isFolder: false },
+    { name: 'plugins', isFolder: true },
+    { name: 'pluginsInterface.sh', isFolder: false }
+  ]}
+]} />
+
+Since the whole thing sat as a git repo hooked into bash-it or oh-my-zsh, updating it was `beamery update` or a `git pull` in the installation folder.
+
+## What I'd keep
+
+A single dispatch primitive, plugins as flat files, and help text extracted from comments meant the tool grew organically: anyone on the team could add a helper in five minutes without touching the core. If I were rebuilding it today, the shape would be the same.

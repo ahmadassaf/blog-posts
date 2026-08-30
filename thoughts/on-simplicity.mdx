@@ -10,12 +10,14 @@ draft: false
 
 The best code I've written is often the code I've deleted.
 
-There's a particular satisfaction in refactoring a complex solution into something elegant and simple. Not simplistic-simple. There's a difference.
+There's a particular satisfaction in refactoring a complex solution into something elegant and simple. Not simplistic, simple. The difference matters. Simplistic code ignores essential complexity: it handles the happy path and pretends the edge cases, failure modes, and awkward requirements do not exist, so the complexity leaks out to whoever uses it. Simple code absorbs that complexity: it faces the same messy problem but finds the design that makes the mess tractable. Simplistic is what you get by stopping early; simple is what you get by pushing through.
 
-> Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away - Antoine de Saint-Exupéry
+Saint-Exupéry's line about perfection being achieved when there is nothing left to take away gets quoted in every talk on this subject, and it earns the overuse: subtraction, not addition, is the test.
 
-This applies to code as much as it does to design. Every line of code is a liability. It needs to be maintained, understood, and debugged. The fewer lines that achieve the same goal, the better.
+Every line of code is a liability. It needs to be maintained, understood, and debugged. The fewer lines that achieve the same goal, the better.
 
 ## The Challenge
 
 The hard part isn't writing simple code initially. It's having the discipline to refactor complex code into simple code when you discover a better way.
+
+Simplicity is harder than complexity because it demands understanding: I can only delete a branch once I know why it exists and can prove nothing depends on it, and building that certainty is real work. Complexity, by contrast, only requires adding another case. And deletion has no visible artifact. A thousand lines added shows up in the diff, the demo, the standup; a thousand lines removed looks, from the outside, like nothing happened. We reward what we can see, so the incentives quietly favor the wrong thing.

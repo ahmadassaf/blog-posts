@@ -13,7 +13,9 @@ category: 'projects'
 
 ## Booklight
 
-I got fed up wasting my time trying to navigate my way through bunch of bookmarks folder to arrange them. So if you are:
+> **Status**: The [repo](https://github.com/ahmadassaf/booklight) is alive (around 110 stars, last pushed August 2026), but the extension still targets Chrome's Manifest V2, which Chrome has been phasing out; it would need a Manifest V3 migration to run on current Chrome.
+
+I got fed up wasting my time navigating through a maze of bookmark folders to keep them arranged. So if you are:
 - Obsessed with organization
 - Have hundreds or thousands of folders in your bookmarks
 - You like to keep things tidy and every page has to be in its "perfect" place
@@ -32,63 +34,17 @@ then you came to the right place. **Booklight** is a clean Chrome Extension to e
 - Show the path of the current selected folder
 - Navigate easily through the folders tree using keyboard
 - Bookmark directly when you find your target
-- The ability to switch to urls search **NEW**
-- Launching urls in current or new tab **NEW**
-- Fuzzy search enabled for filtering on both folders and urls **NEW**
+- Switch to urls search mode
+- Launch urls in the current or a new tab
+- Fuzzy search for filtering on both folders and urls
 - Clean current URL before bookmarking (sometimes the url is polluted with query strings e.g `?source= ...` for various tracking information). To clean the url from those, hit `ctrl+alt+x` and this will solve this issue.
 
-## Bookmark Search & launch
+## Bookmark Search & Launch
 
-Booklight now has the ability to search on your bookmakrs **and it is blazing fast**. I have around 20,000 bookmarks ! and through smart lazy loading and fuzzy search, you can now easily search and launch bookmarks anywhere while browsing.
-To switch to the url search mode just hit `space` and then you will see that you can now search urls by having the `|` symbol in the input box.
-To launch a url in the current window, simply hit `enter` and to open it in a new tab hit `ctr\control + enter`
-
+Booklight can search across your bookmarks, **and it is fast**. I have around 20,000 bookmarks, and through lazy loading and fuzzy search you can search and launch any of them from wherever you are browsing.
+To switch to the url search mode just hit `space`; you will see the `|` symbol appear in the input box to indicate you are now searching urls.
+To launch a url in the current window, hit `enter`; to open it in a new tab, hit `ctrl/control + enter`.
 
 ## Booklight Performance
-I currently have over 1000 folders and 20,000 bookmarked urls. Booklight is blazing fast, to achieve this i implement various hacks to minimize DOM manipulations and most importantly lazy-loading of urls. The lazy loading happens in the following function:
 
-```javascript
-lazyloader: function lazyloader(elements){
-
-	var lazyloader = this;
-
-	this.elements  = elements;
-	this.showLimit = 15;
-	this.urlsDOM   = '';
-
-	this.load = function(empty, hide) {
-
-		var urlsDOM             = '';
-		var currentAttachedUrls = this.urlsDOM == '' ? 0 : $('.booklight_list li[data-type="url"]').length;
-		var limit               = this.elements.length > this.showLimit ? this.showLimit : this.elements.length;
-		var urlsToAdd           = this.elements.slice(currentAttachedUrls, currentAttachedUrls + limit);
-
-		// the idea is build a kind of lazy loading for urls to minimize the building of the DOM elements
-		urlsToAdd.forEach(function(url){
-			urlsDOM += '<li id="' + url.id + '" data-url="' + url.url + '" data-parent="' + url.parentId + '" data-type="url">' +
-			'<img src="http://www.google.com/s2/favicons?domain_url=' + url.url + '"</img>' +
-			url.title + '</li>';
-		});
-
-		lazyloader.urlsDOM += urlsDOM;
-
-		booklight.UI.showSection(urlsDOM, empty, hide);
-		booklight.UI.updateCounter();
-	}
-}
-```
-You can tweak the number of elements you want to show on every iteration and it works for both searching and filtering.
-
-## Things i would like to do
-
-- Add mouse interactions
-- Add better logic to the star icon (at the moment it only shows when the page is successfully bookmarked) but it will not update if remove the bookmark ... etc.
-- ~~Add fuzzy search for filtering from input box~~
-- Smart folder suggestions
-- ~~Remember last location when going back to main screen or removing filters~~ **done**
-
-
-## Thoughts
-
- - [Google Chrome’s awful new bookmark manager (and how to switch it off)](http://blog.garethjmsaunders.co.uk/2015/04/19/google-chromes-awful-new-bookmark-manager-and-how-to-switch-it-off/)
- - [Chrome users roast Google on spit of hate over revamped bookmarks manager](https://www.computerworld.com/article/1364190/chrome-users-roast-google-on-spit-of-hate-over-revamped-bookmarks-manager.html)
+I currently have over 1,000 folders and 20,000 bookmarked urls, so performance was a real constraint rather than an afterthought. The two tricks that matter: minimizing DOM manipulation, and lazy-loading url results in small batches (15 at a time by default) instead of rendering the whole result set. The batch size is tweakable, and the same mechanism drives both searching and filtering. The implementation lives in the extension's lazyloader in [the repo](https://github.com/ahmadassaf/booklight) if you want the details.

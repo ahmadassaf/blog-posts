@@ -10,19 +10,23 @@ draft: false
 
 Technical debt has a bad reputation. But like financial debt, it's a tool. Used wisely, it lets you move faster when speed matters.
 
-The problem isn't taking on debt. It's taking it on accidentally, or never paying it back.
+Martin Fowler's [technical debt quadrant](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html) makes the useful cut: debt is deliberate or inadvertent, and prudent or reckless. The problem was never the deliberate-prudent kind, "we ship now and accept the cleanup cost". The problem is the reckless kind, and above all the inadvertent kind: debt you took on without ever noticing, or never paying back.
 
 ## When to Take On Debt
 
 Ship the MVP fast to validate an idea. If it works, you can refactor. If it doesn't, you saved time by not over-engineering.
 
-Hit a deadline that actually matters. Real deadlines-like a conference demo or a contract renewal-can justify shortcuts.
+Hit a deadline that actually matters. Real deadlines, like a conference demo or a contract renewal, can justify shortcuts.
 
 Learn by doing. Sometimes you need to build the wrong thing first to understand what the right thing should be.
 
 ## When Not to Take On Debt
 
-Core infrastructure. Security. Data integrity. Anything that's expensive to fix later.
+The test is the cost of reversal, and in a few places that cost is brutal:
+
+- **Core infrastructure.** Everything else is built on top of it, so a shortcut here gets baked into every service that depends on it. Reversing it means migrating all of them at once.
+- **Security.** You don't get to refactor after a breach. The downside is not rework, it's incident response, disclosure, and lost trust that no sprint pays back.
+- **Data integrity.** Bad code can be replaced; data corrupted or lost by bad code often cannot. Once wrong values have propagated into reports, decisions, and downstream systems, there is no clean rollback.
 
 ## The Key
 
