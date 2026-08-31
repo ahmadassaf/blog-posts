@@ -14,6 +14,7 @@ const AgileCadenceExplorer = dynamic(() => import('./AgileCadenceExplorer'));
 const AgileChartsExplorer = dynamic(() => import('./AgileChartsExplorer'));
 const DittoStagesExplorer = dynamic(() => import('./DittoStagesExplorer'));
 const GaudiBarLayout = dynamic(() => import('./GaudiBarLayout'));
+const GrowthLevelsExplorer = dynamic(() => import('./GrowthLevelsExplorer'));
 const ImprovementKataExplorer = dynamic(() => import('./ImprovementKataExplorer'));
 const JsonLdGraphExplorer = dynamic(() => import('./JsonLdGraphExplorer'));
 const OlapCubeExplorer = dynamic(() => import('./OlapCubeExplorer'));
@@ -32,6 +33,7 @@ export const VisualisationComponents = {
   AgileChartsExplorer,
   DittoStagesExplorer,
   GaudiBarLayout,
+  GrowthLevelsExplorer,
   ImprovementKataExplorer,
   JsonLdGraphExplorer,
   LinkedDataQualityFramework,
