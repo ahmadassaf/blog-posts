@@ -50,7 +50,7 @@ Syntax trees are representations of source code or even natural language. These 
 
 ## Remark: Markdown Processing Made Easy
 
-[Remark](https://github.com/remarkjs/remark) is a [Unified.js](https://github.com/unifiedjs/unified) processor specifically designed for working with Markdown. It transforms Markdown text into a Markdown Abstract Syntax Tree (MDAST), which provides a structured format for analyzing and manipulating the content.
+Remark is a [Unified.js](https://github.com/unifiedjs/unified) processor specifically designed for working with Markdown. It transforms Markdown text into a Markdown Abstract Syntax Tree (MDAST), which provides a structured format for analyzing and manipulating the content.
 
 <UnifiedProcessorExplorer view="remark" />
 
@@ -101,9 +101,9 @@ Welcome to my blog. Here's an interactive chart:
 
 :::
 
-[Remark](https://github.com/remarkjs/remark) parses this text into an MDAST, where each element (heading, paragraph, etc.) becomes a node in the tree. Plugins can then be applied to modify the structure, perhaps to add links, convert headings to anchor links, or inject custom elements. Once transformations are complete, [Remark](https://github.com/remarkjs/remark) can convert the MDAST back into Markdown or directly to HTML.
+Remark parses this text into an MDAST, where each element (heading, paragraph, etc.) becomes a node in the tree. Plugins can then be applied to modify the structure, perhaps to add links, convert headings to anchor links, or inject custom elements. Once transformations are complete, Remark can convert the MDAST back into Markdown or directly to HTML.
 
-By combining [Remark](https://github.com/remarkjs/remark) with plugins, you can:
+By combining Remark with plugins, you can:
 
 - Enforce consistent Markdown formatting.
 - Automatically generate tables of contents.
@@ -122,9 +122,9 @@ Each of the Markdown elements (headings, paragraphs, etc.) is mapped to a specif
 
 ## Rehype: HTML and Beyond
 
-While [Remark](https://github.com/remarkjs/remark) excels at handling Markdown, [Rehype](https://github.com/rehypejs/rehype) is the go-to tool for working with HTML. Like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype) parses content into an abstract syntax tree, known as HAST (HTML Abstract Syntax Tree). This tree is ideal for making HTML-specific transformations, such as adding classes, optimizing images, or embedding scripts.
+While Remark excels at handling Markdown, Rehype is the go-to tool for working with HTML. Like Remark, Rehype parses content into an abstract syntax tree, known as HAST (HTML Abstract Syntax Tree). This tree is ideal for making HTML-specific transformations, such as adding classes, optimizing images, or embedding scripts.
 
-[Rehype](https://github.com/rehypejs/rehype) becomes particularly useful when converting Markdown to HTML. Using the `remark-rehype` plugin, you can transform an MDAST into a HAST, enabling a seamless transition from Markdown to HTML. From there, [Rehype](https://github.com/rehypejs/rehype) plugins can be used to enhance the HTML output, ensuring that your blog post is optimized for performance and accessibility.
+Rehype becomes particularly useful when converting Markdown to HTML. Using the `remark-rehype` plugin, you can transform an MDAST into a HAST, enabling a seamless transition from Markdown to HTML. From there, Rehype plugins can be used to enhance the HTML output, ensuring that your blog post is optimized for performance and accessibility.
 
 <Callout type="info">Any package that starts with `rehype-*` is operating on the HTML syntax tree (HAST)</Callout>
 
@@ -252,8 +252,8 @@ There are several advantages to working with **MDAST** (Markdown Abstract Syntax
 The real power of these tools emerges when they are used together. Here’s a typical workflow for creating an interactive blog post:
 
 1. **Write Content in Markdown:** Start with simple Markdown to draft your content.
-2. **Enhance with Remark:** Use [Remark](https://github.com/remarkjs/remark) plugins to lint your Markdown, generate a table of contents, or add custom syntax transformations.
-3. **Transform to HTML with Rehype:** Convert Markdown to HTML and apply [Rehype](https://github.com/rehypejs/rehype) plugins to add interactivity or optimize the output.
+2. **Enhance with Remark:** Use Remark plugins to lint your Markdown, generate a table of contents, or add custom syntax transformations.
+3. **Transform to HTML with Rehype:** Convert Markdown to HTML and apply Rehype plugins to add interactivity or optimize the output.
 4. **Integrate JSX with MDX:** Embed React components to introduce dynamic and interactive elements.
 5. **Render in Your Application:** Use a framework like Next.js to render your [MDX](https://mdxjs.com) content as part of a blog or documentation site.
 
