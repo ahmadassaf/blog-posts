@@ -10,11 +10,11 @@ category: 'engineering'
 tableOfContents: true
 ---
 
-Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words-they seek engaging, interactive, and visually rich content. For developers and content creators, the challenge lies in creating blog posts that are both easy to write and maintain while also offering interactivity and customization. This is where the [Unified.js](https://github.com/unifiedjs/unified) ecosystem-along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com)-shines.
+Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words: they seek engaging, interactive, and visually rich content. I faced this challenge directly when building this blog, wanting posts that are easy to write and maintain while still offering interactivity and customization. My answer was the [Unified.js](https://github.com/unifiedjs/unified) ecosystem, along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com). In fact, the post you are reading right now is rendered by the very pipeline this article describes: this blog runs its own remark plugins (one that turns external links into preview cards, another that adds titles to code blocks) alongside a rehype plugin that transforms internal post links into interactive preview cards.
 
 Markdown has many different flavors and different people have different requirements for features they expect from it. [Unified.js](https://github.com/unifiedjs/unified) provides a powerful and flexible framework for parsing, transforming, and rendering content in various formats, including Markdown, HTML, and JSX.  It takes a string and turns it into structured data (syntax tree) that other plugins can work with. Plugins can do anything, from spellcheck to linting or transforming from one format to another (e.g. Markdown → HTML). Unified on its own doesn’t do much. It acts as a unifying package for all the other plugins out there.
 
-By leveraging these tools, we can create interactive and engaging blog posts that combine the simplicity of Markdown with the capabilities of modern JavaScript frameworks.
+By leveraging these tools, I get interactive and engaging blog posts that combine the simplicity of Markdown with the capabilities of modern JavaScript frameworks, and in this post I'll walk through how each piece fits together.
 
 ## MDX: Markdown Meets JSX
 
@@ -61,11 +61,9 @@ For example, consider a blog post written in Markdown:
 ```markdown
 # My Interactive Blog
 
-This is a regular Markdown paragraph.
+Welcome to my blog. Here's an interactive chart:
 
 <Chart data={[1, 2, 3, 4]} />
-
-Another paragraph follows the chart.
 ```
 
 ```json
@@ -103,7 +101,7 @@ Another paragraph follows the chart.
 
 :::
 
-[Remark](https://github.com/remarkjs/remark) parses this text into an MDAST, where each element (heading, paragraph, etc.) becomes a node in the tree. Plugins can then be applied to modify the structure-perhaps to add links, convert headings to anchor links, or inject custom elements. Once transformations are complete, [Remark](https://github.com/remarkjs/remark) can convert the MDAST back into Markdown or directly to HTML.
+[Remark](https://github.com/remarkjs/remark) parses this text into an MDAST, where each element (heading, paragraph, etc.) becomes a node in the tree. Plugins can then be applied to modify the structure, perhaps to add links, convert headings to anchor links, or inject custom elements. Once transformations are complete, [Remark](https://github.com/remarkjs/remark) can convert the MDAST back into Markdown or directly to HTML.
 
 By combining [Remark](https://github.com/remarkjs/remark) with plugins, you can:
 
@@ -137,11 +135,9 @@ While [Remark](https://github.com/remarkjs/remark) excels at handling Markdown, 
 ```markdown
 # My Interactive Blog
 
-This is a regular Markdown paragraph.
+Welcome to my blog. Here's an interactive chart:
 
 <Chart data={[1, 2, 3, 4]} />
-
-Another paragraph follows the chart.
 ```
 
 ```json
@@ -214,7 +210,7 @@ Another paragraph follows the chart.
     }
   ]
 }
-````
+```
 :::
 
 ### Breakdown of HAST Structure:
@@ -223,7 +219,7 @@ Another paragraph follows the chart.
 - **Element Node**: Each `h1` (heading) and `p` (paragraph) in the original MDX content is converted to corresponding HTML elements (`<h1>` and `<p>`).
 - **JSX Converted to `div`**: The JSX component `<Chart />` is converted to a `div` element (for simplicity in this example). It could also be rendered dynamically via React, but in the HAST tree, it’s represented as a `div` for static rendering.
 
-In a real-world scenario, the `div` would likely be rendered into a functional component or React element when integrated into a frontend framework like [React](https://react.com).
+In a real-world scenario, the `div` would likely be rendered into a functional component or React element when integrated into a frontend framework like [React](https://react.dev).
 
 ## Rehype vs. Remark: Choosing the Right Tool
 
@@ -265,8 +261,6 @@ The real power of these tools emerges when they are used together. Here’s a ty
 
 ## Conclusion
 
-[Unified.js](https://github.com/unifiedjs/unified) offers a robust toolkit for creating modern, interactive, and engaging blog posts. The tools there not only simplify content creation but also enable rich customization and interactivity.
+[Unified.js](https://github.com/unifiedjs/unified) offers a robust toolkit for creating modern, interactive, and engaging blog posts, and it is the toolkit this blog itself runs on: every post here, including the one you have just read, passes through the remark and rehype pipeline described above before it reaches your screen.
 
-**MDAST** and [Remark](https://github.com/remarkjs/remark) are ideal for working directly with Markdown content, providing a flexible and high-level way to transform and manipulate it without having to worry about the specifics of HTML. It's easier to perform content-centric operations like linting, generation of TOCs, and custom syntax extensions. **HAST** and [Rehype](https://github.com/rehypejs/rehype) on the other hand, shine when you need to work with HTML content or require a final output optimized for web rendering. For those working within the Markdown ecosystem, MDAST provides a much smoother workflow and is better suited for manipulating the semantic structure of the content before rendering it to HTML.
-
-By leveraging this ecosystem, you can transform static posts into vibrant experiences that captivate your audience while maintaining a smooth and efficient writing workflow. Start exploring these tools today and redefine how you create content!
+By leveraging this ecosystem, I have been able to turn static posts into richer, more interactive experiences while keeping my writing workflow as simple as editing a Markdown file.

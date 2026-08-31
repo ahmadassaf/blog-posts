@@ -27,24 +27,22 @@ To overcome this, I have designed gaudiBar utilizing flex layout capabilities an
 
 ## Installation
 
-Make sure you have [Übersicht](http://tracesof.net/uebersicht/) installed.
-
-Then clone this repository.
+Make sure you have [Übersicht](http://tracesof.net/uebersicht/) installed, then clone the repository into the Übersicht widgets directory (or wherever you have pointed your widgets folder if you have changed it):
 
 ```bash
 # Make sure that this points to your widgets folder
-$WIDGETS_HOME=$HOME/Library/Application\ Support/Übersicht/widgets/
+WIDGETS_HOME=$HOME/Library/Application\ Support/Übersicht/widgets/
 git clone https://github.com/g-udi/gaudiBar.ubersicht.widget $WIDGETS_HOME/gaudiBar.ubersicht.widget
 ```
-or to your current widget directory if you have changed it.
+
 > You can always know your widgets folder by clicking on the Übersicht menu bar icon and clicking on *Open widgets folder*
 
-Some widgets may require installing some additional packages, they are all documented under each widgets README.
+Some widgets may require installing some additional packages, they are all documented under each widget's README.
 
 
 ## The Development Process
 
-[Übersicht](http://tracesof.net/uebersicht/) creates a webview and places it on your desktop, just above the wallpaper but behind everything else. Übersicht widgets are written as `.coffee` or `.js` <sup>and other flavors like `.jsx`</sup>  files which let you format elements with html, style them with css and manipulate data with javascript and coffeescript. For dynamic widgets, Übersicht let's you run terminal commands and insert the output into html, so just about any language can be used to write scripts for widgets.
+[Übersicht](http://tracesof.net/uebersicht/) creates a webview and places it on your desktop, just above the wallpaper but behind everything else. Übersicht widgets are written as `.coffee` or `.js` <sup>and other flavors like `.jsx`</sup> files which let you format elements with html, style them with css and manipulate data with javascript and coffeescript. For dynamic widgets, Übersicht lets you run terminal commands and insert the output into html, so just about any language can be used to write scripts for widgets.
 
 ### Layout Design
 
@@ -52,7 +50,7 @@ I started by designing a flexible layout. The main container spans the entire de
 
 <GaudiBarLayout />
 
-The interactive diagram above shows how gaudi overlays on your desktop:
+The interactive diagram above shows how gaudiBar overlays on your desktop:
  - The main container covering the whole desktop
  - Two main `primary-bar` components on the top and bottom of the screen
  - Each `primary-bar` has three `secondary-bar` regions (left, middle, right)
@@ -67,8 +65,8 @@ module.exports = {
     battery: require('./battery/index.jsx'),
     chunkwm: require('./chunkwm/index.jsx'),
     date: require('./date/index.jsx'),
-    istats: require('./istats/index.jsx')
-    ...
+    istats: require('./istats/index.jsx'),
+    // ...
 }
 ```
 

@@ -15,7 +15,7 @@ In the [previous article](/blog/category/data/everything-you-need-to-know-about-
 
 RDF organizes data into triples in the form of **subject-predicate-object**, which collectively form a directed graph. Each triple represents a relationship, making RDF an ideal format for data that contains intricate relationships, hierarchies, and dependencies.
 
-Querying RDF data allows you to retrieve meaningful subsets of data, answer complex questions, or explore relationships between resources. The standard approach for querying RDF is [SPARQL](https://www.w3.org/TR/sparql11-query/) , a language specifically designed to navigate and manipulate RDF graphs.
+Querying RDF data allows you to retrieve meaningful subsets of data, answer complex questions, or explore relationships between resources. The standard approach for querying RDF is [SPARQL](https://www.w3.org/TR/sparql11-query/), a language specifically designed to navigate and manipulate RDF graphs.
 
 [SPARQL](https://www.w3.org/TR/sparql11-query/), standardized by W3C, functions as both a query and update language. Its graph-based nature aligns perfectly with the RDF structure, enabling sophisticated querying mechanisms beyond the capabilities of traditional relational query languages like SQL. If this is the first time you look at SPARQL, but you are familiar with [SQL](https://en.wikipedia.org/wiki/SQL), you will see some similarities because it shares several keywords such as `SELECT`, `WHERE`, etc. It also has new keywords that you have never seen if you come from a SQL world such as `OPTIONAL`, `FILTER` and much more.
 
@@ -79,7 +79,7 @@ WHERE {
 
 :::
 
-Let’s break down the first query, which gets every name in the database. The query starts with the keyword `SELECT` and afterwards are the variable names that we would like to project, which in this case is `?name`. <Highlight>Note that all variable names have a question mark in the beginning</Highlight>.  Afterwards, we find the `WHERE` keyword which is followed by a triple between curly braces. This triple is the most interesting part. The triple in the query must also consists of a **subject**, **predicate** and an **object** but in this case, either one can be a variable. In this case, the subject and the object are variables while the predicate is a constant value. This triple in the query is evaluated against all the RDF triples in your database. Constant values in the query triples are matched with constant values of the RDF triples in your database. For example, in our query triple, the only constant value is in the predicate which is `foaf:name`. Out of our eight RDF triples, four of them have `foaf:name` as a constant in the predicate, therefore these four RDF triples match our query triple. Note that nothing in the query restricts `?x` to blogs: anything with a `foaf:name`, blogs and owners alike, matches.
+Let’s break down the first query, which gets every name in the database. The query starts with the keyword `SELECT` and afterwards are the variable names that we would like to project, which in this case is `?name`. <Highlight>Note that all variable names have a question mark in the beginning</Highlight>.  Afterwards, we find the `WHERE` keyword which is followed by a triple between curly braces. This triple is the most interesting part. The triple in the query must also consist of a **subject**, **predicate** and an **object** but in this case, either one can be a variable. In this case, the subject and the object are variables while the predicate is a constant value. This triple in the query is evaluated against all the RDF triples in your database. Constant values in the query triples are matched with constant values of the RDF triples in your database. For example, in our query triple, the only constant value is in the predicate which is `foaf:name`. Out of our eight RDF triples, four of them have `foaf:name` as a constant in the predicate, therefore these four RDF triples match our query triple. Note that nothing in the query restricts `?x` to blogs: anything with a `foaf:name`, blogs and owners alike, matches.
 
 ```shell
 ?x = http://example.org/blog1, ?name = "Ahmad's Blog"
@@ -172,7 +172,7 @@ WHERE {
 :::
 
 
-If you are coming from the SQL world, you would expect two results: `{?name = “Ahmad Assaf”, ?loc = :London}` and `{?name = Ahmad, ?loc = null}`. However, there is no triple with subject `:id2` and predicate `foaf:based_near`, therefore there is nothing to join on. Additionally, <Highlight>there are no nulls in RDF</Highlight> so you can't explicitly say that Ahmad has a location which is `null`, Therefore, this solution is not possible. The actual answer is just `{?name = “Ahmad Assaf”, ?loc = :London}` . So how do I get the previous results? This is where `OPTIONAL` comes in. The query would have to be:
+If you are coming from the SQL world, you would expect two results: `{?name = "Ahmad Assaf", ?loc = :London}` and `{?name = "Ahmad", ?loc = null}`. However, there is no triple with subject `:id2` and predicate `foaf:based_near`, therefore there is nothing to join on. Additionally, <Highlight>there are no nulls in RDF</Highlight> so you can't explicitly say that Ahmad has a location which is `null`. Therefore, this solution is not possible. The actual answer is just `{?name = "Ahmad Assaf", ?loc = :London}`. So how do I get the previous results? This is where `OPTIONAL` comes in. The query would have to be:
 
 ```sparql
 SELECT ?name ?loc
@@ -182,7 +182,7 @@ WHERE {
 }
 ```
 
-This query can be read as: “find all the names, and oh by the way, if there is a `foaf:based_near` attached, return that too, otherwise, don't worry about it”. The actual solution would be `{?name = “Ahmad Assaf”, ?loc = :London}` and `{?name = “Ahmad”}`.
+This query can be read as: “find all the names, and oh by the way, if there is a `foaf:based_near` attached, return that too, otherwise, don't worry about it”. The actual solution would be `{?name = "Ahmad Assaf", ?loc = :London}` and `{?name = "Ahmad"}`.
 
 ## Negation Using `FILTER`
 

@@ -50,7 +50,7 @@ generate_npm_report() {
 ```
 
 This script is executed at the root folder that contains all of your repositories, will execute the `npm-check` command, and aggregate the results in the `npm-report.txt` at the root directory where you executed your script.
-The script also checks first if the `npm-check` command exists or if we need to install it via an `npm install -g npm-check.`
+The script also checks first if the `npm-check` command exists or if we need to install it via an `npm install -g npm-check`.
 
 To go step by step inside the main function:
 
@@ -65,7 +65,7 @@ After knowing the various modules used, I cleaned my file, pasted the results in
 
 ## Cleaning out unused NPM modules
 
-The previous function gives us an idea of the modules and frequency used. However, we might have a bunch of unused modules that were left over old code and will just increase the size of our containers with no actual use.
+The previous function gives us an idea of the modules and frequency used. However, we might have a bunch of unused modules that were left over from old code and will just increase the size of our containers with no actual use.
 
 We can easily clean out those modules by taking advantage of the [npm-clean](https://github.com/afc163/npm-clean) and plug that in a similar wrapper as the function above, reusing the same `command_exists` helper:
 

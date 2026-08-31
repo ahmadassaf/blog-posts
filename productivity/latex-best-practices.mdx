@@ -61,14 +61,14 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
   ]}
 />
 
-## General Organisations
+## General Organisation
 
 - Create a structure to include your papers in an organised fashion. I keep separate folders for `papers`, `posters`, `presentations`, `reports` and `thesis`. **Note**: Demo and research paper are included in the same folder, you can decide to have posters and demo in the same folder. It is up to you.
 - To easily navigate through papers, it is good to have a separate folder for each conference (if you have a large number of papers, you can add another hierarchy level with the year) but for me it is a flat structure inside each folder with a naming convention that follows `<Conference>'<Year> - <Paper Name>`.
 - Keep a `util` folder in the root. This will hold misc files that you need globally. For me, I have a `LaTeX` folder inside that includes all the document classes that I use across my papers. I then reference the class using a relative path. This way, you will not need to maintain different copies of the same files in each paper's folder. Also this folder will include a `Bibliography` folder containing a centralised `.bib` file. I will come to this in details after.
 - In every paper folder, create a separate folder for your `figures` to include shapes, graphics and charts and `tables` to include `.xls, .csv, .lyx` files or any information related to creating tables.
 
-#### An Example of my folders structure
+### An example of my folder structure
 
 <FileTree
   data={[
@@ -167,7 +167,7 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
   ]}
 />
 
-#### Special Organisation
+### Special Organisation
 
 For special reports (or thesis), when you have multiple `.tex` files and things can get messy then you can:
 
@@ -212,19 +212,19 @@ For special reports (or thesis), when you have multiple `.tex` files and things 
 
 ## Environment Setup
 
-- I cannot stress enough on the importance of using a versioning system like [`git`](http://git-scm.com/) or [`svn`](https://subversion.apache.org/). It is vital for collaborative authoring.
+- I cannot stress enough the importance of using a versioning system like [`git`](http://git-scm.com/) or [`svn`](https://subversion.apache.org/). It is vital for collaborative authoring.
 - My development machine is a Mac running OSX Yosemite. I use [MacTeX](https://tug.org/mactex/). MacTeX is an all-in-one package installing the following:
-  - GUI Applications: [TeXShop](http://www.uoregon.edu/~koch/texshop/texshop.html) , [BibDesk](http://bibdesk.sourceforge.net/), [LaTeXiT](https://www.chachatelier.fr/latexit/), [TeX Live Utility](https://code.google.com/p/mactlmgr/), the spell checker [Excalibur](http://excalibur.sourceforge.net/), and some documentation
+  - GUI Applications: [TeXShop](http://www.uoregon.edu/~koch/texshop/texshop.html), [BibDesk](http://bibdesk.sourceforge.net/), [LaTeXiT](https://www.chachatelier.fr/latexit/), [TeX Live Utility](https://code.google.com/p/mactlmgr/), the spell checker [Excalibur](http://excalibur.sourceforge.net/), and some documentation
   - Ghostscript 9.10
   - TeX Live 2014, the actual TeX distribution
 
-#### Generating LaTeX Tables
+### Generating LaTeX Tables
 
 - A nice program that provides a GUI for various tasks is Lyx. I have not used it for Mac but it was useful when editing/creating tables on Windows. It can import data in `.csv` format and generate `.tex` code from it.
 - There are several online `.tex` generators. I use [the online LaTeX table generator](http://www.tablesgenerator.com/), and found it very useful for small/medium tables.
 - There is a handy Excel macro to convert tables in Excel files to LaTeX; I keep a converter macro (`Excel To LaTeX Table Converter.xla`) in my utils folder.
 
-#### Editing LaTeX with Sublime Text
+### Editing LaTeX with Sublime Text
 
 I use [Sublime Text](https://www.sublimetext.com/) for nearly everything, so using it to write LaTeX was the logical choice for me. With the correct plugins it is a handy editor. You first need to make sure you have a valid TeX distribution (see above) and installed [Skim PDF Viewer](http://skim-app.sourceforge.net/). Skim is used to generate the result of the LaTeX build.
 
@@ -241,7 +241,7 @@ Now you will be able to use LaTeX in Sublime. A powerful feature is **auto-compl
 - Use comment blocks to identify each section
 - Use labels always to refer to sections, figures or tables. Start your label for each with a unique string e.g. `fig:`, `sec:`, `tab:`. This is useful when the auto-complete suggests several entries, you can easily filter and find what you want exactly.
 - Always use `\url` command to represent URLs.
-- Use `~` to have a non-breaking space between the last word and the reference or citation e.g. `in~cite{}`
+- Use `~` to have a non-breaking space between the last word and the reference or citation e.g. `in~\cite{}`
 - In your LaTeX document, avoid as much as possible to control the layout. Hence, you should never use `\\` Either you want to start a new paragraph or you don't but you should let LaTeX format the paper.
 
 ## Writing-Style Tips
@@ -254,7 +254,7 @@ I used to have a separate `.bib` file for each paper. However, I ended up using 
 
 - There is a central `.bib` file containing just about every reference you (or your coauthors) have ever even thought of.
 - You (and your various coauthors) have a variety of documents that refer to stuff in this central `.bib` file.
-- You want to look in the `.aux` file for a list of references, then go to this `.bib` file, extracts the relevant entries, and then puts them in a local `.bbl` file ready for insertion in to the document for each paper.
+- BibTeX looks in the `.aux` file for the list of references, goes to the `.bib` file, extracts the relevant entries, and puts them in a local `.bbl` file ready for insertion into the document for each paper.
 
 This is done automatically by BibTex. So for me, in every paper now I only add `\bibliography{../../Util/Bibliography/bibliography}` and I am good to go.
 
@@ -277,7 +277,7 @@ I used to copy/paste BibTex citations from the Internet and thought that I was g
 - Loading the [strict](http://texd.cvs.sourceforge.net/texd/latex/sty/strict.sty?revision=1.2&view=markup) package prevents using LaTeX's declarations as environments.
 - Loading the [fixltx2e](http://ctan.org/pkg/fixltx2e) package fixes some LaTeX2e errors (obsolete since 2015: its fixes were merged into the LaTeX kernel, so recent distributions no longer need it).
 - [fixmath](http://ctan.org/pkg/fixmath) changes LaTeX's default math style to comply with some international standards, specifically regarding Greek letters, see package description.
-- [refcheck](https://www.ctan.org/tex-archive/macros/latex/contrib/refcheck) for checking "references in a document, looking for numbered but unlabeled equations, for labels which are not used in the text, for unused bibliography references.
+- [refcheck](https://www.ctan.org/tex-archive/macros/latex/contrib/refcheck) for checking references in a document: numbered but unlabeled equations, labels that are never used in the text, and unused bibliography entries.
 - [LaTeX Templates](https://www.overleaf.com/latex/templates) (originally on ShareLaTeX, which has since merged into Overleaf)
 
 ## Further links

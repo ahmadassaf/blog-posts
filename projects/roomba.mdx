@@ -24,11 +24,11 @@ Linked Open Data (LOD) is one of the largest collections of interlinked datasets
 
 ### Data Portal Identification
 
-Data portals can be considered as data access points providing tools to facilitate data publishing, sharing, searching and visualization. [CKAN](http://ckan.org) is the world's leading open-source data portal platform powering websites like the DataHub, Europe's Public Data and the U.S Government's open data. Modeled on CKAN, [DKAN](http://drupal.org/project/dkan) is a standalone Drupal distribution that is used in various public data portals as well.
+Data portals can be considered as data access points providing tools to facilitate data publishing, sharing, searching and visualization. [CKAN](http://ckan.org) is the world's leading open-source data portal platform powering websites like the DataHub, Europe's Public Data and the U.S. Government's open data. Modeled on CKAN, [DKAN](http://drupal.org/project/dkan) is a standalone Drupal distribution that is used in various public data portals as well.
 Identifying the software powering data portals is a vital first step to understand the API calls structure. Web scraping is a technique for extracting data from Web pages. Roomba relies on several scraping techniques in the identification process, combining:
 
 - **URL inspection**: Check the existence of certain URL patterns.
-- **Meta tags inspection**: For example, `meta[content*="ckan]` (all meta tags with the attribute content containing the string `CKAN`). This selector can identify CKAN portals whereas the `meta[content*="Drupal"]` can identify DKAN portals.
+- **Meta tags inspection**: For example, `meta[content*="ckan"]` (all meta tags with the attribute content containing the string `CKAN`). This selector can identify CKAN portals whereas the `meta[content*="Drupal"]` can identify DKAN portals.
 - **Document Object Model (DOM) inspection**: Similar to the meta tags inspection, Roomba checks the existence of certain DOM elements or properties.
 
 The identification process for each portal can be easily customized by overriding the `prototype.check` function for each parser. Moreover, adding or removing steps from the identification process can be easily configured.
@@ -55,26 +55,30 @@ The metadata validation process identifies missing information and, where possib
 
 There are special validation steps for various fields. For example, for ownership information where the maintainer email has to be defined, the validator checks if the email field is an actual valid email address. A similar process is done to URLs whenever found, including an HTTP `HEAD` request to check if the URL is reachable. For the dataset resources, the `content-header` information from a successful request is used to extract, compare and correct further metadata values like mimetype and content size.
 
+The excerpt below (trimmed from a full CKAN dataset record) shows the kind of metadata being validated:
+
 ```json
-"author": "Raphael Troncy",
-        "author_email": "raphael.troncy@eurecom.fr",
-        "state": "active",
-        "version": "2010-09-01 (0.1)",
-        "license_id": "cc-by-sa",
-        "type": "dataset",
-        "resources": [
-            {
-                "mimetype": "",
-                "cache_url": "",
-                "mimetype_inner": "",
-                "hash": "",
-                "description": "LODE ontology",
-                "format": "meta/rdf-schema"
-            }
-        ]
+{
+    "author": "Raphael Troncy",
+    "author_email": "raphael.troncy@eurecom.fr",
+    "state": "active",
+    "version": "2010-09-01 (0.1)",
+    "license_id": "cc-by-sa",
+    "type": "dataset",
+    "resources": [
+        {
+            "mimetype": "",
+            "cache_url": "",
+            "mimetype_inner": "",
+            "hash": "",
+            "description": "LODE ontology",
+            "format": "meta/rdf-schema"
+        }
+    ]
+}
 ```
 
-## How to run ?
+## How to run?
 
 You can either download this repo as a zip file or clone directly through git. Pay attention when cloning as there is a `submodule` defined and has to be cloned recursively as well. This can be done via:
 ```shell
@@ -117,23 +121,9 @@ There are a set of options that you can customize. They can be edited from `opti
 
 ### Localization
 
-If you wish to translate the messages and prompts into other languages than English, you have to create a new language entry in the `util/messages.js` with the new locale code e.g. `fr`. Afterwards, you should keep the object keys intact and translate the values into the desired language. For example:
+Report labels can be localized; see the [repo](https://github.com/ahmadassaf/roomba) for details.
 
-```javascript
-var messages =   {
-    "en": {
-        "error" : {
-            "unKnownError" : "An unknown Error occurred .. ",
-            .
-            .
-    "fr": {
-        "error" : {
-            "unkownError" : "Erreur inconnue .."
-        }
-    }
-```
-
-## How to use ?
+## How to use?
 
 Roomba gives you the ability to perform the following:
 

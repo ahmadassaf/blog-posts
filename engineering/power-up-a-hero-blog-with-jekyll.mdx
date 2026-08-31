@@ -112,7 +112,7 @@ What is notable about a **page** is the ability to define a `permalink` in the f
 
 ## Collaborating on Posts
 
-Since one of the reasons I moved to Jekyll and markdown-based blog is to enable people to contribute to my posts. To do so, I host the posts into a [separate Github repository](https://github.com/ahmadassaf/blog-posts) and include that as a separate git submodule by configuring the `.gitmodules` as follows:
+One of the reasons I moved to a Jekyll, markdown-based blog is to enable people to contribute to my posts. To do so, I host the posts into a [separate Github repository](https://github.com/ahmadassaf/blog-posts) and include that as a separate git submodule by configuring the `.gitmodules` as follows:
 
 ```
 [submodule "_posts"]
@@ -133,7 +133,7 @@ paginate: 7
 paginate_path: 'posts/page/:num'
 ```
 
-The `paginate_path` is the important property that we need to take care about. It specifies the page that we want to enable pagination on. The plugin does not support pagination on `tag` and `category` pages, so as a workaround I have a new `/posts` route that will contain all the posts and enable pagination on them. To do so, I have created a new directory called `posts` in the root folder with an `index.html` page. This will be picked up by Jekyll and result in a `/posts` page. The page contains normal Liquid templates as follows:
+The `paginate_path` is the important property that we need to take care of. It specifies the page that we want to enable pagination on. The plugin does not support pagination on `tag` and `category` pages, so as a workaround I have a new `/posts` route that will contain all the posts and enable pagination on them. To do so, I have created a new directory called `posts` in the root folder with an `index.html` page. This will be picked up by Jekyll and result in a `/posts` page. The page contains normal Liquid templates as follows:
 
 ```html
 {% raw %}
@@ -246,7 +246,7 @@ To utilize the image gallery we need to provide a simple markup
 {% endraw %}
 ```
 
-note that the directory we are referring to is `/images/posts`. This is the directory that we will copy all the posts images to using our grunt build script. Also you can pass multiple images in between the `capture`
+Note that the directory we are referring to is `/images/posts`. This is the directory that we will copy all the posts images to using our grunt build script. Also you can pass multiple images in between the `capture`
 
 There are also few CSS classes to display images side-by-side like:
 

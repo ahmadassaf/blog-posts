@@ -71,6 +71,8 @@ These XML representations, while effective, may not align with the intuitive way
 - **Description**: Encompasses the attributes, characteristics, and relationships of resources.
 - **Framework**: Provides the models, languages, and syntaxes for describing resources.
 
+The Framework is a combination of web-based protocols (URI, HTTP, XML, etc.) that are based on formal models and defines all the allowed relationships among resources.
+
 RDF is an intuitive knowledge representation using directed graphs, where the subjects and objects are the **nodes** and the predicates are the **edges** of that graph. This statement, which comprises these three parts, is called **RDF-Triple** where the resource is a URI or a blank (empty) node, the property is a URI and the object can be a URI, literal or a [Blank Node](#blank-nodes). If we wish to transform this knowledge into the traditional relational model (tables) it will look like:
 
 | **Subject** | **Predicate** |        **Object**         |
@@ -122,7 +124,7 @@ Literals are written either using double-quotes when they do not contain linebre
 > [!NOTE]
 > RDF/XML uses the namespace mechanism of XML, but in an expanded way. In XML, namespaces are only used for disambiguation purposes. In RDF/XML, external namespaces are expected to be RDF documents defining resources, which are then used in the importing RDF document. This mechanism allows the reuse of resources by other people who may decide to insert additional features into these resources. The result is the emergence of large, distributed collections of knowledge
 
-A datatype tells us how to map lexical representations to values, and vice versa. RDF reuses the XML Schema (W3C) datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date`. RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. If you omit a datatype declaration, many RDF tools will consider the value a plain literal, **which is not the same thing as a string**. However, RDF 1.1 (published in 2014) removed this distinction: `"Rob Gonzalez"` and `"Rob Gonzalez"^^xsd:string` are treated as equivalent, and tools have supported this for years.
+A datatype tells us how to map lexical representations to values, and vice versa. RDF reuses the XML Schema (W3C) datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date`. RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. If you omit a datatype declaration, many RDF tools will consider the value a plain literal, which, under the original RDF specification, was a distinct thing from a typed string. RDF 1.1 (published in 2014) removed this distinction: `"Rob Gonzalez"` and `"Rob Gonzalez"^^xsd:string` are treated as equivalent, and tools have supported this for years.
 
 The semantics of RDF takes language tags and datatypes into account. This means two things. First, a literal value without either a language tag or datatype is different from a literal with a language tag and is different from a literal with a datatype. These four statements say four different things and none can be inferred from the others:
 
@@ -170,7 +172,7 @@ This is a visual way of modeling RDF as a Node-Edge-Node Triple. It's directed, 
 
 <RdfTripleExplorer />
 
-<Highlight>Directionality matters in RDF triples. Defining reverse relationships is possible, but not always necessary</Highlight> We will see later in my post about the [Web Ontology Language (OWL)](https://www.w3.org/OWL/), that there is a simple way to define the “opposite” property using the `inverseOf` relationship. Although it's not strictly necessary to define reverse properties.
+<Highlight>Directionality matters in RDF triples. Defining reverse relationships is possible, but not always necessary</Highlight> This is the territory of the [Web Ontology Language (OWL)](https://www.w3.org/OWL/), which offers a simple way to define the "opposite" property using the `inverseOf` relationship.
 
 
 ### XML RDF Notation
@@ -204,9 +206,10 @@ We notice that every RDF triple is wrapped between the `rdf:RDF` tags. Defining 
 </rdf:RDF>
 ```
 
-In an **RDF/XML** document there are two types of XML nodes: 
-    1. **resource XML nodes**: the subjects and objects of statements, and they usually are `rdf:Description` tags that have an `rdf:about` attribute on them giving the URI of the resource they represent. In this example, the rdf:Description nodes are the resource nodes.
-    2. **property XML nodes**: nodes contain within them property XML nodes (and nothing else). 
+In an **RDF/XML** document there are two types of XML nodes:
+
+1. **resource XML nodes**: the subjects and objects of statements. They usually are `rdf:Description` tags that have an `rdf:about` attribute on them giving the URI of the resource they represent, and they contain within them property XML nodes (and nothing else). In this example, the `rdf:Description` nodes are the resource nodes.
+2. **property XML nodes**: the nodes nested inside resource XML nodes, each describing a property of the enclosing resource.
 
 Each property XML node represents a single statement. The subject of the statement is the outer resource XML node that contains the property. We should also notice that we have used the `rdf:datatype` in order to specify the usage of certain types like Strings or Integers ... etc. The URL can be shortcut by using namespaces as well. We have the `xml:base` attribute that defines a base URI that will be used globally in the XML representation. So for example, if I have identified a `xml:base` tag as follows:
 
@@ -259,7 +262,7 @@ A simplified form of the N3 notation. URIs are wrapped in angle brackets and Lit
 <http://assaf.website/blog> .
 ```
 
-We have talked about namespaces and base URIs in XML. The same concepts are transfered into the turtle notation:
+We have talked about namespaces and base URIs in XML. The same concepts are transferred into the turtle notation:
 
 ```turtle
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
@@ -309,8 +312,6 @@ Note that we have used a semicolon to express that we want to keep stating facts
 :d :e .
 # the last triple is :a :d :e .
 ```
-
-The Framework is a combination of web-based protocols (URI, HTTP, XML, etc.) that are based on formal models and defines all the allowed relationships among resources.
 
 ## Blank Nodes (B Nodes)
 
@@ -444,7 +445,7 @@ In **XML/RDF**
 **RDF/XML** provides `rdf:li` as a convenience element to avoid having to explicitly number each membership property. The numbered properties `rdf:_1, rdf:_2` and so on are generated from the `rdf:li` elements in forming the corresponding graph. The element name `rdf:li` was chosen to be mnemonic with the term "list item" from HTML. We notice that we referenced our blog by using the default namespace with the colon `:`, and we referred to the collection with the brackets `[]` (like Blank Nodes), but we added the `rdf:type` of `rdf:Seq` to that blank node. In RDF, a shorthand for `rdf:type` is the letter `a` (as in natural English: saying "this is a cat" means this is something with a type of cat). We have seen so far the sequential container, which denotes an ordered list of elements, but we also have other types of containers:
 
 *   `rdf:Bag`: This is an unordered list of elements possibly including duplicate members and there is no given order for elements.
-*   `rdf:Alt`: Defines alternatives of elements and only one element of the given alternatives is relevant to the application ( a group of resources or literals that are alternatives (typically for a single value of a property) . An Alt container is intended to have at least one member, identified by the property `rdf:_1`. This member is intended to be considered as the default or preferred value. Other than the member identified as `rdf:_1` the order of the remaining elements is not significant.
+*   `rdf:Alt`: Defines alternatives of elements where only one element of the given alternatives is relevant to the application (a group of resources or literals that are alternatives, typically for a single value of a property). An Alt container is intended to have at least one member, identified by the property `rdf:_1`. This member is intended to be considered as the default or preferred value. Other than the member identified as `rdf:_1` the order of the remaining elements is not significant.
 
 ### Collections
 
@@ -481,7 +482,7 @@ However, in Turtle there are shortcuts to simplify the syntax. We do that by usi
 :blog aa:hasAdmins (<A> <B> <C>) .
 ```
 
-The collection of RDF statements (RDF Triples) form together an RDF graph. The assertion of an **RDF graph** (_assertion means that a term evaluates to true_) amounts to the assertion of all triples in it, this means a conjunction (logical AND) between all the statement corresponding to all the triples in the graph.
+The collection of RDF statements (RDF Triples) form together an RDF graph. The assertion of an **RDF graph** (_assertion means that a term evaluates to true_) amounts to the assertion of all triples in it, this means a conjunction (logical AND) between all the statements corresponding to all the triples in the graph.
 
 > The datastore that stores these triples is often called a triple store
 
@@ -524,7 +525,7 @@ When using named graphs, `TriG` is the de facto serialization. It's the same as 
 }
 ```
 
-This trivial example puts all the statements in the document into a single named graph, egotistically called `:blogGraph` Again, like all things in RDF `:blogGraph` is a URI. Looking at the 4-tuples, it's pretty obvious that the same statement can exist in multiple named graphs. This is by design and is a very important feature. By organizing the statement into named graphs, a Semantic Web application can implement access control, trust, data lineage, and other functionality very cleanly.
+This trivial example puts all the statements in the document into a single named graph, egotistically called `:blogGraph`. Again, like all things in RDF `:blogGraph` is a URI. Looking at the 4-tuples, it's pretty obvious that the same statement can exist in multiple named graphs. This is by design and is a very important feature. By organizing the statement into named graphs, a Semantic Web application can implement access control, trust, data lineage, and other functionality very cleanly.
 
 ## RDF Reification
 

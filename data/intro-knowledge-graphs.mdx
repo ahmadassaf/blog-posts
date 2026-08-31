@@ -168,7 +168,7 @@ A key requirement for working with any data model is the ability to reference no
 
 | Feature | [RDF](https://www.w3.org/RDF/) | Property Graph |
 | --- | --- | --- |
-| Expressivity | Arbitrary complex descriptions via links to other nodes; no properties on edges out of the box. With [RDF*](https://www.w3.org/groups/wg/rdf-star/) the model gets much more expressive than property graphs | Limited expressivity; beyond the basic directed cyclic labeled graph properties (KV pairs) for nodes and edge |
+| Expressivity | Arbitrary complex descriptions via links to other nodes; no properties on edges out of the box. With [RDF*](https://www.w3.org/groups/wg/rdf-star/) the model gets much more expressive than property graphs | Limited expressivity; beyond the basic directed cyclic labeled graph properties (KV pairs) for nodes and edges |
 | Formal Semantics | ✅ standards schema and model semantics foster reuse and inference | ❌ No formal model representation |
 | Standardisation | Driven by W3C working groups and standardisation processes | Different competing vendors |
 | Query Language | [SPARQL](https://www.w3.org/TR/sparql11-query/) W3C standard | Cypher, PGQL, G-CORE; GQL (ISO/IEC 39075) became an ISO standard in 2024 but adoption is still uneven |
@@ -177,14 +177,14 @@ A key requirement for working with any data model is the ability to reference no
 | Design goal | Linked Data (publishing and linking data with formal semantic and no central control) | Graph representation for analytics |
 | Processing Strengths | Set analysis operations (as in SQL but with schema abstraction and flexibility) | Graph Traversal (plenty of graph analytics and ML Libs) |
 
-### tldr; The main advantages of RDF
+### In short: The main advantages of RDF
 
 - The [RDF](https://www.w3.org/RDF/) Data Model provides a **richer, semantically consistent foundation** over property graphs.
 - Text values can also have language tags to **support internationalisation of data**. For example, instead of a single value for rdfs:label for New York City we could have multiple values such as:
     
-    `“New York City” xsd:string @en`
+    `"New York City"@en`
     
-    `“Nueva York” xsd:string @sp`
+    `"Nueva York"@es`
     
 - A key differentiator is how the underlying model (schema) is represented in the same way as the data. Just to serve as a primer, `rdf:type` is a predicate used to connect a resource with a class it belongs to; `rdfs:label` is used to provide a display name for a resource. The uniformity of the data model makes [RDF](https://www.w3.org/RDF/) Graphs more easily evolvable and gives them more flexibility compared to Property Graphs.
 - **Enrichment Through Composition:** With the inherent composability of [RDF](https://www.w3.org/RDF/) Graphs, when two nodes have the same URI, they are automatically merged. This means that you can load different files and their content will be joined together forming a larger and more interesting graph.
@@ -260,11 +260,11 @@ The table below summarizes a point-in-time Gartner market guide from around 2021
 | [Cambridge Semantics AnzoGraph DB Engine](https://www.cambridgesemantics.com/anzograph/) | Native | [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) (property) | On-premises, multicloud, hybrid | OpenCypher, [SPARQL](https://www.w3.org/TR/sparql11-query/) | Built-in | Freemium, subscription | vCPU cores |
 | [DataStax Enterprise](https://www.datastax.com/products/datastax-enterprise) and  [DataStax Astra](https://www.datastax.com/products/datastax-astra) | Multimodel | Property | On-premises, multicloud | TinkerPop, Gremlin, GraphQL | TinkerPop | Open core | Nodes and consumption |
 | [Dgraph](https://docs.dgraph.io/admin/enterprise-features/) | Native | GraphQL, JSON, [RDF](https://www.w3.org/RDF/) | On-premises, cloud | DQL, GraphQL | Built-in | Open source, Apache 2.0 | CPUs per node |
-| [Franz AllegroGraph](https://allegrograph.com/products/allegrograph/) | Multimodel | Document, graph (JSON-LD), [OWL](https://www.w3.org/TR/owl-features/), [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) | On-premises, multicloud, hybrid | SPARQL, SPARQL*, FedShard-Parallel, SPARQL, GraphQL, Prolog/Datalog, Lisp, JIG/Gremlin, domain-specific languages | Built-in | Closed source | CPU cores |
+| [Franz AllegroGraph](https://allegrograph.com/products/allegrograph/) | Multimodel | Document, graph (JSON-LD), [OWL](https://www.w3.org/TR/owl-features/), [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) | On-premises, multicloud, hybrid | SPARQL, SPARQL*, FedShard-Parallel, GraphQL, Prolog/Datalog, Lisp, JIG/Gremlin, domain-specific languages | Built-in | Closed source | CPU cores |
 | [MarkLogic](https://www.marklogic.com/product/marklogic-database-overview/) | Multimodel | Triples | On-premises, multicloud, hybrid | JavaScript, Optic, Search, SPARQL, XQuery | Built-in | Closed source (free developer version) | Cores, consumption (free developer version) |
 | [Microsoft Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) | Multimodel | Property | Cloud | Gremlin | Built-in | Open source, Apache 2.0 | Throughput capacity, serverless consumption |
 | [Neo4j](https://neo4j.com/product/neo4j-graph-database/) | Native | Property | On-premises, multicloud, hybrid | Cypher (openCypher), GraphQL, RDF/SPARQL, SQL | Built-in | Open core, managed service | SaaS: RAM, consumption; on-premises: machines/cores/RAM |
-| [Ontotext GraphDB](https://www.ontotext.com/products/graphdb/) | Native | [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) OWL/[RDFS](https://www.w3.org/TR/rdf-schema/) | On-premises, multicloud | GraphQL, SPARQL, SPARQL*,SQL | Built-in | Perpetual, subscription, limited free version | per-CPU |
+| [Ontotext GraphDB](https://www.ontotext.com/products/graphdb/) | Native | [RDF](https://www.w3.org/RDF/), [RDF*](https://www.w3.org/groups/wg/rdf-star/) OWL/[RDFS](https://www.w3.org/TR/rdf-schema/) | On-premises, multicloud | GraphQL, SPARQL, SPARQL*, SQL | Built-in | Perpetual, subscription, limited free version | per-CPU |
 | [OpenLink Software Virtuoso](https://virtuoso.openlinksw.com/) | Multimodel | [RDF](https://www.w3.org/RDF/) | On-premises, multicloud, hybrid | SPARQL, SQL | Built-in | Closed source | Concurrent users and CPU affinity, per node |
 | [Oracle Database](https://www.oracle.com/database/graph/) | Multimodel | Property, [RDF](https://www.w3.org/RDF/) | On-premises, multicloud, hybrid | PGQL, [SPARQL](https://www.w3.org/TR/sparql11-query/) | Built-in | Perpetual, subscription | Perpetual: user/server/enterprise; subscription: consumption |
 | [RedisGraph](https://github.com/RedisGraph/RedisGraph) | Multimodel | Property | On-premises, multicloud, hybrid | Cypher | LAGraph | Perpetual, subscription | Consumption (RGUs based on memory and throughput) |

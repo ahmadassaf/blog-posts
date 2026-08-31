@@ -16,7 +16,7 @@ When I first wrote this, Whisper had no UI and `whisper-1` was the only transcri
 
 ## The 25 MB limit
 
-<Callout type='warning'>By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB's or less or used a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost</Callout>
+<Callout type='warning'>By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB or less or use a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost</Callout>
 
 That limit is the whole reason this post exists. For longer recordings, you divide the audio into smaller chunks, transcribe each chunk individually, and then combine the results. Keeping chunks comfortably under the limit also avoids timeouts and flaky uploads.
 

@@ -83,7 +83,7 @@ To make these rules concrete, imagine two tables living in two separate database
 1. Instead of using application-specific identifiers (database keys, UUIDs, incremental numbers, etc.), you map them to a set of URIs. Each identifier must map to one single URI. For example, each row of those two tables is uniquely identifiable using its URI.
 2. Make your URIs dereferenceable. This roughly means making them accessible via HTTP as we do for every human-readable Web page. This is a crucial aspect of Linked Data: every row of our tables is now fetchable and uniquely identifiable anywhere on the Web.
 3. Have our web server reply with some structured data when invoked. This is the Semantic Web "juicy" part. Model your data with RDF. Here is where you must shift from a relational data model to a graph one.
-4. Once all the rows of our tables have been uniquely identified, made dereferenceable through HTTP, and described with RDF, the last step is providing links between different rows across different tables. The main aim here is to make those implicit links explicit before shifting to the Linked data approach.
+4. Once all the rows of our tables have been uniquely identified, made dereferenceable through HTTP, and described with RDF, the last step is providing links between different rows across different tables. This is the step where the implicit links become explicit: it is what makes the data Linked Data.
 
 Because of their linking, these datasets form a giant web of data or a knowledge graph, which connects a vast amount of descriptions of entities and concepts of general importance. This interconnectedness allows for the discovery of new relationships and insights that would be difficult to uncover otherwise.
 

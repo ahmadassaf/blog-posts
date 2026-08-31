@@ -29,7 +29,7 @@ Here's a run down of the dotfiles in my repo and a description of what they can 
 
 ### .bash_profile / .bashrc
 
-When you open a new Terminal session, this file is loaded by Bash. It loads in the other dotfiles `path,bash_prompt,exports,aliases,functions,extra` and configures some useful settings such as auto correcting typos when using cd completion.
+When you open a new Terminal session, this file is loaded by Bash. It loads in the other dotfiles `path, bash_prompt, exports, aliases, functions, extra` and configures some useful settings such as auto correcting typos when using cd completion.
 
 In some instances `.bashrc` can be loaded, so this file makes sure that .bash_profile is called.
 
@@ -51,7 +51,7 @@ Using this file you can customise and set the various colors of your Bash prompt
 
 ### .exports
 
-Sets environment variables, such as setting Vim as the default editor using export `EDITOR="sublime"` It also increases the amount of history saved, useful for backtracking over previous commands you've used.
+Sets environment variables, such as setting Sublime Text as the default editor using export `EDITOR="sublime"` It also increases the amount of history saved, useful for backtracking over previous commands you've used.
 
 ### .aliases
 
@@ -130,7 +130,7 @@ For `vim` I have also included the [powerline](https://github.com/Lokaltog/power
 - The `--user` parameter should be removed if you got an error while installation especially if you have python installed via Homebrew.
 - A dependency is the [powerline fonts](https://github.com/powerline/fonts) pack. Installation instructions can be found directly in the repository.
 
-after installing powerline enable it by adding to the `.vimrc`:
+After installing powerline, enable it by adding to the `.vimrc`:
 
 ```shell
 set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
@@ -175,7 +175,7 @@ My file contains the following `brew` formulas:
 - **Core Modules** coreutils, moreutils, findutils, binutils
 - **Bash, Bash plugins** bash, bash-completion, zsh, grc
 - **Development** git, heroku, node, mercurial, iojs
-- **Git speific addons** git-extras, hub, bfg
+- **Git specific addons** git-extras, hub, bfg
 - **Utilities** htop-osx, id3tool, lesspipe, ssh-copy-id, the_silver_searcher, tree, fcrackzip, foremost, ack, p7zip, pigz, pv, gnu-sed, vim, wget
 - **Network tools** dns2tcp, knock, rename, webkit2png
 
@@ -193,12 +193,11 @@ My `cask` file contains the following applications:
 
 - **Utilities** path-finder, alfred, cakebrew, a-better-finder-rename, fastscripts, bettertouchtool, iterm2, launchrocket, gyazo, ubersicht, dockmod, liteicon, cleanmymac, bartender, flexiglass
 - **Productivity** todoist, evernote, mendeley-desktop, fantastical, slack, screenhero
-- **Development** sublime-text3, atom, sourcetree, github, brackets, coda, tower, transmission-remote-gui, macvim, sqlite-database-browser, lightpaper,
-- codebox, anvil, hex-fiend, ksdiff, codekit, MAMP
+- **Development** sublime-text3, atom, sourcetree, github, brackets, coda, tower, transmission-remote-gui, macvim, sqlite-database-browser, lightpaper, codebox, anvil, hex-fiend, ksdiff, codekit, MAMP
 - **Internet, Networking** firefox, google-chrome, charles, dropbox, google-drive, mailbox, viber, utorrent, plex-media-server
 - **Misc** vlc, imagealpha, imageoptim, steam, the-unarchiver, spotify, handbrake
 - **Quick Look plugins** betterzipql, qlcolorcode, qlmarkdown, qlprettypatch, qlstephen, quicklook-csv, quicklook-json, quicknfo, suspicious-package, webp-quicklook
-- **Color pickers** colorpicker-developer, colorpicker-skalacolo
+- **Color pickers** colorpicker-developer, colorpicker-skalacolor
 
 ## Install NPM Globals
 

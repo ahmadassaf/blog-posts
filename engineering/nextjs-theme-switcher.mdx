@@ -175,6 +175,8 @@ function ThemeSwitch() {
 export default ThemeSwitch;
 ```
 
+This sample is simplified for the post; it uses `react-icons` for brevity, while the production component in my design system renders its own Icon set.
+
 ### 3. Integrate Theme Provider
 
 The layout container is a **server component**. It reads the theme cookie with `await cookies()` (cookies are async in Next.js 15) and passes the value as the provider's default theme, so the very first server render already has the correct theme and there is no flash on load. The provider is dynamically imported and wraps the children; since they are passed through as props, they stay server components:
