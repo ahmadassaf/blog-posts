@@ -90,6 +90,8 @@ Let’s break down the first query, which gets every name in the database. The q
 
 Because our query is only selecting the values assigned to the variable `?name`, the final answer is **Ahmad's Blog**, **Ahmad Assaf**, **Overfit.in** and **Ahmad**.
 
+<SparqlPatternExplorer />
+
 ### Chaining Queries: Getting Blog Owners' Names
 
 The second query shows how to narrow that down by chaining two triples. In the first triple, the predicate has a constant value of `aa:owner` and the object is a variable. This triple will match the RDF triples that have the predicate `aa:owner` and will assign the value of the object to the variable `?owner`. The second triple will then match the RDF triples that have the predicate `foaf:name` for those owners and assign the value of the object to the variable `?ownerName`. 

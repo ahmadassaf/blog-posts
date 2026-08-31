@@ -12,27 +12,37 @@ import dynamic from 'next/dynamic';
 
 const AgileCadenceExplorer = dynamic(() => import('./AgileCadenceExplorer'));
 const AgileChartsExplorer = dynamic(() => import('./AgileChartsExplorer'));
+const DittoStagesExplorer = dynamic(() => import('./DittoStagesExplorer'));
 const GaudiBarLayout = dynamic(() => import('./GaudiBarLayout'));
 const ImprovementKataExplorer = dynamic(() => import('./ImprovementKataExplorer'));
+const JsonLdGraphExplorer = dynamic(() => import('./JsonLdGraphExplorer'));
+const OlapCubeExplorer = dynamic(() => import('./OlapCubeExplorer'));
+const SparqlPatternExplorer = dynamic(() => import('./SparqlPatternExplorer'));
 const LinkedDataQualityFramework = dynamic(() => import('./LinkedDataQualityFramework'));
 const PipelineDiagram = dynamic(() => import('./PipelineDiagram'));
 const RdfBlankNodeExplorer = dynamic(() => import('./RdfBlankNodeExplorer'));
 const RdfCollectionExplorer = dynamic(() => import('./RdfCollectionExplorer'));
 const RdfContainerExplorer = dynamic(() => import('./RdfContainerExplorer'));
 const RdfTripleExplorer = dynamic(() => import('./RdfTripleExplorer'));
+const RdfVsPropertyGraphExplorer = dynamic(() => import('./RdfVsPropertyGraphExplorer'));
 const UnifiedProcessorExplorer = dynamic(() => import('./UnifiedProcessorExplorer'));
 
 export const VisualisationComponents = {
   AgileCadenceExplorer,
   AgileChartsExplorer,
+  DittoStagesExplorer,
   GaudiBarLayout,
   ImprovementKataExplorer,
+  JsonLdGraphExplorer,
   LinkedDataQualityFramework,
+  OlapCubeExplorer,
   PipelineDiagram,
   RdfBlankNodeExplorer,
   RdfCollectionExplorer,
   RdfContainerExplorer,
   RdfTripleExplorer,
+  RdfVsPropertyGraphExplorer,
+  SparqlPatternExplorer,
   UnifiedProcessorExplorer
 };
 

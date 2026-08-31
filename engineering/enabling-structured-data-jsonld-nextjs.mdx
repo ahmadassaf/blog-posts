@@ -42,6 +42,8 @@ The implementation is deliberately layered so that every fact lives in exactly o
 - [data/meta/JSON-LD](https://github.com/ahmadassaf/blog/tree/main/data/meta/JSON-LD) holds the Schema.org entities as plain constants: the `Person`, the `WebSite`, the `Blog`, and the organisations the author is affiliated with.
 - [data/meta/generator/post.js](https://github.com/ahmadassaf/blog/blob/main/data/meta/generator/post.js) exports `linkedDataGenerator`, which turns a post's frontmatter into a full `BlogPosting` description at build time.
 
+<JsonLdGraphExplorer />
+
 ### Describing the Author and the Site
 
 The static entities are just exported objects. The author is a Schema.org `Person` that pulls its identity values from the shared metadata module instead of hard-coding them:

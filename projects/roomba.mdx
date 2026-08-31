@@ -20,7 +20,7 @@ Linked Open Data (LOD) is one of the largest collections of interlinked datasets
 
 ## Architecture
 
-<Image className='mx-auto' width={800} height={800} src="/static/images/posts/linked-data-quality.svg" darkSrc="/static/images/posts/linked-data-quality-dark.svg" alt="linked-data-quality" />
+<LinkedDataQualityFramework />
 
 ### Data Portal Identification
 
@@ -78,52 +78,19 @@ The excerpt below (trimmed from a full CKAN dataset record) shows the kind of me
 }
 ```
 
-## How to run?
+## Running it
 
-You can either download this repo as a zip file or clone directly through git. Pay attention when cloning as there is a `submodule` defined and has to be cloned recursively as well. This can be done via:
+Clone recursively (the [Open Licenses repo](https://github.com/okfn/licenses) is a submodule that powers license validation), install, and start:
+
 ```shell
 git clone --recursive http://github.com/ahmadassaf/roomba
-```
-
-**Note** If you have cloned without --recursive, you may find out that some folders are empty. To fix this:
-
-`git submodule update --init`
-
-Now, you will need to install the dependencies:
-
-```shell
-# Install the required packages
 npm install
-# You may alternatively use yarn to install them
-yarn install
-# After the installation finish start the application
 node DC.js
 ```
 
-### Options
-There are a set of options that you can customize. They can be edited from `options.json` file:
+Behavior is configured through a small `options.json` (locale, cache folder, license mappings, proxy); the [repo](https://github.com/ahmadassaf/roomba) documents each key, and report labels can be localized there too.
 
-```json
-{
-    "locale"         : "en",
-    "cacheFolderName": "/cache/",
-    "licensesFolder" : "/util/licenses/",
-    "mappingFileName": "licenseMappings",
-    "proxy"          : ""
-}
-```
-
-- `locale` the language of the messages and the prompts. Default:`en`
-- `cacheFolderName` the name of cache folder separated by `/`. Default:`/cache/`
-- `licensesFolder` the location of the [Open Licenses Repo](https://github.com/okfn/licenses). It is defined as a submodule and by default it is located in `/util/licenses/`
-- `mappingFileName` the name of manual license mappings. Default:`licenseMappings`
-- `proxy` proxy server e.g. `proxy:8080`. Default:`null`
-
-### Localization
-
-Report labels can be localized; see the [repo](https://github.com/ahmadassaf/roomba) for details.
-
-## How to use?
+## What it can do
 
 Roomba gives you the ability to perform the following:
 
@@ -161,27 +128,14 @@ The **objective measures** identified are: completeness, availability, licensing
 
 ### Quality Indicators
 
-The **objective quality indicators** assessed are:
+Each measure is backed by indicators Roomba can check automatically:
 
- - Supports multiple serializations
- - Has different data access points
- - Uses datasets description vocabularies
- - Existence of descriptions about its size
- - Existence of descriptions about its structure (MIME Type, Format)
- - Existence of descriptions about its organization and categorization
- - Existence of dereferencable links for the dataset and its resources
- - Existence of an RDF dump that can be downloaded by users
- - Existence of queryable endpoints that respond to direct queries
- - Existence of valid dereferencable URLs (respond to HTTP request)
- - Existence of human and machine readable license information
- - Existence of dereferencable links to the full license information
- - Existence of timestamps that can keep track of its modifications
- - Includes the correct MIME type for the content
- - Includes the correct size for the content
- - Absence of Syntactic errors on the links level
- - Use the HTTP URI Scheme
- - Existence of at least one exemplary RDF file
- - Existence of general information (title, URL, description) for the dataset
- - Existence of mailing list, message board or point of contact
- - Existence of metadata that describes its authoritative information
- - Usage of Versioning
+| Measure | What Roomba checks |
+| --- | --- |
+| Completeness | Descriptions of size, structure (MIME type, format), organization and categorization; at least one exemplary RDF file |
+| Availability | Multiple serializations, different access points, downloadable RDF dump, queryable endpoints, dereferenceable URLs that answer HTTP requests |
+| Licensing | Human- and machine-readable license information with dereferenceable links to the full license |
+| Freshness | Timestamps that track modifications, usage of versioning |
+| Correctness | Correct MIME type and content size, no syntactic errors at the link level, HTTP URI scheme |
+| Comprehensibility | General information (title, URL, description), a mailing list or point of contact, dataset-description vocabularies |
+| Provenance | Metadata describing the dataset's authoritative information |

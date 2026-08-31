@@ -18,11 +18,9 @@ tableOfContents: true
 
 When dealing with data integration, translating JSON from external formats into an internal representation is a constant chore: every new data source arrives with its own field names and nesting. Ditto solves this declaratively. Instead of writing a bespoke transformation script per source, you write a mapping file that describes the output shape, and Ditto produces JSON from the input data to match it.
 
-Ditto parses the mapping file (see [mapping rules](https://github.com/ahmadassaf/json-ditto#_map)) and runs three stages, where the output of each stage is fed as input to the next:
+Ditto parses the mapping file (see [mapping rules](https://github.com/ahmadassaf/json-ditto#_map)) and runs three stages (`_preMap`, `_map`, `_postMap`), where the output of each stage is fed as input to the next:
 
- - **_preMap**: transforms the input data before the main mapping runs
- - **_map**: the unification step, where the mapping file is read and the data is mapped accordingly
- - **_postMap**: transforms the mapping result after the main mapping is done
+<DittoStagesExplorer />
 
 ## How to use Ditto
 

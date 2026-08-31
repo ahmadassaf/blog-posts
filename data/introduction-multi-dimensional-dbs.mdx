@@ -1,0 +1,67 @@
+---
+type: 'Post'
+title: 'Introduction to Multidimensional Databases'
+subtitle: 'Facts, dimensions, and the cube as a mental model for analytical data'
+tags: ['Multidimensional Databases', 'Data Warehousing', 'OLAP', 'Databases', 'Data Modeling']
+summary: 'The multidimensional model organizes data as facts sitting at the intersections of dimensions, and analysis becomes a handful of verbs moving through a cube. What the model actually buys you, how the cube works, and where star and snowflake schemas fit.'
+featured: false
+date: '2015-04-22'
+updated: '2026-08-31'
+category: 'data'
+tableOfContents: true
+---
+
+## Two kinds of database work
+
+Every database question I've ever been asked falls into one of two shapes. The first is transactional: "update this customer's address", "record this order." One row at a time, fast, now. The second is analytical: "how did sales of product B move across regions over the last three quarters?" Thousands or millions of rows at a time, aggregated, sliced by context.
+
+The [relational model](http://en.wikipedia.org/wiki/Relational_model) was built for the first shape. OLTP (Online Transaction Processing) systems care about individual transactions: correctness, isolation, speed of a single write. OLAP (Online Analytical Processing) systems care about the aggregate view: they summarize across huge numbers of transactions and rarely touch a single one in isolation. Ask a normalized transactional schema an analytical question and you get a wall of joins, and at scale, a wall of pain.
+
+The multidimensional model exists for the second shape. Instead of scattering an answer across a dozen joined tables, it organizes data the way the analytical question is already phrased: a **fact** ("we sold 14 units") sitting at the intersection of **dimensions** ("of product B, in the EU, in Q2"). Queries stop being join puzzles and become coordinates.
+
+## The anatomy: facts, measures, dimensions
+
+Three terms carry the whole model:
+
+- **Facts** are the events worth analyzing: a sale, a click, a shipment. Each fact is one cell in the model, identified by the combination of dimension values it belongs to. Facts are usually paired with numbers, though a fact table with no measures at all (a "factless" fact table, recording that something merely happened, like an attendance) is legitimate and common.
+- **Measures** are the numeric properties of a fact: units sold, revenue, duration. They're what you aggregate. A useful measure comes with an idea of *how* it aggregates: revenue sums cleanly across any dimension; an account balance sums across customers but not across time; a temperature averages but never sums. Getting this wrong is the classic silent bug of analytical reporting.
+- **Dimensions** are the contexts you slice by: time, product, geography, customer. Each dimension usually carries a **hierarchy**: day rolls into month into quarter into year; city into country into region. Hierarchies are what make the model navigable: they define what "zooming out" means.
+
+The mental model that ties these together is the cube.
+
+## The cube
+
+Take three dimensions (Time, Product, Region) and every combination of their values defines a cell holding that combination's measures. That's the whole idea, and it generalizes to as many dimensions as you need (nobody can picture a 9-dimensional "hypercube", but the math doesn't care).
+
+What makes the cube more than a storage layout is that the classic analytical operations become spatial verbs:
+
+<OlapCubeExplorer />
+
+Two things worth noticing about these verbs. First, they compose: a real dashboard interaction is usually a dice followed by a roll-up followed by a drill-down, and the model makes each step cheap to express. Second, they're symmetric around hierarchies: roll-up and drill-down are the same move in opposite directions along a dimension's hierarchy, which is why getting the hierarchies right during modeling matters more than almost anything else.
+
+There's a fourth operation families of tools like to add: **pivot** (rotate the cube to swap which dimensions are on which axis of your report). It changes nothing about the data, only the view, which is exactly why spreadsheet pivot tables were most people's first contact with multidimensional thinking.
+
+## Star and snowflake schemas
+
+Cubes have to live somewhere, and in practice that's usually a relational database wearing a multidimensional costume. The two classic layouts:
+
+- **Star schema**: one central fact table, with one denormalized table per dimension around it. The dimension tables repeat themselves happily (the Product table carries the category name on every row) because reads dominate writes in a warehouse, and one join per dimension keeps queries simple and fast.
+- **Snowflake schema**: the same star with normalized dimensions, so hierarchies become chains of tables (Product joins to Category joins to Department). It saves space and avoids update anomalies at the price of more joins.
+
+My rule of thumb hasn't changed in a decade: start with a star. Storage is cheap, analytical queries are join-averse, and the star's simplicity pays for itself every time someone new has to understand the schema. Snowflake a dimension only when it's genuinely large and volatile.
+
+## Where the data comes from, and where it lives
+
+A warehouse built on this model is fed by **ETL** (extract, transform, load): pull data out of the transactional systems, reshape it into facts and dimensions, and load it on a schedule. The transform step is where the modeling decisions above become real work: conforming dimensions across sources, resolving hierarchies, deciding aggregation rules for each measure.
+
+Under the hood, engines differ in how literally they take the cube:
+
+- **MOLAP** (multidimensional OLAP) stores the cube as a cube: pre-aggregated arrays, extremely fast for the queries you anticipated, rigid for the ones you didn't.
+- **ROLAP** (relational OLAP) keeps everything in relational tables (the star/snowflake above) and generates SQL; slower per query, but flexible and unbounded by pre-computation.
+- **HOLAP** (hybrid) pre-aggregates the hot paths and falls back to relational storage for the rest, which is where much of the industry landed.
+
+The modern column-store warehouses blur these lines (columnar storage gives ROLAP most of MOLAP's speed), but the vocabulary survives because the trade-off it names (pre-compute versus compute-on-demand) is permanent.
+
+## Where this sits today
+
+The multidimensional model is one of several answers to "my data's shape doesn't match my questions' shape." When the questions are about aggregates over hierarchies, the cube wins. When they're about relationships and traversal, you're in [graph territory instead](/blog/category/data/intro-knowledge-graphs), and the comparison between those worlds deserves its own post. The durable lesson from both is the same: model around the questions you'll ask, not around the shape the data arrived in.
