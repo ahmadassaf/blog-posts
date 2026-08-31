@@ -4,7 +4,7 @@
  * THESIS: One ladder for ICs and leads, six levels, and the only thing being measured is impact.
  * OWN-WORLD: An engineering ladder drawn as a staircase climbing across three maturity bands: dependent, independent, interdependent.
  * STORY: Select a level to read what it means, what moves someone up, and what slipping looks like.
- * FIRST VIEWPORT: All six steps of the staircase with M3, where most careers live, selected.
+ * FIRST VIEWPORT: All six steps of the staircase with L3, where most careers live, selected.
  * FORM: A responsive SVG with selectable level steps driving a three-part readout.
  */
 
@@ -14,51 +14,51 @@ import styles from './GrowthLevelsExplorer.module.css';
 
 const levels = [
   {
-    'description': 'Executes well-defined tasks that someone senior has already scoped, with a hands-on M3 mentor keeping them unblocked. Expected to graduate within 90 days.',
+    'description': 'Executes well-defined tasks that someone senior has already scoped, with a hands-on L3 mentor keeping them unblocked. Expected to graduate within 90 days.',
     'down': 'Staying here is only acceptable for under three months. Not graduating in the first 90 days is a significant problem.',
     'id': 'm1',
     'kind': 'Scoped Tasks',
-    'name': 'M1',
+    'name': 'L1',
     'outcomes': 'no',
     'role': 'interns · new hires',
     'up': 'They can unblock themselves technically, find their own way from A to B, and have lived a full project lifecycle from creation to support.'
   },
   {
     'description': 'Executes scoped projects while someone with more business context makes the final call on tradeoffs, prioritization, and the quality bar. Trusted on the support queue, and not responsible when the plan itself was flawed.',
-    'down': 'Work lands late and blockers go uncommunicated. Most M2s should be on a one-to-two-year path toward M3.',
+    'down': 'Work lands late and blockers go uncommunicated. Most L2s should be on a one-to-two-year path toward L3.',
     'id': 'm2',
     'kind': 'Scoped Projects',
-    'name': 'M2',
+    'name': 'L2',
     'outcomes': 'no',
     'role': 'engineer',
     'up': 'They start owning projects end to end, including inter-team communication and technical decisions. Trial them on a small unscoped project and watch whether it lands on time, on budget, and delights the customer.'
   },
   {
-    'description': 'The key phrase is trust: they deliver unscoped projects with light direction, pull in an M4/M5 and pivot when needed. Most engineers (more than half) remain M3 for their whole careers, and a team of all M3s is a force to be reckoned with. Can be an IC or a team lead.',
+    'description': 'The key phrase is trust: they deliver unscoped projects with light direction, pull in an L4/L5 and pivot when needed. Most engineers (more than half) remain L3 for their whole careers, and a team of all L3s is a force to be reckoned with. Can be an IC or a team lead.',
     'down': 'You lose faith in their ability to execute and start second-guessing their output. Every failed project comes with an excuse that it was not their responsibility.',
     'id': 'm3',
     'kind': 'Unscoped Projects',
-    'name': 'M3',
+    'name': 'L3',
     'outcomes': 'situational',
     'role': 'sr eng · team lead',
     'up': 'They push beyond their lane to shape the team itself: proposing architecture, owning technical debt, becoming the center of technical guidance (ICs), or engaging deeply in planning and career growth (leads).'
   },
   {
-    'description': 'A team force multiplier: raises the impact of the whole team, with 3x as the mental model. A good code reviewer is an M3; an M4 runs reading groups on reviewing, installs quality analyzers, and writes the team review guides. IC M4s exist but are rare; it implies their code alone is worth 3x.',
-    'down': 'When an M4 slips, the entire team drops in quality and delivery: bad judgment, weak follow-through, or practices that stopped scaling with the team.',
+    'description': 'A team force multiplier: raises the impact of the whole team, with 3x as the mental model. A good code reviewer is an L3; an L4 runs reading groups on reviewing, installs quality analyzers, and writes the team review guides. IC L4s exist but are rare; it implies their code alone is worth 3x.',
+    'down': 'When an L4 slips, the entire team drops in quality and delivery: bad judgment, weak follow-through, or practices that stopped scaling with the team.',
     'id': 'm4',
     'kind': 'Team Force Multiplier',
-    'name': 'M4',
+    'name': 'L4',
     'outcomes': 'yes',
     'role': 'lead · architect · EM',
-    'up': 'They think beyond their own team at the macro level, helping other teams with feedback, structure, and direction. M4s who want M5 need no encouragement.'
+    'up': 'They think beyond their own team at the macro level, helping other teams with feedback, structure, and direction. L4s who want L5 need no encouragement.'
   },
   {
-    'description': 'A force multiplier for the force multipliers, operating almost entirely at the meta-engineering level: leads of leads, or the rarer technical M5 who mentors staff engineers and makes architectural calls that shape whole groups.',
+    'description': 'A force multiplier for the force multipliers, operating almost entirely at the meta-engineering level: leads of leads, or the rarer technical L5 who mentors staff engineers and makes architectural calls that shape whole groups.',
     'down': 'Judge the whole product as a reflection of their leadership. They control hiring, team makeup, and objectives; if the combination yields a bad product, look to replace them.',
     'id': 'm5',
     'kind': 'Group Force Multiplier',
-    'name': 'M5',
+    'name': 'L5',
     'outcomes': 'yes',
     'role': 'principal · director',
     'up': 'The band here is wide and context-dependent; even the step from director to VP is a significant change in the skills required.'
@@ -68,7 +68,7 @@ const levels = [
     'down': 'Failing when the business outgrows them and the C-suite gets dragged back into operational minutiae.',
     'id': 'm6',
     'kind': 'Senior Leader',
-    'name': 'M6',
+    'name': 'L6',
     'outcomes': 'yes',
     'role': 'head of · VP',
     'up': 'The next layer up is the C-suite itself.'
@@ -77,7 +77,7 @@ const levels = [
 
 /* The staircase: each level sits one step higher than the last */
 const STEP_XS = [ 100, 280, 460, 640, 820, 1000 ];
-const STEP_CYS = [ 430, 362, 294, 226, 158, 90 ];
+const STEP_CYS = [ 438, 370, 302, 234, 166, 98 ];
 const CARD_W = 140;
 const CARD_H = 76;
 
@@ -88,7 +88,7 @@ const bands = [
 ];
 
 const GrowthLevelsExplorer = ({
-  title = 'The ladder, M1 to M6',
+  title = 'The ladder, L1 to L6',
   description = 'Six levels on one scale for ICs and leads, measured by impact rather than tenure or headcount. Select a level to read what it means, what moves someone up, and what slipping looks like.',
   className = ''
 }) => {
@@ -123,13 +123,13 @@ const GrowthLevelsExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable engineering ladder diagram' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1100 520' role='group' aria-label='The engineering ladder, M1 to M6'>
+        <svg className={ styles.graph } viewBox='0 0 1100 540' role='group' aria-label='The engineering ladder, L1 to L6'>
           {/* Maturity bands wrap their steps */}
           {bands.map((band) => {
-            const x = STEP_XS[band.from] - CARD_W / 2 - 6;
-            const width = STEP_XS[band.to] + CARD_W / 2 + 6 - x;
-            const top = STEP_CYS[band.to] - CARD_H / 2 - 44;
-            const bottom = STEP_CYS[band.from] + CARD_H / 2 + 34;
+            const x = STEP_XS[band.from] - CARD_W / 2 - 16;
+            const width = STEP_XS[band.to] + CARD_W / 2 + 16 - x;
+            const top = STEP_CYS[band.to] - CARD_H / 2 - 52;
+            const bottom = STEP_CYS[band.from] + CARD_H / 2 + 48;
 
             return (
               <g key={ band.label } className={ styles.band }>
