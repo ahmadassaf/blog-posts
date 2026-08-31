@@ -76,8 +76,8 @@ const levels = [
 ];
 
 /* The staircase: each level sits one step higher than the last */
-const STEP_XS = [ 100, 260, 420, 580, 740, 900 ];
-const STEP_CYS = [ 388, 330, 272, 214, 156, 98 ];
+const STEP_XS = [ 100, 280, 460, 640, 820, 1000 ];
+const STEP_CYS = [ 430, 362, 294, 226, 158, 90 ];
 const CARD_W = 140;
 const CARD_H = 76;
 
@@ -123,7 +123,7 @@ const GrowthLevelsExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable engineering ladder diagram' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 470' role='group' aria-label='The engineering ladder, M1 to M6'>
+        <svg className={ styles.graph } viewBox='0 0 1100 520' role='group' aria-label='The engineering ladder, M1 to M6'>
           {/* Maturity bands wrap their steps */}
           {bands.map((band) => {
             const x = STEP_XS[band.from] - CARD_W / 2 - 6;
@@ -138,15 +138,6 @@ const GrowthLevelsExplorer = ({
               </g>
             );
           })}
-
-          {/* The climb: stair connectors between steps */}
-          {STEP_XS.slice(0, -1).map((x, index) => (
-            <path
-              key={ x }
-              d={ `M ${x + CARD_W / 2} ${STEP_CYS[index] - 10} L ${STEP_XS[index + 1] - CARD_W / 2} ${STEP_CYS[index + 1] + 10}` }
-              className={ styles.path }
-            />
-          ))}
 
           {/* The empty upper-left corner carries the reading key */}
           <text x='40' y='96' className={ styles.cornerLabel }>impact widens</text>

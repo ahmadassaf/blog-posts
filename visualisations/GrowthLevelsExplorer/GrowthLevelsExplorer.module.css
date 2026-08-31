@@ -102,15 +102,6 @@
   letter-spacing: 1.1px;
 }
 
-/* Connectors */
-.path {
-  fill: none;
-  stroke: color-mix(in srgb, var(--ds-color-accent) 55%, var(--ds-color-border));
-  stroke-dasharray: 0.5 7;
-  stroke-linecap: round;
-  stroke-width: 2.5;
-}
-
 /* Level stops */
 .stop {
   cursor: pointer;
