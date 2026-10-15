@@ -2,6 +2,12 @@
 
 import { useId, useState } from 'react';
 
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaudi/design-system/core/Accordion';
+import Button from '@gaudi/design-system/core/Button';
+import Icon from '@gaudi/design-system/core/Icon';
+import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+import { TableBodyPrimitive, TableCaption, TableCellPrimitive, TableHeadPrimitive, TableHeader, TableRoot, TableRowPrimitive } from '@gaudi/design-system/mdx/Table';
+
 import { burndownRows, charts, cumulativeBoundaries, mean, remainingWork, rollingMean } from './AgileChartsExplorer.data';
 
 import styles from './AgileChartsExplorer.module.css';
@@ -120,13 +126,17 @@ const Values = ({ chart, scenario }) => {
   }
 
   return (
-    <div className={ styles.tableScroll } tabIndex='0' role='region' aria-label='Chart values table'>
-      <table>
-        <caption>{`Fictional values: ${scenario.label}`}</caption>
-        <thead><tr>{headings.map((heading) => <th scope='col' key={ heading }>{heading}</th>)}</tr></thead>
-        <tbody>{rows.map((row) => <tr key={ row[0] }>{row.map((value, index) => (index === 0 ? <th scope='row' key={ index }>{value}</th> : <td key={ index }>{value}</td>))}</tr>)}</tbody>
-      </table>
-    </div>
+    <TableRoot density='compact' className={ styles.table } containerProps={{ 'aria-label': 'Chart values table' }}>
+      <TableCaption className={ styles.tableCaption }>{`Fictional values: ${scenario.label}`}</TableCaption>
+      <TableHeader><TableRowPrimitive>{headings.map((heading) => <TableHeadPrimitive scope='col' key={ heading }>{heading}</TableHeadPrimitive>)}</TableRowPrimitive></TableHeader>
+      <TableBodyPrimitive>
+        {rows.map((row) => (
+          <TableRowPrimitive key={ row[0] }>
+            {row.map((value, index) => <TableCellPrimitive as={ index === 0 ? 'th' : 'td' } scope={ index === 0 ? 'row' : undefined } key={ index }>{value}</TableCellPrimitive>)}
+          </TableRowPrimitive>
+        ))}
+      </TableBodyPrimitive>
+    </TableRoot>
   );
 };
 
@@ -232,36 +242,41 @@ const AgileChartsExplorer = ({ chart, 'id': suppliedId, className = '' }) => {
       </figcaption>
 
       <div className={ styles.toolbar }>
-        <div className={ styles.scenarios } role='group' aria-label={ `${config.title}: choose a history` }>
+        <ToggleGroupRoot
+          type='single'
+          variant='outline'
+          size='sm'
+          spacing={ 1 }
+          className={ styles.scenarios }
+          aria-label={ `${config.title}: choose a history` }
+          value={ scenario.id }
+          onValueChange={ (value) => value && setSelectedScenarios((current) => {
+            return { ...current, [chart]: value };
+          }) }
+        >
           {config.scenarios.map((item) => (
-            <button
-              type='button'
-              key={ item.id }
-              aria-label={ `${item.label}: ${item.meaning}` }
-              aria-pressed={ scenario.id === item.id }
-              title={ item.meaning }
-              onClick={ () => setSelectedScenarios((current) => {
-                return { ...current, [chart]: item.id };
-              }) }
-            >
+            <ToggleGroupItem key={ item.id } value={ item.id } aria-label={ `${item.label}: ${item.meaning}` } title={ item.meaning }>
               {item.label}
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroupRoot>
         {chart === 'epic' && (
-          <div className={ styles.viewSwitch } role='group' aria-label='Release chart view'>
+          <ToggleGroupRoot
+            type='single'
+            variant='outline'
+            size='sm'
+            spacing={ 0 }
+            className={ styles.viewSwitch }
+            aria-label='Release chart view'
+            value={ releaseView }
+            onValueChange={ (value) => value && setReleaseView(value) }
+          >
             {[ 'burnup', 'burndown' ].map((view) => (
-              <button
-                type='button'
-                key={ view }
-                aria-label={ view === 'burnup' ? 'Burnup: scope and completed' : 'Burndown: remaining' }
-                aria-pressed={ releaseView === view }
-                onClick={ () => setReleaseView(view) }
-              >
+              <ToggleGroupItem key={ view } value={ view } aria-label={ view === 'burnup' ? 'Burnup: scope and completed' : 'Burndown: remaining' }>
                 {view === 'burnup' ? 'Burnup' : 'Burndown'}
-              </button>
+              </ToggleGroupItem>
             ))}
-          </div>
+          </ToggleGroupRoot>
         )}
       </div>
 
@@ -282,8 +297,11 @@ const AgileChartsExplorer = ({ chart, 'id': suppliedId, className = '' }) => {
               const [ x, y ] = positions[item.id];
 
               return (
-                <button
-                  type='button'
+                <Button
+                  variant={ annotation.id === item.id ? 'solid' : 'outline' }
+                  tone='accent'
+                  size='icon-sm'
+                  radius='full'
                   className={ styles.marker }
                   style={{ 'left': `${x / 10}%`, 'top': `${y / 3.96}%` }}
                   key={ item.id }
@@ -294,7 +312,7 @@ const AgileChartsExplorer = ({ chart, 'id': suppliedId, className = '' }) => {
                   onClick={ () => selectAnnotation(item.id) }
                 >
                   <span aria-hidden='true'>{index + 1}</span>
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -316,27 +334,34 @@ const AgileChartsExplorer = ({ chart, 'id': suppliedId, className = '' }) => {
           <p className={ styles.stat }>{`Mean of these 8 completed totals: ${format(mean(scenario.bars.map((bar) => bar.completed)))} points. Range: ${Math.min(...scenario.bars.map((bar) => bar.completed))}–${Math.max(...scenario.bars.map((bar) => bar.completed))}. This describes the sample, not the next sprint.`}</p>
         )}
         {chart === 'control' && (
-          <div className={ styles.ageSection }>
-            <button type='button' aria-expanded={ showAges } aria-controls={ `${id}-ages` } onClick={ () => setShowAges((current) => !current) }>
-              {showAges ? 'Hide unfinished work' : 'Reveal unfinished work'}
-            </button>
-            {showAges && (
-              <div id={ `${id}-ages` } className={ styles.ageReadout }>
-                <strong>Still unfinished at the end of day 24</strong>
-                <ul>{scenario.unfinished.map((item) => <li key={ item.id }>{`Item ${item.id}: ${item.age} elapsed days since starting`}</li>)}</ul>
-                <p>These ages keep increasing until the items finish. They are not completed cycle times and are excluded from the plotted mean. Inspect waiting and blockers with the team.</p>
-              </div>
-            )}
-          </div>
+          <Collapsible className={ styles.ageSection } open={ showAges } onOpenChange={ setShowAges }>
+            <CollapsibleTrigger asChild>
+              <Button variant='outline' tone='neutral' size='sm'>
+                {showAges ? 'Hide unfinished work' : 'Reveal unfinished work'}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent id={ `${id}-ages` } className={ styles.ageReadout }>
+              <strong>Still unfinished at the end of day 24</strong>
+              <ul>{scenario.unfinished.map((item) => <li key={ item.id }>{`Item ${item.id}: ${item.age} elapsed days since starting`}</li>)}</ul>
+              <p>These ages keep increasing until the items finish. They are not completed cycle times and are excluded from the plotted mean. Inspect waiting and blockers with the team.</p>
+            </CollapsibleContent>
+          </Collapsible>
         )}
       </div>
 
-      <details className={ styles.values }>
-        <summary>{chart === 'burndown' ? 'Inspect the values and work log' : 'Inspect the chart values'}</summary>
-        {scenario.context && <p>{scenario.context}</p>}
-        <Values chart={ chart } scenario={ scenario } />
-        <p className={ styles.sampleNote }>These examples illustrate possible readings, not team benchmarks.</p>
-      </details>
+      <Collapsible className={ styles.values }>
+        <CollapsibleTrigger asChild>
+          <Button variant='ghost' tone='neutral' className={ styles.valuesTrigger }>
+            <Icon name='ChevronRight' decorative />
+            {chart === 'burndown' ? 'Inspect the values and work log' : 'Inspect the chart values'}
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          {scenario.context && <p>{scenario.context}</p>}
+          <Values chart={ chart } scenario={ scenario } />
+          <p className={ styles.sampleNote }>These examples illustrate possible readings, not team benchmarks.</p>
+        </CollapsibleContent>
+      </Collapsible>
       <p className={ styles.units } id={ `${id}-units` }>{config.unit}</p>
     </figure>
   );
