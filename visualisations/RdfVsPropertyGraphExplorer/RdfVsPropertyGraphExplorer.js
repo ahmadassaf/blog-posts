@@ -10,6 +10,8 @@
 
 import { useState } from 'react';
 
+import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+
 import styles from './RdfVsPropertyGraphExplorer.module.css';
 
 const models = {
@@ -79,21 +81,21 @@ const RdfVsPropertyGraphExplorer = ({
       </figcaption>
 
       <div className={ styles.toolbar }>
-        <div className={ styles.typeTabs } aria-label='Graph data model' role='group'>
+        <ToggleGroupRoot
+          type='single'
+          spacing={ 1 }
+          className={ styles.typeTabs }
+          aria-label='Graph data model'
+          value={ activeModelId }
+          onValueChange={ (value) => value && setActiveModelId(value) }
+        >
           {[ 'property', 'rdf' ].map((id) => [ id, models[id] ]).map(([ id, model ]) => (
-            <button
-              type='button'
-              aria-label={ `${model.label} ${model.meaning}` }
-              aria-pressed={ activeModelId === id }
-              data-active={ activeModelId === id }
-              key={ id }
-              onClick={ () => setActiveModelId(id) }
-            >
+            <ToggleGroupItem value={ id } aria-label={ `${model.label} ${model.meaning}` } key={ id }>
               <strong>{model.label}</strong>
               <span>{model.meaning}</span>
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroupRoot>
       </div>
 
       <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>

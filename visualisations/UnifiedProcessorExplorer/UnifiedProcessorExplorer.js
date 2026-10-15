@@ -10,6 +10,8 @@
 
 import { Fragment, useId, useState } from 'react';
 
+import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+
 import { getProcessorView } from './UnifiedProcessorExplorer.data';
 
 import styles from './UnifiedProcessorExplorer.module.css';
@@ -182,20 +184,21 @@ const UnifiedProcessorExplorer = ({
         <span className={ styles.description }>{description || config.description}</span>
       </figcaption>
 
-      <div className={ styles.toolbar } role='group' aria-label='Transformation direction'>
+      <ToggleGroupRoot
+        type='single'
+        variant='outline'
+        spacing={ 0 }
+        className={ styles.toolbar }
+        aria-label='Transformation direction'
+        value={ direction }
+        onValueChange={ (value) => value && chooseDirection(value) }
+      >
         {Object.entries(config.routes).map(([ routeDirection, routeConfig ]) => (
-          <button
-            type='button'
-            className={ styles.direction }
-            data-active={ direction === routeDirection }
-            aria-pressed={ direction === routeDirection }
-            key={ routeDirection }
-            onClick={ () => chooseDirection(routeDirection) }
-          >
+          <ToggleGroupItem value={ routeDirection } className={ styles.direction } key={ routeDirection }>
             {routeConfig.label}
-          </button>
+          </ToggleGroupItem>
         ))}
-      </div>
+      </ToggleGroupRoot>
 
       <ol className={ styles.accessibleFlow }>
         {route.order.map((nodeId, index) => (

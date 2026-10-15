@@ -10,6 +10,9 @@
 
 import { useState } from 'react';
 
+import Button from '@gaudi/design-system/core/Button';
+import Icon from '@gaudi/design-system/core/Icon';
+
 import styles from './RdfCollectionExplorer.module.css';
 
 const members = [ 'A', 'B', 'C' ];
@@ -146,12 +149,12 @@ const RdfCollectionExplorer = ({
         </div>
 
         <div className={ styles.walkthrough }>
-          <button type='button' disabled={ activeStep === 0 } onClick={ () => setActiveStep((step) => Math.max(0, step - 1)) }>
-            <span aria-hidden='true'>←</span> Previous
-          </button>
-          <button type='button' disabled={ terminal } onClick={ () => setActiveStep((step) => Math.min(members.length, step + 1)) }>
-            Next <span aria-hidden='true'>→</span>
-          </button>
+          <Button variant='ghost' tone='accent' size='sm' disabled={ activeStep === 0 } onClick={ () => setActiveStep((step) => Math.max(0, step - 1)) }>
+            <Icon name='ArrowLeft' decorative /> Previous
+          </Button>
+          <Button variant='ghost' tone='accent' size='sm' disabled={ terminal } onClick={ () => setActiveStep((step) => Math.min(members.length, step + 1)) }>
+            Next <Icon name='ArrowRight' decorative />
+          </Button>
         </div>
       </div>
 

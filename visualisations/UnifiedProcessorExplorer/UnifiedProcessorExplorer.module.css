@@ -35,42 +35,9 @@
 }
 
 .toolbar {
-  display: flex;
-  width: fit-content;
-  max-width: 100%;
-  padding: 0.25rem;
   margin-top: 1rem;
-  border-radius: 0.5rem;
-  background: var(--ds-color-surface-muted);
-  gap: 0.25rem;
 }
 
-.direction {
-  min-height: 2.75rem;
-  padding: 0.5rem 0.75rem;
-  border: 0;
-  border-radius: 0.375rem;
-  background: transparent;
-  color: var(--ds-color-text-muted);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1.2;
-  transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1), color 160ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.direction:hover {
-  color: var(--ds-color-text);
-}
-
-.direction[data-active='true'] {
-  background: var(--ds-color-surface);
-  color: var(--route-color);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--ds-color-text) 10%, transparent);
-}
-
-.direction:focus-visible,
 .node:focus-visible,
 .satellite:focus-visible,
 .route:focus-visible {
@@ -554,6 +521,8 @@
 
   .direction {
     min-width: 0;
+    height: auto;
+    min-height: 2rem;
     white-space: normal;
   }
 
@@ -688,7 +657,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .direction,
   .node,
   .route,
   .satellite {

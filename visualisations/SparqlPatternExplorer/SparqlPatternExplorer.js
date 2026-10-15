@@ -10,6 +10,8 @@
 
 import { useState } from 'react';
 
+import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+
 import styles from './SparqlPatternExplorer.module.css';
 
 const triples = [
@@ -155,24 +157,25 @@ const SparqlPatternExplorer = ({
       </figcaption>
 
       <div className={ styles.toolbar }>
-        <div className={ styles.typeTabs } aria-label='Query pattern' role='group'>
+        <ToggleGroupRoot
+          type='single'
+          spacing={ 1 }
+          className={ styles.typeTabs }
+          aria-label='Query pattern'
+          value={ activePatternId }
+          onValueChange={ (value) => {
+            if (!value) return;
+            setActivePatternId(value);
+            setSelectedTripleId(null);
+          } }
+        >
           {patternOrder.map((id) => [ id, patterns[id] ]).map(([ id, pattern ]) => (
-            <button
-              type='button'
-              aria-label={ `${pattern.label}, ${pattern.meaning}` }
-              aria-pressed={ activePatternId === id }
-              data-active={ activePatternId === id }
-              key={ id }
-              onClick={ () => {
-                setActivePatternId(id);
-                setSelectedTripleId(null);
-              } }
-            >
+            <ToggleGroupItem value={ id } aria-label={ `${pattern.label}, ${pattern.meaning}` } key={ id }>
               <strong>{pattern.tab}</strong>
               <span>{pattern.meaning}</span>
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroupRoot>
       </div>
 
       <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>

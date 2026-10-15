@@ -10,6 +10,9 @@
 
 import { useState } from 'react';
 
+import Icon from '@gaudi/design-system/core/Icon';
+import { Toggle, ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+
 import styles from './RdfContainerExplorer.module.css';
 
 const containerTypes = {
@@ -64,31 +67,31 @@ const RdfContainerExplorer = ({
       </figcaption>
 
       <div className={ styles.toolbar }>
-        <div className={ styles.typeTabs } aria-label='RDF container type' role='group'>
+        <ToggleGroupRoot
+          type='single'
+          spacing={ 1 }
+          className={ styles.typeTabs }
+          aria-label='RDF container type'
+          value={ activeTypeId }
+          onValueChange={ (value) => value && setActiveTypeId(value) }
+        >
           {Object.entries(containerTypes).map(([ id, type ]) => (
-            <button
-              type='button'
-              aria-label={ `${type.label} ${type.meaning}` }
-              aria-pressed={ activeTypeId === id }
-              data-active={ activeTypeId === id }
-              key={ id }
-              onClick={ () => setActiveTypeId(id) }
-            >
+            <ToggleGroupItem value={ id } aria-label={ `${type.label} ${type.meaning}` } key={ id }>
               <strong>{type.label}</strong>
               <span>{type.meaning}</span>
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroupRoot>
 
-        <button
-          type='button'
-          aria-pressed={ extended }
+        <Toggle
+          variant='outline'
+          pressed={ extended }
           className={ styles.extendButton }
-          onClick={ () => setExtended((current) => !current) }
+          onPressedChange={ setExtended }
         >
-          <span aria-hidden='true'>{extended ? '−' : '+'}</span>
+          <Icon name={ extended ? 'Minus' : 'Plus' } decorative />
           {extended ? 'Remove D' : 'Add member D'}
-        </button>
+        </Toggle>
       </div>
 
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
