@@ -1,0 +1,153 @@
+---
+type: 'Post'
+title: 'Why I Think Generative UI Comes Next'
+subtitle: 'From self-service data and Notion blocks to interfaces and workflows shaped by intent'
+summary: 'What self-service BI, Notion, and recent research on generative interfaces reveal about helping people shape both their tools and their path through a task.'
+tags: ['Generative UI', 'AI', 'Notion', 'Structured Data', 'Software Engineering']
+category: 'engineering'
+date: '2026-09-07'
+featured: true
+draft: false
+tableOfContents: false
+bibliography: ['meta/bibliography/references.bib']
+---
+
+My interest in generative UI goes back to my time working in business intelligence at SAP. We had dashboards and plenty of data, but people kept running into questions those dashboards weren’t built to answer. Sometimes they needed to bring in data from other sources, and while they knew what they wanted to investigate, finding and using that data themselves wasn’t straightforward. That became the focus of my [PhD work](https://github.com/ahmadassaf/PhD) within the BI team: understanding what someone was trying to do and helping them find and bring relevant data into their own reports. For me, the interesting part was the freedom this could give people to follow their own questions and shape something around their needs.
+
+I later found myself loving Notion and becoming attached to the systems I built in it. Only after using it did I start to understand why: its blocks let me arrange a workspace around how I worked. The result felt like something I had made myself.
+
+Generative AI gave more people another way to start building: describe an idea in a conversation, see something take shape, and refine it. That could mean creating an entire app. What interests me here is what happens inside a product someone already uses: generating a view for their question, then bringing in the next useful tool as the question develops. I'd like people to keep their decisions, notes, and evidence as they go. That's the version of generative UI I want to explore.
+
+## Self-service leaves more work than we admit
+
+When we build a dashboard, we choose which measures matter, which comparisons deserve space, and which questions to make easy to answer. Those choices make it useful, but they can only cover so much. An unexpected question starts another round of work: finding a source, checking what a field means, combining it with existing data, and producing a view that makes the comparison possible.
+
+Someone might know exactly why they want to investigate a number without knowing how to pull that data together. Asking for another report can be a way of following their own question without learning every tool needed to answer it.
+
+Research on self-service BI captures this problem. Across 30 interviews in two implementation projects, Lennerholt and colleagues found that users still needed specialist support, now for locating and understanding data and performing complex reporting operations. Interpretation could remain difficult even when access worked. **Self-service can move work around without making it disappear.** [@Lennerholt:ISM:21]
+
+Data Formulator 2 offers a useful response: people combine natural language with visual controls, while AI handles data transformations. They can revisit earlier steps and reuse previous designs. Its eight-participant study is an early exploration, but the design addresses something familiar: you need to be able to change your question without rebuilding everything around it. [@Wang:CHI:25]
+
+At [Mav9](https://mav9.com), the demand for customization keeps coming back. We can spend considerable time building dashboards for different users and still receive requests for another arrangement, another comparison, or a simpler view. Making everything configurable would give people more freedom, but many of our users don't have the time or familiarity to operate a comprehensive builder. They can explain what they need much more easily than they can configure it.
+
+## Understanding why I stayed with Notion
+
+In [Notion's data model](https://www.notion.com/blog/data-model-behind-notion), each block has an identity, a type, properties, and relationships. That helped me understand why I could rearrange a workspace without losing the pieces I had put into it. The structure supported the freedom I enjoyed as a user.
+
+Reading Akanksha Pandey's [“Psychology of Notion”](https://medium.com/@yoursocialwiz/psychology-of-notion-why-everyone-is-obsessed-with-it-1044643e03ab), I recognized the feeling she describes: I'd made the workspace mine. The names, views, and connections were choices I'd made. Her connection to the IKEA effect resonated with me. Research on that effect and on customization suggests we can value things more when we feel we've helped make them. That doesn't tell us whether an AI-built workspace will be useful or keep us coming back, but it gives me a question worth exploring. [@Norton:JCP:12; Franke:MS:10]
+
+If an agent does most of the setup, will the result still feel like mine? I suspect the ability to change it matters: naming things, moving them around, rejecting suggestions, and deciding what belongs together. I don't need to perform every setup step to see my choices in the result.
+
+Notion Agent connects this to the product's architecture. It can create and edit pages, databases, properties, and views, including relations between databases, and work with selected blocks. A request for a project tracker can become an editable database in the workspace. The person and the agent are working with the same identifiable pieces. [@Notion:Agent:26]
+
+Custom Agents extend that to recurring work. People can describe a job in chat, review its instructions and access, and configure schedules or events such as a database property changing. That lets them shape what the workspace does as well as how it looks. It also raises the question of how much direction to give an agent as the work changes. [@Notion:CustomAgents:26]
+
+## Building begins with a conversation
+
+Tools such as [Lovable](https://docs.lovable.dev/features/generate-files) make the starting point tangible: upload data, ask for a dashboard, and work on the result through conversation. There is still checking and refinement to do, but you have something concrete before you know every detail of how to build it.
+
+Inside an existing product, the opportunity is slightly different. The data, permissions, and familiar tools are already there. Someone might need a particular comparison for today's review, without wanting to build and maintain another application. Generative UI could assemble that view from the product's capabilities and leave it open to further changes.
+
+A written answer may be enough for a simple question. An investigation also needs ways to change scope, compare alternatives, and inspect evidence. Requiring a new message for every adjustment can make the conversation itself another layer of work.
+
+DynaVis demonstrates a useful combination. A natural-language request edits a visualization and produces a persistent control for further changes. People in its study preferred that approach to a natural-language-only interface, citing easier edits and immediate feedback. Ask for the change once, then adjust it directly. [@Vaithilingam:CHI:24]
+
+The broader *Generative Interfaces for Language Models* study reports favorable human evaluations across a range of queries, especially where organization and interaction help. Its limitations matter for a product: it generates frontends without backend logic, and generation can take several minutes. Preference for an interface is encouraging; it still leaves the question of whether the whole task becomes easier. [@Chen:ACL:26]
+
+The example below follows the idea in the [Thesys comparison demo](https://demo.thesys.dev/compare). **Try one thing: compare the responses, then change the region on the UI side.** Both responses start from the same fictional figures. The control lets you continue exploring without composing another question.
+
+<GenerativeUIComparison id="generative-ui-comparison" />
+
+This illustrates the value of having controls alongside an answer. A well-designed dashboard can offer those controls too. The generative opportunity is assembling a useful selection for a question the product designer didn't anticipate.
+
+## Keep what I've already built
+
+Once I start changing a generated view, I want those changes to stick. Suppose I add review notes, select a region, and ask for a different chart. A request about presentation shouldn't quietly discard my notes or change the scope. Asking for a different layout shouldn't mean starting over.
+
+Jelly explores this through an evolving data model that drives the interface. Both natural-language requests and direct manipulation change that model. Its study involved eight daily AI users recruited through a university, so it gives us an early view of the approach. The architectural idea is useful: keep the things someone is working on identifiable while changing how they appear. [@Cao:CHI:25]
+
+For [Mav9](https://mav9.com), those things could be a measure, a source observation, a comparison, a note, or a filter. Moving a note changes its placement. Switching charts changes a representation. Neither operation should silently alter the meaning of the underlying measure. If someone explicitly asks for another region, the scope should change; the notes they've already made should still belong to the records they describe.
+
+**Try one thing below: edit the note, then move Notes above Summary.** You can also remove it and add it again, or switch to “Describe what I need” and compose a new arrangement. The same note survives.
+
+<GenerativeUIBlockBuilder id="generative-ui-block-builder" />
+
+The text mode uses a small vocabulary of block names. It illustrates composition and state preservation, while the question of how reliably an AI can infer the right arrangement remains separate.
+
+Keeping the view editable solves part of the problem. It still leaves the person to decide what to investigate next and where to find the tool for it.
+
+## The first question is often just a starting point
+
+The page someone is looking at tells you what they're reading, but not necessarily what they're trying to do. Two people can open the same company page because one is considering an investment and the other wants to understand a competitor. The useful next piece of information could be quite different.
+
+That was part of what I wanted to explore with [SNARC](https://github.com/ahmadassaf/PhD/tree/main/Papers/ESWC%2713%20-%20SNARC%20An%20Approach%20for%20Aggregating%20and%20Recommending%20Contextualized%20Social%20Content): could we bring useful context into the page someone was already browsing? We built a Chrome extension that extracted entities, concepts, and categories from the content, queried other services, and brought related social content back into the page. The implementation used the page as a clue to relevance. My broader interest was the question behind it: why am I here, and what else would help me? [@Assaf:ESWC:13]
+
+Browsing rarely follows a tidy plan. You start with an article, notice an unfamiliar term, follow it, and discover that your real question is slightly different. Sometimes you find the words for what you need only after seeing a few examples.
+
+Exploratory-search research examines that process. A 2024 study of master's students explored how they judged relevance and built knowledge while searching the literature. Although the setting differs from business analysis, it helps explain why reading and searching are part of working out the question itself. [@Soufan:CHIIR:24]
+
+Semantic query expansion can help with retrieval. A narrow phrase can be expanded with related terms or concepts, so a search isn't limited to the exact words someone typed. Query2doc generates a short pseudo-document and adds it to the query to improve retrieval. Its benchmark results concern finding relevant material; they don't establish understanding of a person's wider purpose. [@Wang:EMNLP:23]
+
+I'd like to make some of those connections available as choices. Someone looking at revenue growth might want to explore pricing, customer retention, or an acquisition that changed the comparison. Those are possible directions to offer, not explanations to assume. The prompt, current page, selected records, and subsequent choices all provide clues. The person still needs an easy way to correct the direction.
+
+## From generating a view to generating a route through the work
+
+I use **generative routing** as a working term for composing and adapting a path through an application's capabilities around a person's goal and context. Here, routing means which view, evidence, or action to offer next. It isn't about choosing which language model handles a request.
+
+Consider a hypothetical [Mav9](https://mav9.com) query: “This company's EBITDA looks different from what we recorded at acquisition.” The person has expressed a concern without specifying its cause. A useful response could begin by comparing the observations, their periods, and their definitions.
+
+What happens next depends on the evidence. Different currencies suggest checking exchange-rate assumptions. Adjusted and unadjusted EBITDA call for inspecting the adjustments. Conflicting documents call for reviewing provenance. The application could bring the appropriate tool into the workspace, carrying over the company, period, and sources. I shouldn't need to know which menu hides the next step.
+
+**Try one thing below: open the currency check, save its finding, then change the exchange rate.** The calculation updates, while the saved finding keeps its original assumptions and is marked for review. You can continue into a period comparison or explore the separate definition and source examples.
+
+<GenerativeRoutingExplorer id="generative-routing-explorer" />
+
+These are predefined routes. The demo illustrates how an investigation could behave, including what should survive a change. The generative ambition is for a system to select and compose relevant capabilities from context, beyond the paths we've designed in advance. Showing a different panel after a click is not sufficient evidence that it can do that reliably.
+
+There is already research on generating interaction paths. *Generative Interfaces for Language Models* represents flows as directed graphs of views or subgoals, alongside state machines for component behavior. DuetUI adds a feedback loop: the agent decomposes a task into interfaces, and the user's interactions help steer subsequent generation. Its evaluation reported efficiency and usability improvements, although the prototype covers a limited range of tasks. [@Chen:ACL:26; Xu:CHI:26]
+
+Google Research's *Self-Evolving Systems* report explores interfaces that generate features from requests and inferred needs. In a 72-participant comparison of a banking prototype, the adaptive version received higher usability scores. That is another reason to experiment, while leaving long-term familiarity, reliability, and adoption open. [@Arora:Google:26]
+
+For our own product, I'd start with the modest version: suggest a next step, explain what makes it relevant, and let the person choose another direction. As the investigation develops, completed work should remain available. Missing evidence should produce an honest stopping point.
+
+## When is generation worth it?
+
+A good filter or a well-designed workflow may already solve the problem. For a frequent task with known inputs and a clear sequence, I would usually want a stable interface that people can learn. Generating it again adds waiting and another result to check.
+
+The more interesting cases involve combinations we haven't anticipated: a different comparison, an unusual source, or a question that changes midway through the work. A product can't expose every possible combination without becoming difficult to use. Generation could assemble the relevant pieces for that moment while keeping familiar controls and shared definitions underneath.
+
+That puts a useful constraint on the idea. A generated view has to save more effort than it introduces through explanation, checking, and learning its controls. Sometimes a short answer will do. Sometimes the best next step is opening an existing tool. I'd want the system to recognize those cases too.
+
+## The pieces are becoming practical
+
+There are working projects to explore different parts of this. These are starting points to investigate, not a ranking or a claim that they solve the same problem.
+
+| What I want to try | Projects to explore |
+| --- | --- |
+| Compose a view from existing product components | [Tambo](https://github.com/tambo-ai/tambo) connects React components to an agent with streaming and state management. [json-render](https://github.com/vercel-labs/json-render) renders generated specifications through defined component and action catalogs. |
+| Stream structured UI into a client | [Thesys OpenUI](https://github.com/thesysdev/openui) streams its UI language through a supplied component library. [A2UI](https://github.com/a2ui-project/a2ui) defines an incrementally updatable format that clients render with their own components. |
+| Experiment with generated custom interfaces | [OpenGenerativeUI](https://github.com/CopilotKit/OpenGenerativeUI) demonstrates streamed, sandboxed interfaces. |
+| Explore the analysis experience itself | [Data Formulator](https://github.com/microsoft/data-formulator) makes the research direction available as software. [Hex](https://hex.tech/) offers conversational analysis and interactive data apps over governed data. |
+| Build a separate app through conversation | [Lovable](https://docs.lovable.dev/features/generate-files) can turn uploaded data and analysis into app features such as dashboards. |
+
+For a prototype, I'd expose a few well-understood views and operations first. The useful test is whether someone can refine a result, inspect its evidence, and continue to a related task while keeping their work. A convincing first screen is only the beginning.
+
+## What I'd want underneath it
+
+I'd keep track of three things: what the person is trying to do, what the product can do, and what data it has. Task state records the goal, choices, and unresolved questions. A capability catalog describes available operations and their requirements. The data model identifies the observations, definitions, and sources those operations use.
+
+In the EBITDA example, a like-for-like comparison needs compatible measures and periods. Reviewing provenance needs accessible source documents. Previewing an assumption should leave the recorded company value intact. A request to investigate a discrepancy does not itself authorize replacing that value. This is how I'm thinking about it for [Mav9](https://mav9.com); we haven't built the whole experience yet.
+
+In [Notion's API design](https://www.notion.com/blog/creating-the-notion-api), preserving structure is part of exposing content to other software. The same concern applies here. A due date, an accounting period, and a document's upload date may all look like dates, but they support different operations. The interface needs to preserve those distinctions.
+
+It also needs to help people check the work. A study of 22 analysts using an AI-analysis prototype found that verification behavior varied with their programming, analytical, and tool backgrounds. A convincing explanation wasn't enough to settle whether an analysis was right. [@Gu:CHI:24]
+
+I would keep sources, calculations, and assumptions inspectable. A saved finding should show the state it depended on. Changing an upstream assumption should flag affected conclusions for review. Familiar navigation should remain available, with ways to decline suggestions and return to earlier decisions.
+
+To test whether this helps, I'd compare the same tasks in a well-designed dashboard with filters and workflows, a good chat interface, and a generated workspace. **Time to a correct result matters more than time to the first rendered screen.** I'd also look at whether people spot conflicting definitions, recover from a wrong interpretation, resume saved work, and keep using the result after the novelty wears off.
+
+## Where this leaves me
+
+I want to be able to start with an incomplete question, get a useful view, follow an unexpected finding, and return later to work I still understand. Generative UI could help assemble the view; generative routing could help bring in the next tool. Both need to preserve the decisions and evidence that make the work mine.
+
+That's what I want to find out as we build: whether conversation can make a tool easier to shape, and whether that tool helps someone keep going when their question changes.

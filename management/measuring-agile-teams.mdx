@@ -2,11 +2,14 @@
 type: 'Post'
 title: 'Measuring Agile Teams Without Weaponizing the Numbers'
 tags: ['Agile', 'Metrics', 'Project Management', 'Engineering Management']
-summary: 'Metrics can help an agile team see itself or they can be turned into weapons. What each of the classic charts actually tells you, how each one lies, and the anti-patterns to catch early.'
-subtitle: 'What burndowns, velocity, and cycle time really measure'
+summary: 'A practical way to read agile metrics: separate the observation from its possible explanations, then decide what to inspect next. With interactive, fictional examples of five familiar charts.'
+subtitle: 'What the charts show, what they leave out, and what to check next'
 featured: false
 date: '2025-11-15'
+updated: '2026-09-10'
 category: 'management'
+tableOfContents: false
+bibliography: ['meta/bibliography/references.bib']
 series:
   order: 1
   title: 'Classical Agile'
@@ -14,93 +17,120 @@ series:
 
 ## Why metrics are complicated
 
-I've been on teams that tracked nothing, and it was like flying blind. Are we going to make the release date? Are we getting faster or slower? No idea. I've also been on teams where metrics were used as weapons: pitting teams against each other, or justifying why everyone should work the weekend. Neither extreme is healthy.
+I've been on teams that tracked nothing, and it was like flying blind. Are we going to make the release date? Are we getting faster or slower? No idea. I've also been on teams where metrics became weapons: a way to rank teams or explain why everyone should work the weekend. Neither experience made me want a bigger dashboard.
 
-Used thoughtfully, metrics do three things for a team: they reduce confusion, they show where you're actually making progress, and they surface where you're struggling early enough to act. The key word is *thoughtfully*, and most of this post is about what that looks like for each of the classic agile charts.
+What I want from a chart is a better question. If work is taking longer, where is the time going? If more items are completing, are users getting something better? Before changing anything, I want to know what changed in the work, what changed in how it was recorded, and what the people doing it can explain.
 
-One framing before the charts: every metric below measures the **process**, not the **product**. Shipping on time isn't enough if you're shipping the wrong thing, so process metrics only mean something next to business metrics.
+That gives me a simple reading habit: **observation, possible explanations, next check**. A chart can establish a pattern in the recorded data. It rarely establishes someone's motive, and it doesn't automatically tell us what caused the pattern.
 
-## Start from the business, not the board
+## Start with the outcome
 
-Something that took me a while to learn: you need to ship the *right* features at the *right* time for the *right* market, and no burndown chart will tell you whether you did.
+The charts below describe work and delivery. They need company: evidence that the product helps someone, that quality is holding up, and that the way of working is sustainable.
 
-<Callout type='warning'>
-**The difference in one example**: for a new search feature, "ships by March" is a process claim. "A third of sessions use search within a month of launch" is a business claim. Define the second kind up front, or the first kind quietly becomes the goal.
-</Callout>
+Take a new search feature. Shipping it by March tells us about delivery. Search adoption tells us whether people use it. Neither tells us whether they find what they need. More searches could mean the feature is useful, or that navigation has become confusing. I'd pair adoption with task success, time to a useful result, and a few observed sessions before celebrating.
 
-For each major initiative, set a few key performance indicators that matter to the business. For each feature, define success criteria upfront: adoption rate, coverage, whatever fits. These create the feedback loop your process metrics plug into. Without them, a team can be a model of agile hygiene while confidently building things nobody wants.
+The same discipline applies inside the team. Define the question, the unit, the start and finish boundaries, and the period being measured. Write down changes to those definitions. Otherwise a process change and a measurement change can look exactly alike.
 
-## The classic charts, and how each one lies
+## Five charts, read with context
 
-Every chart below is genuinely useful, and every one of them can be gamed or misread. So for each: what it tells you, and how it lies.
+Every example below is fictional. The interactions are demonstrations of how to read data, not benchmarks or evidence about any real team. Open the values beneath a figure to inspect the numbers behind it.
 
 ### Sprint burndown
 
-The sprint burndown tracks remaining work through the sprint: time on the x-axis, work left (story points or hours) on the y-axis, ideally reaching zero by the sprint's end. A team that consistently meets its forecast is the best internal advertisement for agile there is.
+A sprint burndown shows the estimated work remaining in the current selection over time. Reaching zero means that recorded quantity reached zero. It doesn't establish that the Sprint Goal was achieved or that the result was useful. The Sprint Goal is the commitment; selected work is a forecast that can be renegotiated as the team learns, without endangering the goal. [@Schwaber:ScrumGuide:20]
 
-<AgileChartsExplorer chart='burndown' />
+<AgileChartsExplorer chart='burndown' id='sprint-burndown-example' />
 
-How it lies: the numbers are easy to fudge. Declaring an item done before it really is makes the chart look great this sprint and destroys the learning it exists to produce. Watch for these patterns:
+In this example, the line reaches zero before the end. Switch work logs: one records all the original work completed; the other records some work removed after a scope decision. The line alone cannot distinguish them.
 
-- Finishing early sprint after sprint: the team is under-committing.
-- Missing the forecast sprint after sprint: the team is over-committing.
-- Steep cliffs instead of a gradual slope: work isn't broken down into small enough pieces.
-- Scope appearing mid-sprint: the product owner is changing the deal after it was struck.
+The same caution applies to the other familiar shapes. A flat stretch could mean blocked work, work too large to finish quickly, or a reporting delay. A cliff could reflect several completions recorded together, acceptance in batches, or one large item. An upward step could reflect added work or a revised estimate. My next check is the item history and the team's explanation, including what happened to the Sprint Goal. I wouldn't read under-commitment or a broken agreement directly from the line.
 
-### Epic and release burndown
+### Release burndown and burnup
 
-The same idea at a larger scale: progress across a body of work spanning many sprints. Here's the nuance that trips teams up: scope change at this level is *healthy*. As the team learns, the product owner should be adding and removing work. "Scope creep" is a problem inside a sprint; across an epic, it's the whole point of being agile. The chart's job is to keep that ebb and flow visible to everyone.
+Across a release, remaining work combines two moving quantities: scope and completion. That's why I often prefer a burnup here. It draws completed work and total scope separately, so a team can be completing work while the distance to the current scope stays the same.
 
-<AgileChartsExplorer chart='epic' />
+<AgileChartsExplorer chart='epic' id='release-scope-example' />
 
-How it lies: mostly by neglect. Forecasts that never get updated as the team churns through work, several iterations with no visible progress, scope growing faster than the team absorbs it, or an epic that never ships anything incrementally along the way. Chronic, unexamined scope growth usually means the product owner doesn't yet understand the problem the epic is meant to solve.
+The examples keep completed work identical and change scope. In the growing-scope case, the gap is larger. That might reflect useful discovery, a necessary correction, or avoidable churn. The chart doesn't choose among them. Inspect what changed, why it changed, and whether smaller increments are reaching users.
+
+Any date inferred from these lines depends on assumptions about future scope and delivery. A ruler through the recent slope is a scenario, not a promise. If those assumptions change, update the forecast and its uncertainty while the decision is still useful.
 
 ### Velocity
 
-Velocity is the team's average completed work per sprint, and it's the forecasting tool: if the backlog holds 500 points and the team averages 50 a sprint, you can reasonably plan around ten sprints. The more iterations behind the average, the better the forecast. New teams should expect velocity to climb as they gel; mature teams should expect it to hold steady, and a sustained drop is a retro topic, not a stick.
+Velocity usually means the amount of estimated work completed in a sprint, often summarized across recent sprints. Some teams find it useful for forecasting. Scrum requires neither story points nor velocity. [@Schwaber:ScrumGuide:20]
 
-<AgileChartsExplorer chart='velocity' />
+The arithmetic is easy: 500 points at 50 per sprint suggests ten sprints. The assumptions do the hard work. Does the remaining work resemble the sample? Are capacity, estimation, quality requirements, and scope still comparable? More history can help when the system is comparable; older data can mislead after it changes.
 
-How it lies: velocity is only comparable to itself. Each team's estimation culture is unique, so team A at 50 points versus team B at 75 tells you *nothing* about who delivers more. The moment velocity is compared across teams or turned into a target, people re-inflate estimates and the number stops meaning anything. This is the sense in which I've [called velocity a vanity metric elsewhere](/blog/category/management/agile-project-management-evolution): as a score shown to outsiders it is vanity; as the team's private forecasting input it is the only legitimate use it has. If velocity swings erratically, revisit estimation in the retro: were there challenges you couldn't see when estimating? Is outside pressure pushing commitments past reality? Are you simply forecasting with too much optimism?
+<AgileChartsExplorer chart='velocity' id='velocity-example' />
 
-### Cycle time and the control chart
+A gap between planned and completed points invites a conversation about changed scope, interruptions, dependencies, estimates, and unfinished work. It isn't a measure of effort. Rising points could reflect easier delivery, a different work mix, or a different estimation scale. New teams don't owe us an upward curve, and a mature team doesn't owe us flat bars.
 
-Cycle time is how long one item takes from "in progress" to "done", and the control chart plots it per issue with a rolling average. It's the primary Kanban metric, but Scrum teams benefit just as much. What you want is a short, *consistent* cycle time regardless of work type, because consistency is what makes delivery predictable. It's also the fastest feedback loop in this list: change your process this week, and cycle time reacts almost immediately.
+What bothers me is using velocity as a score. Points aren't a common unit across teams, and even comparisons within one team need context. I'd keep the recent range visible alongside any average, and check whether the forecast is helping decisions rather than quietly becoming a target people must hit.
 
-<AgileChartsExplorer chart='control' />
+### Completed cycle time and unfinished work
 
-How it lies: through outliers and noise. Don't chase every spike; look for trends. Rising cycle time saps agility and deserves a retro (with one honest exception: if you expanded your definition of done, cycle time expanding with it is correct, not a regression). Erratic cycle time for similarly sized items points at estimation misses: filter the chart by story-point value and look at each band separately.
+Cycle time measures elapsed time from a defined start to a defined finish. Work-item age measures elapsed time since starting something that is still unfinished. Throughput counts finished items per period; work in progress counts started, unfinished items. These four measures belong together. [@KanbanGuides:Guide:25]
+
+<AgileChartsExplorer chart='control' id='cycle-time-example' />
+
+This is a **cycle-time scatterplot**: each dot is a completed item, positioned by its completion day. The line is calculated from the latest five completed items. It helps us inspect patterns; without calculated control limits, it doesn't tell us whether the process is statistically in control.
+
+The narrow sample looks reassuring. Now reveal the unfinished work: one item is already 18 days old. It is absent from the completion history because it hasn't finished. A short average among completed items doesn't tell us that nothing is waiting.
+
+A long completed item deserves investigation, even if it is the only one. A rising average also deserves context: work mix, waiting, dependencies, and changes to the finish boundary can all matter. Inspect actual item histories and active ages; don't assume equal point estimates make two items comparable.
+
+Variation doesn't make forecasting impossible. It makes an average alone less informative. A service level expectation combines a duration with a probability, grounded in relevant history, rather than promising every item will match the mean. Revisit it as the workflow changes. [@KanbanGuides:Guide:25]
 
 ### Cumulative flow
 
-The cumulative flow diagram shows how many items sit in each workflow state over time, and healthy flow reads as smooth, roughly parallel bands. Bubbles or gaps in a band are shortages and bottlenecks made visible.
+A cumulative flow diagram shows how work accumulates across defined states over time. Here, the bottom band is cumulative finished work; the thickness of each unfinished band shows how many items occupy that state at each snapshot. Its definition matters: this example separates queued work from started work.
 
-<AgileChartsExplorer chart='flow' />
+<AgileChartsExplorer chart='flow' id='cumulative-flow-example' />
 
-How it lies: quietly, at the edges. A blocked band means backups in one state and starvation downstream, and items stuck in intermediate states like "In Review" aren't just idle: the longer they sit, the nastier the integration conflicts when they finally merge. The other classic: a backlog band growing forever because obsolete items never get closed. That's not demand, that's hoarding.
+A widening active band tells us more items are started and unfinished at those snapshots. It doesn't tell us whether the cause is a dependency, a changed work mix, an interruption, or a status-recording problem. I'd inspect the oldest items and where they wait, then check the team's WIP policies.
 
-## Beyond the process charts
+A shrinking queue needs context too. It could reflect an intentional wind-down or a gap in replenishment. And a steady band can still contain one aging item while newer items pass through. The aggregate points us toward the work; it doesn't replace looking at it.
 
-Two more families of metrics deserve a place, and they're the ones that keep process metrics honest:
+## Delivery, quality, and the experience of doing the work
 
-**Quality**: how many defects are found during development versus after release versus by people outside the team? How many get deferred to a future release? What's the customer-support request volume doing? What percentage of testing is automated? A great velocity with a rotten defect trend is a team borrowing from its future.
+Delivery measures help connect the board to production. DORA's guide, updated in January 2026, uses five software delivery performance metrics rather than the historical four: [@Harvey:DORA:26]
 
-**Delivery**: how often do releases actually go out, and how many builds make it to production? How long does an emergency fix take to ship? Is a release routine, or does it require heroics? That last question is my favorite smell test: heroic releases are a process bug wearing a cape.
+| Measure | What it describes |
+| --- | --- |
+| Change lead time | Time from a code commit to production deployment |
+| Deployment frequency | How often deployments occur |
+| Failed deployment recovery time | Time to recover from a failed deployment requiring immediate intervention |
+| Change fail rate | The proportion of deployments requiring immediate intervention |
+| Deployment rework rate | The proportion of deployments that are unplanned responses to production incidents |
 
-## The cheat sheet
+Read them together for a particular application or service, with its context intact. They're useful inputs to improvement, not a league table. Faster deployment is a delivery capability; whether the changes improve customers' lives needs separate evidence. [@Harvey:DORA:26]
 
-| Metric family | The question it answers | The anti-pattern it catches |
-| --- | --- | --- |
-| Sprint burndown | Will we hit the sprint goal? | Over-committing, invisible big items |
-| Release burndown | When does this epic actually land? | Unexamined scope growth |
-| Velocity | How much can we plan next sprint? | Estimates inflating to meet a target |
-| Cycle time | How predictable is a single item? | Queues and rotting reviews |
-| Cumulative flow | Where is work piling up? | Bottlenecks and hoarded backlogs |
-| Quality metrics | Are we borrowing from the future? | Velocity bought with defects |
-| Delivery metrics | Is a release routine or a heroic act? | Process bugs wearing capes |
+Quality needs its own questions. What defects escape to users? How severe are they? What happens to support demand and reliability? A rising coverage percentage tells us more code is exercised by tests; it doesn't, by itself, show that those tests catch the failures that matter.
 
-## Finding the balance
+Then ask about the work people experience. SPACE describes productivity across satisfaction and well-being, performance, activity, communication and collaboration, and efficiency and flow. Its useful challenge is that one activity count cannot stand in for all of that. [@Forsgren:SPACE:21]
 
-Metrics give you quantitative insight and measurable goals, and that's all they give you. The qualitative half, what the team says in retrospectives, matters just as much for trust, quality, and speed. Use both. And when a number and the team disagree about how things are going, the number is usually the one missing context.
+DevEx offers a related lens: feedback loops, cognitive load, and flow state. Pair system data with what developers report. A review queue gives us waiting times; a conversation may reveal that reviewers lack context, or that the same person is constantly interrupted. Those lead to different experiments. [@Noda:DevEx:23]
 
-*This post is part of a series on classical Agile: start with the [introduction to Scrum and Kanban](/blog/category/management/introduction-to-classical-agile), and continue with [Improvement Kata](/blog/category/management/improvement-kata) for making improvement a habit.*
+## A small reading checklist
+
+| Observation | What I would check next |
+| --- | --- |
+| Remaining selected work reached zero | Completion and scope logs, then the Sprint Goal and usable result |
+| Release scope outpaces completion | What was added, why, and which forecast assumptions changed |
+| Completed points changed | Work mix, capacity, estimate scale, and scope changes |
+| Completed items look fast | Ages and blockers of the items still in progress |
+| An active band widened | Individual waiting times, workflow boundaries, and WIP policies |
+| Deployments increased | Failure and rework measures, then user outcomes |
+| People report friction | Where it occurs, whom it affects, and what would make it better |
+
+When the numbers and the team's account disagree, I don't want to pick a winner. I want to understand the gap. Sometimes the recording is wrong; sometimes the aggregate hides something people see every day; sometimes a familiar story doesn't survive the data.
+
+That's where [Improvement Kata](/blog/category/management/improvement-kata) becomes useful: choose an obstacle, make a prediction, run a small experiment, and compare what happened. The dashboard has done its job when it helps that conversation happen.
+
+## Further reading
+
+- [*Accelerate* — Nicole Forsgren, Jez Humble, and Gene Kim](https://itrevolution.com/product/accelerate/) explores the research connecting delivery capability and organizational performance. Pair the book with the [current DORA guide](https://dora.dev/guides/dora-metrics/) for today's metric definitions.
+- [*Actionable Agile Metrics for Predictability* — Daniel Vacanti](https://actionableagile.com/books/) goes deeper into flow data, cycle-time distributions, and forecasting with uncertainty.
+- [*DevEx: What Actually Drives Productivity*](https://www.michaelagreiler.com/wp-content/uploads/2024/06/DevEx-WhatDrivesProductivity.pdf) is a practical companion when the next question concerns interruptions, feedback, or cognitive load.
+
+*This is the middle post in Classical Agile. Start with the [introduction to Scrum and Kanban](/blog/category/management/introduction-to-classical-agile), then continue with [Improvement Kata](/blog/category/management/improvement-kata) to turn observations into experiments.*

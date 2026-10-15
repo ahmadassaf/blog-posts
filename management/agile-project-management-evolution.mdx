@@ -2,15 +2,17 @@
 type: 'Post'
 title: 'The Evolution of Agile Project Management: From Trend to Practice'
 tags: ['Agile', 'Project Management', 'Improvement Kata', 'Continuous Improvement']
-summary: 'A personal journey through agile project management: from a traditional enterprise where doing Scrum was the revolution, through startup sprints and an R&D team where Scrum broke, to improvement kata and the practices that actually work.'
+summary: 'What working at SAP, scaling Beamery, and building an AI team taught me about Scrum, flow, and learning through small experiments.'
 subtitle: 'How agile project management evolved from buzzwords to meaningful practices'
 featured: false
 date: '2025-10-14'
-updated: '2026-09-01'
+updated: '2026-09-10'
 category: 'management'
+tableOfContents: false
+bibliography: ['meta/bibliography/references.bib']
 ---
 
-## SAP: Where Doing Scrum Was the Revolution
+## Starting in a large enterprise
 
 My career started at SAP, and you could not ask for a better place to learn what agile was reacting against. A traditional enterprise with decades of process in its bones: release trains measured in quarters, documents signed before code was written, and a hierarchy for every decision. In that world, simply running Scrum (actual standups, actual sprints, an actual board) felt genuinely revolutionary. It was the buzzword era everywhere, but inside a company like that, the ceremonies were not theater yet; they were rebellion. (If you're new to these concepts, I've written a [comprehensive introduction to classical Agile, Scrum, and Kanban](/blog/category/management/introduction-to-classical-agile) that covers the fundamentals.)
 
@@ -18,66 +20,50 @@ The appeal was obvious. Waterfall felt rigid and slow, often delivering products
 
 But even then I noticed the failure mode that would follow me for years: teams adopting the rituals without the principles. Standups that ran for 30 minutes as status reports to a project manager. Sprint planning that felt like a commitment ceremony rather than collaborative planning. Retrospectives that were complaint sessions with no action items. Story points quietly becoming deadline commitments; velocity becoming a scoreboard; the backlog becoming a wishlist nobody dared to prune. In a company that size, agile theater is almost gravitational: the org chart pulls every new practice back into the shape of the old ones.
 
-## Beamery: Six People Doing Sprints Anyway
+## From a six-person startup to a scale-up
 
-Then I joined Beamery as an early-stage startup, and the contrast was total. We were six people. Six. And we still did agile properly: sprints, planning, standups, the whole rhythm. It sounds absurd for a team that could hold its entire coordination problem in one conversation over coffee, but it worked, because at that size the ceremonies are nearly weightless and the rhythm itself is the value: a cadence for deciding, a moment for demoing, a habit of asking what we learned.
+Then I joined Beamery as an early-stage startup, and the contrast was total. We were six people. Six. And we still did sprints, planning, standups, the whole rhythm. It sounds excessive for a team that could hold most of its coordination in one conversation over coffee, but it worked. At that size the ceremonies were nearly weightless, and the rhythm itself was useful: a cadence for deciding, a moment for demoing, a habit of asking what we learned.
 
-As the company scaled, we leaned into Scrum harder rather than lighter. We brought in a scrum coach, formalized the retros, tightened the ceremonies. And for a while that was right: each layer of process was absorbing a real coordination cost that growth had created. This is the part of the journey where the textbook works: a product organization of stable teams shipping a roadmap is exactly the world Scrum was designed for.
+As the company scaled, we leaned into Scrum harder rather than lighter. We brought in a Scrum coach, formalized the retros, tightened the ceremonies. And for a while that was right: each layer of process was absorbing a real coordination cost that growth had created. It suited what our teams needed then.
 
-But keep scaling and you watch Scrum decay in slow motion, the same drift I'd seen at SAP arriving from the other direction. The ceremonies that had been good practice hardened back into rituals: retros held because the calendar said so, plannings performed for the process rather than the plan. And the real bottleneck quietly moved somewhere Scrum has nothing to say about. It was no longer any team's sprint planning; it was organizational planning: how the company's bets cascade into EPD (Engineering, Product, and Design), how EPD's priorities cascade into engineering, and how any of it lands as coherent work across dozens of teams. Scrum is a team-sized answer, and past a certain size the hard question stops being team-sized.
+As we kept scaling, I saw some of the same drift I'd seen at SAP: retros held because the calendar said so, planning performed for the process rather than the plan. The harder bottleneck had moved. How did the company's bets become priorities for Engineering, Product, and Design? How did those priorities become coherent work across dozens of teams? Improving a team's ceremonies wasn't enough to resolve competing priorities and dependencies across the organization.
 
 ## The AI Team: Planning in the Era of Uncertainty
 
-The break came when I started the AI team at Beamery. R&D work refuses the core assumptions Scrum rests on. An estimate assumes you know what you're building; in research, half the backlog is questions ("can this model even do this?"), and you cannot put a story point on an answer you don't have. A sprint commitment assumes the goal survives two weeks; in R&D, the Tuesday experiment routinely invalidates the Monday plan. We would "fail" sprint after sprint while doing exactly what a research team should do: learning fast and changing course.
+The break came when I started the AI team at Beamery. Half the backlog was questions: “Can this model even do this?” A Tuesday experiment could invalidate the work we'd selected on Monday. When we judged the sprint by how much of that selection we'd completed, useful research could look like failure.
 
-The problem wasn't the team; it was planning itself in an environment of that much uncertainty. So we stopped pretending. We kept the parts of Scrum that create feedback (the demo cadence, the retros) and dropped the parts that create fiction (sprint commitments, estimation poker for unknowable work), and ran the day-to-day as a WIP-limited Kanban flow where research spikes moved through explicit states. A mix of Scrum's rhythm and Kanban's honesty. That experience taught me to ask, for every ceremony: what feedback loop does this create, and does that loop survive contact with our uncertainty?
+That was a problem with how we were using Scrum. The Scrum Guide explicitly addresses complex work and allows scope to be clarified and renegotiated as people learn, while preserving the Sprint Goal. It doesn't require a frozen list of tasks, and it doesn't require story points. We had been asking our estimates and plans to carry more certainty than the work justified. [@Schwaber:ScrumGuide:20]
+
+We kept the demo cadence and retrospectives, and ran the day-to-day as a WIP-limited Kanban flow where research spikes moved through explicit states. We still had to plan: choose a question, decide what evidence would be useful, and limit how many investigations we opened at once. The shorter horizon suited us better. That experience taught me to ask, for every ceremony: what feedback does this create, and how quickly can we act on it?
 
 ## Discovering Improvement Kata: A Different Lens
 
 Then I stumbled upon improvement kata, and it fundamentally changed how I thought about continuous improvement and project management. It's a practice Mike Rother distilled from Toyota's management culture, built around a simple four-step pattern of scientific thinking: understand the direction, grasp the current condition, set the next target condition, and experiment your way toward it. I've since written a [full post on the practice](/blog/category/management/improvement-kata), so I'll keep this to what it changed for me.
 
-What struck me was its emphasis on learning through experimentation rather than following a prescribed process. It wasn't about doing sprints or standups or any specific ceremony. Instead of asking "Are we following the Scrum guide correctly?", we started asking "What are we trying to achieve, and what experiment can we run to learn more?" The coaching kata that accompanies it (five fixed questions a coach asks, every time) created a culture where obstacles became learning opportunities rather than blockers, and teams got comfortable with uncertainty.
+What struck me was how concrete it made learning. What condition are we trying to reach? What happens now? What do we expect the next small experiment to show? The accompanying Coaching Kata gives a coach and learner a routine for examining those questions. After checking the current condition, they look back at the previous prediction, what happened, and what they learned. The question card is a starting point for practicing that conversation. [@Rother:CoachingKata:Web]
 
-## Mav9: Building the Plane While Flying It
+I found that more useful than another abstract instruction to “continuously improve.” It gave us something to do with an obstacle before turning it into a process change for everyone.
 
-Now I've started Mav9, and I'm doing the startup-from-the-ground-up thing again. This time we don't run Scrum. Honestly, we don't run any form of proper planning, because there is nothing stable enough to plan against: we are building the airplane while flying it, and the destination updates mid-flight. A sprint commitment at this stage would be fiction with a two-week expiry date.
+## Back to building a startup
 
-What survived, once again, is the combination that keeps earning its place: a lightweight Kanban flow (a board, explicit states, ruthless WIP limits) plus the [improvement kata](/blog/category/management/improvement-kata) as the steering mechanism, with target conditions doing the job sprint goals used to pretend to do. The symmetry with early Beamery is what strikes me most. Mav9 today is seven people (nine counting the founders), almost exactly the size Beamery was when we ran the full ceremony book. Beamery at that size did sprints because we didn't yet know what the ceremonies were for; Mav9 at the same size skips them because now I do, and I can keep the feedback loops without the theater.
+Now I've started [Mav9](https://mav9.com), and I'm doing the startup-from-the-ground-up thing again. This time we don't run Scrum. The work changes quickly enough that we plan over a shorter horizon: choose the next priority, make room for it, and reconsider as we learn. There is still planning involved, even when it doesn't look like a sprint planning meeting.
 
-## Where I Am Now: A Synthesis of Practices
+What keeps earning its place is a lightweight Kanban flow, with explicit states and WIP limits, alongside [improvement kata](/blog/category/management/improvement-kata) for working on how we operate. We're a small team again, which makes the comparison with early Beamery interesting. Sprints helped us then; a lighter flow suits us here. I don't think the difference is that we've graduated beyond Scrum. The work, uncertainty, and coordination needs are different.
 
-Today, my approach to project management is a synthesis of everything that journey (SAP, Beamery, the AI team, Mav9) taught me: agile principles, improvement kata thinking, and hard-won pragmatism. I've moved away from religious adherence to any single framework and toward a more adaptive, context-sensitive approach.
+## What I keep coming back to
 
-Here's what this looks like in practice:
+I want to understand where work waits, what we're trying to improve, and how we'll notice whether a change helped. A board can make the waiting visible. A regular demo can expose a misunderstanding. A small experiment can test an assumption. Each needs a clear purpose; none earns its place just by being familiar.
 
-### Focus on Flow, Not Ceremonies
+Target conditions help me be more specific about improvement work. For example, if deployment is the problem, I would describe how routine changes should move through automated checks and reach production without an unnecessary manual handoff, then set a date and measures for that condition. A test-coverage percentage alone wouldn't tell me whether the critical paths were protected or whether deployment had become easier. This also doesn't replace a product backlog: deciding what to build and improving how we build it are related jobs, with different questions.
 
-I care less about whether we're doing sprints "correctly" and more about whether work is flowing smoothly through our system. We identify bottlenecks, measure cycle time, and optimize for reducing work-in-progress. Some teams use sprints, some use continuous flow. The choice depends on the context, team maturity, and the nature of the work.
+I also want to separate customer outcomes from delivery capability. Customer satisfaction asks whether we're helping people. Deployment frequency, recovery after a failed deployment, and lead time tell us about aspects of our delivery system. They can support a conversation about value; they don't establish value by themselves. The current DORA measures are useful here, alongside the broader view of developer productivity in SPACE. Neither is a reason to rank individual engineers by activity. [@Harvey:DORA:26; Forsgren:SPACE:21]
 
-### Experiments Over Plans
+Finally, I need people to be able to tell me that a plan no longer makes sense. If admitting uncertainty is punished, we'll get tidy updates and hidden problems. That is a management responsibility I can't delegate to a framework. I've explored the same tension in [how I think about performance management](/blog/category/management/performance-management-evolution).
 
-Inspired by improvement kata, we frame everything as experiments. We might hypothesize that pairing developers will reduce bugs, so we run a time-boxed experiment and measure the results. We might think that smaller user stories lead to faster delivery, so we test it. This mindset shift from "implementing best practices" to "running experiments" has made teams more engaged and reduced the defensiveness that often comes with process changes.
+I still find plenty to use in Scrum. I also know that the process that helped us at one stage can become expensive at another. The question I want to keep asking is simple: what is this practice helping this team learn or do today?
 
-### Target Conditions Over Backlogs
+## Reading that helps with the next questions
 
-Rather than maintaining massive backlogs that nobody looks at, we define clear target conditions for what we want to achieve. This could be "reduce deployment time to under 10 minutes" or "achieve 90% test coverage in the authentication module." The work we do is in service of moving toward these target conditions, and we're ruthless about saying no to anything that doesn't clearly contribute.
-
-### Regular Reflection, Flexible Format
-
-We've kept the retrospective spirit but made the format flexible. Sometimes it's a structured retro, sometimes it's a group problem-solving session, sometimes it's a celebration of wins. The key is that we regularly pause to reflect and adjust. The improvement kata coaching questions often guide these sessions.
-
-### Metrics That Matter
-
-We've stopped using velocity or story points as productivity scores; [used as a team's private forecasting input](/blog/category/management/measuring-agile-teams), velocity still earns its keep, but as a scoreboard it's vanity. Instead, we focus on outcomes: customer satisfaction, deployment frequency, mean time to recovery, and cycle time. These metrics tell us whether we're actually improving our ability to deliver value, not just whether we're "busy."
-
-### Psychological Safety as Foundation
-
-None of this works without psychological safety. Teams need to feel safe experimenting, admitting uncertainty, and discussing obstacles openly. Building this safety has become a primary focus, more important than any process or tool.
-
-## The Journey Continues
-
-The evolution of my project management approach reflects a broader maturity in how I think about process and improvement. At SAP I was looking for the "right way" to do things, and Scrum looked like it. At Beamery I watched the right way work, then scale, then stop fitting. At Mav9 I finally stopped looking for a right way at all.
-
-Now I understand that there is no "right way", only practices that work better or worse in specific contexts. The goal isn't to follow a methodology perfectly, but to build teams that can continuously learn and adapt. Agile gave us permission to iterate quickly. Improvement kata gave us a systematic way to learn from those iterations. What I do now is an ongoing experiment in combining these ideas with the realities of the teams and contexts I work in.
-
-The only constant is the commitment to keep learning, keep experimenting, and keep adapting. Everything else in this post is subject to the next retro.
+- [Team Topologies, second edition, by Matthew Skelton and Manuel Pais](https://itrevolution.com/product/team-topologies-second-edition/) looks beyond team ceremonies to team boundaries, cognitive load, and how teams interact. It's relevant to the coordination problems I ran into as Beamery grew.
+- [The Principles of Product Development Flow, by Donald Reinertsen](https://reinertsenassociates.com/books/) goes deeper into queues, batch sizes, and the economics of managing work in progress.
+- The practical companion posts cover [Scrum and Kanban](/blog/category/management/introduction-to-classical-agile), [interpreting delivery metrics](/blog/category/management/measuring-agile-teams), and [running an improvement experiment](/blog/category/management/improvement-kata).

@@ -1,86 +1,81 @@
 'use client';
 
-/**
- * THESIS: Scrum and Kanban answer the same question, "when do we ship?", with two different clocks.
- * OWN-WORLD: One canvas, two rhythms: a fixed loop that beats every two weeks, and a lane that never stops flowing.
- * STORY: Switch between the Scrum loop and the Kanban board, then select any stage to read what it is for.
- * FIRST VIEWPORT: The Scrum cycle with its backlog inlet and increment outlet, cadence badge at the center.
- * FORM: A responsive SVG with semantic tab switching and selectable stages.
- */
+import { useEffect, useId, useRef, useState } from 'react';
 
-import { useState } from 'react';
+import { createKanbanState,
+  createScrumState,
+  getKanbanCounts,
+  getKanbanMove,
+  getScrumStatus,
+  KANBAN_LIMITS,
+  moveKanbanItem,
+  moveScrumDay,
+  releaseScrumIncrement,
+  SCRUM_READY_DAY,
+  SCRUM_REVIEW_DAY } from './cadence-model.mjs';
 
 import styles from './AgileCadenceExplorer.module.css';
 
-const modes = {
-  'kanban': {
-    'defaultStage': 'progress',
-    'label': 'Kanban',
-    'meaning': 'continuous flow',
-    'stages': [
-      { 'blurb': 'Priorities live here in strict order. The product owner can reshuffle it at any time without disturbing anyone, because nothing here is being worked on yet.', 'cards': 5, 'id': 'backlog', 'name': 'Backlog' },
-      { 'blurb': 'The short runway of agreed next work. When someone frees up, they pull from the top. Nobody assigns work downward.', 'cards': 3, 'id': 'todo', 'name': 'To Do' },
-      { 'blurb': 'Only three items may live here at once. When the column is full, the team’s attention has nowhere left to go but finishing something.', 'cards': 3, 'id': 'progress', 'name': 'In Progress', 'wip': 3 },
-      { 'blurb': 'Capped even lower, on purpose. A full column here blocks anything new from entering the board, so clearing it becomes the fastest route back to writing code.', 'cards': 2, 'id': 'review', 'name': 'Review', 'wip': 2 },
-      { 'blurb': 'Cards land here one at a time, and each one can go out the door the moment it arrives. The column is the release.', 'cards': 4, 'id': 'done', 'name': 'Done' }
-    ],
-    'term': 'Flow'
-  },
-  'scrum': {
-    'defaultStage': 'sprint',
-    'label': 'Scrum',
-    'meaning': 'fixed sprints',
-    'stages': [
-      { 'blurb': 'The team pulls what fits from the backlog and commits to a single sprint goal. The goal is the contract; the stories are just the current plan for reaching it.', 'id': 'plan', 'name': 'Sprint Planning' },
-      { 'blurb': 'A fixed time box, most commonly two weeks, with a daily scrum inside as its heartbeat. Nothing outside the sprint goal is allowed to interrupt it; that protection is what the box buys.', 'id': 'sprint', 'name': 'The Sprint', 'sub': 'daily scrum inside' },
-      { 'blurb': 'The increment meets its stakeholders. Whatever they say here becomes the raw material for the next pass over the product backlog.', 'id': 'review', 'name': 'Sprint Review' },
-      { 'blurb': 'The one ceremony aimed at the team itself. Its output is not a list of complaints; it is the single experiment the team will run next sprint.', 'id': 'retro', 'name': 'Retrospective' }
-    ],
-    'term': 'Cadence'
-  }
-};
+const columns = [
+  { 'action': 'Start work', 'empty': 'Nothing waiting to start.', 'id': 'ready', 'label': 'Ready' },
+  { 'action': 'Send to review', 'empty': 'Space to start an item.', 'id': 'progress', 'label': 'In Progress' },
+  { 'action': 'Finish review', 'empty': 'No reviews waiting.', 'id': 'review', 'label': 'Review' },
+  { 'empty': 'Finished items will appear here.', 'id': 'done', 'label': 'Done' }
+];
 
-const scrumPositions = {
-  'plan': [ 320, 118 ],
-  'retro': [ 320, 342 ],
-  'review': [ 680, 342 ],
-  'sprint': [ 680, 118 ]
-};
-
-const kanbanColumns = [ 120, 310, 500, 690, 880 ];
+const events = [
+  { 'name': 'Sprint Planning', 'purpose': 'Agree the goal and make a plan.', 'timing': 'Start of the Sprint' },
+  { 'name': 'Daily Scrum', 'purpose': 'Inspect goal progress and adapt the plan.', 'timing': 'Every working day' },
+  { 'name': 'Sprint Review', 'purpose': 'Inspect results with stakeholders.', 'timing': 'Near the end' },
+  { 'name': 'Retrospective', 'purpose': 'Decide how to improve the way we work.', 'timing': 'Concludes the Sprint' }
+];
 
 const AgileCadenceExplorer = ({
-  title = 'Two clocks for the same question',
-  description = 'Scrum ships on a fixed beat; Kanban ships whenever a card reaches Done. Switch modes and select any stage to read what it is for.',
+  id,
+  title = 'A shared rhythm, a visible flow',
+  description = 'Try an early release in Scrum, then unblock a Kanban queue. Both examples use a fictional search team; the days, cards, and limits are illustrative.',
   className = ''
 }) => {
-  const [ activeModeId, setActiveModeId ] = useState('scrum');
-  const [ activeStageIds, setActiveStageIds ] = useState({ 'kanban': 'progress', 'scrum': 'sprint' });
-  const activeMode = modes[activeModeId];
-  const activeStage = activeMode.stages.find((stage) => stage.id === activeStageIds[activeModeId]);
+  const generatedId = useId();
+  const instanceId = id || generatedId;
+  const [ mode, setMode ] = useState('scrum');
+  const [ selectedEvent, setSelectedEvent ] = useState(1);
+  const [ scrum, setScrum ] = useState(createScrumState);
+  const [ kanban, setKanban ] = useState(createKanbanState);
+  const cardRefs = useRef({});
+  const pendingFocus = useRef(null);
+  const scrumStatus = getScrumStatus(scrum);
+  const counts = getKanbanCounts(kanban.items);
+  const dayId = `${instanceId}-day`;
+  const policyId = `${instanceId}-policy`;
+  const statusId = `${instanceId}-status`;
+  const eventId = `${instanceId}-event`;
+  let incrementLabel = 'Building and verifying';
+  let ariaState = 'increment still in progress';
+  let defaultMessage = `Work is still being built and verified. It reaches Done on day ${SCRUM_READY_DAY} in this example.`;
 
-  const selectStage = (stageId) => {
-    return {
-      'aria-label': `Read about ${activeMode.stages.find((stage) => stage.id === stageId).name}`,
-      'aria-pressed': activeStageIds[activeModeId] === stageId,
-      'data-active': activeStageIds[activeModeId] === stageId,
-      'onClick': () => setActiveStageIds((current) => {
-        return { ...current, [activeModeId]: stageId };
-      }),
-      'onFocus': () => setActiveStageIds((current) => {
-        return { ...current, [activeModeId]: stageId };
-      }),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setActiveStageIds((current) => {
-            return { ...current, [activeModeId]: stageId };
-          });
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
-    };
+  if (scrumStatus.released) {
+    incrementLabel = `Released on day ${scrum.releasedDay}`;
+    ariaState = 'increment released';
+    defaultMessage = `The increment was released on day ${scrum.releasedDay}. The Review still takes place on day ${SCRUM_REVIEW_DAY}.`;
+  } else if (scrumStatus.ready) {
+    incrementLabel = 'Usable and verified';
+    ariaState = 'increment ready to release';
+    defaultMessage = `The increment meets the Definition of Done. ${scrum.day < SCRUM_REVIEW_DAY ? 'You can release it before the Review.' : 'You could have released it from day 5.'}`;
+  }
+
+  const scrumMessage = scrum.feedback || defaultMessage;
+
+  useEffect(() => {
+    const card = cardRefs.current[pendingFocus.current];
+
+    if (card) (card.querySelector('button') || card).focus();
+    pendingFocus.current = null;
+  }, [ kanban.items ]);
+
+  const advanceCard = (itemId) => {
+    pendingFocus.current = getKanbanMove(kanban, itemId).blocked ? null : itemId;
+    setKanban((current) => moveKanbanItem(current, itemId));
   };
 
   return (
@@ -91,118 +86,177 @@ const AgileCadenceExplorer = ({
       </figcaption>
 
       <div className={ styles.toolbar }>
-        <div className={ styles.typeTabs } aria-label='Delivery cadence' role='group'>
-          {[ 'scrum', 'kanban' ].map((id) => [ id, modes[id] ]).map(([ id, mode ]) => (
-            <button
-              type='button'
-              aria-label={ `${mode.label} ${mode.meaning}` }
-              aria-pressed={ activeModeId === id }
-              data-active={ activeModeId === id }
-              key={ id }
-              onClick={ () => setActiveModeId(id) }
-            >
-              <strong>{mode.label}</strong>
-              <span>{mode.meaning}</span>
-            </button>
-          ))}
+        <div className={ styles.modeControls } role='group' aria-label='Explore a work approach'>
+          <button type='button' aria-pressed={ mode === 'scrum' } onClick={ () => setMode('scrum') }>Scrum</button>
+          <button type='button' aria-pressed={ mode === 'kanban' } onClick={ () => setMode('kanban') }>Kanban</button>
         </div>
+        <button
+          type='button'
+          className={ styles.reset }
+          onClick={ () => {
+            if (mode === 'scrum') {
+              setScrum(createScrumState());
+              setSelectedEvent(1);
+            } else {
+              setKanban(createKanbanState());
+            }
+          } }
+        >Reset example</button>
       </div>
 
-      <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>
+      {mode === 'scrum' ? (
+        <div className={ styles.scrum }>
+          <p className={ styles.instruction }>Release on day 5, then move to day 10. Select an event to explore its purpose.</p>
 
-      <div className={ styles.scrollFrame } role='region' aria-label='Scrollable delivery cadence diagram' tabIndex='0'>
-        {activeModeId === 'scrum' ? (
-          <svg className={ styles.graph } viewBox='0 0 1000 460' role='group' aria-label='The Scrum sprint loop'>
-            {/* The loop: a rounded track the four ceremonies sit on */}
-            <rect x='320' y='118' width='360' height='224' rx='112' className={ styles.loopTrack } />
+          <section className={ styles.sprintBoundary } aria-label='One fictional Sprint containing all Scrum events'>
+            <p className={ styles.goal }><strong>Sprint Goal:</strong> help people find their saved documents.</p>
+            <div className={ styles.sprintScene }>
+              <div className={ styles.sprintHeading }>
+                <strong>One Sprint</strong>
+                <span>Day {scrum.day} of {SCRUM_REVIEW_DAY}</span>
+              </div>
+              <div className={ styles.inlet }><span>From</span><strong>Product Backlog</strong></div>
+              <ul className={ styles.events }>
+                {events.map((event, index) => (
+                  <li key={ event.name } data-position={ index }>
+                    <button
+                      type='button'
+                      aria-pressed={ selectedEvent === index }
+                      aria-describedby={ selectedEvent === index ? eventId : undefined }
+                      onClick={ () => setSelectedEvent(index) }
+                    >
+                      <strong>{event.name}</strong>
+                      <span>{event.timing}</span>
+                      {index === 1 && (
+                        <span className={ styles.dayRail } aria-hidden='true'>
+                          {Array.from({ 'length': SCRUM_REVIEW_DAY }, (_, dayIndex) => (
+                            <span
+                              className={ styles.dayTick }
+                              key={ dayIndex }
+                              data-current={ scrum.day === dayIndex + 1 }
+                              data-past={ scrum.day > dayIndex + 1 }
+                            ><span>{dayIndex + 1}</span></span>
+                          ))}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className={ styles.incrementNode } data-ready={ scrumStatus.ready } data-released={ scrumStatus.released }>
+                <strong>Increment</strong>
+                <span>{incrementLabel}</span>
+              </div>
+            </div>
+            <p className={ styles.eventReadout } id={ eventId }><strong>{events[selectedEvent].name}</strong><span>{events[selectedEvent].purpose} All four events take place within the Sprint.</span></p>
 
-            {/* Direction hints on the track */}
-            <path d='M 505 118 L 495 112 L 495 124 Z' className={ styles.loopArrow } />
-            <path d='M 495 342 L 505 336 L 505 348 Z' className={ styles.loopArrow } />
+            <div className={ styles.dayControl }>
+              <label htmlFor={ dayId }>Explore a working day</label>
+              <output htmlFor={ dayId }>Day {scrum.day} of {SCRUM_REVIEW_DAY}</output>
+              <input
+                id={ dayId }
+                type='range'
+                min='1'
+                max={ SCRUM_REVIEW_DAY }
+                step='1'
+                value={ scrum.day }
+                aria-valuetext={ `Day ${scrum.day}: ${ariaState}` }
+                onChange={ (event) => {
+                  const day = Number(event.target.value);
 
-            <g className={ styles.cadenceBadge }>
-              <rect x='428' y='204' width='144' height='52' rx='26' />
-              <text x='500' y='226' textAnchor='middle' className={ styles.cadenceLabel }>FIXED CADENCE</text>
-              <text x='500' y='244' textAnchor='middle' className={ styles.cadenceValue }>2-week sprint</text>
-            </g>
+                  setScrum((current) => moveScrumDay(current, day));
+                  if (day === 1) setSelectedEvent(0);
+                  else if (day === SCRUM_REVIEW_DAY) setSelectedEvent(2);
+                  else setSelectedEvent(1);
+                } }
+              />
+              <div className={ styles.dayLabels } aria-hidden='true'>
+                <span>Day 1 · Planning</span>
+                <span>Day 5 · Increment Done</span>
+                <span>Day 10 · Review & retro</span>
+              </div>
+            </div>
 
-            {/* Backlog feeds planning; the review emits the increment */}
-            <g className={ styles.sideNode }>
-              <rect x='40' y='91' width='150' height='54' rx='27' />
-              <text x='115' y='113' textAnchor='middle' className={ styles.sideKind }>INPUT</text>
-              <text x='115' y='131' textAnchor='middle' className={ styles.sideName }>Product Backlog</text>
-            </g>
-            <path d='M 192 118 C 214 118, 218 118, 233 118' className={ styles.sideEdge } />
+            <div className={ styles.release }>
+              <div>
+                <strong>Search increment</strong>
+                <span>{incrementLabel}</span>
+              </div>
+              <button
+                type='button'
+                disabled={ scrumStatus.released }
+                aria-describedby={ statusId }
+                onClick={ () => setScrum(releaseScrumIncrement) }
+              >{scrumStatus.released ? 'Increment released' : 'Release increment'}</button>
+            </div>
+            <p className={ styles.reviewNote }>{scrum.day === SCRUM_REVIEW_DAY ? 'Today: inspect the outcome with stakeholders, then hold the retrospective.' : `Review and retrospective remain scheduled for day ${SCRUM_REVIEW_DAY}.`}</p>
+          </section>
 
-            <g className={ styles.sideNode }>
-              <rect x='810' y='315' width='150' height='54' rx='27' />
-              <text x='885' y='337' textAnchor='middle' className={ styles.sideKind }>OUTPUT</text>
-              <text x='885' y='355' textAnchor='middle' className={ styles.sideName }>Increment</text>
-            </g>
-            <path d='M 767 342 C 786 342, 792 342, 808 342' className={ styles.sideEdge } />
-
-            {modes.scrum.stages.map((stage) => {
-              const [ x, y ] = scrumPositions[stage.id];
-
-              return (
-                <g className={ styles.stageNode } key={ stage.id } { ...selectStage(stage.id) }>
-                  <rect x={ x - 87 } y={ y - 27 } width='174' height='54' rx='27' />
-                  <text x={ x } y={ stage.sub ? y - 1 : y + 5 } textAnchor='middle' className={ styles.stageName }>{stage.name}</text>
-                  {stage.sub ? <text x={ x } y={ y + 17 } textAnchor='middle' className={ styles.stageSub }>{stage.sub}</text> : null}
-                </g>
-              );
-            })}
-          </svg>
-        ) : (
-          <svg className={ styles.graph } viewBox='0 0 1000 460' role='group' aria-label='The Kanban board flow'>
-            {modes.kanban.stages.map((stage, index) => {
-              const x = kanbanColumns[index];
-
-              return (
-                <g className={ styles.column } key={ stage.id } { ...selectStage(stage.id) }>
-                  <rect x={ x - 80 } y='90' width='160' height='240' rx='18' />
-                  <text x={ x } y='122' textAnchor='middle' className={ styles.columnTitle }>{stage.name}</text>
-                  {typeof stage.wip === 'number' && (
-                    <g className={ styles.wipBadge }>
-                      <rect x={ x - 34 } y='58' width='68' height='24' rx='12' />
-                      <text x={ x } y='74' textAnchor='middle'>WIP {stage.wip}</text>
-                    </g>
-                  )}
-                  {Array.from({ 'length': stage.cards }, (_, cardIndex) => (
-                    <rect
-                      key={ cardIndex }
-                      x={ x - 56 }
-                      y={ 142 + (cardIndex * 36) }
-                      width='112'
-                      height='24'
-                      rx='7'
-                      className={ styles.card }
-                    />
-                  ))}
-                </g>
-              );
-            })}
-
-            <path d='M 40 388 L 952 388' className={ styles.flowLine } />
-            <path d='M 952 388 L 938 381 L 938 395 Z' className={ styles.flowArrow } />
-            <text x='500' y='424' textAnchor='middle' className={ styles.flowLabel }>continuous flow · release at any time</text>
-          </svg>
-        )}
-      </div>
-
-      <div className={ styles.readout }>
-        <div className={ styles.readoutPrimary }>
-          <span className={ styles.readoutType }>{activeStage.name}</span>
-          <span className={ styles.readoutText }>{activeStage.blurb}</span>
+          <p className={ styles.feedback } id={ statusId } role='status' aria-live='polite' aria-atomic='true'>{scrumMessage}</p>
+          <p className={ styles.takeaway }>Scrum fixes the inspection rhythm. Product readiness and release policy determine when value reaches users.</p>
         </div>
-        <span className={ styles.readoutMeta }>
-          {activeModeId === 'scrum' ? 'the loop repeats every sprint · velocity is the metric' : 'cards pull left to right · cycle time is the metric'}
-        </span>
-      </div>
+      ) : (
+        <div className={ styles.kanban }>
+          <p className={ styles.instruction }>Try sending “Saved searches” into full Review, then finish a review and try again.</p>
+          <details className={ styles.policy }>
+            <summary>Workflow policy · two items per active stage</summary>
+            <p id={ policyId }><strong>This fictional workflow:</strong> at most two items in In Progress and two in Review. Pull only when the destination has capacity. Ready and Done are outside WIP. Here, Done means verified and ready for release; deployment is a separate decision.</p>
+          </details>
 
-      <p className={ styles.liveRegion } aria-live='polite'>
-        {activeMode.label}, {activeMode.meaning}. {activeStage.name}: {activeStage.blurb}
-      </p>
+          <div className={ styles.boardFrame } role='region' aria-label='Scrollable fictional Kanban board' tabIndex='0'>
+            <div className={ styles.board } aria-label='Fictional search team Kanban board'>
+              {columns.map((column) => {
+                const items = kanban.items.filter((item) => item.stage === column.id);
+                const limit = KANBAN_LIMITS[column.id];
+                const full = Boolean(limit && counts[column.id] >= limit);
+
+                return (
+                  <section className={ styles.column } key={ column.id } data-full={ full } aria-label={ `${column.label}: ${counts[column.id]} items${limit ? `, limit ${limit}` : ''}` }>
+                    <div className={ styles.columnHeading }>
+                      <h3>{column.label}</h3>
+                      <span className={ styles.count } data-full={ full }>{limit ? `${counts[column.id]} / ${limit}${full ? ' · full' : ''}` : counts[column.id]}</span>
+                    </div>
+                    {items.length > 0 ? (
+                      <ul className={ styles.cards }>
+                        {items.map((item) => {
+                          const { blocked } = getKanbanMove(kanban, item.id);
+
+                          return (
+                            <li className={ styles.card } key={ item.id } tabIndex={ -1 } ref={ (element) => {
+                              cardRefs.current[item.id] = element;
+                            } }>
+                              <strong>{item.title}</strong>
+                              {column.action ? (
+                                <button
+                                  type='button'
+                                  data-blocked={ blocked }
+                                  aria-label={ `${column.action}: ${item.title}` }
+                                  aria-describedby={ `${policyId} ${statusId}` }
+                                  onClick={ () => advanceCard(item.id) }
+                                >{column.action}{blocked ? ' (full)' : ''}</button>
+                              ) : <span className={ styles.done }>Ready for release</span>}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : <p className={ styles.empty }>{column.empty}</p>}
+                  </section>
+                );
+              })}
+            </div>
+            <svg className={ styles.flowConnector } viewBox='0 0 1000 38' aria-hidden='true'>
+              <path d='M 25 19 H 975' className={ styles.loopTrack } />
+              <path d='M 975 19 L 962 12 L 962 26 Z' className={ styles.loopArrow } />
+            </svg>
+          </div>
+          <p className={ styles.scrollHint }>Scroll the board horizontally to follow the work.</p>
+
+          <p className={ styles.feedback } id={ statusId } role='status' aria-live='polite' aria-atomic='true'>
+            {kanban.feedback || 'Review is full at 2/2. In Progress still has one open slot. Try an action to see which limit applies.'}
+          </p>
+          <p className={ styles.takeaway }>WIP: {counts.progress + counts.review} unfinished items. Finishing a review opens that stage; its limit does not automatically stop the whole board.</p>
+        </div>
+      )}
     </figure>
   );
 };

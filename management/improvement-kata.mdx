@@ -2,75 +2,84 @@
 type: 'Post'
 title: 'Improvement Kata: Making Better a Habit'
 tags: ['Improvement Kata', 'Lean', 'Continuous Improvement', 'Project Management']
-summary: 'Improvement Kata is a Toyota-born practice for turning continuous improvement from a retrospective bullet point into a daily habit: a four-step pattern of scientific thinking you repeat until it becomes automatic.'
+summary: 'A practical look at Improvement Kata: understand the work, describe a better operating condition, and learn through small experiments and coaching.'
 subtitle: 'A four-step pattern for scientific thinking at work'
 featured: false
 date: '2025-11-16'
+updated: '2026-09-10'
 category: 'management'
+tableOfContents: false
+bibliography: ['meta/bibliography/references.bib']
 series:
   order: 2
   title: 'Classical Agile'
 ---
 
-## What is a kata?
+## Making improvement a practice
 
-Here's a concept that changed how I think about solving problems. If you've ever studied martial arts, you know what a kata is: a pattern of movements you practice over and over until it becomes second nature. Improvement Kata applies that idea to how we tackle challenges at work.
+A retrospective can leave us with useful observations and good intentions. The harder part is what happens afterwards: someone needs to try a change, notice what it does, and bring that learning back. That gap is what interests me about Improvement Kata.
 
-The concept comes from Toyota (yes, them again; between this and [Kanban](/blog/category/management/introduction-to-classical-agile), they really did figure some things out). Mike Rother documented it in [Toyota Kata](https://www.amazon.com/Toyota-Kata-Managing-Improvement-Adaptiveness/dp/0071635238), and the core idea is developing a *habit* of scientific thinking. Instead of winging it every time you face a problem, you follow one consistent pattern. Repeat it enough and it becomes automatic: you stop thinking about the pattern and start thinking only about the problem.
+A kata is a pattern you practice until it becomes familiar. Mike Rother drew on his research into Toyota's management practices to describe a pattern of scientific thinking, then developed starter routines to help people learn it. These routines are a way to build the habit of testing assumptions; they aren't a script Toyota used everywhere or something you must follow unchanged forever. [@LEI:ToyotaWayKata:Web]
 
-That's the difference between this and the "continuous improvement" every team claims to practice. A retro action item is an intention. A kata is a rehearsed behavior. (I've written about [how I found my way to this practice](/blog/category/management/agile-project-management-evolution) while unlearning agile theater; this post is the practice itself.)
+I've written about [how I came to use this approach](/blog/category/management/agile-project-management-evolution). Here I want to make the practice concrete: what would you actually do differently tomorrow?
 
 ## The four steps
 
-The pattern breaks big, fuzzy goals into small targets you can actually hit:
+1. **Understand the direction.** What larger challenge makes this work worth improving? It might be helping customers receive small changes more predictably. The direction helps you choose which problems deserve attention.
+2. **Grasp the current condition.** Observe how the work happens now. Separate measurements from assumptions, and agree where the process starts and ends. “Reviews are slow” is a concern; knowing where requests wait gives you something to investigate.
+3. **Describe the next target condition.** Set a date and describe how you want the process to operate by then, with relevant measures. “Install a review bot” names a solution. “Routine requests receive a first review within one working day” describes a condition you could reach in several ways.
+4. **Experiment toward it.** Choose an obstacle, write what you expect a small test to show, run it, and compare the observation with the prediction. Use what you learn to choose the next step. [@Rother:PracticeGuide:17; Rother:CoachingKata:Web]
 
-1. **Understand the direction.** Where are we trying to go? What's the big goal? If you struggle to name it, look at how your team contributes to the organization's larger goals, or where your team's strengths could turn a vision into reality. Call it a North Star: everything else in the kata steers by it.
-2. **Grasp the current condition.** Where are we, honestly? Document the current process, check the team against the metrics that matter, and write down what you actually know versus what you assume. This step only works if you're brutally honest; a flattering baseline poisons every step after it.
-3. **Define the next target condition.** Not the final destination, just the next milestone: a single, tangible change achievable in a few weeks or sprints that moves you toward the direction. Small enough to hit, big enough to matter.
-4. **Iterate toward it through experiments.** Form a hypothesis about how to get there, try it, and treat every failure as course-correction data rather than a penalty. Obstacles aren't exceptions to the plan; discovering and clearing them *is* the plan.
+The distinction in step three matters. A target condition gives the work a direction without pretending we already know the intervention that will get us there. It describes both the operation we want and evidence that would tell us we're approaching it.
 
-Two working habits make step four effective. First, move fast even if it means cutting corners: you either get early confirmation the approach works, or you surface the unforeseen problems while they're still cheap. Second, once it works, go back and polish the corners you cut. Speed first, then cleanliness, in that order and never the first without the second.
+## Follow one problem through the loop
 
-<ImprovementKataExplorer />
+Imagine a team whose routine pull requests spend too long waiting for review. In this **fictional example**, only four of the last ten received a first review within one working day. The team wants small changes to reach users predictably while keeping its existing review checks.
 
-## The coaching kata
+Its next target condition is: **by the end of the fortnight, at least eight of ten routine requests receive a first review within one working day in each of two consecutive working weeks.** Here, “routine” means a small, non-emergency change requiring one reviewer. Time starts when it is marked ready for review; a working day is eight working hours, and “first review” means substantive feedback. The automated checks and review checklist still apply before merge.
 
-Rother's model has a second half that most summaries skip: the **coaching kata**. The improvement kata is the learner's pattern; the coaching kata is the manager's, and it consists of five questions asked in the same order, every time:
+The team chooses one experiment: protect a daily review window for the next five routine requests. That window is an intervention to test. It is not the target condition. The sample is deliberately small enough to inspect closely.
 
-1. What is the target condition?
-2. What is the actual condition now?
-3. What obstacles do you think are preventing you from reaching the target condition? Which one are you addressing now?
-4. What is your next step, your next experiment, and what do you expect from it?
-5. When can we go and see what we learned from taking that step?
+**Try it below: record a prediction, reveal the observations, and choose the next experiment.** Notice whether the evidence answers the question you started with or exposes a different obstacle.
 
-The repetition is the point. Because the questions never change, the coached person starts anticipating them, which means they start thinking in the pattern before the conversation happens. It also keeps the manager honest: there is no question in the list for "why isn't this done yet?", and I've found that constraint changes the character of a one-on-one more than any amount of good intention.
+<ImprovementKataExplorer id='improvement-kata-example' />
 
-## Where the kata plugs into the agile loop
+Three of the five requests receive substantive first feedback within one working day. An incident repeatedly pulls the reviewer away. That gives the team a more specific problem to address: coverage during interruptions. A backup reviewer is one possible next test. More reminders might help someone who forgot, but they don't necessarily help someone who is already occupied.
 
-Kata is not a competitor to [Scrum or Kanban](/blog/category/management/introduction-to-classical-agile); it's what makes their feedback loops mean something. The mapping is fairly direct:
+Even a better second result would leave work to do. Five requests are not two consecutive weeks of evidence, and a faster first response doesn't prove that the whole delivery process improved. I would also look at review quality, rework, and whether the queue simply moved to testing or release.
 
-- **The retrospective** is where target conditions get set. A retro that produces a next target condition and one experiment beats a retro that produces five action items nobody rehearses.
-- **The sprint** is a natural experiment cadence: a fixed time box in which to run the next step and a review in which to compare what happened against what you expected.
-- **[The metrics](/blog/category/management/measuring-agile-teams)** are how you grasp the current condition without flattering yourself. A cycle-time chart is an honest baseline in a way that "we feel slow" never is.
+## The coach's part
 
-## Why it works
+The Coaching Kata helps the learner examine their thinking. Its starter questions ask about the target condition, the actual condition, the obstacle being addressed, the next step and its expected result, and when the coach and learner can inspect what happened. [@Rother:CoachingKata:Web]
 
-The value isn't mystical; it comes from three mundane effects compounding:
+There is a crucial pause after establishing the actual condition: **what did we predict last time, what happened, and what did we learn?** Without that reflection, it is easy to turn the conversation into another update about activity.
 
-- **Alignment**: when everyone can name the direction and the current target, people make proactive decisions toward the goal instead of waiting for assignments. Shared definitions of success are what turn a group into a team.
-- **Experimentation over paralysis**: knowing the destination without knowing the path usually freezes people. A rehearsed experiment loop dissolves that: you don't need the whole route, only a testable next step.
-- **Less waste**: the constant question "does this move me toward the current target?" is a ruthless filter. It catches the features nobody needs and the rabbit holes that consume a week before anyone asks why. Managers practicing the same kata spend their time clearing the team's actual obstacles instead of inventing new work.
+I like the constraint this puts on me as a manager. I need to understand the learner's reasoning before jumping in with a solution. It also changes what counts as progress. Discovering that an assumption was wrong can be useful, provided we can explain what the observation changes about our next step.
 
-## What it looks like in practice
+A question card doesn't make someone a coach. The coach needs practice with improvement work too: enough to notice an untested assumption, a vague prediction, or a leap from one result to a confident explanation. Short, frequent conversations help keep that reasoning close to the work. [@LEI:CoachingKata:Web]
 
-Say you want to build a new service around an idea you're not sure will work. The kata version: instead of architecting every layer upfront and expanding to feature-complete, pick a target that delivers some real value and moves toward the system you envision. Run at it, learn from what breaks, adjust, and when you hit the target, reassess and pick the next one. Each cycle either confirms the direction or redirects you before the sunk cost grows.
+## Where it fits with Scrum and Kanban
 
-Or take an internal system that needs improvements. Pick one improvement you're ready to tackle, brainstorm approaches, and get the fastest version working to start collecting feedback. Good enough? Move to the next problem. The discipline is in finishing each cycle before starting the next.
+A retrospective can help identify an improvement challenge, but we don't have to wait for the next retrospective to learn. A sprint can contain several small experiments. A Kanban team can run the same loop as useful observations arrive. The experiment's cadence should follow the question and the available feedback. [@LEI:CoachingKata:Web]
 
-## Kata and lean
+The [metrics in the previous post](/blog/category/management/measuring-agile-teams) can help establish the current condition. They also need interpretation. A cycle-time chart shows what happened to completed work; it doesn't, by itself, tell us why reviews waited or what remains stuck. Talking to the people doing the work belongs alongside the chart.
 
-People mix these up because both came out of Toyota, but they sit at different levels. **Lean** is about processes: extracting the most value from a workflow with minimal waste, then optimizing that workflow relentlessly. **Kata** is about people: an individual-level habit of learning through experimentation, most useful exactly where lean struggles, in problems full of uncertainty where no process exists yet to optimize.
+I would keep an experiment record simple: the obstacle, the next step, the prediction, the observation, and what to try next. It should be easy to return to a week later and see why a decision was made.
 
-They compose beautifully. Lean names the goal (eliminate waste, maximize value); kata provides the daily mechanism (experiment, learn, discard what doesn't work). Kata's insistence on finishing one target before starting the next feeds lean's efficiency directly, and breaking objectives into small optimized pieces is how a system ends up lean as a whole. If lean describes the future state you want, Improvement Kata is a tool you can use in the present state to get there.
+## Small experiments, whole-system consequences
 
-*This post closes a series on classical Agile: the [introduction to Scrum and Kanban](/blog/category/management/introduction-to-classical-agile) covers the frameworks, and [measuring agile teams](/blog/category/management/measuring-agile-teams) covers the numbers.*
+Moving quickly means making the test smaller. Try the change on a limited set of work, keep the necessary checks, and inspect the result soon. Skipping those checks can make the result look encouraging while hiding the cost elsewhere.
+
+Lean already includes people development and learning through experimentation. Kata is one way to practice that thinking. Treating Lean as process optimization and Kata as the people side misses how closely they belong together. [@LEI:Lean:Web; LEI:ToyotaWayKata:Web]
+
+The same applies to improvement across a system. Faster coding can make an overloaded review queue worse. Faster review can expose a release bottleneck. We need to judge local changes against the flow of value through the whole process, rather than assume that better-looking pieces add up to a better system. [@Womack:EndToEnd:Web]
+
+That is the habit I want to keep: make the intention clear, put an assumption where it can be tested, and let the observation influence what happens next. The routine is useful when it helps us learn, including when the result is inconvenient.
+
+## If you want to try it
+
+- [Rother's free coaching handbook](https://public.websites.umich.edu/~jmondisa/TK/Handbook/Coaching_Kata_2.pdf) provides practice material and a place to start with the learner–coach conversation.
+- [The Toyota Kata Practice Guide](https://www.mheducation.com/highered/mhp/product/toyota-kata-practice-guide.html) goes deeper into the routines and the distinction between a target and a target condition.
+- [Learning to See, by Mike Rother and John Shook](https://www.lean.org/store/book/learning-to-see/) helps connect a local improvement to the wider flow of work.
+
+*This closes the Classical Agile series: [Scrum and Kanban](/blog/category/management/introduction-to-classical-agile) introduces the frameworks, and [measuring agile teams](/blog/category/management/measuring-agile-teams) explores the evidence. [Performance management](/blog/category/management/performance-management-evolution) considers the related challenge of helping people develop while still making judgments about their work.*

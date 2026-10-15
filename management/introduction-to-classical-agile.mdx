@@ -2,10 +2,13 @@
 type: 'Post'
 title: 'Introduction to Classical Agile: Scrum and Kanban'
 tags: ['Agile', 'Scrum', 'Kanban', 'Project Management']
-summary: 'Scrum and Kanban give two different answers to one question: when do we ship? A practical introduction to both frameworks, what each is actually for, and how to pick between them.'
+summary: 'Scrum gives a team a shared rhythm; Kanban helps it manage the flow of work. What each approach is for, where they fit together, and how to use them without losing sight of the work.'
 subtitle: 'Understanding the foundational frameworks of Agile software development'
 featured: false
 date: '2025-11-14'
+updated: '2026-09-10'
+tableOfContents: false
+bibliography: ['meta/bibliography/references.bib']
 category: 'management'
 series:
   order: 0
@@ -25,84 +28,107 @@ Here's what I find most interesting: Agile isn't a set of rules. There's no Agil
 - Customer collaboration over contract negotiation
 - Responding to change over following a plan
 
-Everything else (the sprints, the boards, the ceremonies) is scaffolding that teams built around those priorities. Which brings us to the two most durable pieces of scaffolding: Scrum and Kanban. They solve the same problem with two different clocks, and understanding that difference is most of what this post is about.
+Those preferences still leave room for documentation, tools, contracts, and plans. The question is whether they're helping people do useful work and learn from it.
 
-<AgileCadenceExplorer />
+Scrum gives a team a regular rhythm for setting goals and inspecting progress. Kanban makes the movement and accumulation of work explicit. Both can support frequent releases, and plenty of teams benefit from using them together. That is a more useful distinction than deciding which one gets to call itself more Agile.
 
-## Scrum: the fixed clock
+The example below lets you try both. Release an increment before the Sprint Review, then switch to Kanban and see what happens when a review queue fills up. The team, work items, days, and limits are fictional.
 
-I get asked all the time whether Scrum and Agile are the same thing. They're not, and the difference matters: Agile is the philosophy, the why. Scrum is one way to actually do it, the how, and it's deliberately prescriptive so a team can borrow structure while it develops its own judgment. The parts worth being strict about are the feedback loops; the rest you adapt to your context, and you should.
+<AgileCadenceExplorer id='agile-cadence-example' />
+
+## Scrum: a shared rhythm
+
+I get asked all the time whether Scrum and Agile are the same thing. Agile is the philosophy, the why. Scrum is one way to put it into practice, with enough structure to make the feedback loops hard to forget. You can adapt the techniques you use within it. If you remove parts of the framework, be clear that you're borrowing from Scrum rather than describing the whole thing. [@Schwaber:ScrumGuide:20]
 
 Scrum builds on two ideas. Empiricism: decide based on what you observe, not what you assumed three months ago. And lean thinking: cut what doesn't contribute. The framework admits upfront that you don't know everything at the start, and its whole structure (short cycles, frequent reprioritization, constant inspection) exists to make that admission safe.
 
 ### The team
 
-A Scrum team is intentionally small, ten people at most, and I've found the best ones are five to seven (the "two pizza" heuristic holds up). Three roles:
+A Scrum team is intentionally small, typically ten people or fewer, and I've found the best ones are five to seven. The current guide calls these three *accountabilities* within one team:
 
-- **Product owner**: the team's connection to reality. They own the backlog, keep it prioritized and clean (harder than it sounds), make sure everyone understands *why* something is being built, and decide when things ship. One critical rule I've learned the hard way: you need exactly ONE product owner. Teams get whiplash when multiple people fill this role with conflicting priorities. And note that product owner is not the same job as product manager, even when it's the same person.
-- **Scrum master**: the process guardian, not a project manager. A coach who helps the team work better together, spots where things are stuck, gets them unstuck, and runs the ceremonies.
-- **The development team**: everyone who builds the thing. Not just developers: testers, designers, ops, the whole crew. Self-organizing, cross-skilled enough that no single person is a bottleneck, and responsible for planning their own sprints based on what they've delivered before.
+- **Product owner**: accountable for product value and an ordered, understandable backlog. Keeping that list useful is harder than it sounds. One critical rule I've learned the hard way: you need exactly ONE product owner. Teams get whiplash when multiple people fill this role with conflicting priorities. Product owner and product manager can be the same person, but the responsibilities aren't interchangeable. Who authorizes a production release depends on the organization.
+- **Scrum master**: a coach who helps the team become effective and ensures its events happen productively. Facilitating a meeting can help; owning every meeting can make the team dependent on them.
+- **Developers**: everyone creating the increment, including designers, testers, and other specialists. They plan and manage their own work. Cross-functional means the team collectively has the skills it needs; it doesn't mean every person can do every job.
 
-What makes these teams work is ownership. They define "done", they set the quality bar, they set the pace. Giving a team that much autonomy feels risky the first time, but what I've consistently observed is that trusted teams exceed what anyone thought was possible.
+What makes these teams work is ownership. The team agrees what "done" means while respecting any organizational quality standards. Giving a team that much autonomy feels risky the first time, but what I've consistently observed is that trusted teams exceed what anyone thought was possible. That trust also needs room for honest forecasts and a sustainable pace.
 
 ### The artifacts
 
 Three shared pieces of information keep everyone aligned:
 
-- **Product backlog**: the master list, owned by the product owner, alive and constantly reprioritized. Items that felt critical last month become irrelevant this month, and that is the system working, not failing.
-- **Sprint backlog**: what the team committed to right now. Details can shift mid-sprint as you learn, but the sprint goal stays locked. You don't change what you're trying to achieve halfway through.
-- **The increment**: what you actually built and could ship. Some teams release every sprint; others batch releases. Neither is wrong, but the longer you wait between real releases, the higher the odds you've built something the market no longer wants.
+- **Product backlog**: the evolving work needed to improve the product, guided by a **Product Goal**. Items that felt critical last month can become irrelevant this month as the team learns.
+- **Sprint backlog**: the Developers' plan around a **Sprint Goal**. Selected items are a forecast. Scope can be renegotiated with the product owner as more is learned, without endangering that goal.
+- **Increment**: usable work that meets the **Definition of Done**. It can be released during the Sprint; the Sprint Review is never a release gate. [@Schwaber:ScrumGuide:20]
+
+That last point matters in practice. A team can have a two-week planning rhythm and release several times a week. Waiting for a calendar boundary adds delay unless there is a reason the product needs it.
 
 <Callout type='info'>
-**Sprint**: a fixed time box, usually two weeks, in which the team commits to a specific goal. Keep the length consistent: that consistency is what makes your delivery data comparable sprint over sprint.
+**Sprint**: a fixed period of one month or less containing all the events below. Two weeks is a common choice. A consistent length helps the team build a rhythm, but changes in capacity and work still matter when comparing Sprints.
 </Callout>
 
-### The ceremonies
+### The events
 
-Scrum's meetings have a bad reputation, and honestly, some of it is earned. My advice: run all of them for a couple of sprints, then keep what helps and change what feels like box-checking.
+Scrum's meetings have a bad reputation, and honestly, some of it is earned. My advice is to get clear on what each event should change about the team's next decision. If the answer is "nothing", investigate the format, who participates, and whether anyone can act on what comes up.
 
-1. **Sprint planning**: the team picks the sprint goal and pulls in the stories that serve it. Everyone leaves knowing what will be delivered and roughly how.
-2. **The daily scrum**: fifteen minutes, same time, same place. Its real job is surfacing blockers and aligning on the next 24 hours. When it degrades into people reading their calendars aloud (and it will), change the format rather than abandoning it.
-3. **Sprint review**: demo the increment to stakeholders, gather reactions, and let the product owner rework the backlog with what everyone learned.
+1. **Sprint planning**: agree why this Sprint is valuable and make a realistic plan for it. Everyone should understand the goal and what currently looks achievable.
+2. **The daily scrum**: fifteen minutes for Developers to inspect progress toward the Sprint Goal and adapt their plan. When it degrades into people reading their calendars aloud (and it will), change the format rather than abandoning it.
+3. **Sprint review**: work with stakeholders to inspect results and decide what to do next. A demo can help that conversation, but save time for the things everyone learned and what they mean for the product.
 4. **Retrospective**: the team inspects itself rather than the product: what to keep, what to drop, what to try. Skipping retros is how process debt accumulates.
 
-Alongside the ceremonies runs **backlog refinement** (you may know it by its older name, grooming): the ongoing work of keeping the list prioritized and ready, feeding in what the product owner learns from users and the team. It isn't a formal Scrum event, and treating it as a continuous habit rather than yet another meeting is usually the healthier reading.
+Alongside the events runs **backlog refinement** (you may know it by its older name, grooming): breaking down and clarifying work as the team learns. It isn't a formal Scrum event. I find it more useful to think of it as an ongoing habit than to assume one meeting will keep the backlog healthy.
 
 ### The values
 
-Scrum names five values: commitment, courage, focus, openness, and respect. That can sound like poster material, but there's an operational core to each: commit only to what you can finish, feel safe questioning the status quo and being honest about delays, protect the sprint's focus, keep progress and blockers visible, and treat every contribution as part of the win. Teams that live these need very little enforcement of the mechanics.
+Scrum names five values: commitment, courage, focus, openness, and respect. That can sound like poster material. The useful questions are more personal: can we tell each other a plan isn't working? Can someone ask for help without looking weak? Do we support the shared goal when our own task is blocked? The mechanics are easier to use when those answers are yes.
 
-## Kanban: the continuous clock
+## Kanban: make the flow visible
 
-While Scrum dominates the Agile conversation, Kanban has quietly become one of my favorite approaches for certain teams. Its roots are in 1940s Toyota, long before software: supermarkets stocked only what customers actually bought, right when they needed it, and Toyota translated that into cards (*kanban*, "visual signal") passed between factory stations to request materials. Make only what's needed, exactly when it's needed.
+While Scrum dominates the Agile conversation, Kanban has quietly become one of my favorite approaches for certain teams. Its roots reach back to Toyota's production system, long before software. The appeal for me is the attention it puts on work that has started but hasn't yet delivered anything.
 
-Software teams apply the same principle to work in progress instead of inventory. And the barrier to entry is wonderfully low: no new roles, no ceremonies to schedule. A board, some cards, and one rule. You could start tomorrow.
+You can start from the workflow and responsibilities you already have. There are three connected practices: define and visualize the workflow, actively manage the work moving through it, and improve that workflow. A board helps, but it needs agreements about what the team does when work gets stuck. [@KanbanGuides:Guide:25]
 
 ### The board and the cards
 
-Everything revolves around the board: the single source of truth for the team's work. The basic workflow is three columns, To Do, In Progress, Done, and you extend it to match your actual process (a Review column, a Ready-for-QA column, whatever reflects reality). Each work item is a card carrying enough context that anyone can see who owns it, what it is, and where it's stuck. The point of all this visibility is fast identification of blockers and dependencies, not decoration.
+Start with your actual workflow. To Do, In Progress, Done may be enough; Review or Ready for QA may make an otherwise invisible wait easier to see. Each work item needs enough context for the team to understand what it is and where it's stuck.
 
-### The one rule that matters: WIP limits
+Then make the policies explicit: what counts as started and finished, what lets an item move, how you control work in progress, and what delivery expectation the team uses. "Done" might mean ready for release or already in production. Decide which, because the distinction changes what your measurements tell you.
 
-The thing that turns a board from a to-do list into a system is the work-in-progress limit. Multitasking kills efficiency: the more items in flight, the more context switching, and the slower everything lands. So you cap each column.
+### WIP limits turn waiting into a shared problem
 
-A concrete example: cap Review at 2. That sounds brutally low, and that's the point. Developers would rather write new code than review someone else's, so reviews queue and rot. A full Review column blocks new work from entering, which forces the team to finish reviews before starting anything new. The limit converts a cultural nag ("please review my PR") into a mechanical property of the system.
+Work-in-progress limits make the cost of starting visible. Having more work open can bring more context switching and longer waits, especially when it all queues for the same person or review step. Limits give the team a reason to look at finishing before reaching for the next item.
 
-The metric that falls out of this is **cycle time**: how long a card takes from started to shipped. Consistent, short cycle times make forecasting honest, and because any card can ship the moment it lands in Done, Kanban pairs naturally with continuous delivery. No release ceremony, no waiting for the sprint boundary.
+A concrete example: cap Review at two items. When it fills, a third item cannot enter Review. That alone doesn't block the whole board; another stage might still have capacity. The team can also agree to help clear reviews before pulling more work. The number is an experiment in this example, not a universal recommendation.
+
+This is where a useful conversation starts. Is the reviewer unavailable? Are changes too large? Are we waiting for a decision outside the team? A limit exposes the queue. The people still have to resolve it.
+
+Four flow measures help you see what is happening:
+
+- **WIP**: items started and not yet finished.
+- **Throughput**: items finished per unit of time.
+- **Work-item age**: how long a currently unfinished item has been in progress.
+- **Cycle time**: elapsed time from the agreed start to the agreed finish of a completed item.
+
+Use historical cycle times to make an expectation with a probability attached. For example, a fictional team might say, "85% of comparable items finish within eight days." That is a forecast to revisit, not a promise about every item. Age helps the team notice current work at risk of exceeding it. [@KanbanGuides:Guide:25]
+
+Kanban works well alongside continuous delivery, but it doesn't prescribe a release schedule. The interesting question is how much waiting your workflow creates between an idea and something useful reaching a customer.
 
 ## Picking between them
 
-After working with both, I've stopped thinking of this as Scrum versus Kanban and started asking four questions about the team:
+After working with both, I've stopped treating this as a choice of identities. I ask what the team needs help seeing or deciding:
 
-| The question | Points to Scrum | Points to Kanban |
+| The question | What Scrum offers | What Kanban adds |
 | --- | --- | --- |
-| Does the work arrive as a roadmap or as a stream? | Roadmap: features you can plan a goal around | Stream: support, platform work, unpredictable requests |
-| Does the team need protection from mid-cycle churn? | Yes: the sprint boundary is a shield | No: priorities genuinely change daily and that's fine |
-| What should improve first? | Estimation and forecasting (velocity) | Throughput and responsiveness (cycle time) |
-| How much process can the team absorb right now? | Roles and ceremonies help a team that wants structure | One board and one rule suit a team allergic to meetings |
+| Are we struggling to focus together? | A shared Sprint Goal and regular inspection | Visible WIP and explicit pull policies |
+| Where is work waiting? | Events where the team can inspect and adapt its plan | Queues, aging items, and flow measures |
+| When do we revisit product direction? | A regular Review with stakeholders | Feedback and replenishment policies that fit the workflow |
+| Can these fit our existing team? | Defined accountabilities and events | Flow practices that can augment the team's current approach |
 
-Two honest caveats from experience. First, these blend: plenty of good teams run Scrum ceremonies over a WIP-limited board and call it whatever they like. The frameworks are starting points, not identities. Second, whichever you pick, the failure mode is the same: following the mechanics while ignoring the feedback loops they exist to create.
+Support work, roadmap work, and platform work can all benefit from inspecting flow. A product team can also keep a Sprint Goal while using WIP limits and item age to manage its work. Neither a Sprint nor a board removes the need to negotiate interruptions.
+
+The failure mode I've seen in both is following the mechanics while ignoring what they reveal. The useful part begins when the team changes something because of what it learned.
 
 ## Where to go next
 
 This post is the first of a three-part series on classical Agile. The second covers [how to measure these teams without weaponizing the numbers](/blog/category/management/measuring-agile-teams): sprint burndowns, velocity, cycle time, and the anti-patterns hiding in each. The third covers [Improvement Kata](/blog/category/management/improvement-kata), a Toyota-born practice for making continuous improvement an actual habit rather than a retro bullet point.
+
+For a closer reading, the [2020 Scrum Guide](https://scrumguides.org/scrum-guide.html) is short enough to read with your team; pay particular attention to the Sprint Goal and the meaning of an increment. The [May 2025 Kanban Guide](https://kanbanguides.org/the-kanban-guide/2025.5/) is a useful companion when agreeing workflow policies and choosing which flow measures to use.

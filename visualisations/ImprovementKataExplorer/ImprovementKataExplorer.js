@@ -1,151 +1,256 @@
 'use client';
 
-/**
- * THESIS: The Improvement Kata is a picture: a rehearsed loop of experiments walking from where you are toward a target you chose.
- * OWN-WORLD: One horizontal journey: the current condition on the left, the direction on the far right, and unknown territory in between.
- * STORY: Select any element of the kata (direction, current condition, target, experiments, obstacles) to read what it is for.
- * FIRST VIEWPORT: The full journey with the direction selected and the readout explaining the north star.
- * FORM: A responsive SVG with selectable stages driving a shared readout.
- */
+import { useId, useRef, useState } from 'react';
 
-import { useState } from 'react';
+import { baselineHours, comparePrediction, predictionSnapshot, trials, withinWorkingDay } from './ImprovementKataExplorer.data';
 
 import styles from './ImprovementKataExplorer.module.css';
 
-const stages = [
-  {
-    'blurb': 'The north star: where the team is trying to go on a one-to-three-year horizon. It is too far away to plan toward directly, and that is fine. Its job is to make every smaller choice comparable: does this move us toward the direction or away from it?',
-    'id': 'direction',
-    'name': 'Direction'
-  },
-  {
-    'blurb': 'Where you actually are, established honestly: the process as it runs today, the numbers as they really read. A flattering baseline poisons every step after it, because targets get set relative to a place you never actually stood.',
-    'id': 'current',
-    'name': 'Current Condition'
-  },
-  {
-    'blurb': 'Not the destination, just the next milestone: a single tangible change achievable in a few weeks that moves toward the direction. Small enough to hit, big enough to matter. When you reach it, you stand in a new current condition and pick the next one.',
-    'id': 'target',
-    'name': 'Next Target Condition'
-  },
-  {
-    'blurb': 'The loop you actually live in: form a hypothesis, run the cheapest test of it, compare what happened against what you expected, adjust. Each turn of the loop is a step through the grey zone, and speed matters more than elegance while you are learning.',
-    'id': 'experiments',
-    'name': 'Experiments'
-  },
-  {
-    'blurb': 'The things you discover standing between you and the target. They are not exceptions to the plan; finding and clearing them, one at a time, IS the plan. An obstacle you can name is progress.',
-    'id': 'obstacles',
-    'name': 'Obstacles'
-  }
-];
-
-const experimentLoops = [ 370, 455, 540 ];
+const stageNotes = {
+  'current': { 'name': 'Current condition', 'text': 'Start with what you can observe. Here, four of ten routine requests received substantive first feedback within one working day. The baseline is a sample to investigate, not an explanation of why work waited.' },
+  'direction': { 'name': 'Direction', 'text': 'Small changes should reach users predictably, with the review checks intact. That larger purpose gives the local experiment context: faster first feedback is useful only if quality holds and waiting does not simply move downstream.' },
+  'experiments': { 'name': 'Experiment, learn, adjust', 'text': 'Choose one obstacle, predict what a small test will show, and compare that prediction with the observation. The next step follows what you learned. Try the review-queue example below to keep a record of that loop.' },
+  'obstacles': { 'name': 'Obstacles emerge', 'text': 'You do not need to know the entire route. In the worked example, a protected review window exposes an interruption problem. Coverage becomes something to test, instead of assuming more reminders will solve the waiting.' },
+  'target': { 'name': 'Next target condition', 'text': 'Describe how the work should operate by a date. Here: at least eight of ten routine requests get first feedback within one working day in each of two consecutive weeks, with existing checks intact. A review bot or a protected window is an intervention toward it.' }
+};
 
 const ImprovementKataExplorer = ({
+  id,
   title = 'The Improvement Kata, as a journey',
-  description = 'You cannot plan a route through territory you have not seen. The kata walks it instead: experiment by experiment, target by target, always oriented by the direction. Select any element to read what it is for.',
+  description = 'From the current condition toward a target, one experiment at a time. Select a part of the diagram, then try the worked example below.',
   className = ''
 }) => {
-  const [ activeStageId, setActiveStageId ] = useState('direction');
-  const activeStage = stages.find((stage) => stage.id === activeStageId) || stages[0];
+  const generatedId = useId();
+  const uid = id || generatedId;
+  const experimentHeading = useRef(null);
+  const [ active, setActive ] = useState('window');
+  const [ selectedStage, setSelectedStage ] = useState('direction');
+  const stage = stageNotes[selectedStage];
+  const stageProps = (name) => {
+    return { 'aria-controls': `${uid}-diagram-readout`, 'aria-pressed': selectedStage === name, 'onClick': () => setSelectedStage(name), 'type': 'button' };
+  };
+  const [ drafts, setDrafts ] = useState({});
+  const [ records, setRecords ] = useState({});
+  const [ notice, setNotice ] = useState('');
+  const trial = trials[active];
+  const draft = drafts[active] || { 'expected': 4, 'note': '' };
+  const record = records[active];
+  const result = comparePrediction(trial.hours, record?.expected ?? draft.expected);
 
-  const selectStage = (stageId) => {
-    return {
-      'aria-label': `Read about ${stages.find((stage) => stage.id === stageId).name}`,
-      'aria-pressed': activeStageId === stageId,
-      'data-active': activeStageId === stageId,
-      'onClick': () => setActiveStageId(stageId),
-      'onFocus': () => setActiveStageId(stageId),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setActiveStageId(stageId);
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
-    };
+  const updateDraft = (patch) => setDrafts((current) => {
+    return { ...current, [active]: { ...draft, ...patch } };
+  });
+
+  const choose = (trialId) => {
+    setActive(trialId);
+    setNotice(`${trials[trialId].title} selected. ${records[trialId]?.revealed ? 'Your previous prediction and observations are kept.' : 'Record a prediction before revealing the sample.'}`);
+    experimentHeading.current?.focus();
+  };
+
+  const save = () => {
+    setRecords((current) => {
+      return {
+        ...current,
+        [active]: { ...predictionSnapshot(draft.expected, draft.note), 'revealed': false }
+      };
+    });
+    setNotice('Prediction recorded. Now reveal the observations.');
+  };
+
+  const reveal = () => {
+    setRecords((current) => {
+      return { ...current, [active]: { ...current[active], 'revealed': true } };
+    });
+    setNotice(`${result.actual} of 5 within one working day. ${result.comparison}`);
+  };
+
+  const editPrediction = () => {
+    setRecords((current) => {
+      const next = { ...current };
+
+      delete next[active];
+
+      return next;
+    });
+    setNotice('Prediction unlocked. The observations have not been revealed.');
+  };
+
+  const reset = () => {
+    setActive('window');
+    setDrafts({});
+    setRecords({});
+    setNotice('Example reset. Start with a new prediction.');
+    experimentHeading.current?.focus();
   };
 
   return (
-    <figure className={ `${styles.root} ${className}`.trim() }>
+    <figure className={ `${styles.root} ${className}` } aria-label='Improvement Kata worked example'>
       <figcaption className={ styles.caption }>
-        <strong className={ styles.title }>{title}</strong>
-        <span className={ styles.description }>{description}</span>
+        <strong>{title}</strong>
+        <span>{description}</span>
       </figcaption>
-
-      <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>
-
-      <div className={ styles.scrollFrame } role='region' aria-label='Scrollable Improvement Kata diagram' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 420' role='group' aria-label='The Improvement Kata journey'>
-          {/* The grey zone: unknown territory between current condition and target */}
-          <g className={ styles.greyZone } { ...selectStage('obstacles') }>
-            <rect x='300' y='120' width='310' height='190' rx='20' />
-            <text x='455' y='148' textAnchor='middle' className={ styles.zoneLabel }>UNKNOWN TERRITORY</text>
-            {/* Obstacles inside the zone */}
-            <g className={ styles.obstacle }>
-              <path d='M 400 168 L 416 184 L 400 200 L 384 184 Z' />
-            </g>
-            <g className={ styles.obstacle }>
-              <path d='M 505 250 L 521 266 L 505 282 L 489 266 Z' />
-            </g>
-            <text x='455' y='296' textAnchor='middle' className={ styles.zoneHint }>obstacles emerge as you walk</text>
-          </g>
-
-          {/* Path: current -> target (dashed, through the zone), target -> direction (fainter) */}
-          <path d='M 258 215 C 300 215, 320 215, 342 215' className={ styles.path } />
-          <path d='M 398 215 C 415 215, 420 215, 427 215' className={ styles.path } />
-          <path d='M 483 215 C 500 215, 505 215, 512 215' className={ styles.path } />
-          <path d='M 568 215 C 590 215, 600 215, 622 215' className={ styles.path } />
-          <path d='M 790 215 C 815 215, 825 215, 848 215' className={ styles.futurePath } />
-
-          {/* Experiment loops: little PDCA circles along the path */}
-          <g { ...selectStage('experiments') } className={ styles.experiments }>
-            {experimentLoops.map((x) => (
-              <g key={ x } className={ styles.loop }>
-                <circle cx={ x } cy='215' r='26' />
-                <path d={ `M ${x} 191 A 24 24 0 1 1 ${x - 17} 198` } className={ styles.loopArrow } />
-                <path d={ `M ${x - 17} 198 L ${x - 25} 190 L ${x - 27} 202 Z` } className={ styles.loopHead } />
-              </g>
-            ))}
-            <text x='455' y='330' textAnchor='middle' className={ styles.loopLabel }>experiment · learn · adjust</text>
-          </g>
-
-          {/* Current condition */}
-          <g className={ styles.stageNode } { ...selectStage('current') }>
-            <rect x='84' y='188' width='174' height='54' rx='27' />
-            <text x='171' y='210' textAnchor='middle' className={ styles.stageKind }>YOU ARE HERE</text>
-            <text x='171' y='228' textAnchor='middle' className={ styles.stageName }>Current Condition</text>
-          </g>
-
-          {/* Next target condition */}
-          <g className={ styles.stageNode } { ...selectStage('target') }>
-            <rect x='626' y='188' width='164' height='54' rx='27' />
-            <text x='708' y='210' textAnchor='middle' className={ styles.stageKind }>WEEKS AWAY</text>
-            <text x='708' y='228' textAnchor='middle' className={ styles.stageName }>Next Target</text>
-          </g>
-
-          {/* Direction: the north star */}
-          <g className={ styles.directionNode } { ...selectStage('direction') }>
-            <circle cx='905' cy='215' r='52' />
-            <path d='M 905 185 L 911 205 L 932 205 L 915 218 L 921 239 L 905 226 L 889 239 L 895 218 L 878 205 L 899 205 Z' className={ styles.star } />
-            <text x='905' y='292' textAnchor='middle' className={ styles.directionLabel }>Direction</text>
-          </g>
+      <div className={ styles.journey } role='group' aria-label='Explore the Improvement Kata diagram'>
+        <svg className={ styles.journeyLines } viewBox='0 0 1000 360' aria-hidden='true'>
+          <rect className={ styles.unknownZone } x='288' y='65' width='324' height='230' rx='20' />
+          <text className={ styles.zoneLabel } x='450' y='93' textAnchor='middle'>UNKNOWN TERRITORY</text>
+          <path className={ styles.path } d='M 258 175 H 334 M 386 175 H 425 M 477 175 H 516 M 568 175 H 645' />
+          <path className={ styles.futurePath } d='M 810 175 H 852' />
         </svg>
+        <button className={ `${styles.diagramNode} ${styles.currentNode}` } { ...stageProps('current') }>
+          <span>Current condition</span><strong>4 of 10 within a day</strong>
+        </button>
+        <button className={ styles.experimentNode } { ...stageProps('experiments') } aria-label='Explore experiments'>
+          <span className={ styles.loopStrip } aria-hidden='true'>{[ 0, 1, 2 ].map((loop) => <svg key={ loop } viewBox='0 0 64 64'><circle cx='32' cy='32' r='28' /><path d='M 32 11 A 21 21 0 1 1 17 17' /><path d='M 17 17 L 8 15 L 13 7' /></svg>)}</span>
+          <span>experiment · learn · adjust</span>
+        </button>
+        <button className={ styles.obstacleNode } { ...stageProps('obstacles') }><svg viewBox='0 0 24 24' aria-hidden='true'><path d='M12 2 22 12 12 22 2 12Z' /></svg><span>Obstacles emerge</span></button>
+        <button className={ `${styles.diagramNode} ${styles.targetNode}` } { ...stageProps('target') }><span>Next target condition</span><strong>8 of 10, sustained</strong></button>
+        <button className={ styles.directionNode } { ...stageProps('direction') }><svg viewBox='0 0 100 100' aria-hidden='true'><circle cx='50' cy='50' r='46'/><path d='M50 23 56 43 77 43 60 56 66 77 50 64 34 77 40 56 23 43 44 43Z'/></svg><span>Direction</span></button>
       </div>
+      <div className={ styles.diagramReadout } id={ `${uid}-diagram-readout` } aria-live='polite' aria-atomic='true'><strong>{stage.name}</strong><p>{stage.text}</p></div>
+      <details className={ styles.practice }>
+        <summary>Try a review-queue experiment <span>Predict · observe · adjust</span></summary>
+        <p className={ styles.disclosure }>Fictional case with predefined observations. Routine requests are small, non-emergency changes requiring one reviewer. Time runs from ready for review to substantive feedback, counting working hours only. One working day = eight working hours.</p>
+        <ol className={ styles.pattern } aria-label='The four steps of Improvement Kata'>
+          <li>Understand the direction</li>
+          <li>Observe the current condition</li>
+          <li>Set a target condition</li>
+          <li>Experiment and learn</li>
+        </ol>
+        <dl className={ styles.context }>
+          <div>
+            <dt>Direction</dt>
+            <dd>Small changes reach users predictably, with the existing review checks intact.</dd>
+          </div>
+          <div>
+            <dt>Current condition</dt>
+            <dd>
+              {withinWorkingDay(baselineHours)} of the last {baselineHours.length} routine requests received substantive first feedback within one working day.
+              <details>
+                <summary>Inspect the baseline</summary>
+                <p>Working hours to first review: {baselineHours.join(', ')}. These ten completed requests describe the starting sample, not the age of unfinished work.</p>
+              </details>
+            </dd>
+          </div>
+          <div>
+            <dt>Next target condition</dt>
+            <dd>By the end of the fortnight: at least 8 of 10 routine requests within one working day in each of two consecutive working weeks. Keep the existing review checks.</dd>
+          </div>
+        </dl>
 
-      <div className={ styles.readout }>
-        <div className={ styles.readoutPrimary }>
-          <span className={ styles.readoutType }>{activeStage.name}</span>
-          <span className={ styles.readoutText }>{activeStage.blurb}</span>
-        </div>
-        <span className={ styles.readoutMeta }>reach the target · stand in a new current condition · pick the next target</span>
-      </div>
+        <section className={ styles.experiment } aria-label='Current experiment'>
+          <h3 ref={ experimentHeading } tabIndex={ -1 }>{trial.title}</h3>
+          <p>{trial.step}. {trial.change}</p>
+          {active !== 'window' && (
+            <p className={ styles.small }>This branch starts from the first experiment. The two alternatives use separate fictional samples.</p>
+          )}
+          <div className={ styles.prediction }>
+            <label htmlFor={ `${uid}-expected` }>
+            How many of the next five requests will receive a first review within one working day?
+              <select
+                id={ `${uid}-expected` }
+                value={ record?.expected ?? draft.expected }
+                disabled={ Boolean(record) }
+                onChange={ (event) => updateDraft({ 'expected': Number(event.target.value) }) }
+              >
+                {[ 0, 1, 2, 3, 4, 5 ].map((value) => (
+                  <option key={ value } value={ value }>{value} of 5</option>
+                ))}
+              </select>
+            </label>
+            <label htmlFor={ `${uid}-reason` }>
+              <span>Why do you expect that? <span className={ styles.small }>(optional)</span></span>
+              <textarea
+                id={ `${uid}-reason` }
+                value={ record?.note ?? draft.note }
+                disabled={ Boolean(record) }
+                onChange={ (event) => updateDraft({ 'note': event.target.value }) }
+                placeholder='Write the assumption you want this test to check.'
+                rows={ 2 }
+              />
+            </label>
+          </div>
 
-      <p className={ styles.liveRegion } aria-live='polite'>
-        {activeStage.name}: {activeStage.blurb}
-      </p>
+          {!record && (
+            <button type='button' className={ styles.primary } onClick={ save }>Record prediction</button>
+          )}
+          {record && !record.revealed && (
+            <div className={ styles.actions }>
+              <button type='button' className={ styles.primary } onClick={ reveal }>Reveal observations</button>
+              <button type='button' onClick={ editPrediction }>Edit prediction</button>
+            </div>
+          )}
+          {record?.revealed && (
+            <div className={ styles.result }>
+              <h4>{result.actual} of 5 received a first review within one working day</h4>
+              <p>You predicted {record.expected} of 5. {result.comparison}</p>
+              <details>
+                <summary>Inspect the five observations</summary>
+                <div className={ styles.tableWrap }>
+                  <table>
+                    <caption>Fictional requests in this experiment. Elapsed time counts working hours only.</caption>
+                    <thead>
+                      <tr>
+                        <th scope='col'>Request</th>
+                        <th scope='col'>Hours</th>
+                        <th scope='col'>What happened</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {trial.hours.map((hours, index) => (
+                        <tr key={ index }>
+                          <th scope='row'>PR {index + 1}</th>
+                          <td>{hours}{hours <= 8 ? ' · within a day' : ' · over a day'}</td>
+                          <td>{trial.observations[index]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </details>
+              <h4>What does this change about the next step?</h4>
+              <p>{trial.learning}</p>
+              <p className={ styles.limit }>The target is not established: this is five requests, not ten in each of two consecutive weeks. Keep checking review quality and downstream waiting too.</p>
+            </div>
+          )}
+        </section>
+
+        {records.window?.revealed && (
+          <section className={ styles.next } aria-label='Choose a next experiment'>
+            <h3>Which obstacle would you test next?</h3>
+            <p>The first trial exposed interruptions. Compare two possible responses, keeping each prediction and result in the record.</p>
+            <div className={ styles.actions }>
+              <button type='button' aria-pressed={ active === 'backup' } onClick={ () => choose('backup') }>Try backup coverage</button>
+              <button type='button' aria-pressed={ active === 'reminder' } onClick={ () => choose('reminder') }>Try reminders</button>
+            </div>
+          </section>
+        )}
+        {Object.values(records).some((item) => item.revealed) && (
+          <section className={ styles.history } aria-label='Experiment record'>
+            <h3>Your experiment record</h3>
+            <ul>
+              {Object.entries(records).filter(([ , item ]) => item.revealed).map(([ trialId, item ]) => (
+                <li key={ trialId }>
+                  <button
+                    type='button'
+                    aria-current={ active === trialId ? 'step' : undefined }
+                    onClick={ () => choose(trialId) }
+                  >
+                    {trials[trialId].title}
+                  </button>
+                  <p>Predicted {item.expected} of 5; observed {withinWorkingDay(trials[trialId].hours)} of 5.</p>
+                  {item.note && <p>Your assumption: {item.note}</p>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        <p className={ styles.status } role='status'>{notice}</p>
+        <footer>
+          <span>Practice inspired by Mike Rother’s Improvement and Coaching Kata.</span>
+          <button type='button' onClick={ reset }>Reset example</button>
+        </footer>
+      </details>
     </figure>
   );
 };

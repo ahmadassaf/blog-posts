@@ -3,13 +3,14 @@
 import CustomLink from '@gaudi/design-system/core/Link';
 import Aside from '@gaudi/design-system/mdx/Aside';
 import Callout from '@gaudi/design-system/mdx/Callout';
+import { CodeFence, CodeGroup } from '@gaudi/design-system/mdx/Code';
 import FileTree from '@gaudi/design-system/mdx/FileTree';
 import Highlight from '@gaudi/design-system/mdx/Highlight';
 import Image from '@gaudi/design-system/mdx/Image';
 import Preview from '@gaudi/design-system/mdx/Preview';
+import { MDXLayoutRenderer as GaudiMDXLayoutRenderer } from '@gaudi/design-system/mdx/runtime';
 import Table, { TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from '@gaudi/design-system/mdx/Table';
 import Tooltip from '@gaudi/design-system/mdx/Tooltip';
-import { MDXLayoutRenderer as GaudiMDXLayoutRenderer } from '@gaudi/design-system/mdx/runtime';
 import dynamic from 'next/dynamic';
 
 import { VisualisationComponents } from './index';
@@ -20,6 +21,7 @@ const BlogMDXComponents = {
   Aside,
   Callout,
   Chart,
+  CodeGroup,
   FileTree,
   Highlight,
   Image,
@@ -28,6 +30,7 @@ const BlogMDXComponents = {
   Tooltip,
   ...VisualisationComponents,
   'a': CustomLink,
+  'pre': CodeFence,
   'table': Table,
   'tbody': TableBody,
   'td': TableCell,
