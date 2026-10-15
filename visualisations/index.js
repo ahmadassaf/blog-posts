@@ -32,7 +32,6 @@ const GenerativeUIBlockBuilder = diagram(() => import('./GenerativeUIBlockBuilde
 const GrowthLevelsExplorer = diagram(() => import('./GrowthLevelsExplorer'));
 const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'));
 const JsonLdGraphExplorer = diagram(() => import('./JsonLdGraphExplorer'));
-const KnowledgeGraph3D = diagram(() => import('./KnowledgeGraph3D'));
 const OlapCubeExplorer = diagram(() => import('./OlapCubeExplorer'));
 const SparqlPatternExplorer = diagram(() => import('./SparqlPatternExplorer'));
 const LinkedDataQualityFramework = diagram(() => import('./LinkedDataQualityFramework'));
@@ -55,7 +54,6 @@ export const VisualisationComponents = {
   GrowthLevelsExplorer,
   ImprovementKataExplorer,
   JsonLdGraphExplorer,
-  KnowledgeGraph3D,
   LinkedDataQualityFramework,
   OlapCubeExplorer,
   PipelineDiagram,
