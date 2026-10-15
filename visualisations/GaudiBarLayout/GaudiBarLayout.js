@@ -9,24 +9,13 @@
  */
 
 import { useId, useState } from 'react';
+import { Sparkline } from '@gaudi/design-system/charts/Sparkline';
+import Button from '@gaudi/design-system/core/Button';
 import Icon from '@gaudi/design-system/core/Icon';
 
 import { gaudiBarRegions, gaudiBarRegionsById } from './GaudiBarLayout.data';
 
 import styles from './GaudiBarLayout.module.css';
-
-const sparklinePoints = (values) => {
-  const maximum = Math.max(...values);
-  const minimum = Math.min(...values);
-  const range = maximum - minimum || 1;
-
-  return values.map((value, index) => {
-    const x = values.length === 1 ? 0 : (index / (values.length - 1)) * 48;
-    const y = 15 - ((value - minimum) / range) * 13;
-
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join(' ');
-};
 
 const accessibleRegion = (region) => {
   const widgets = region.widgets.map((widget) => `${widget.label}: ${widget.value}`).join(', ');
@@ -59,9 +48,10 @@ const WidgetPreview = ({ widget }) => (
     )}
 
     {widget.trend && (
-      <svg className={ styles.sparkline } viewBox='0 0 48 17' aria-hidden='true' focusable='false'>
-        <polyline points={ sparklinePoints(widget.trend) } />
-      </svg>
+      // The value beside it carries the meaning, so the trend stays a decorative glyph outside the tab order.
+      <span className={ styles.sparkline } aria-hidden='true' inert>
+        <Sparkline data={ widget.trend } color='currentColor' height={ 16 } showEndpoint={ false } ariaLabel={ `${widget.label} trend` } />
+      </span>
     )}
   </span>
 );
@@ -70,8 +60,10 @@ const RegionButton = ({ active, readoutId, region, onSelect }) => {
   const empty = region.widgets.length === 0;
 
   return (
-    <button
-      type='button'
+    <Button
+      variant='ghost'
+      tone='neutral'
+      radius='lg'
       className={ styles.region }
       data-active={ active }
       data-empty={ empty }
@@ -91,7 +83,7 @@ const RegionButton = ({ active, readoutId, region, onSelect }) => {
           </span>
         ))}
       </span>
-    </button>
+    </Button>
   );
 };
 
