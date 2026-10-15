@@ -8,6 +8,11 @@
 
 import { useId, useState } from 'react';
 
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaudi/design-system/core/Accordion';
+import Button from '@gaudi/design-system/core/Button';
+import Icon from '@gaudi/design-system/core/Icon';
+import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+
 import styles from './GrowthLevelsExplorer.module.css';
 
 const levels = [
@@ -128,11 +133,18 @@ const GrowthLevelsExplorer = ({
           <path className={ styles.leadershipPath } d='M 96 94 H 314 V 146 H 106 V 224 H 314 V 276 H 106 V 354 H 304' />
         </svg>
 
-        <div className={ styles.scopeControls } role='group' aria-label='Contribution scope'>
+        <ToggleGroupRoot
+          type='single'
+          spacing={ 0 }
+          className={ styles.scopeControls }
+          aria-label='Contribution scope'
+          value={ activeLevelId }
+          onValueChange={ (value) => value && setActiveLevelId(value) }
+        >
           {levels.map((level, index) => (
-            <button
+            <ToggleGroupItem
               key={ level.id }
-              type='button'
+              value={ level.id }
               className={ styles.scopeButton }
               style={{
                 '--scope-mobile-x': `${index % 2 === 0 ? 24 : 76}%`,
@@ -141,14 +153,12 @@ const GrowthLevelsExplorer = ({
                 '--scope-y': `${(326 - index * 52) / 4.2}%`
               }}
               aria-controls={ readoutId }
-              aria-pressed={ activeLevelId === level.id }
-              onClick={ () => setActiveLevelId(level.id) }
             >
               <span className={ styles.levelName }>{level.name}</span>
               <span>{level.kind}</span>
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroupRoot>
         <p className={ styles.landscapeNote }>Select any scope.<br />There is more than one way to grow.</p>
       </div>
 
@@ -173,19 +183,26 @@ const GrowthLevelsExplorer = ({
             <dd>{activeLevel.evidence}</dd>
           </div>
         </dl>
-        <details className={ styles.practice }>
-          <summary>Explore support and a possible experiment</summary>
-          <dl className={ styles.learning }>
-            <div>
-              <dt>Support to make available</dt>
-              <dd>{activeLevel.support}</dd>
-            </div>
-            <div>
-              <dt>A possible experiment</dt>
-              <dd>{activeLevel.experiment}</dd>
-            </div>
-          </dl>
-        </details>
+        <Collapsible className={ styles.practice }>
+          <CollapsibleTrigger asChild>
+            <Button variant='ghost' tone='accent' className={ styles.practiceTrigger }>
+              <Icon name='ChevronRight' decorative />
+              Explore support and a possible experiment
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <dl className={ styles.learning }>
+              <div>
+                <dt>Support to make available</dt>
+                <dd>{activeLevel.support}</dd>
+              </div>
+              <div>
+                <dt>A possible experiment</dt>
+                <dd>{activeLevel.experiment}</dd>
+              </div>
+            </dl>
+          </CollapsibleContent>
+        </Collapsible>
       </section>
 
       <p className={ styles.note }>

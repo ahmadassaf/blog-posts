@@ -2,6 +2,12 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaudi/design-system/core/Accordion';
+import Button from '@gaudi/design-system/core/Button';
+import Icon from '@gaudi/design-system/core/Icon';
+import { Slider } from '@gaudi/design-system/core/Slider';
+import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+
 import { createKanbanState,
   createScrumState,
   getKanbanCounts,
@@ -46,7 +52,7 @@ const AgileCadenceExplorer = ({
   const pendingFocus = useRef(null);
   const scrumStatus = getScrumStatus(scrum);
   const counts = getKanbanCounts(kanban.items);
-  const dayId = `${instanceId}-day`;
+  const dayLabelId = `${instanceId}-day-label`;
   const policyId = `${instanceId}-policy`;
   const statusId = `${instanceId}-status`;
   const eventId = `${instanceId}-event`;
@@ -86,13 +92,22 @@ const AgileCadenceExplorer = ({
       </figcaption>
 
       <div className={ styles.toolbar }>
-        <div className={ styles.modeControls } role='group' aria-label='Explore a work approach'>
-          <button type='button' aria-pressed={ mode === 'scrum' } onClick={ () => setMode('scrum') }>Scrum</button>
-          <button type='button' aria-pressed={ mode === 'kanban' } onClick={ () => setMode('kanban') }>Kanban</button>
-        </div>
-        <button
-          type='button'
-          className={ styles.reset }
+        <ToggleGroupRoot
+          type='single'
+          variant='outline'
+          size='sm'
+          spacing={ 0 }
+          aria-label='Explore a work approach'
+          value={ mode }
+          onValueChange={ (value) => value && setMode(value) }
+        >
+          <ToggleGroupItem value='scrum'>Scrum</ToggleGroupItem>
+          <ToggleGroupItem value='kanban'>Kanban</ToggleGroupItem>
+        </ToggleGroupRoot>
+        <Button
+          variant='ghost'
+          tone='neutral'
+          size='sm'
           onClick={ () => {
             if (mode === 'scrum') {
               setScrum(createScrumState());
@@ -101,7 +116,10 @@ const AgileCadenceExplorer = ({
               setKanban(createKanbanState());
             }
           } }
-        >Reset example</button>
+        >
+          <Icon name='RotateCcw' decorative />
+          Reset example
+        </Button>
       </div>
 
       {mode === 'scrum' ? (
@@ -116,15 +134,22 @@ const AgileCadenceExplorer = ({
                 <span>Day {scrum.day} of {SCRUM_REVIEW_DAY}</span>
               </div>
               <div className={ styles.inlet }><span>From</span><strong>Product Backlog</strong></div>
-              <ul className={ styles.events }>
+              <ToggleGroupRoot
+                type='single'
+                spacing={ 0 }
+                className={ styles.events }
+                aria-label='Scrum events'
+                value={ String(selectedEvent) }
+                onValueChange={ (value) => value && setSelectedEvent(Number(value)) }
+              >
                 {events.map((event, index) => (
-                  <li key={ event.name } data-position={ index }>
-                    <button
-                      type='button'
-                      aria-pressed={ selectedEvent === index }
-                      aria-describedby={ selectedEvent === index ? eventId : undefined }
-                      onClick={ () => setSelectedEvent(index) }
-                    >
+                  <ToggleGroupItem
+                    key={ event.name }
+                    value={ String(index) }
+                    className={ styles.event }
+                    data-position={ index }
+                    aria-describedby={ selectedEvent === index ? eventId : undefined }
+                  >
                       <strong>{event.name}</strong>
                       <span>{event.timing}</span>
                       {index === 1 && (
@@ -139,10 +164,9 @@ const AgileCadenceExplorer = ({
                           ))}
                         </span>
                       )}
-                    </button>
-                  </li>
+                  </ToggleGroupItem>
                 ))}
-              </ul>
+              </ToggleGroupRoot>
               <div className={ styles.incrementNode } data-ready={ scrumStatus.ready } data-released={ scrumStatus.released }>
                 <strong>Increment</strong>
                 <span>{incrementLabel}</span>
@@ -151,18 +175,17 @@ const AgileCadenceExplorer = ({
             <p className={ styles.eventReadout } id={ eventId }><strong>{events[selectedEvent].name}</strong><span>{events[selectedEvent].purpose} All four events take place within the Sprint.</span></p>
 
             <div className={ styles.dayControl }>
-              <label htmlFor={ dayId }>Explore a working day</label>
-              <output htmlFor={ dayId }>Day {scrum.day} of {SCRUM_REVIEW_DAY}</output>
-              <input
-                id={ dayId }
-                type='range'
-                min='1'
+              <span className={ styles.dayLabel } id={ dayLabelId }>Explore a working day</span>
+              <output>Day {scrum.day} of {SCRUM_REVIEW_DAY}</output>
+              <Slider
+                className={ styles.daySlider }
+                aria-labelledby={ dayLabelId }
+                min={ 1 }
                 max={ SCRUM_REVIEW_DAY }
-                step='1'
-                value={ scrum.day }
-                aria-valuetext={ `Day ${scrum.day}: ${ariaState}` }
-                onChange={ (event) => {
-                  const day = Number(event.target.value);
+                step={ 1 }
+                value={ [ scrum.day ] }
+                getValueText={ (day) => `Day ${day}: ${ariaState}` }
+                onValueChange={ ([ day ]) => {
 
                   setScrum((current) => moveScrumDay(current, day));
                   if (day === 1) setSelectedEvent(0);
@@ -182,12 +205,13 @@ const AgileCadenceExplorer = ({
                 <strong>Search increment</strong>
                 <span>{incrementLabel}</span>
               </div>
-              <button
-                type='button'
+              <Button
+                variant='outline'
+                tone='accent'
                 disabled={ scrumStatus.released }
                 aria-describedby={ statusId }
                 onClick={ () => setScrum(releaseScrumIncrement) }
-              >{scrumStatus.released ? 'Increment released' : 'Release increment'}</button>
+              >{scrumStatus.released ? 'Increment released' : 'Release increment'}</Button>
             </div>
             <p className={ styles.reviewNote }>{scrum.day === SCRUM_REVIEW_DAY ? 'Today: inspect the outcome with stakeholders, then hold the retrospective.' : `Review and retrospective remain scheduled for day ${SCRUM_REVIEW_DAY}.`}</p>
           </section>
@@ -198,10 +222,18 @@ const AgileCadenceExplorer = ({
       ) : (
         <div className={ styles.kanban }>
           <p className={ styles.instruction }>Try sending “Saved searches” into full Review, then finish a review and try again.</p>
-          <details className={ styles.policy }>
-            <summary>Workflow policy · two items per active stage</summary>
-            <p id={ policyId }><strong>This fictional workflow:</strong> at most two items in In Progress and two in Review. Pull only when the destination has capacity. Ready and Done are outside WIP. Here, Done means verified and ready for release; deployment is a separate decision.</p>
-          </details>
+          <Collapsible className={ styles.policy }>
+            <CollapsibleTrigger asChild>
+              <Button variant='ghost' tone='neutral' className={ styles.policyTrigger }>
+                <Icon name='ChevronRight' decorative />
+                Workflow policy · two items per active stage
+              </Button>
+            </CollapsibleTrigger>
+            {/* Mounted while closed so the card actions can still reference the policy by id. */}
+            <CollapsibleContent forceMount>
+              <p id={ policyId }><strong>This fictional workflow:</strong> at most two items in In Progress and two in Review. Pull only when the destination has capacity. Ready and Done are outside WIP. Here, Done means verified and ready for release; deployment is a separate decision.</p>
+            </CollapsibleContent>
+          </Collapsible>
 
           <div className={ styles.boardFrame } role='region' aria-label='Scrollable fictional Kanban board' tabIndex='0'>
             <div className={ styles.board } aria-label='Fictional search team Kanban board'>
@@ -227,13 +259,16 @@ const AgileCadenceExplorer = ({
                             } }>
                               <strong>{item.title}</strong>
                               {column.action ? (
-                                <button
-                                  type='button'
+                                <Button
+                                  variant='outline'
+                                  tone={ blocked ? 'warning' : 'neutral' }
+                                  size='sm'
+                                  className={ styles.cardAction }
                                   data-blocked={ blocked }
                                   aria-label={ `${column.action}: ${item.title}` }
                                   aria-describedby={ `${policyId} ${statusId}` }
                                   onClick={ () => advanceCard(item.id) }
-                                >{column.action}{blocked ? ' (full)' : ''}</button>
+                                >{column.action}{blocked ? ' (full)' : ''}</Button>
                               ) : <span className={ styles.done }>Ready for release</span>}
                             </li>
                           );
