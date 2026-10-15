@@ -10,6 +10,8 @@
 
 import { useState } from 'react';
 
+import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+
 import styles from './OlapCubeExplorer.module.css';
 
 /* Isometric projection: i (Time) runs right-down, j (Product) left-down, k (Region) up */
@@ -105,21 +107,25 @@ const OlapCubeExplorer = ({
       </figcaption>
 
       <div className={ styles.toolbar }>
-        <div className={ styles.typeTabs } aria-label='OLAP operation' role='group'>
+        <ToggleGroupRoot
+          type='single'
+          spacing={ 1 }
+          className={ styles.typeTabs }
+          aria-label='OLAP operation'
+          value={ activeOp.id }
+          onValueChange={ (value) => value && setActiveOpId(value) }
+        >
           {operations.map((operation) => (
-            <button
-              type='button'
-              aria-label={ `${operation.label}: ${operation.meaning}` }
-              aria-pressed={ activeOp.id === operation.id }
-              data-active={ activeOp.id === operation.id }
+            <ToggleGroupItem
               key={ operation.id }
-              onClick={ () => setActiveOpId(operation.id) }
+              value={ operation.id }
+              aria-label={ `${operation.label}: ${operation.meaning}` }
             >
               <strong>{operation.label}</strong>
               <span>{operation.meaning}</span>
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroupRoot>
       </div>
 
       <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>

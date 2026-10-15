@@ -9,6 +9,7 @@
  */
 
 import { useId, useState } from 'react';
+import Button from '@gaudi/design-system/core/Button';
 import Icon from '@gaudi/design-system/core/Icon';
 
 import styles from './LinkedDataQualityFramework.module.css';
@@ -80,8 +81,10 @@ const accessibleSystem = (system) => {
 
 const ArchitectureBlock = ({ active, system, readoutId, onSelect }) => (
   <div className={ styles.systemBlock } data-active={ active } data-system={ system.id } role='listitem'>
-    <button
-      type='button'
+    <Button
+      variant='outline'
+      tone='neutral'
+      radius='lg'
       className={ styles.systemButton }
       aria-controls={ readoutId }
       aria-pressed={ active }
@@ -110,7 +113,7 @@ const ArchitectureBlock = ({ active, system, readoutId, onSelect }) => (
           </span>
         ))}
       </span>
-    </button>
+    </Button>
   </div>
 );
 

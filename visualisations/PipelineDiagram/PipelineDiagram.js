@@ -9,6 +9,7 @@
  */
 
 import { useId, useState } from 'react';
+import Button from '@gaudi/design-system/core/Button';
 import Icon from '@gaudi/design-system/core/Icon';
 
 import styles from './PipelineDiagram.module.css';
@@ -179,9 +180,10 @@ const PipelineDiagram = ({
 
               return (
                 <li className={ styles.step } data-state={ state } key={ step.id }>
-                  <button
+                  <Button
+                    variant='ghost'
+                    tone='neutral'
                     className={ styles.stepButton }
-                    type='button'
                     aria-current={ state === 'current' ? 'step' : undefined }
                     aria-controls={ readoutId }
                     aria-label={ `${step.label}. ${step.detail}` }
@@ -194,7 +196,7 @@ const PipelineDiagram = ({
                     </span>
                     <strong className={ styles.stepLabel }>{step.label}</strong>
                     <span className={ styles.stepMeta }>{step.meta}</span>
-                  </button>
+                  </Button>
 
                   {step.failure && (
                     <span className={ styles.failureBranch } data-active={ state === 'current' }>

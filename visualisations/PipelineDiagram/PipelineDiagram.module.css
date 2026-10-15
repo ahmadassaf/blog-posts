@@ -60,11 +60,6 @@
   pointer-events: none;
 }
 
-.stepButton:focus-visible {
-  outline: 2px solid var(--ds-color-accent);
-  outline-offset: 3px;
-}
-
 .flowField {
   position: relative;
   padding: clamp(2rem, 4cqi, 2.5rem) clamp(1rem, 3cqi, 2rem) 1.25rem;
@@ -130,15 +125,20 @@
 .stepButton {
   display: grid;
   width: 100%;
+  height: auto;
   padding: 0;
-  border: 0;
   grid-template-rows: 1.35rem auto auto;
   justify-items: center;
+  gap: 0;
   background: transparent;
   color: inherit;
-  cursor: pointer;
   font: inherit;
   text-align: center;
+  white-space: normal;
+}
+
+.stepButton:hover {
+  background: transparent;
 }
 
 .marker {
