@@ -2,6 +2,14 @@
 
 import { useId, useRef, useState } from 'react';
 
+import Button from '@gaudi/design-system/core/Button';
+import Field, { FieldDescription, FieldError, FieldLabel } from '@gaudi/design-system/core/Field';
+import Icon from '@gaudi/design-system/core/Icon';
+import { NativeSelect, NativeSelectOption } from '@gaudi/design-system/core/Select';
+import Textarea from '@gaudi/design-system/core/Textarea';
+import { Toggle, ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+import { TableBodyPrimitive, TableCaption, TableCellPrimitive, TableHeadPrimitive, TableHeader, TableRoot, TableRowPrimitive } from '@gaudi/design-system/mdx/Table';
+
 import {
   blockCatalog,
   composeView,
@@ -16,12 +24,6 @@ import {
 } from './GenerativeUIBlockBuilder.data';
 
 import styles from './GenerativeUIBlockBuilder.module.css';
-
-const ArrowIcon = ({ down = false }) => (
-  <svg viewBox='0 0 20 20' aria-hidden='true' focusable='false'>
-    <path d={ down ? 'M10 4v12m-5-5 5 5 5-5' : 'M10 16V4m-5 5 5-5 5 5' } />
-  </svg>
-);
 
 const RevenueChart = () => {
   const maximum = Math.max(...revenueRows.flatMap((row) => [ row.revenue, row.target ]));
@@ -45,13 +47,25 @@ const RevenueChart = () => {
 };
 
 const RevenueTable = () => (
-  <table className={ styles.table }>
-    <caption className={ styles.visuallyHidden }>Fictional May 2026 revenue and targets, in pounds</caption>
-    <thead><tr><th scope='col'>Market</th><th scope='col'>Revenue</th><th scope='col'>Target</th></tr></thead>
-    <tbody>
-      {revenueRows.map((row) => <tr key={ row.id }><th scope='row'>{row.market}</th><td>{formatMoney(row.revenue)}</td><td>{formatMoney(row.target)}</td></tr>)}
-    </tbody>
-  </table>
+  <TableRoot density='compact' className={ styles.table } containerProps={{ 'aria-label': 'Revenue table' }}>
+    <TableCaption className={ styles.visuallyHidden }>Fictional May 2026 revenue and targets, in pounds</TableCaption>
+    <TableHeader>
+      <TableRowPrimitive>
+        <TableHeadPrimitive scope='col' variant='plain'>Market</TableHeadPrimitive>
+        <TableHeadPrimitive scope='col' variant='plain' className={ styles.numeric }>Revenue</TableHeadPrimitive>
+        <TableHeadPrimitive scope='col' variant='plain' className={ styles.numeric }>Target</TableHeadPrimitive>
+      </TableRowPrimitive>
+    </TableHeader>
+    <TableBodyPrimitive>
+      {revenueRows.map((row) => (
+        <TableRowPrimitive key={ row.id }>
+          <TableCellPrimitive as='th' scope='row' className={ styles.rowHeader }>{row.market}</TableCellPrimitive>
+          <TableCellPrimitive className={ styles.numeric }>{formatMoney(row.revenue)}</TableCellPrimitive>
+          <TableCellPrimitive className={ styles.numeric }>{formatMoney(row.target)}</TableCellPrimitive>
+        </TableRowPrimitive>
+      ))}
+    </TableBodyPrimitive>
+  </TableRoot>
 );
 
 const GenerativeUIBlockBuilder = ({
@@ -72,7 +86,6 @@ const GenerativeUIBlockBuilder = ({
   const viewId = `${instanceId}-view`;
   const helperId = `${instanceId}-help`;
   const errorId = `${instanceId}-error`;
-  const notesId = `${instanceId}-notes`;
 
   const changeMode = (nextMode) => {
     setMode(nextMode);
@@ -112,10 +125,18 @@ const GenerativeUIBlockBuilder = ({
         <span>Try it: edit the note, then move Notes above Summary. Your words stay with the block.</span>
       </figcaption>
 
-      <div className={ styles.modes } role='group' aria-label='Choose how to compose the report'>
-        <button type='button' aria-pressed={ mode === 'manual' } aria-controls={ viewId } onClick={ () => changeMode('manual') }>Arrange it myself</button>
-        <button type='button' aria-pressed={ mode === 'describe' } aria-controls={ viewId } onClick={ () => changeMode('describe') }>Describe what I need</button>
-      </div>
+      <ToggleGroupRoot
+        type='single'
+        variant='outline'
+        spacing={ 2 }
+        className={ styles.modes }
+        aria-label='Choose how to compose the report'
+        value={ mode }
+        onValueChange={ (value) => value && changeMode(value) }
+      >
+        <ToggleGroupItem value='manual' aria-controls={ viewId }>Arrange it myself</ToggleGroupItem>
+        <ToggleGroupItem value='describe' aria-controls={ viewId }>Describe what I need</ToggleGroupItem>
+      </ToggleGroupRoot>
 
       <div className={ styles.controls }>
         {mode === 'manual' ? (
@@ -123,33 +144,40 @@ const GenerativeUIBlockBuilder = ({
             <p className={ styles.instruction }>Use “Move Notes up” to change the layout. Add other blocks when you want to explore further.</p>
             <div className={ styles.palette } role='group' aria-label='Available report blocks'>
               {blockCatalog.map((block) => (
-                <button type='button' key={ block.id } ref={ (element) => { paletteButtons.current[block.id] = element; } } aria-pressed={ composition.includes(block.id) } onClick={ () => changeBlock(block) }>
-                  <svg viewBox='0 0 16 16' aria-hidden='true' focusable='false'><path d={ composition.includes(block.id) ? 'm3 8 3 3 7-7' : 'M8 3v10M3 8h10' } /></svg>
+                <Toggle
+                  variant='outline'
+                  key={ block.id }
+                  ref={ (element) => { paletteButtons.current[block.id] = element; } }
+                  pressed={ composition.includes(block.id) }
+                  onPressedChange={ () => changeBlock(block) }
+                >
+                  <Icon name={ composition.includes(block.id) ? 'Check' : 'Plus' } size='sm' decorative />
                   {block.name}
-                </button>
+                </Toggle>
               ))}
             </div>
           </div>
         ) : (
           <form onSubmit={ compose } noValidate>
-            <label className={ styles.label } htmlFor={ `${instanceId}-example` }>Start with an example</label>
-            <select id={ `${instanceId}-example` } value={ promptExamples.includes(prompt) ? prompt : '' } onChange={ (event) => { setPrompt(event.target.value); setError(''); setFeedback(''); } }>
-              <option value='' disabled>Custom arrangement</option>
-              {promptExamples.map((example) => <option value={ example } key={ example }>{example}</option>)}
-            </select>
-            <label className={ styles.promptLabel } htmlFor={ `${instanceId}-prompt` }>Describe your view</label>
-            <textarea
-              id={ `${instanceId}-prompt` }
-              rows={ 2 }
-              maxLength={ 240 }
-              value={ prompt }
-              aria-describedby={ `${helperId}${error ? ` ${errorId}` : ''}` }
-              aria-invalid={ !!error }
-              onChange={ (event) => { setPrompt(event.target.value); setError(''); setFeedback(''); } }
-            />
-            <p id={ helperId } className={ styles.helper }>Use Summary, Chart, Table and Notes. Names are read left to right; repeats appear once. Join them with “and” or “then”, as in the examples.</p>
-            <button className={ styles.composeButton } type='submit'>Compose my view</button>
-            {error && <p id={ errorId } className={ styles.error } role='alert'>{error}</p>}
+            <Field className={ styles.field }>
+              <FieldLabel htmlFor={ `${instanceId}-example` }>Start with an example</FieldLabel>
+              <NativeSelect id={ `${instanceId}-example` } className={ styles.select } value={ promptExamples.includes(prompt) ? prompt : '' } onChange={ (event) => { setPrompt(event.target.value); setError(''); setFeedback(''); } }>
+                <NativeSelectOption value='' disabled>Custom arrangement</NativeSelectOption>
+                {promptExamples.map((example) => <NativeSelectOption value={ example } key={ example }>{example}</NativeSelectOption>)}
+              </NativeSelect>
+            </Field>
+            <Field className={ styles.field }>
+              <FieldLabel>Describe your view</FieldLabel>
+              <Textarea
+                rows={ 2 }
+                maxLength={ 240 }
+                value={ prompt }
+                onChange={ (event) => { setPrompt(event.target.value); setError(''); setFeedback(''); } }
+              />
+              <FieldDescription id={ helperId }>Use Summary, Chart, Table and Notes. Names are read left to right; repeats appear once. Join them with “and” or “then”, as in the examples.</FieldDescription>
+              <FieldError id={ errorId }>{error}</FieldError>
+            </Field>
+            <Button className={ styles.composeButton } type='submit'>Compose my view</Button>
           </form>
         )}
       </div>
@@ -171,18 +199,22 @@ const GenerativeUIBlockBuilder = ({
                 <h5 id={ `${instanceId}-${block.id}-title` }><span className={ styles.position }>{index + 1}</span>{block.name}</h5>
                 {mode === 'manual' && (
                   <div className={ styles.blockActions } role='group' aria-label={ `Arrange ${block.name}` }>
-                    <button type='button' aria-label={ `Move ${block.name} up` } title={ `Move ${block.name} up` } disabled={ index === 0 } onClick={ () => reorderBlock(block, -1) }><ArrowIcon /></button>
-                    <button type='button' aria-label={ `Move ${block.name} down` } title={ `Move ${block.name} down` } disabled={ index === composition.length - 1 } onClick={ () => reorderBlock(block, 1) }><ArrowIcon down /></button>
-                    <button type='button' aria-label={ `Remove ${block.name}` } title={ `Remove ${block.name}` } onClick={ () => changeBlock(block) }>
-                      <svg viewBox='0 0 20 20' aria-hidden='true' focusable='false'><path d='m5 5 10 10M15 5 5 15' /></svg>
-                    </button>
+                    <Button variant='ghost' tone='neutral' size='icon' aria-label={ `Move ${block.name} up` } title={ `Move ${block.name} up` } disabled={ index === 0 } onClick={ () => reorderBlock(block, -1) }><Icon name='ArrowUp' size='sm' decorative /></Button>
+                    <Button variant='ghost' tone='neutral' size='icon' aria-label={ `Move ${block.name} down` } title={ `Move ${block.name} down` } disabled={ index === composition.length - 1 } onClick={ () => reorderBlock(block, 1) }><Icon name='ArrowDown' size='sm' decorative /></Button>
+                    <Button variant='ghost' tone='neutral' size='icon' aria-label={ `Remove ${block.name}` } title={ `Remove ${block.name}` } onClick={ () => changeBlock(block) }><Icon name='X' size='sm' decorative /></Button>
                   </div>
                 )}
               </div>
               {block.name === 'Summary' && <p className={ styles.summary }><strong>{formatMoney(totals.revenue)} in revenue</strong> across three markets. That is {formatMoney(totals.target - totals.revenue)} below the {formatMoney(totals.target)} May target. Germany has the largest shortfall.</p>}
               {block.name === 'Chart' && <RevenueChart />}
               {block.name === 'Table' && <RevenueTable />}
-              {block.name === 'Notes' && <div className={ styles.notes }><label htmlFor={ notesId }>Your sales review notes</label><textarea id={ notesId } rows={ 3 } value={ notes } onChange={ (event) => setNotes(event.target.value) } /><p>Kept when you rearrange, remove or re-add this block.</p></div>}
+              {block.name === 'Notes' && (
+                <Field className={ styles.notes }>
+                  <FieldLabel>Your sales review notes</FieldLabel>
+                  <Textarea rows={ 3 } value={ notes } onChange={ (event) => setNotes(event.target.value) } />
+                  <FieldDescription>Kept when you rearrange, remove or re-add this block.</FieldDescription>
+                </Field>
+              )}
             </section>
           );
         })}

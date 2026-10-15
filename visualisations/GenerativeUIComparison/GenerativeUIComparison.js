@@ -1,7 +1,16 @@
 'use client';
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
+
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaudi/design-system/core/Accordion';
+import Button from '@gaudi/design-system/core/Button';
+import Field, { FieldError, FieldLabel } from '@gaudi/design-system/core/Field';
+import Icon from '@gaudi/design-system/core/Icon';
+import { NativeSelect, NativeSelectOption } from '@gaudi/design-system/core/Select';
+import Textarea from '@gaudi/design-system/core/Textarea';
+import { Toggle, ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
+import { usePrefersReducedMotion } from '@gaudi/design-system/hooks/a11y/use-prefers-reduced-motion';
+import { TableBodyPrimitive, TableCaption, TableCellPrimitive, TableHeadPrimitive, TableHeader, TableRoot, TableRowPrimitive } from '@gaudi/design-system/mdx/Table';
 
 import {
   createResponse,
@@ -72,10 +81,26 @@ const DataBars = ({ rows, metric, comparison = false, showTargets = false, highl
   );
 };
 
-const SortMark = ({ direction }) => (
-  <svg className={ styles.sortMark } viewBox='0 0 12 16' aria-hidden='true' focusable='false' data-direction={ direction }>
-    <path d='M6 2v11M2 9l4 4 4-4' />
-  </svg>
+const SortMark = ({ direction }) => <Icon name={ direction === 'ascending' ? 'ArrowUp' : 'ArrowDown' } size='xs' decorative />;
+
+const Disclosure = ({ id, label, className, children }) => (
+  <Collapsible id={ id } className={ className }>
+    <CollapsibleTrigger asChild>
+      <Button variant='ghost' tone='neutral' size='sm' className={ styles.disclosureTrigger }>
+        <Icon name='ChevronRight' size='sm' decorative />
+        {label}
+      </Button>
+    </CollapsibleTrigger>
+    <CollapsibleContent>{children}</CollapsibleContent>
+  </Collapsible>
+);
+
+const SortHeader = ({ column, label, sort, streaming, onSort }) => (
+  <TableHeadPrimitive scope='col' variant='plain' aria-sort={ sort.key === column ? sort.direction : 'none' }>
+    <Button variant='ghost' tone='neutral' size='xs' className={ styles.sortButton } disabled={ streaming } onClick={ () => onSort(column) }>
+      {label}{sort.key === column && <SortMark direction={ sort.direction } />}
+    </Button>
+  </TableHeadPrimitive>
 );
 
 const DetailTable = ({ rows, metric, selectedId, onInspect, visibleCount = rows.length, streaming = false, animate = false }) => {
@@ -84,43 +109,53 @@ const DetailTable = ({ rows, metric, selectedId, onInspect, visibleCount = rows.
   const changeSort = (key) => setSort({ key, direction: sort.key === key && sort.direction === 'descending' ? 'ascending' : 'descending' });
 
   return (
-    <div className={ styles.tableScroll } role='region' aria-label='Regional data; select a region to inspect the source figures' tabIndex={ 0 }>
-      <table className={ styles.table }>
-        <caption>Regional detail. Sort a column or inspect a region.</caption>
-        <thead>
-          <tr>
-            <th scope='col' aria-sort={ sort.key === 'region' ? sort.direction : 'none' }><button type='button' disabled={ streaming } onClick={ () => changeSort('region') }>Region{sort.key === 'region' && <SortMark direction={ sort.direction } />}</button></th>
-            <th scope='col' aria-sort={ sort.key === metric ? sort.direction : 'none' }><button type='button' disabled={ streaming } onClick={ () => changeSort(metric) }>{metricLabels[metric]}{sort.key === metric && <SortMark direction={ sort.direction } />}</button></th>
-            {metric === 'revenue' && <th scope='col' aria-sort={ sort.key === 'gap' ? sort.direction : 'none' }><button type='button' disabled={ streaming } onClick={ () => changeSort('gap') }>Gap{sort.key === 'gap' && <SortMark direction={ sort.direction } />}</button></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {visible.slice(0, visibleCount).map((row) => (
-            <tr key={ row.id } className={ animate ? styles.streamItem : undefined } data-selected={ selectedId === row.id }>
-              <th scope='row'><button type='button' className={ styles.inspect } disabled={ streaming } aria-expanded={ selectedId === row.id } onClick={ () => onInspect(selectedId === row.id ? null : row.id) }>{row.region}</button></th>
-              <td>{formatMetric(row[metric], metric)}</td>
-              {metric === 'revenue' && <td data-negative={ row.gap < 0 }>{formatGap(row.gap)}</td>}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <TableRoot density='compact' className={ styles.table } containerProps={{ 'aria-label': 'Regional data; select a region to inspect the source figures', 'className': styles.tableScroll }}>
+      <TableCaption>Regional detail. Sort a column or inspect a region.</TableCaption>
+      <TableHeader>
+        <TableRowPrimitive>
+          <SortHeader column='region' label='Region' sort={ sort } streaming={ streaming } onSort={ changeSort } />
+          <SortHeader column={ metric } label={ metricLabels[metric] } sort={ sort } streaming={ streaming } onSort={ changeSort } />
+          {metric === 'revenue' && <SortHeader column='gap' label='Gap' sort={ sort } streaming={ streaming } onSort={ changeSort } />}
+        </TableRowPrimitive>
+      </TableHeader>
+      <TableBodyPrimitive>
+        {visible.slice(0, visibleCount).map((row) => (
+          <TableRowPrimitive key={ row.id } className={ animate ? styles.streamItem : undefined } data-selected={ selectedId === row.id }>
+            <TableCellPrimitive as='th' scope='row'><Button variant='subtle' size='sm' className={ styles.textButton } disabled={ streaming } aria-expanded={ selectedId === row.id } onClick={ () => onInspect(selectedId === row.id ? null : row.id) }>{row.region}</Button></TableCellPrimitive>
+            <TableCellPrimitive>{formatMetric(row[metric], metric)}</TableCellPrimitive>
+            {metric === 'revenue' && <TableCellPrimitive data-negative={ row.gap < 0 }>{formatGap(row.gap)}</TableCellPrimitive>}
+          </TableRowPrimitive>
+        ))}
+      </TableBodyPrimitive>
+    </TableRoot>
   );
 };
 
 const MonthTable = ({ rows, metric, region, visibleCount, animate }) => (
-  <div className={ styles.tableScroll } role='region' aria-label='April and May comparison figures' tabIndex={ 0 }>
-    <table className={ styles.table }>
-      <caption>Both months / {region}. Same metric and region as the chart.</caption>
-      <thead><tr><th scope='col'>Month</th><th scope='col'>{metricLabels[metric]}</th>{metric === 'revenue' && <th scope='col'>Gap to target</th>}</tr></thead>
-      <tbody>{rows.slice(0, visibleCount).map((row) => <tr key={ row.month } className={ animate ? styles.streamItem : undefined }><th scope='row'>{row.month}</th><td>{formatMetric(row[metric], metric)}</td>{metric === 'revenue' && <td data-negative={ row.gap < 0 }>{formatGap(row.gap)}</td>}</tr>)}</tbody>
-    </table>
-  </div>
+  <TableRoot density='compact' className={ styles.table } containerProps={{ 'aria-label': 'April and May comparison figures', 'className': styles.tableScroll }}>
+    <TableCaption>Both months / {region}. Same metric and region as the chart.</TableCaption>
+    <TableHeader>
+      <TableRowPrimitive>
+        <TableHeadPrimitive scope='col' variant='plain'>Month</TableHeadPrimitive>
+        <TableHeadPrimitive scope='col' variant='plain'>{metricLabels[metric]}</TableHeadPrimitive>
+        {metric === 'revenue' && <TableHeadPrimitive scope='col' variant='plain'>Gap to target</TableHeadPrimitive>}
+      </TableRowPrimitive>
+    </TableHeader>
+    <TableBodyPrimitive>
+      {rows.slice(0, visibleCount).map((row) => (
+        <TableRowPrimitive key={ row.month } className={ animate ? styles.streamItem : undefined }>
+          <TableCellPrimitive as='th' scope='row'>{row.month}</TableCellPrimitive>
+          <TableCellPrimitive>{formatMetric(row[metric], metric)}</TableCellPrimitive>
+          {metric === 'revenue' && <TableCellPrimitive data-negative={ row.gap < 0 }>{formatGap(row.gap)}</TableCellPrimitive>}
+        </TableRowPrimitive>
+      ))}
+    </TableBodyPrimitive>
+  </TableRoot>
 );
 
 const RecordDetail = ({ row, onClose }) => (
   <section className={ styles.recordDetail } aria-label={ `${row.region} source figures` }>
-    <div className={ styles.detailTitle }><strong>{row.region} / {row.month} 2026</strong><button type='button' className={ styles.textButton } onClick={ onClose }>Close</button></div>
+    <div className={ styles.detailTitle }><strong>{row.region} / {row.month} 2026</strong><Button variant='subtle' size='sm' className={ styles.textButton } onClick={ onClose }>Close</Button></div>
     <dl className={ styles.facts }>
       <div><dt>Revenue</dt><dd>{formatMetric(row.revenue)}</dd></div>
       <div><dt>Revenue target</dt><dd>{formatMetric(row.target)}</dd></div>
@@ -163,8 +198,20 @@ const RichResponse = ({ workspace, onScopeChange, onInspect, onToggleReview, ins
         {visibleItems < 1 && <p className={ styles.streamPending }>Preparing the view…</p>}
         {visibleItems >= 1 && <div className={ itemClass }>
           <div className={ styles.filters }>
-            {!isComparison && <label htmlFor={ `${instanceId}-month` }>Month<select id={ `${instanceId}-month` } disabled={ streaming } value={ month } onChange={ (event) => onScopeChange({ month: event.target.value }) }>{months.map((item) => <option key={ item }>{item}</option>)}</select></label>}
-            <label htmlFor={ `${instanceId}-region` }>Region<select id={ `${instanceId}-region` } disabled={ streaming } value={ region } onChange={ (event) => onScopeChange({ region: event.target.value }) }>{[ 'All regions', ...regions ].map((item) => <option key={ item }>{item}</option>)}</select></label>
+            {!isComparison && (
+              <Field className={ styles.filter }>
+                <FieldLabel htmlFor={ `${instanceId}-month` }>Month</FieldLabel>
+                <NativeSelect id={ `${instanceId}-month` } className={ styles.select } disabled={ streaming } value={ month } onChange={ (event) => onScopeChange({ month: event.target.value }) }>
+                  {months.map((item) => <NativeSelectOption key={ item }>{item}</NativeSelectOption>)}
+                </NativeSelect>
+              </Field>
+            )}
+            <Field className={ styles.filter }>
+              <FieldLabel htmlFor={ `${instanceId}-region` }>Region</FieldLabel>
+              <NativeSelect id={ `${instanceId}-region` } className={ styles.select } disabled={ streaming } value={ region } onChange={ (event) => onScopeChange({ region: event.target.value }) }>
+                {[ 'All regions', ...regions ].map((item) => <NativeSelectOption key={ item }>{item}</NativeSelectOption>)}
+              </NativeSelect>
+            </Field>
           </div>
           <p className={ styles.localScope }>{streaming ? 'Controls become available as soon as the response is complete.' : changedLocally ? 'You changed this view. The chat answer keeps the original question’s scope.' : `Try choosing ${region === 'Germany' ? 'All regions' : 'Germany'}: the view updates without another message.`}</p>
         </div>}
@@ -187,8 +234,8 @@ const RichResponse = ({ workspace, onScopeChange, onInspect, onToggleReview, ins
                 <div className={ styles.exceptionHeading }><strong>{row.region}</strong><span>{formatMetric(-row.gap)} below target</span></div>
                 <p>{formatMetric(row.revenue)} of {formatMetric(row.target)}. Shortfall: {Math.abs(row.gapPercent).toFixed(1)}%.</p>
                 <div className={ styles.exceptionActions }>
-                  <button type='button' className={ styles.textButton } disabled={ streaming } aria-expanded={ selectedId === row.id } onClick={ () => onInspect(selectedId === row.id ? null : row.id) }>Inspect figures</button>
-                  <button type='button' className={ styles.agendaButton } disabled={ streaming } aria-pressed={ agenda.some((item) => item.id === row.id) } onClick={ () => toggleAgenda(row) }>{agenda.some((item) => item.id === row.id) ? 'Remove from review' : 'Add to review'}</button>
+                  <Button variant='subtle' size='sm' className={ styles.textButton } disabled={ streaming } aria-expanded={ selectedId === row.id } onClick={ () => onInspect(selectedId === row.id ? null : row.id) }>Inspect figures</Button>
+                  <Toggle variant='outline' size='sm' disabled={ streaming } pressed={ agenda.some((item) => item.id === row.id) } onPressedChange={ () => toggleAgenda(row) }>{agenda.some((item) => item.id === row.id) ? 'Remove from review' : 'Add to review'}</Toggle>
                 </div>
               </div>
             )) : <p className={ `${styles.empty} ${itemClass || ''}` }>No regions are below revenue target in this scope. Choose another month or region to explore.</p>}
@@ -196,11 +243,11 @@ const RichResponse = ({ workspace, onScopeChange, onInspect, onToggleReview, ins
           </div>
         )}
 
-        {query.view === 'summary' && contentItems > 0 && <div className={ `${styles.summary} ${itemClass || ''}` }><p>{getTextAnswer(response).conclusion}</p>{contentItems >= 2 && <details><summary>Inspect regional figures</summary><DetailTable rows={ response.rows } metric={ query.metric } selectedId={ selectedId } onInspect={ onInspect } streaming={ streaming } /></details>}</div>}
+        {query.view === 'summary' && contentItems > 0 && <div className={ `${styles.summary} ${itemClass || ''}` }><p>{getTextAnswer(response).conclusion}</p>{contentItems >= 2 && <Disclosure label='Inspect regional figures'><DetailTable rows={ response.rows } metric={ query.metric } selectedId={ selectedId } onInspect={ onInspect } streaming={ streaming } /></Disclosure>}</div>}
         {isComparison && tableItems > 0 && <MonthTable rows={ response.monthly } region={ region } metric={ query.metric } visibleCount={ tableItems } animate={ animate } />}
         {[ 'overview', 'table' ].includes(query.view) && tableItems > 0 && <DetailTable rows={ response.rows } metric={ query.metric } selectedId={ selectedId } onInspect={ onInspect } visibleCount={ tableItems } streaming={ streaming } animate={ animate } />}
         {selectedRow && <RecordDetail row={ selectedRow } onClose={ () => onInspect(null) } />}
-        {agenda.length > 0 && <section className={ styles.agenda } aria-label='Saved review agenda'><strong>Saved for review</strong><p className={ styles.small }>Revenue exceptions you kept. These stay when you change the view or ask another question.</p><ul>{agenda.map((row) => <li key={ row.id }><span>{row.region} / {row.month} 2026 · {formatMetric(-row.gap)} below target</span><button type='button' className={ styles.textButton } aria-label={ `Remove ${row.region}, ${row.month} from the review agenda` } onClick={ () => toggleAgenda(row) }>Remove</button></li>)}</ul></section>}
+        {agenda.length > 0 && <section className={ styles.agenda } aria-label='Saved review agenda'><strong>Saved for review</strong><p className={ styles.small }>Revenue exceptions you kept. These stay when you change the view or ask another question.</p><ul>{agenda.map((row) => <li key={ row.id }><span>{row.region} / {row.month} 2026 · {formatMetric(-row.gap)} below target</span><Button variant='subtle' size='sm' className={ styles.textButton } aria-label={ `Remove ${row.region}, ${row.month} from the review agenda` } onClick={ () => toggleAgenda(row) }>Remove</Button></li>)}</ul></section>}
         <p className={ styles.actionMessage } role='status'>{actionMessage}</p>
         {!streaming && <p className={ styles.richFooter }>Your next question keeps these filters unless you name a different month or region. Saved review items stay until you remove them or reset the demo; reloading clears them.</p>}
       </div>
@@ -212,7 +259,7 @@ const ResponsePair = ({ workspace, onScopeChange, onInspect, onToggleReview, ins
   const { query } = workspace;
   const response = useMemo(() => createResponse(query), [ query ]);
   const answer = useMemo(() => getTextAnswer(response), [ response ]);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   const timer = useRef(null);
   const statusRef = useRef(null);
   const [ elapsed, setElapsed ] = useState(animate ? 0 : Infinity);
@@ -243,7 +290,7 @@ const ResponsePair = ({ workspace, onScopeChange, onInspect, onToggleReview, ins
     <>
       <div className={ styles.streamActions }>
         <p ref={ statusRef } tabIndex={ -1 } role='status'>{streaming ? 'Responding to your question…' : 'Both responses are ready.'}</p>
-        {streaming && <button type='button' className={ styles.textButton } onClick={ finish }>Show full responses</button>}
+        {streaming && <Button variant='subtle' size='sm' className={ styles.textButton } onClick={ finish }>Show full responses</Button>}
       </div>
       <div className={ styles.comparison } data-streaming={ streaming }>
         <TextResponse answer={ answer } wordCount={ progress.words } streaming={ streaming } />
@@ -302,20 +349,58 @@ const GenerativeUIComparison = ({
       <p className={ styles.disclosure }>Simulated streaming using six fictional sales records. Text and UI use the same calculations; no live model is connected.</p>
 
       <form className={ styles.promptForm } onSubmit={ compare }>
-        <label htmlFor={ `${instanceId}-prompt` }>What would you like to see?</label>
-        <textarea id={ `${instanceId}-prompt` } rows={ 2 } maxLength={ 500 } value={ draft } aria-invalid={ error ? 'true' : undefined } aria-describedby={ `${instanceId}-help${error ? ` ${instanceId}-error` : ''}` } onChange={ (event) => { setDraft(event.target.value); setError(''); } } />
-        <div className={ styles.presets } role='group' aria-label='Example questions; selecting one fills the prompt field'>
-          {presets.map((preset) => <button type='button' key={ preset.label } aria-pressed={ draft === preset.prompt } onClick={ () => { setDraft(preset.prompt); setError(''); setAnnouncement('Example loaded. Choose Compare responses to apply it.'); } }>{preset.label}</button>)}
-        </div>
-        <div className={ styles.submitRow }><button type='submit' className={ styles.compareButton }>Compare responses</button><span>{draftChanged ? 'Draft ready. Submit to update both sides.' : 'Both sides use the submitted question.'}</span></div>
-        {error && <p id={ `${instanceId}-error` } className={ styles.error } role='alert'>{error} The current responses are unchanged.</p>}
-        <details className={ styles.help } id={ `${instanceId}-help` }><summary>Supported questions and sample data</summary><p>Ask about one metric: revenue, orders, or conversion. Use UK, Germany, France, or all regions; April or May 2026. Ask for a chart, table, summary, month comparison, or revenue exceptions. Your first view uses all regions in May. Later questions keep the current filters unless you name a different month or region. The submitted scope below shows what both responses use. This demo matches those words to predefined views.</p><p>Examples: “Show orders by region in April”, “Give me a revenue table for France”, “Summarize conversion in May”. Revenue targets apply only to revenue; conversion is orders / visits. All amounts use GBP.</p><div className={ styles.tableScroll } role='region' aria-label='Six fictional source records' tabIndex={ 0 }><table className={ styles.table }><caption>Shared source data / 2026</caption><thead><tr><th scope='col'>Region</th><th scope='col'>Month</th><th scope='col'>Revenue</th><th scope='col'>Target</th><th scope='col'>Orders</th><th scope='col'>Visits</th></tr></thead><tbody>{salesRecords.map((row) => <tr key={ row.id }><th scope='row'>{row.region}</th><td>{row.month}</td><td>{formatMetric(row.revenue)}</td><td>{formatMetric(row.target)}</td><td>{formatMetric(row.orders, 'orders')}</td><td>{formatMetric(row.visits, 'orders')}</td></tr>)}</tbody></table></div></details>
+        <Field>
+          <FieldLabel htmlFor={ `${instanceId}-prompt` }>What would you like to see?</FieldLabel>
+          <Textarea id={ `${instanceId}-prompt` } className={ styles.prompt } rows={ 2 } maxLength={ 500 } value={ draft } aria-describedby={ `${instanceId}-help` } onChange={ (event) => { setDraft(event.target.value); setError(''); } } />
+          <FieldError id={ `${instanceId}-error` } className={ styles.error }>{error && `${error} The current responses are unchanged.`}</FieldError>
+        </Field>
+        <ToggleGroupRoot
+          type='single'
+          variant='outline'
+          size='sm'
+          spacing={ 1.5 }
+          className={ styles.presets }
+          aria-label='Example questions; selecting one fills the prompt field'
+          value={ presets.find((preset) => preset.prompt === draft)?.label || '' }
+          onValueChange={ (value) => {
+            const preset = value && presets.find((item) => item.label === value);
+            if (!preset) return;
+            setDraft(preset.prompt);
+            setError('');
+            setAnnouncement('Example loaded. Choose Compare responses to apply it.');
+          } }
+        >
+          {presets.map((preset) => <ToggleGroupItem key={ preset.label } value={ preset.label }>{preset.label}</ToggleGroupItem>)}
+        </ToggleGroupRoot>
+        <div className={ styles.submitRow }><Button type='submit'>Compare responses</Button><span>{draftChanged ? 'Draft ready. Submit to update both sides.' : 'Both sides use the submitted question.'}</span></div>
+        <Disclosure id={ `${instanceId}-help` } className={ styles.help } label='Supported questions and sample data'>
+          <p>Ask about one metric: revenue, orders, or conversion. Use UK, Germany, France, or all regions; April or May 2026. Ask for a chart, table, summary, month comparison, or revenue exceptions. Your first view uses all regions in May. Later questions keep the current filters unless you name a different month or region. The submitted scope below shows what both responses use. This demo matches those words to predefined views.</p>
+          <p>Examples: “Show orders by region in April”, “Give me a revenue table for France”, “Summarize conversion in May”. Revenue targets apply only to revenue; conversion is orders / visits. All amounts use GBP.</p>
+          <TableRoot density='compact' className={ styles.table } containerProps={{ 'aria-label': 'Six fictional source records', 'className': styles.tableScroll }}>
+            <TableCaption>Shared source data / 2026</TableCaption>
+            <TableHeader>
+              <TableRowPrimitive>{[ 'Region', 'Month', 'Revenue', 'Target', 'Orders', 'Visits' ].map((heading) => <TableHeadPrimitive scope='col' variant='plain' key={ heading }>{heading}</TableHeadPrimitive>)}</TableRowPrimitive>
+            </TableHeader>
+            <TableBodyPrimitive>
+              {salesRecords.map((row) => (
+                <TableRowPrimitive key={ row.id }>
+                  <TableCellPrimitive as='th' scope='row'>{row.region}</TableCellPrimitive>
+                  <TableCellPrimitive>{row.month}</TableCellPrimitive>
+                  <TableCellPrimitive>{formatMetric(row.revenue)}</TableCellPrimitive>
+                  <TableCellPrimitive>{formatMetric(row.target)}</TableCellPrimitive>
+                  <TableCellPrimitive>{formatMetric(row.orders, 'orders')}</TableCellPrimitive>
+                  <TableCellPrimitive>{formatMetric(row.visits, 'orders')}</TableCellPrimitive>
+                </TableRowPrimitive>
+              ))}
+            </TableBodyPrimitive>
+          </TableRoot>
+        </Disclosure>
       </form>
 
       <p className={ styles.announcement } role='status'>{announcement}</p>
       <div className={ styles.submitted }><span>Submitted question</span><q>{query.prompt}</q><p>{describeScope(query)}</p></div>
       <ResponsePair key={ submission } workspace={ workspace } onScopeChange={ (change) => setWorkspace((current) => updateScope(current, change)) } onInspect={ (selectedId) => setWorkspace((current) => ({ ...current, selectedId })) } onToggleReview={ (row) => setWorkspace((current) => toggleReview(current, row)) } instanceId={ instanceId } animate={ animateResponses } />
-      <div className={ styles.footer }><span>Same prompt and source figures. Different response formats.</span><button type='button' className={ styles.textButton } onClick={ reset }>Reset comparison</button></div>
+      <div className={ styles.footer }><span>Same prompt and source figures. Different response formats.</span><Button variant='subtle' size='sm' className={ styles.textButton } onClick={ reset }>Reset comparison</Button></div>
     </figure>
   );
 };
