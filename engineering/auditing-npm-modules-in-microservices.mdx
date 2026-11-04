@@ -40,11 +40,11 @@ The reporting function, at its core, does the following:
 
 generate_npm_report() {
     if command_exists npm-check ; then
-        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for '{}'' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for '{}'\n' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
     else
-        printf 'npm-check module was not found. Installing now:';
+        printf 'npm-check module was not found. Installing now:\n';
         npm install -g npm-check
-        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for '{}'' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Examining NPM modules for '{}'\n' && echo '{}' >> ../npm-report.txt && npm-check >> ../npm-report.txt" \;
     fi
 }
 ```
@@ -55,7 +55,7 @@ The script also checks first if the `npm-check` command exists or if we need to 
 To go step by step inside the main function:
 
 - `find . -maxdepth 1 -type d \( ! -name . \)`: Will find all the directories within one level down of the current folder
-- `printf 'Examining NPM modules for '{}''` will just print out a message indicating which folder we are currently examining
+- `printf 'Examining NPM modules for '{}'\n'` will just print out a message indicating which folder we are currently examining
 - `echo '{}' >> ../npm-report.txt` will print out the folder name examined in the output file `npm-report.txt`
 - `npm-check >> ../npm-report.txt` This will execute the `npm-check` command and pipe out the result into the output file
 
@@ -67,7 +67,7 @@ After knowing the various modules used, I cleaned my file, pasted the results in
 
 The previous function gives us an idea of the modules and frequency used. However, we might have a bunch of unused modules that were left over from old code and will just increase the size of our containers with no actual use.
 
-We can easily clean out those modules by taking advantage of the [npm-clean](https://github.com/afc163/npm-clean) and plug that in a similar wrapper as the function above, reusing the same `command_exists` helper:
+We can easily clean out those modules by taking advantage of the [npm-clean](https://github.com/afc163/npm-clean) and plug that into a similar wrapper as the function above, reusing the same `command_exists` helper:
 
 ```bash
 # Clean unused NPM modules from each repository
@@ -76,11 +76,11 @@ We can easily clean out those modules by taking advantage of the [npm-clean](htt
 clean_npm_modules() {
 
     if command_exists npm-clean ; then
-        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Cleaning NPM modules for '{}'' && echo '{}' >> ../npm-clean-report.txt && npm-clean >> ../npm-clean-report.txt" \;
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Cleaning NPM modules for '{}'\n' && echo '{}' >> ../npm-clean-report.txt && npm-clean >> ../npm-clean-report.txt" \;
     else
-        printf 'npm-clean module was not found. Installing now:';
+        printf 'npm-clean module was not found. Installing now:\n';
         npm install -g npm-clean
-        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Cleaning NPM modules for '{}'' && echo '{}' >> ../npm-clean-report.txt && npm-clean >> ../npm-clean-report.txt" \;
+        find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && printf 'Cleaning NPM modules for '{}'\n' && echo '{}' >> ../npm-clean-report.txt && npm-clean >> ../npm-clean-report.txt" \;
     fi
 }
 ```

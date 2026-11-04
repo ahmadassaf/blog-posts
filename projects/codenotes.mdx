@@ -7,15 +7,13 @@ subtitle: 'Tool to summarise all code annotation like TODO or FIXME'
 layout: 'ProjectLayout'
 github: 'ahmadassaf/code-notes'
 featured: false
-date: '2018-08-07'
+date: '2017-02-22'
 category: 'projects'
 ---
 
-## code-notes
+code-notes is a node.js version of Rails' "rake notes" functionality. It scans your source for annotation comments (NOTE, OPTIMIZE, TODO, HACK, XXX, FIXME, BUG) and summarises them across your whole project, so the promises buried in your codebase actually surface somewhere.
 
 > **Status**: Actively maintained. The [repo](https://github.com/ahmadassaf/code-notes) has around 190 stars and was last pushed in August 2026.
-
-code-notes is a node.js version of Rails' "rake notes" functionality. It scans your source for annotation comments (NOTE, OPTIMIZE, TODO, HACK, XXX, FIXME, BUG) and summarises them across your whole project, so the promises buried in your codebase actually surface somewhere.
 
 ## Why a fork
 
@@ -55,7 +53,7 @@ Two things to keep in mind: directory exclusions need a trailing slash (`node_mo
 
 Given comments like these somewhere in a file:
 
-```
+```javascript
 // NOTE: This is the sample output for a note!
 // TODO: This is the sample output for a todo!
 // FIXME (Mr Author): This is the sample output for a fixme! Seriously fix this...
@@ -63,11 +61,11 @@ Given comments like these somewhere in a file:
 
 you get an annotated summary per file:
 
-```
+```text
 - path/to/your/directory/file.js [3 messages]:
-  [Line   1]  ✐ NOTE: This is here because sometimes an intermittent issue appears.
-  [Line   9]  ✓ TODO: Add a check here to ensure these are always strings.
-  [Line 136]  ☠ FIXME from Mr Author: We sometimes get an undefined index in this array.
+  [Line   1]  ✐ NOTE: This is the sample output for a note!
+  [Line   2]  ✓ TODO: This is the sample output for a todo!
+  [Line   3]  ☠ FIXME from Mr Author: This is the sample output for a fixme! Seriously fix this...
 ```
 
 Authors in parentheses, as in `// NOTE(Mr Author): ...`, are picked up and displayed with the message.

@@ -68,6 +68,8 @@ export function remarkLinks() {
 Internal links get their own pass ([lib/rehype-internal-links.js](https://github.com/ahmadassaf/blog/blob/main/lib/rehype-internal-links.js)). It matches anchors whose `href` fits the blog's URL shape, extracts the link text (which becomes the inline title), and replaces the `<a>` with a `<Preview internal>` element:
 
 ```js caption="lib/rehype-internal-links.js (trimmed)"
+// Only the match matters; the named groups are never read (with this blog's
+// /blog/category/<category>/<slug> URLs the first group holds the literal "category")
 const INTERNAL_BLOG_PATTERN = /^\/blog\/(?<category>[^/]+)\/(?<slug>.+)$/;
 
 function rehypeInternalLinks() {
@@ -105,12 +107,12 @@ The component cannot fetch arbitrary pages from the browser (CORS, and I would r
 
 ## Step 4: The Preview component
 
-The client side lives in my design system: [Preview.js](https://github.com/ahmadassaf/design-system/blob/main/src/components/mdx/Preview/Preview.js) with its data layer in [usePreviewData.js](https://github.com/ahmadassaf/design-system/blob/main/src/components/mdx/Preview/usePreviewData.js). The hook does the unglamorous work: an LRU cache with TTLs (again shorter for errors), deduplication of concurrent requests for the same URL, abort-on-unmount, and a stale-response guard so a slow fetch for a previous URL can never overwrite the current one. npm package links are synthesized entirely locally because npmjs.com blocks metadata fetches.
+The client side lives in my design system: [LinkPreview.jsx](https://github.com/g-udi/design-system/blob/main/src/components/core/LinkPreview/LinkPreview.jsx) with its data layer in [usePreviewData.js](https://github.com/g-udi/design-system/blob/main/src/components/core/LinkPreview/usePreviewData.js). The hook does the unglamorous work: an LRU cache with TTLs (again shorter for errors), deduplication of concurrent requests for the same URL, abort-on-unmount, and a stale-response guard so a slow fetch for a previous URL can never overwrite the current one. npm package links are synthesized entirely locally because npmjs.com blocks metadata fetches.
 
 The component then renders one of a few states:
 
 - **Loading**: a small skeleton (a pulsing favicon square and title bar) holds the link's place inline
-- **Error**: the link still works, it just degrades. If the API confirmed the target is gone (400, 404, or 410), the link renders in red with a slashed-link icon; transient failures render as a plain neutral link
+- **Error**: the link still works, it just degrades. If the API reported the target as unavailable (a 400 because the site rejected the request, or a 404 or 410 because the page is gone), the link renders in red with a slashed-link icon; transient failures render as a plain neutral link
 - **Success (inline)**: the page's favicon (with an icon fallback if it fails to load) followed by the cleaned-up title. Titles get de-noised: `GitHub - owner/repo: description` becomes `owner/repo`, suffixes like `- Wikipedia` or `- Stack Overflow` are stripped, and everything is capped at 60 characters
 - **Hover card**: a [Radix UI hover card](https://www.radix-ui.com/primitives/docs/components/hover-card) (with a subtle framer-motion entrance that respects `prefers-reduced-motion`). External links show the preview image or Wikipedia excerpt plus description and site name; internal links show a richer post card with category, summary, published date, reading time, and tags
 

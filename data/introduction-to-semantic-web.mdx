@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Introduction to Semantic Web'
 tags: ['Semantic Web', 'Linked Data', 'Knowledge Representation', 'Structured Data', 'Knowledge Graphs']
-summary: 'In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application'
+summary: 'In the same way that Web 1.0 abstracted away the network and physical layers, the Semantic Web abstracts away the document and application layers involved in the exchange of information. The Semantic Web connects facts, so that rather than linking to a specific document or application, you can refer to a specific piece of information inside it.'
 subtitle: 'A gentle introduction to the new paradigm in the Web'
 featured: false
 date: '2023-04-21'
@@ -32,7 +32,7 @@ So now imagine a new Web where the actual content can be manipulated by computer
 
 The semantic Web not only represents structured data and links but also the meaning of the underlying concepts and relationships. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. <Highlight>But standards facilitate building applications, especially in a decentralized system.</Highlight>
 
-The Semantic Web addresses the discoverability challenges through the adoption of distinct identifiers for concepts and their relationships. These identifiers, referred to as Universal Resource Identifiers (URIs), resemble web page URLs but are not restricted to identifying web documents. Instead, their primary purpose is to provide unique identification for objects and concepts, as well as their interconnections.
+The Semantic Web addresses the discoverability challenges through the adoption of distinct identifiers for concepts and their relationships. These identifiers, referred to as Uniform Resource Identifiers (URIs), resemble web page URLs but are not restricted to identifying web documents. Instead, their primary purpose is to provide unique identification for objects and concepts, as well as their interconnections.
 
 Utilizing URIs significantly reduces the ambiguity in information. However, the Semantic Web takes it a step further by enabling concepts to be linked with hierarchical classifications. This enables the inference of new information based on an individual concept's classification and its relationships with other concepts. Achieving this involves the utilization of ontologies, which are structured hierarchies of concepts used to categorize individual concepts.
 
@@ -42,7 +42,7 @@ Utilizing URIs significantly reduces the ambiguity in information. However, the 
 - **Query Language**: [SPARQL](/blog/category/data/sparql-a-comprehensive-guide): The query language of the Semantic Web. It is specifically designed to query data across various systems.
 - **Schema and Ontology Languages**: [Web Ontology Language (OWL)](http://en.wikipedia.org/wiki/Web_Ontology_Language 'Web Ontology Language') and [RDF Schema (RDFS)](https://en.wikipedia.org/wiki/RDF_Schema): The schema language, or knowledge representation (KR) language, of the Semantic Web. They enable you to define concepts in a composable way so that these concepts can be reused as much and as often as possible. Composability means that each concept is carefully defined to be selected and assembled in various combinations with other concepts as needed for many different applications and purposes.
 
-Semantic technologies represent a fairly diverse family of technologies that have existed for a long time and seek to help derive meaning from information. Some examples of semantic technologies include natural language processing (NLP), data mining, [Artificial Intelligence (AI)](http://en.wikipedia.org/wiki/Artificial_intelligence 'Artificial intelligence'), category tagging, and semantic search. The goal of semantic technologies is separating signal from noise. **Some examples of existing semantic technologies being used today include:**
+Semantic technologies represent a fairly diverse family of technologies that have existed for a long time and seek to help derive meaning from information. The goal of semantic technologies is separating signal from noise. **Some examples of existing semantic technologies being used today include:**
 
 - **Natural-language processing (NLP)**:  NLP technologies attempt to process unstructured text content and extract the names, dates, organizations, events, etc., discussed within the text. There are many extensions of NLP, and they include:
 
@@ -50,7 +50,7 @@ Semantic technologies represent a fairly diverse family of technologies that hav
   - **Auto-categorization**: Imagine you have 100,000 news articles and want to sort them based on specific criteria. That would take humans ages, but a computer can do it quickly.
   - **[Sentiment Analysis](http://en.wikipedia.org/wiki/Sentiment_analysis 'Sentiment analysis')**: Sentiment Analysis measures the "sentiment" of an article, typically meaning whether the article's tone is positive, negative, or neutral. This application of NLP technology is often used in conjunction with search, but it can also be used in other contexts, such as alerting. For example, a business owner might ask an application to "alert me when someone says something negative regarding my company on Facebook."
   - **Summarization**: Often used in conjunction with research applications, summaries of topics are created automatically so that people do not have to wade through many long-winded articles (perhaps such as this one!).
-  - **Question Answering**: This is the new hot topic in NLP, as evidenced by Siri and Watson. However, long before these tools, we had Ask Jeeves (now Ask.com) and later Wolfram Alpha, which specialized in question-answering. The idea here is to ask a computer a question and have it answer you (Star Trek-style! "Computer…").
+  - **Question Answering**: At the time, this was the hot topic in NLP, as evidenced by Siri and Watson. However, long before these tools, we had Ask Jeeves (now Ask.com) and later Wolfram Alpha, which specialized in question-answering. The idea here is to ask a computer a question and have it answer you (Star Trek-style! "Computer…").
 
 - **Data mining**: Data mining technologies employ pattern-matching algorithms to tease trends and correlations within large data sets. Data mining can be used, for example, to identify suspicious and potentially fraudulent trading behavior in large databases of financial transactions.
 - **Artificial intelligence or expert systems**: AI or expert systems technologies automatically use elaborate reasoning models to answer complex questions. These systems often include machine-learning algorithms that can improve the system's decision-making capabilities over time.
@@ -85,7 +85,7 @@ To make these rules concrete, imagine two tables living in two separate database
 3. Have our web server reply with some structured data when invoked. This is the Semantic Web "juicy" part. Model your data with RDF. Here is where you must shift from a relational data model to a graph one.
 4. Once all the rows of our tables have been uniquely identified, made dereferenceable through HTTP, and described with RDF, the last step is providing links between different rows across different tables. This is the step where the implicit links become explicit: it is what makes the data Linked Data.
 
-Because of their linking, these datasets form a giant web of data or a knowledge graph, which connects a vast amount of descriptions of entities and concepts of general importance. This interconnectedness allows for the discovery of new relationships and insights that would be difficult to uncover otherwise.
+Because of their linking, datasets published this way form a giant web of data or a knowledge graph, which connects a vast amount of descriptions of entities and concepts of general importance. This interconnectedness allows for the discovery of new relationships and insights that would be difficult to uncover otherwise.
 
 ## From a Web of Keywords to a Web of Things
 
@@ -114,8 +114,9 @@ To publish information in a way that search engines can understand the entities 
 - **[Schema.org](https://schema.org/)**: A standard vocabulary of entities defined by major search engines like Google.
 - **[Microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata)**: Embedding structured data within HTML markup.
 - **[JSON-LD](https://json-ld.org/)**: A syntax for embedding structured data, typically in the page header.
-- **[RDFa](https://www.w3.org/TR/rdfa-primer/)**: A version of RDF designed for embedding in HTML.
-- **Knowledge Graph**: A large structured index of entities on the web, such as the Google Knowledge Graph.
+- **[RDFa](https://www.w3.org/TR/rdfa-primer/)**: A syntax for embedding RDF in HTML.
+
+The entities published with these standards are what feed a **Knowledge Graph**, a large structured index of entities on the web such as the Google Knowledge Graph; it is a product of the standards above rather than a standard itself.
 
 
 ## Knowledge Graphs: The Next Frontier of the Semantic Web

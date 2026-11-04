@@ -2,8 +2,8 @@
 type: 'Post'
 title: 'Power-up a hero blog with Jekyll'
 tags: ['Jekyll', 'Static Site Generation', 'Blogging', 'Markdown']
-summary: "Having had my blog on WordPress for a while now, I thought I need a lighter platform especially since my blog content is very lightweight and I don't need a fully-fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
-subtitle: 'Setting up a modular Jekyll blog with Continuous Integration and Deployment'
+summary: "Having had my blog on WordPress for a while now, I thought I needed a lighter platform especially since my blog content is very lightweight and I don't need a fully-fledged CMS. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility"
+subtitle: 'Setting up a modular Jekyll blog with pagination, archives, search and a Grunt build'
 featured: false
 date: '2016-09-21'
 category: 'engineering'
@@ -11,7 +11,7 @@ category: 'engineering'
 
 *This post is from 2016, when this blog ran on Jekyll. The versions, plugins, and build tooling described here are long out of date, and the blog has since [moved to Next.js](/blog/category/engineering/moving-blog-to-nextjs). I keep it as a record of that setup.*
 
-Having had my blog on WordPress for a while now, I thought I needed a lighter platform, especially since my blog content is very lightweight and I don't need a fledged CRM. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility.
+Having had my blog on WordPress for a while now, I thought I needed a lighter platform, especially since my blog content is very lightweight and I don't need a fully-fledged CMS. Another reason to move away from WordPress was the need to have a collaborative effort and to write posts in Markdown. I have finally decided on Jekyll for its simplicity and extensibility.
 
 Jekyll takes your content written in Markdown, passes it through your templates, and spits it out as a completely static website, ready to be served. Jekyll is a static site generator in contrast to WordPress.
 
@@ -59,7 +59,7 @@ Jekyll comes with a built-in development server. The `jekyll serve` command star
 
 For more detailed instructions about setting up Jekyll sites, I recommend reading:
 
-- [Getting Started with Jekyll ](https://scotch.io/tutorials/getting-started-with-jekyll-plus-a-free-bootstrap-3-starter-theme)
+- [Getting Started with Jekyll](https://www.digitalocean.com/community/tutorials/getting-started-with-jekyll-plus-a-free-bootstrap-3-starter-theme)
 - [Make a Static Website with Jekyll](https://www.taniarascia.com/make-a-static-website-with-jekyll/)
 - [Building a Jekyll Site: Converting a Static Website To Jekyll](https://css-tricks.com/building-a-jekyll-site-part-1-of-3/)
 - [Build A Blog With Jekyll And GitHub Pages](https://www.smashingmagazine.com/2014/08/build-blog-jekyll-github-pages/)
@@ -69,7 +69,7 @@ For more detailed instructions about setting up Jekyll sites, I recommend readin
 
 Jekyll is, at its core, a text transformation engine. The concept behind the system is this: you give it text written in your favorite markup language, be that Markdown, Textile, or just plain HTML, and it churns that through a layout or a series of layout files.
 
-<Aside> You can refer to Jekyll docs [documentation](https://jekyllrb.com/docs/structure/) for more detailed descriptions about the files and folders structure </Aside>
+<Aside> You can refer to the Jekyll [documentation](https://jekyllrb.com/docs/structure/) for more detailed descriptions about the files and folders structure </Aside>
 
 - **\_data**: In addition to the built-in variables in the main config, you can specify your own custom data that can be accessed from here
 - **\_includes**: Snippets of code that can be used throughout your templates
@@ -102,7 +102,7 @@ Jekyll is, at its core, a text transformation engine. The concept behind the sys
 - **sass**: Defines the location of the preprocessing files
 - **google-analytics**: This is the Google Analytics tracking information that will be picked up by the `_includes/scripts.html` to inject the Google Analytics script.
 - **featured**: This is an initialization of an empty array that will be used to save featured articles
-- **disquss.shortname**: This is the Disqus website shortname which is used to inject `_includes/partials/post/comments.html`
+- **disqus.shortname**: This is the Disqus website shortname which is used to inject `_includes/partials/post/comments.html`
 
 ## Posts & Pages
 
@@ -114,7 +114,7 @@ What is notable about a **page** is the ability to define a `permalink` in the f
 
 One of the reasons I moved to a Jekyll, markdown-based blog is to enable people to contribute to my posts. To do so, I host the posts in a [separate GitHub repository](https://github.com/ahmadassaf/blog-posts) and include it as a git submodule by configuring the `.gitmodules` as follows:
 
-```
+```ini
 [submodule "_posts"]
     path = _posts
     url = https://github.com/ahmadassaf/blog-posts.git
@@ -136,21 +136,19 @@ paginate_path: 'posts/page/:num'
 The `paginate_path` is the important property that we need to take care of. It specifies the page that we want to enable pagination on. The plugin does not support pagination on `tag` and `category` pages, so as a workaround I have a new `/posts` route that will contain all the posts and enable pagination on them. To do so, I have created a new directory called `posts` in the root folder with an `index.html` page. This will be picked up by Jekyll and result in a `/posts` page. The page contains normal Liquid templates as follows:
 
 ```html
-{% raw %}
 <div class="archive-container">
   <ul class="archive">
     {% for post in paginator.posts %} {% include partials/post.html %} {% endfor %} {% include
     partials/archive/pagination.html %}
   </ul>
 </div>
-{% endraw %}
 ```
 
 You notice that the pagination is enabled by including the partial `_includes/partials/archive/pagination`.
 
 ## Categories and Tag Pages
 
-In a fashion similar to WordPress I wanted to have pages for my categories and tags, to do so I have used [jekyll-archives](https://github.com/jekyll/jekyll-archives) gem. The plugin is enabled in the `config.yml` by:
+In a fashion similar to WordPress I wanted to have pages for my categories and tags, to do so I have used [jekyll-archives](https://github.com/jekyll/jekyll-archives) gem. The plugin is enabled in the `_config.yml` by:
 
 ```yml
 jekyll-archives:
@@ -167,32 +165,30 @@ jekyll-archives:
 
 This is straightforward as I just specify that I want to enable them on both category and tag pages and specify the layout that will render those pages. The permalink specifies the url of the page, I have set that up to be the name of the category or the tag.
 
-> The layout specified has to be in the `/_includes` directory.
+> The layout specified has to be in the `/_layouts` directory.
 
 Another special page I created is a tags archive page. This is done by creating a page in `/_pages` and a `tags-archive` template. The main code to bring all the blog tags and their posts is:
 
 ```html
-{% raw %}
-  {% capture site_tags %}
-    {% for tag in site.tags %}
-      {{ tag | first }}
-      {% unless forloop.last%},{% endunless %}
-    {% endfor %}{% endcapture %} 
-  {% assign tags = site_tags | split:',' | sort %}
-  {% for item in (0..site.tags.size) %}
-    {% unless forloop.last %}
-      {% capture tag %}{{ tags[item] | strip_newlines }}{% endcapture %}
-      <h2 id="{{ tag }}" class="tag-heading">{{ tag }}</h2>
-      <ul class="archive">
-        {% for post in site.tags[tag] %}
-          {% if post.title != null %}
-            {% include partials/post.html %} 
-          {%endif %}
-        {% endfor %}
-      </ul>
-    {% endunless %}
-  {% endfor %}
-{% endraw %}
+{% capture site_tags %}
+  {% for tag in site.tags %}
+    {{ tag | first }}
+    {% unless forloop.last%},{% endunless %}
+  {% endfor %}{% endcapture %} 
+{% assign tags = site_tags | split:',' | sort %}
+{% for item in (0..site.tags.size) %}
+  {% unless forloop.last %}
+    {% capture tag %}{{ tags[item] | strip_newlines }}{% endcapture %}
+    <h2 id="{{ tag }}" class="tag-heading">{{ tag }}</h2>
+    <ul class="archive">
+      {% for post in site.tags[tag] %}
+        {% if post.title != null %}
+          {% include partials/post.html %} 
+        {%endif %}
+      {% endfor %}
+    </ul>
+  {% endunless %}
+{% endfor %}
 ```
 
 ## Data Files
@@ -217,20 +213,18 @@ There are various features powered by a set of JavaScript plugins and functions.
 I wanted to have a navigation menu that is dynamic and shows automatically all the categories I have configured in the posts front matter. To do that, I use the following:
 
 ```html
-{% raw %}
-  {% capture site_categories %}
-    {% for category in site.categories %}
-      {{ category | first }}
-      {% unless forloop.last %},{% endunless %}
-    {% endfor %}
-  {% endcapture %}
-  {% assign categories = site_categories | split:',' | uniq %}
-  {% for item in (0..categories.size) %}{% unless forloop.last %}
-    {% capture category %}{{ categories[item] | strip_newlines }}{% endcapture %}
-      <li {% if page.title == category or page.category == category %} class="current" {% endif %}><a href="{{ site.url }}/{{ category | downcase | replace:' ', '-'}}">{{ category }}</a></li>
-    {% endunless %}
+{% capture site_categories %}
+  {% for category in site.categories %}
+    {{ category | first }}
+    {% unless forloop.last %},{% endunless %}
   {% endfor %}
-{% endraw %}
+{% endcapture %}
+{% assign categories = site_categories | split:',' | uniq %}
+{% for item in (0..categories.size) %}{% unless forloop.last %}
+  {% capture category %}{{ categories[item] | strip_newlines }}{% endcapture %}
+    <li {% if page.title == category or page.category == category %} class="current" {% endif %}><a href="{{ site.url }}/{{ category | downcase | replace:' ', '-'}}">{{ category }}</a></li>
+  {% endunless %}
+{% endfor %}
 ```
 
 > As you see that I transfer the name of the category to lower case and replace any space with `-` to match the permalink generated by Jekyll.
@@ -240,17 +234,15 @@ I wanted to have a navigation menu that is dynamic and shows automatically all t
 To utilize the image gallery we need to provide a simple markup
 
 ```html
-{% raw %}
-  {% capture images %} /static/images/quora-better-notification.png {% endcapture %}
-  {% include partials/post/gallery.html images=images caption="Quora Better Notifications (QBN) ChromeExtension" cols=1 %}
-{% endraw %}
+{% capture images %} /images/posts/quora-better-notification.png {% endcapture %}
+{% include partials/post/gallery.html images=images caption="Quora Better Notifications (QBN) ChromeExtension" cols=1 %}
 ```
 
 Note that the directory we are referring to is `/images/posts`. This is the directory that we will copy all the posts images to using our grunt build script. Also you can pass multiple images in between the `capture`
 
-There are also few CSS classes to display images side-by-side like:
+There are also a few CSS classes to display images side-by-side like:
 
-```
+```html
 <figure class="half">
     <a href="http://placehold.it/1200x600.JPG"><img src="http://placehold.it/600x300.jpg"></a>
     <a href="http://placehold.it/1200x600.jpeg"><img src="http://placehold.it/600x300.jpg"></a>
@@ -263,34 +255,32 @@ There are also few CSS classes to display images side-by-side like:
 
 ## Code Formatting
 
-I use rouge syntax highlighter that comes with Jekyll. Rouge can be installed if not already via `gem install rouge` then enabled in `configs.yml` with `highlighter: rouge`. I am using a custom theme that is defined in `/assets/_sass/_syntax.scss`. For various themes and presets you can check:
+I use rouge syntax highlighter that comes with Jekyll. Rouge can be installed if not already via `gem install rouge` then enabled in `_config.yml` with `highlighter: rouge`. I am using a custom theme that is defined in `/assets/_sass/_syntax.scss`. For various themes and presets you can check:
 
-- [Obsidian theme for rouge syntax highlighter](http://vgaidarji.github.io/blog/2016/02/27/obsidian-theme-for-rouge-syntax-highlighter/)
+- [Obsidian theme for rouge syntax highlighter](http://vgaidarji.me/blog/2016/02/27/obsidian-theme-for-rouge-syntax-highlighter/)
 - [Pygments styles gallery](https://pygments.org/styles/)
 - [jekyll-pygments-themes](https://github.com/jwarby/jekyll-pygments-themes)
 
-For any of the later, you can simply copy and replace the code in `/assets/_sass/_syntax.scss` and you should be good to go.
+For any of the latter, you can simply copy and replace the code in `/assets/_sass/_syntax.scss` and you should be good to go.
 
 ## Enabling Search
 
 One thing I wanted to add is the ability to perform full text search on the posts. To do so, I first wanted to be able to grab the posts data and have them saved. I managed to do that by creating the `/posts.json`:
 
 ```html
-{% raw %} 
-  [ {% for post in site.posts %} 
-    { "{{ forloop.index }}" : { "id" : "{{ forloop.index }}","title" : "{{ post.title | escape }}", "category" : "{{ post.categories | join: ' ' }}", "content" : "{{post.content | strip_html | strip_newlines | remove: " " | escape | remove: "\"}}", "url" : "{{ site.baseurl }}{{ post.url }}", "date" : "{{ post.date }}" } } {% unless forloop.last %},{%endunless %} 
-  {% endfor %} ] 
-{% endraw %}
+[ {% for post in site.posts %} 
+  { "{{ forloop.index }}" : { "id" : "{{ forloop.index }}","title" : "{{ post.title | escape }}", "category" : "{{ post.categories | join: ' ' }}", "content" : "{{post.content | strip_html | strip_newlines | remove: " " | escape | remove: "\"}}", "url" : "{{ site.baseurl }}{{ post.url }}", "date" : "{{ post.date }}" } } {% unless forloop.last %},{%endunless %} 
+{% endfor %} ] 
 ```
 
-Now by requesting `{{site.url}}/posts.json` I am able to have a JSON file that contains the post id, title, category, url, published data and most importantly the content.
+Now by requesting `{{site.url}}/posts.json` I am able to have a JSON file that contains the post id, title, category, url, published date and most importantly the content.
 Enabling full text search is done with [elasticlunr](https://github.com/weixsong/elasticlunr.js/) by iterating the `posts.json` and building our index
 
 ```javascript
 // This will include the posts.json built in the _site by jekyll
 var posts = require('../../../_site/posts.json')
-// We would like now to fetch the posts JSON data into lunr.js and build the index
-var index = el(function () {
+// We would like now to fetch the posts JSON data into elasticlunr and build the index
+var index = elasticlunr(function () {
   this.addField('title', { boost: 10 })
   this.addField('content', { boost: 5 })
   this.addField('category')
@@ -320,6 +310,7 @@ Now, after doing that to serve the site locally I pass in the `--config` flag wi
 I use [Browserify](http://browserify.org/) in my `main.js` to easily bundle up all of my front-end dependencies. Now, if I am serving my site and want to test my JavaScript changes, it is painful to rebuild the site every time for that. The jekyll watch feature will not run browserify for me, so instead I use the [grunt-concurrent](https://github.com/sindresorhus/grunt-concurrent) with a `watch` task defined to monitor and fire a browserify build whenever a change is detected and a background shell process using [grunt-bg-shell](https://github.com/rma4ok/grunt-bg-shell) to serve. They all come together like:
 
 ```javascript
+grunt.initConfig({
 clean: ['assets/js/build/'],
 
 mkdir: {
@@ -401,7 +392,7 @@ concurrent: {
 
 ```
 
-In the end, I have three main grunt tasks:
+In the end, I have four main grunt tasks:
 
 ```javascript
 // Register the grunt build task

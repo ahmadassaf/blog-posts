@@ -14,7 +14,7 @@ As a developer and customization enthusiast, I've always been fascinated by the 
 
 The main decision behind developing gaudiBar was to allow usage of adaptive widgets. Like many developers, I've used various system information tools over the years, and my recurring frustration was their lack of flexibility. If you have been using Übersicht, you will know that to customize the location of any widget, you had to dig into the code and position it, most probably with absolute positioning. For the case of information bars, I did not find that to be a good experience, especially when the information is dynamic, e.g.:
 
-- Displaying Wi-Fi information, where the network SSID can be long (you can work around this with a maximum width and text overflow .. but really?)
+- Displaying Wi-Fi information, where the network SSID can be long (you can work around this with a maximum width and text overflow... but really?)
 - System information, application names, and opened window names of varying lengths
 
 To overcome this, I have designed gaudiBar utilizing flex layout capabilities and using modules for each widget, allowing the content to be:
@@ -31,8 +31,8 @@ Make sure you have [Übersicht](http://tracesof.net/uebersicht/) installed, then
 
 ```bash
 # Make sure that this points to your widgets folder
-WIDGETS_HOME=$HOME/Library/Application\ Support/Übersicht/widgets/
-git clone https://github.com/g-udi/gaudiBar.ubersicht.widget $WIDGETS_HOME/gaudiBar.ubersicht.widget
+WIDGETS_HOME="$HOME/Library/Application Support/Übersicht/widgets"
+git clone https://github.com/g-udi/gaudiBar.ubersicht.widget "$WIDGETS_HOME/gaudiBar.ubersicht.widget"
 ```
 
 > You can always know your widgets folder by clicking on the Übersicht menu bar icon and clicking on *Open widgets folder*
@@ -42,7 +42,7 @@ Some widgets may require installing some additional packages, they are all docum
 
 ## The Development Process
 
-[Übersicht](http://tracesof.net/uebersicht/) creates a webview and places it on your desktop, just above the wallpaper but behind everything else. Übersicht widgets are written as `.coffee` or `.js` <sup>and other flavors like `.jsx`</sup> files which let you format elements with html, style them with css and manipulate data with javascript and coffeescript. For dynamic widgets, Übersicht lets you run terminal commands and insert the output into html, so just about any language can be used to write scripts for widgets.
+[Übersicht](http://tracesof.net/uebersicht/) creates a webview and places it on your desktop, just above the wallpaper but behind everything else. Übersicht widgets are written as `.coffee` or `.js` files (and other flavors like `.jsx`) which let you format elements with html, style them with css and manipulate data with javascript and coffeescript. For dynamic widgets, Übersicht lets you run terminal commands and insert the output into html, so just about any language can be used to write scripts for widgets.
 
 ### Layout Design
 
@@ -58,23 +58,40 @@ The interactive diagram above shows how gaudiBar overlays on your desktop:
 
 ### Setting up the layout (widgets configuration)
 
-The widgets are defined inside the `lib/plugins` folder and are loaded via `lib/index.js`, which exposes them.
+The layout is controlled by `lib/configs.js`: you add widget names to the bar and region where you want them to appear.
 
-```js
+```js caption="lib/configs.js"
 module.exports = {
-    battery: require('./battery/index.jsx'),
-    chunkwm: require('./chunkwm/index.jsx'),
-    date: require('./date/index.jsx'),
-    istats: require('./istats/index.jsx'),
-    // ...
+    top: {
+        left: ["weather", "crypto", "github", "prayerTime"],
+        middle: [],
+        right: ["dnd", "time", "battery", "network"]
+    },
+    bottom: {
+        left: ["yabai"],
+        middle: [],
+        right: ["stats"]
+    }
 }
+```
+
+The widgets themselves are defined inside the `lib/plugins` folder and are exposed by the registry in `lib/plugins/index.js`, which lazy-loads each module only when it is present in `lib/configs.js`.
+
+```js caption="lib/plugins/index.js"
+const PLUGIN_LOADERS = {
+    battery: () => require('./battery/index.jsx'),
+    date: () => require('./date/index.jsx'),
+    stats: () => require('./stats/index.jsx'),
+    yabai: () => require('./yabai/index.jsx'),
+    // ...
+};
 ```
 
 ### Widgets and Configuration
 
-Each widget is a self-contained module: it defines its refresh frequency, a `render` function that outputs JSX, any system commands or API calls it needs, and its own styling. Which widgets appear, and in which region of the bar, is driven by a central `configs.js` file, so rearranging the bar or adding a widget never means touching the core code.
+Each widget is a self-contained module: it defines its refresh frequency, a `render` function that outputs JSX, any system commands or API calls it needs, and its own styling. Which widgets appear, and in which region of the bar, is driven by the central `lib/configs.js` file, so rearranging the bar or adding a widget never means touching the core code.
 
-Two problems came up repeatedly during development. The first was making widgets with varying content lengths coexist harmoniously, and this is exactly where the flex layout earned its keep, letting widgets expand or contract while the bar keeps its balance. The second was handling API keys for widgets that pull data from external sources (like weather); I keep those in `keys.secret.js` files that stay out of the repository.
+Two problems came up repeatedly during development. The first was making widgets with varying content lengths coexist harmoniously, and this is exactly where the flex layout earned its keep, letting widgets expand or contract while the bar keeps its balance. The second was handling API keys for widgets that pull data from external sources (like weather); I keep those in an ignored `.env` file in the widget directory (there is a checked-in `.env.example` to start from); the older per-widget `keys.secret.js` files are still read for compatibility, but new installs should use `.env`.
 
 ## Conclusion
 

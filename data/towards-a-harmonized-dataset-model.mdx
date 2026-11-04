@@ -2,8 +2,9 @@
 type: 'Post'
 title: 'Towards a Harmonized Dataset Model for Open Data Portals'
 tags: ['Open Data', 'Metadata', 'Data Portals', 'Data Modeling', 'Linked Data']
-summary: 'We first conduct a unique and comprehensive survey of seven metadata models: CKAN, DKAN, Public Open Data, Socrata, VoID, DCAT and Schema.org. Next, we propose a Harmonized Dataset modeL (HDL) based on this survey'
+summary: 'We first conduct a unique and comprehensive survey of seven metadata models: CKAN, DKAN, Project Open Data, Socrata, VoID, DCAT and Schema.org. Next, we propose a Harmonized Dataset modeL (HDL) based on this survey'
 date: '2015-07-22'
+updated: '2026-08-31'
 category: 'data'
 bibliography: ['meta/bibliography/references.bib']
 ---
@@ -32,55 +33,55 @@ Data models vary across data portals. While exhaustively surveying the range of 
 
 There are many data portals that host a large number of private and public datasets. Each portal presents the data based on a model used by the underlying software. In this section, we present the results of our landscape survey of the most common data portals and dataset models.
 
-## DCAT
+### DCAT
 
 The Data Catalog Vocabulary (DCAT) is a W3C recommendation that has been designed to facilitate interoperability between data catalogs published on the Web [@Erickson:DCV:14]. The goal behind DCAT is to increase datasets discoverability enabling applications to easily consume metadata coming from multiple sources. Moreover, the authors foresee that aggregated DCAT metadata can facilitate digital preservation and enable decentralized publishing and federated search.
 
 DCAT is an RDF vocabulary defining three main classes: `dcat:Catalog`, `dcat:Dataset` and `dcat:Distribution`. We are interested in both the `dcat:Dataset` class which is a collection of data that can be available for download in one or more formats and the `dcat:Distribution` class which describes the method with which one can access a dataset (e.g. an RSS feed, a REST API or a SPARQL endpoint).
 
-## DCAT-AP
+### DCAT-AP
 
-The DCAT application profile for data portals in Europe ([DCAT-AP](https://joinup.ec.europa.eu/asset/dcat_application_profile/description)) is a specialization of DCAT to describe public section datasets in Europe. It defines a minimal set of properties that should be included in a dataset profile by specifying mandatory and optional properties. The main goal behind it is to enable cross-portal search and enhance discoverability. DCAT-AP has been promoted by the Open Data Support project (a European Commission initiative that has since concluded) to be the standard for describing datasets and catalogs in Europe.
+The DCAT application profile for data portals in Europe ([DCAT-AP](https://interoperable-europe.ec.europa.eu/collection/semic-support-centre/solution/dcat-application-profile-data-portals-europe)) is a specialization of DCAT to describe public sector datasets in Europe. It defines a minimal set of properties that should be included in a dataset profile by specifying mandatory and optional properties. The main goal behind it is to enable cross-portal search and enhance discoverability. DCAT-AP has been promoted by the Open Data Support project (a European Commission initiative that has since concluded) to be the standard for describing datasets and catalogs in Europe.
 
-## ADMS
+### ADMS
 
 The Asset Description Metadata Schema (ADMS) [@Archer:W3C:13] is also a profile of DCAT. It is used to semantically describe assets. An asset is broadly defined as something that can be opened and read using familiar desktop software (e.g. code lists, taxonomies, dictionaries, vocabularies) as opposed to something that needs to be processed like raw data. While DCAT is designed to facilitate interoperability between data catalogs, ADMS is focused on the assets within a catalog.
 
-## VoID
+### VoID
 
-VoID [@Bohm:WebSemJournal:11] is another RDF vocabulary designed specifically to describe linked RDF datasets and to bridge the gap between data publishers and data consumers. In addition to dataset metadata, VoID describes the links between datasets. VoID defines three main classes: `void:Dataset`, `void:Linkset` and `void:subset`. We are specifically interested in the `void:Dataset` concept. VoID conceptualizes a dataset with a social dimension. A VoID dataset is a collection of raw data, talking about one or more topics, originates from a certain source or process and accessible on the web.
+VoID [@Bohm:WebSemJournal:11] is another RDF vocabulary designed specifically to describe linked RDF datasets and to bridge the gap between data publishers and data consumers. In addition to dataset metadata, VoID describes the links between datasets. VoID defines two main classes, `void:Dataset` and `void:Linkset`, and the `void:subset` property to relate a dataset to its sub-datasets. We are specifically interested in the `void:Dataset` concept. VoID conceptualizes a dataset with a social dimension. A VoID dataset is a collection of raw data, talking about one or more topics, originates from a certain source or process and accessible on the web.
 
-## CKAN
+### CKAN
 
 [CKAN](http://ckan.org) was, at the time of this survey in 2015, the world's leading open-source data management system (DMS), and it remains widely deployed. It helps users from different domains (national and regional governments, companies and organizations) to easily publish their data through a set of workflows to publish, share, search and manage datasets. CKAN is the portal powering web sites like Datahub, the Europe's Public Data portal or the [U.S Government's open data portal](http://data.gov).
 
-CKAN is a complete catalog system with an integrated data storage and powerful RESTful JSON API. It offers a rich set of visualization tools (e.g. maps, tables, charts) as well as an administration dashboard to monitor datasets usage and statistics. CKAN allows publishing datasets either via an import feature or through a web interface. Relevant metadata describing the dataset and its resources as well as organization related information can be added. A [Solr](http://lucene.apache.org/solr/) index is built on top of this metadata to enable search and filtering.
+CKAN is a complete catalog system with an integrated data storage and powerful RESTful JSON API. It offers a rich set of visualization tools (e.g. maps, tables, charts) as well as an administration dashboard to monitor datasets usage and statistics. CKAN allows publishing datasets either via an import feature or through a web interface. Relevant metadata describing the dataset and its resources as well as organization related information can be added. A [Solr](https://solr.apache.org/) index is built on top of this metadata to enable search and filtering.
 
 The [CKAN data model](https://docs.ckan.org/en/latest/api/) contains information to describe a set of entities (dataset, resource, group, tag and vocabulary). CKAN keeps the core metadata restricted as a JSON file, but allows for additional information to be added via "extra" arbitrary key/value fields. CKAN supports Linked Data and RDF as it provides a complete and functional mapping of its model to Linked Data formats.
 
-## DKAN
+### DKAN
 
 [DKAN](https://dkan.readthedocs.io/) is a Drupal-based DMS with a full suite of cataloging, publishing and visualization features. Built over Drupal, DKAN can be easily customized and extended. The actual data sets in DKAN can be stored either within DKAN or on external sites. DKAN users are able to explore, search and describe datasets through the web interface or a RESTful API.
 
-The DKAN [data model](http://docs.getdkan.com/dkan-documentation/dkan-developers/dataset-technical-field-reference/) is very similar to the CKAN one, containing information to describe datasets, resources, groups and tags.
+The DKAN [data model](https://getdkan.org/) is very similar to the CKAN one, containing information to describe datasets, resources, groups and tags.
 
-## Socrata
+### Socrata
 
 [Socrata](https://support.socrata.com/) is a commercial platform to streamline data publishing, management, analysis and reusing. It empowers users to review, compare, visualize and analyze data in real time. Datasets hosted in Socrata can be accessed using RESTful API that facilitates search and data filtering.
 
 Socrata allows flexible data management by implementing various data governance models and ensuring compliance with metadata schema standards. It also enables administrators to track data usage and consumption through dashboards with real-time reporting. Socrata is very flexible when it comes to customizations. It has a consumer-friendly experience giving users the opportunity to tell their story with data. Socrata's data model is designed to represent tabular data: it covers a basic set of metadata properties and has good support for geospatial data.
 
-## Schema.org
+### Schema.org
 
 [Schema.org](http://schema.org) is a collection of schemas used to markup HTML pages with structured data. This structured data allows many applications, such as search engines, to understand the information contained in Web pages, thus improving the display of search results and making it easier for people to find relevant data.
 
 Schema.org covers many domains. We are specifically interested in the `Dataset` schema. However, there are many classes and properties that can be used to describe organizations, authors, etc.
 
-## Project Open Data
+### Project Open Data
 
 [Project Open Data (POD)](http://project-open-data.cio.gov) is an online collection of best practices and case studies to help data publishers. It is a collaborative project that aims to evolve as a community resource to facilitate adoption of open data practices and facilitate collaboration and partnership between both private and public data publishers.
 
-[The POD metadata model](https://project-open-data.cio.gov/v1.1/schema/) is based on DCAT. Similarly to DCAT-AP, POD defines three types of metadata elements: Required, Required-if(conditionally required) and Expanded (optional). The metadata model is presented in the JSON format and encourages publishers to extend their metadata descriptions using elements from the "Expanded Fields" list, or from any well-known vocabulary.
+[The POD metadata model](https://resources.data.gov/resources/dcat-us/) is based on DCAT. Similarly to DCAT-AP, POD defines three types of metadata elements: Required, Required-if(conditionally required) and Expanded (optional). The metadata model is presented in the JSON format and encourages publishers to extend their metadata descriptions using elements from the "Expanded Fields" list, or from any well-known vocabulary.
 
 ## Metadata Classification
 
@@ -95,12 +96,11 @@ Upon closer examination of the various data models, we group the metadata inform
 
 -   **General information**: The core information about the dataset (e.g., title, description, ID). The most common vocabulary used to describe this information is [Dublin Core](http://dublincore.org/documents/dcmi-terms/).
 -   **Access information**: Information about dataset access and usage (e.g., URL, license title and license URL). In addition to the properties in the models discussed above, there are several vocabularies designed specially to describe data access right e.g. [Linked Data Rights](https://lov.linkeddata.es/dataset/lov/vocabs/ldr), the [Open Digital Rights Language (ODRL)](http://www.w3.org/ns/odrl/2/).
--   **Ownership information**: Authoritative information about the dataset (e.g. author, maintainer and organization). The common vocabularies used to expose ownership information are [Friend-of-Friend (FOAF)](http://xmlns.com/foaf/spec) for people and relationships, vCard [@Iannella:W3C:14] for people and organizations and the Organization ontology [@Reynolds:W3C:14] designed specifically to describe organizational structures.
--   **Provenance information**: Temporal and historical information about the dataset creation and update records, in addition to versioning information (e.g. creation data, metadata update data, latest version). Provenance information coverage varies across the models surveyed. However, its great importance led to the development of various special vocabularies like the [Open Provenance Model](http://open-biomed.sourceforge.net/opmv/) and PROV-O [@Lebo:W3C:13]. DataID [@Brummer::ICSS:14] is an effort to provide semantically rich metadata with focus on providing detailed provenance, license and access information.
+-   **Ownership information**: Authoritative information about the dataset (e.g. author, maintainer and organization). The common vocabularies used to expose ownership information are [Friend of a Friend (FOAF)](http://xmlns.com/foaf/spec) for people and relationships, vCard [@Iannella:W3C:14] for people and organizations and the Organization ontology [@Reynolds:W3C:14] designed specifically to describe organizational structures.
+-   **Provenance information**: Temporal and historical information about the dataset creation and update records, in addition to versioning information (e.g. creation date, metadata update date, latest version). Provenance information coverage varies across the models surveyed. However, its great importance led to the development of various special vocabularies like the [Open Provenance Model](http://open-biomed.sourceforge.net/opmv/) and PROV-O [@Lebo:W3C:13]. DataID [@Brummer::ICSS:14] is an effort to provide semantically rich metadata with focus on providing detailed provenance, license and access information.
 -   **Geospatial information**: Information reflecting the geographical coverage of the dataset represented with coordinates or geometry polygons. There are several additional models and extensions specifically designed to express geographical information. The Infrastructure for Spatial Information in the [European Community (INSPIRE) directive](http://inspire.ec.europa.eu/) aims at establishing an infrastructure for spatial information. Mappings have been made between DCAT-AP and the INSPIRE metadata. CKAN provides as well a [spatial extension](https://github.com/ckan/ckanext-spatial) to add geospatial capabilities. It allows importing geospatial metadata from other resources and supports various standards (e.g. ISO 19139) and formats (e.g. GeoJSON).
--   **Temporal information**: Information reflecting the temporal coverage of the dataset (e.g. from date to date). There has been some notable work on extending CKAN to include temporal information. `govdata.de` is an Open Data portal in Germany that extends the CKAN data model to include information like `temporal_granularity`, `temporal_coverage_to` and `temporal_granularity_from`.
+-   **Temporal information**: Information reflecting the temporal coverage of the dataset (e.g. from date to date). There has been some notable work on extending CKAN to include temporal information. `govdata.de` is an Open Data portal in Germany that extends the CKAN data model to include information like `temporal_granularity`, `temporal_coverage_from` and `temporal_coverage_to`.
 -   **Statistical information**: Statistical information about the data types and patterns in datasets (e.g. properties distribution, number of entities and RDF triples). This information is particularly useful to explore a dataset as it gives detailed insights about the raw data when provided properly. VoID is the only model that provides statistical information about a dataset. VoID defines properties to express different statistical characteristics of a dataset e.g. the total number of triples, entities or distinct classes. However, there are other vocabularies such as SCOVO [@Hausenblas:ESWC:09] that can model and publish statistical data about datasets.
-
 -   **Quality information**: Information that indicates the quality of the dataset on the metadata and instance levels. In addition to that, a dataset should include an openness score that measures its alignment with the Linked Data publishing standards [@Berners-Lee:W3C:06]. Quality information is only expressed in the POD metadata. However, there are various other vocabularies like daQ [@Debattista:WWW:14] that can be used to express datasets quality. The [RDF Review Vocabulary](http://vocab.org/review/) can also be used to express reviews and ratings about the dataset or its resources. I later built on this observation with an [objective assessment framework for Linked Data quality](/blog/category/data/an-objective-assessment-framework-tool-for-linked-data-quality) that scores such metadata automatically.
 
 ## Towards A Harmonized Model
@@ -108,7 +108,7 @@ Upon closer examination of the various data models, we group the metadata inform
 Since establishing a common vocabulary or model is the key to communication, we identified the need for a harmonized dataset metadata model containing sufficient information so that consumers can easily understand and process datasets. To create the mappings between the different models, we performed various steps:
 
 -   Examine the model or vocabulary specification and documentation.
--   Examine existing datasets using these models and vocabularies. `http://dataportals.org` provides a comprehensive list of Open Data Portals from around the world. It was our entry point to find out portals using CKAN or DKAN as their underlying DMS. We also investigated portals known to be using specific DMS. Socrata, for example, maintains a list of Open Data portals using their software on their homepage such as `http://pencolorado.org` and `http://data.maryland.gov`.
+-   Examine existing datasets using these models and vocabularies. `http://dataportals.org` provides a comprehensive list of Open Data Portals from around the world. It was our entry point to find out portals using CKAN or DKAN as their underlying DMS. We also investigated portals known to be using specific DMS. Socrata, for example, maintains a list of Open Data portals using their software on their homepage such as `pencolorado.org` (since taken offline) and `http://data.maryland.gov`.
 -   Examine the source code of some portals. This was specifically the case for Socrata as their API returns the raw data serialized as JSON rather than the dataset's metadata. As a consequence, we had to investigate the [Socrata Open Data API (SODA) source code](https://github.com/socrata/soda-java/tree/master/src/main/java/com/socrata/model) and check the different classes and interfaces.
 
 | CKAN           | DKAN           | POD            | DCAT                           | VoID                            | Schema.org              | Socrata        |
@@ -122,7 +122,7 @@ The first task is to map the four main information sections (resources, tags, gr
 
 The table above shows only these section-level mappings; the full mappings between the models across all the information groups are given in the paper, linked again at the end of this section (there, entries in the CKAN column marked with $\ast$ are properties from CKAN extensions and not included in the original data model). Similar to the sections mappings, for the ontologies (DCAT, VoID), the first part represents the class and the part after $\rightarrow$ represents the property. However, sometimes the part after $\rightarrow$ refers to another resource. For example, to describe the dataset's maintainer email in DCAT, the information should be presented in the `dcat:Dataset` class using the `dcat:contactPoint` property. However, the range of this property is a resource of type `vcard` which has the property `hasEmail`.
 
-For Schema.org, similar to the sections mapping, the first part refers to the schema and the second part after $:$ refers to the property. However, if the property is inherited from another schema we denote that by using a $\rightarrow$ as well. For example, the size of a dataset is a property for a `Dataset` schema specified in its `distribution` property. However, the type of `distribution` is `dataDownload` which is inherited from the `MediaObject` schema. The size for `MediaObject` is defined in its `contentSize` property which makes the mapping string `Dataset:distribution`$\rightarrow$` DataDownload`$\rightarrow$` MediaObject:contentSize`.
+For Schema.org, similar to the sections mapping, the first part refers to the schema and the second part after $:$ refers to the property. However, if the property is inherited from another schema we denote that by using a $\rightarrow$ as well. For example, the size of a dataset is a property for a `Dataset` schema specified in its `distribution` property. However, the type of `distribution` is `DataDownload` which is inherited from the `MediaObject` schema. The size for `MediaObject` is defined in its `contentSize` property which makes the mapping string `Dataset:distribution`$\rightarrow$`DataDownload`$\rightarrow$`MediaObject:contentSize`.
 
 Examining the different models, we noticed a lack of a complete model that covers all the information types. There is an abundance of extensions and application profiles that try to fill in those gaps, but they are usually domain specific addressing specific issues like geographic or temporal information. At the time of the survey, there was no complete model that encompassed all the described information types. In hindsight, the standards eventually caught up: DCAT 2 (2020) and DCAT 3 (2024) later addressed much of the granularity gap this paper identified, including richer distribution, provenance and dataset series descriptions.
 
