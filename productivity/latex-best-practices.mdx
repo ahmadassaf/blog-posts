@@ -21,7 +21,7 @@ I hope this post can help you complete your PhD smoothly.
 
 Doing effective and genuine research requires that you familiarise yourself with the state of the art in your field. This requires reading **tons** of journal, conference and workshop papers. However, after some time, recalling what you have read and being able to effectively reference that in your research becomes a daunting task.
 
-I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange my bibliography (the Mendeley Desktop client I used has since been discontinued). It has loads of features, but I have used it mainly to arrange my digital research library. I have used Mendeley basically as follows:
+I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange my bibliography. It has loads of features, but I have used it mainly to arrange my digital research library. I have used Mendeley basically as follows:
 
 - As I did not have a specific research topic in the beginning, I was skimming various _wide_ fields. As a result, I created a separate folder for each research field I was focusing on e.g., `Dataset Profiling`, `Linked Data quality`
 - I also had a separate folder for every paper I have written. That folder contained all the papers I have read that influenced my research for that paper and/or have been referenced in it.
@@ -63,7 +63,7 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
 
 ## General Organisation
 
-- Create a structure to include your papers in an organised fashion. I keep separate folders for `Papers`, `Posters`, `Presentations` and `Progress Reports`; the thesis gets its own structure (see below). **Note**: Demo and research paper are included in the same folder, you can decide to have posters and demo in the same folder. It is up to you.
+- Create a structure to include your papers in an organised fashion. I keep separate folders for `Papers`, `Posters`, `Presentations` and `Progress Reports`; the thesis gets its own structure (see below). **Note**: Demo and research papers are included in the same folder; you can decide to have posters and demos in the same folder. It is up to you.
 - To easily navigate through papers, it is good to have a separate folder for each conference (if you have a large number of papers, you can add another hierarchy level with the year) but for me it is a flat structure inside each folder with a naming convention that follows `<Conference>'<Year> - <Paper Name>`.
 - Keep a `Util` folder in the root. This will hold misc files that you need globally. For me, I have a `LaTeX` folder inside that includes all the document classes that I use across my papers. I then reference the class using a relative path. This way, you will not need to maintain different copies of the same files in each paper's folder. Also this folder will include a `Bibliography` folder containing a centralised `.bib` file. I will come to this in detail later.
 - In every paper folder, create a separate folder for your `figures` to include shapes, graphics and charts and `tables` to include `.xls, .csv, .lyx` files or any information related to creating tables.
@@ -171,7 +171,7 @@ I personally found [Mendeley](https://www.mendeley.com/) a great tool to arrange
 
 For special reports (or thesis), when you have multiple `.tex` files and things can get messy then you can:
 
-- Create separate folder for each section (introduction, abstract, etc.). Each directory contains all the LaTeX code, and could have further subdirectories if required. All `.tex` files are included in the paper by adding `\input{directory/subdirectory/something.tex}` to your main `.tex` file in the appropriate place.
+- Create a separate folder for each section (introduction, abstract, etc.). Each directory contains all the LaTeX code, and could have further subdirectories if required. All `.tex` files are included in the paper by adding `\input{directory/subdirectory/something.tex}` to your main `.tex` file in the appropriate place.
 - The `Util` folder in this case will include additional files:
   - All package inclusions `\usepackage{}`, command declarations, etc. required for the paper are included in `include.tex`
   - Formatting and special stylings are included in `format.tex` file.
@@ -182,13 +182,6 @@ For special reports (or thesis), when you have multiple `.tex` files and things 
       name: "Thesis",
       isFolder: true,
       childrenProp: [
-        {
-          name: "Part1",
-          isFolder: true,
-          childrenProp: [
-            { name: "Chapter1", isFolder: true }
-          ]
-        },
         { name: "abstract", isFolder: true },
         { name: "acknowledgement", isFolder: true },
         { name: "acronyms", isFolder: true },
@@ -220,7 +213,7 @@ For special reports (or thesis), when you have multiple `.tex` files and things 
 
 ### Generating LaTeX Tables
 
-- A nice program that provides a GUI for various tasks is Lyx. I have not used it for Mac but it was useful when editing/creating tables on Windows. It can import data in `.csv` format and generate `.tex` code from it.
+- A nice program that provides a GUI for various tasks is LyX. I have not used it for Mac but it was useful when editing/creating tables on Windows. It can import data in `.csv` format and generate `.tex` code from it.
 - There are several online `.tex` generators. I use [the online LaTeX table generator](http://www.tablesgenerator.com/), and found it very useful for small/medium tables.
 - There is a handy Excel macro to convert tables in Excel files to LaTeX; I keep a converter macro (`Excel To LaTeX Table Converter.xla`) in my `Util` folder.
 
@@ -236,7 +229,7 @@ Now you will be able to use LaTeX in Sublime. A powerful feature is **auto-compl
 
 ## LaTeX Writing Tips
 
-- Use as few packages as possible. That's because packages tend to conflict and go obsolete [check this](http://tex.stackexchange.com/questions/3910/how-to-keep-up-with-packages-and-know-which-ones-are-obsolete)
+- Use as few packages as possible. That's because packages tend to conflict and go obsolete; [check this](http://tex.stackexchange.com/questions/3910/how-to-keep-up-with-packages-and-know-which-ones-are-obsolete).
 - Call the packages in particular order. Some packages require (or are recommended) to be called before/after other packages. Some must be called among the last, some among the first.
 - Use comment blocks to identify each section
 - Use labels always to refer to sections, figures or tables. Start your label for each with a unique string e.g. `fig:`, `sec:`, `tab:`. This is useful when the auto-complete suggests several entries, you can easily filter and find what you want exactly.
@@ -262,7 +255,7 @@ This is done automatically by BibTeX. So for me, in every paper now I only add `
 
 ### Maintaining a clean `.bib` file
 
-I used to copy/paste BibTeX citations from the Internet and thought that I was good to go. However, the information copied is very noisy and contains lots of unneeded information. The best practice is to check what are the required information for each `bib` entry and include only that. For example, for the `@inproceedings` you need to have `[title, author, year, booktitle]`. In addition make sure to:
+I used to copy/paste BibTeX citations from the Internet and thought that I was good to go. However, the information copied is very noisy and contains lots of unneeded information. The best practice is to check which fields are required for each `bib` entry and include only those. For example, for the `@inproceedings` you need to have `[title, author, year, booktitle]`. In addition make sure to:
 
 - Escape the accents and special characters in people names
 - Try to always write "firstName lastName" and not "lastName, firstName" or an initial for the firstName or whatever ... all this is decided by the bib style (e.g. a .bst file). Use the "and" operator between authors and not the comma.
@@ -272,7 +265,7 @@ I used to copy/paste BibTeX citations from the Internet and thought that I was g
 - If you write a URL, anywhere, then say it's a url using the `\url` command.
 - Don't write journal abbreviation, or conference abbreviation, again the style can do this.
 - If you use the article element, then specify the volume and number.
-- Don't use the `incollection` element, this is often incorrect. In most of your references, those Springer volumes are just proceedings of conferences
+- Don't use the `incollection` element, this is often incorrect. In most of your references, those Springer volumes are just proceedings of conferences.
 
 ## Some Useful Hacks
 

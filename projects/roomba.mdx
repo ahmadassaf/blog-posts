@@ -21,7 +21,7 @@ Linked Open Data (LOD) is one of the largest collections of interlinked datasets
 
 ### Data Portal Identification
 
-Data portals can be considered as data access points providing tools to facilitate data publishing, sharing, searching and visualization. [CKAN](http://ckan.org) is the world's leading open-source data portal platform powering websites like the DataHub, Europe's Public Data and the U.S. Government's open data. Modeled on CKAN, [DKAN](http://drupal.org/project/dkan) is a standalone Drupal distribution that is used in various public data portals as well.
+Data portals can be considered as data access points providing tools to facilitate data publishing, sharing, searching and visualization. [CKAN](http://ckan.org) is the world's leading open-source data portal platform; at the time it powered websites like the DataHub, Europe's PublicData.eu and the U.S. Government's open data. Modeled on CKAN, [DKAN](http://drupal.org/project/dkan) is a standalone Drupal distribution that is used in various public data portals as well.
 Identifying the software powering data portals is a vital first step to understand the API calls structure. Web scraping is a technique for extracting data from Web pages. Roomba relies on several scraping techniques in the identification process, combining:
 
 - **URL inspection**: Check the existence of certain URL patterns.
@@ -50,7 +50,7 @@ From the extracted metadata Roomba identifies all the resources associated with 
 
 The metadata validation process identifies missing information and, where possible, corrects it automatically. Each set of metadata (general, access, ownership and provenance) is validated and corrected automatically when possible. Each profiler task has a set of metadata fields to check against. The validation process checks if each field is defined and if the value assigned is valid.
 
-There are special validation steps for various fields. For example, for ownership information where the maintainer email has to be defined, the validator checks if the email field is an actual valid email address. A similar process is done to URLs whenever found, including an HTTP `HEAD` request to check if the URL is reachable. For the dataset resources, the `content-header` information from a successful request is used to extract, compare and correct further metadata values like mimetype and content size.
+There are special validation steps for various fields. For example, for ownership information where the maintainer email has to be defined, the validator checks if the email field is an actual valid email address. A similar process is done to URLs whenever found, including an HTTP `HEAD` request to check if the URL is reachable. For the dataset resources, the `Content-Type` and `Content-Length` headers from a successful response are used to extract, compare and correct further metadata values like mimetype and content size.
 
 The excerpt below (trimmed from a full CKAN dataset record) shows the kind of metadata being validated:
 
@@ -99,11 +99,11 @@ Roomba gives you the ability to perform the following:
 
 **A screencast is available on:** [YouTube](https://youtu.be/p7Y-mDN_Y2s)
 
-> Note that the demo above uses `publicdata.eu`. However, it seems that they no longer support CKAN access as PublicData.eu is archived and no longer active. You can try `https://demo.ckan.org` instead to demonstrate the tool
+> Note that the demo above uses `publicdata.eu`. However, it seems that they no longer support CKAN access as PublicData.eu is archived and no longer active. You can try `https://demo.ckan.org` instead to demonstrate the tool.
 
 ### Report Generation
 
-Data portal administrators need to have an overview of the datasets in their portal or in a specific group. The reporting tool gives the freedom for admins to execute various types of queries and mining information about the datasets. The reports are of three types:
+Data portal administrators need to have an overview of the datasets in their portal or in a specific group. The reporting tool gives the freedom for admins to execute various types of queries and mine information about the datasets. The reports are of three types:
 
 - **meta-field values** report: Aggregate all the values of a certain `key` e.g. `license_title` will aggregate all the licenses titles
 - **key:object meta-field values** report: Aggregate all the values of a certain key with an aggregate of another field as its object. e.g. `license_title:title` will aggregate all the license titles used and also will aggregate all the titles for all the datasets using that license title
@@ -121,7 +121,7 @@ Traditional data quality is a thoroughly researched field, but ensuring quality 
 
 ### Quality Measures
 
-The **objective measures** identified are: completeness, availability, licensing, freshness, correctness, comprehensibility, provenance
+The **objective measures** identified are: completeness, availability, licensing, freshness, correctness, comprehensibility, provenance.
 
 ### Quality Indicators
 

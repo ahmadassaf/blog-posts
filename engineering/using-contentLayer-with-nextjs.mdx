@@ -16,7 +16,7 @@ draft: false
 
 As of July 2024, Contentlayer is effectively unmaintained. In its current state, the project cannot be used with Next.js 14 due to dependency conflicts. You can see more info [here](https://github.com/contentlayerdev/contentlayer/issues/429#issuecomment-1974928678) or some alternatives like [Content Collections](https://www.content-collections.dev/).
 
-There is [news](https://github.com/contentlayerdev/contentlayer/issues/651#issuecomment-2030335434) that Netlify is working on a new version of Contentlayer, but no release date has been announced yet.
+There is [news](https://github.com/contentlayerdev/contentlayer/issues/651#issuecomment-2030335434) that Netlify is working on a new version of Contentlayer, but as of July 2024 no release date had been announced.
 
 </Callout>
 
@@ -49,7 +49,7 @@ The two ideas that earned their keep:
 - **Schema as code**: every post is validated at build time against field definitions (`category` and `date` are required, `draft` is a boolean, a `series` is a nested type with a title and an order). A typo in frontmatter fails the build instead of silently rendering wrong.
 - **Computed fields**: values derived from the content rather than written by hand. This blog computes each post's `slug` from its file path, `readingTime` from the raw body, and the table of contents from the headings:
 
-```js caption="lib/contentLayer/computedFields.js"
+```js caption="lib/contentLayer/computedFields.js (trimmed)"
 const computedFields = {
   'readingTime': { 'resolve': (doc) => readingTime(doc.body.raw), 'type': 'json' },
   'slug': { 'resolve': (doc) => `category/${relPath(doc)}`, 'type': 'string' },

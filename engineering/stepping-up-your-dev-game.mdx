@@ -45,7 +45,7 @@ There was already a nice set of widgets published in the [gallery](http://traces
 ### Installation
 
 - Installing Übersicht could be done using the downloadable zip file, or the recommended way would be via cask (Homebrew's extension for installing native macOS apps) with `brew cask install ubersicht`
-- Installing the widgets is done by copying the **contents** of the widgets folder into `Library -> Application Support -> Übersicht -> widgets`. However, what I did was set up my widgets to be in my Github repo or dropbox folder so that they are synced and can be backed up, and I linked the folder directly to the desired location via `ln -s ~/Projects/Configurations/config/widgets/ ~/Library/Application\ Support/Übersicht/widgets` where the first parameter is the location of the `widgets/` folder cloned.
+- Installing the widgets is done by copying the **contents** of the widgets folder into `Library -> Application Support -> Übersicht -> widgets`. However, what I did was set up my widgets to be in my GitHub repo or dropbox folder so that they are synced and can be backed up, and I linked the folder directly to the desired location via `ln -s ~/Projects/Configurations/config/widgets/ ~/Library/Application\ Support/Übersicht/widgets` where the first parameter is the location of the `widgets/` folder cloned.
   **Note** I have included the folder link in my `.osx` file, you may need to adjust the path of the first argument.
 
 ## Other Widgets
@@ -84,7 +84,7 @@ Although I had the latest OSX Yosemite update, I was still unhappy with the capa
 
 ## Alfred Workflows
 
-Workflows are one of the key features in Alfred v2; They provide a way for you to extend Alfred to perform the tasks you need more efficiently.
+Workflows are one of the key features in Alfred v2; they provide a way for you to extend Alfred to perform the tasks you need more efficiently.
 
 For example, with a workflow, you can launch a group of applications from a hotkey, create custom search filters for frequent searches or run scripts from a keyword.
 
@@ -95,22 +95,22 @@ The Workflows I used are (Located in the `workflows` folder):
 - **Shorten URL**: Shortening URLs (for tweets, emails, etc.) is a pain; you have to go to the website you want, enter your URL, wait for the transformation to occur, copy it, and move on. This allows for a quicker process across all the famous URL shorteners.
 - **StackOverflow**: Search StackOverflow questions directly.
 - **[Encode/Decode](https://github.com/willfarrell/alfred-encode-decode-workflow)**: Encoding and decoding a string into multiple variations
-- **[Github](https://github.com/gharlan/alfred-github-workflow)**: A bunch of Github commands integrations for Alfred.
-- **Search Safari and Chrome Tabs:** Search tabs in Safari and Chrome (also supports WebKit, Chromium, and Chrome Canary)
+- **[GitHub](https://github.com/gharlan/alfred-github-workflow)**: A bunch of GitHub command integrations for Alfred.
+- **Search Safari and Chrome Tabs**: Search tabs in Safari and Chrome (also supports WebKit, Chromium, and Chrome Canary)
 
 [Workflows Reference](https://github.com/hzlzh/Alfred-Workflows)
 
 ## Setting-up the Machine
 
-Developers are very picky about their working environment. We may consolidate various `.` files tailored to our tastes over years and track the change in a version control system. It's no secret that on the UNIX world, dotfiles play a very important part when it comes to making your terminal look good. Be it on Linux, be it on a Mac. Dotfiles are there so you can configure your favorite software to look just the way you like it.
+Developers are very picky about their working environment. We may consolidate various `.` files tailored to our tastes over years and track the change in a version control system. It's no secret that in the UNIX world, dotfiles play a very important part when it comes to making your terminal look good, be it on Linux or on a Mac. Dotfiles are there so you can configure your favorite software to look just the way you like it.
 
 Dotfiles can be used to customize the look of the terminal, to manage bundles with Vim and saving configuration for almost anything.
 
-One thing that normally annoys me, is the fact that whenever I rebuild my machine (or build a new one) I need to copy over my dotfiles, and obviously make sure they are kept up-to-date on all my devices when I change something.
+One thing that normally annoys me is the fact that whenever I rebuild my machine (or build a new one) I need to copy over my dotfiles, and obviously make sure they are kept up-to-date on all my devices when I change something.
 
 My configuration consisted of the following:
 
-- Mac OSX terminal with bash shell configured with a forked [bash-it](http://github.com/ahmadassaf/bash-it) configurations
+- Mac OSX terminal with bash shell configured with a forked [bash-it](http://github.com/ahmadassaf/bash-it) configuration
 - iTerm2 terminal with zsh shell configured with [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh)
 - A cloned `gitignore` repo for easy fetching of `.gitignore` files into various projects
 - A Custom set of [dotfiles](http://github.com/ahmadassaf/dotfiles) for various machine-wide configurations
@@ -121,7 +121,7 @@ First of all you will have to clone this repository into your local machine, and
 
 `git clone --recursive http://github.com/ahmadassaf/Configurations`
 
-**Note** If you have cloned without --recursive, you may find out that some folders are empty. To fix this:
+**Note** If you have cloned without `--recursive`, you may find out that some folders are empty. To fix this:
 
 `git submodule update --init`
 
@@ -130,7 +130,7 @@ Afterwards you can launch the installation by running `sh install.sh`. What this
 - It will ask you if you would like to run an update using the `update.sh` script. Usually this is good when you have lots of changes in your repos and you wish to fetch all the changes afterwards, but simply skip this if this is a fresh installation.
 - It will install the `oh-my-zsh` scripts by symlinking the folder and the `zshrc` into the `~` folder.
 - It will prompt if you wish to install `zsh-syntax-highlighting` and does that automatically.
-- It will install the `bash-it` script files and guide throughout the installation process.
+- It will install the `bash-it` script files and guide you through the installation process.
 - It will prompt if you would like to add the Aliases defined also to your `zsh` aliases _recommended_
 - It will symlink the dotfiles into your `~` folder.
 - It will prompt if you wish to install type-based `ls`
@@ -163,4 +163,4 @@ Afterwards you can launch the installation by running `sh install.sh`. What this
 
 ## Updates
 
-Simply run `sh update.sh` and it will take care of the rest
+Simply run `sh update.sh` and it will take care of the rest.

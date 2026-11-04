@@ -33,7 +33,7 @@ const myCustomMappings = require('./myMappingFile');
 // Create a new mapper that will always use the "myCustomMappings" file
 const myCustomMapper = new Ditto(myCustomMappings);
 
-// Call the unify function that will read the "documentToBeUnified" and transforms it via the mapping file
+// Call the unify function that will read the "documentToBeUnified" and transform it via the mapping file
 myCustomMapper.unify(documentToBeUnified).then((result) => {
     .....
 });
@@ -67,8 +67,8 @@ module.exports = function aggregateExperience(experience) {
 
     let totalExperience = 0;
 
-    _.each(experience.values, function(experience){
-        if (!!experience.experienceDuration) totalExperience += experience.experienceDuration
+    _.each(experience.values, function(entry){
+        if (!!entry.experienceDuration) totalExperience += entry.experienceDuration
     })
 
     return totalExperience === 0 ? null : totalExperience;

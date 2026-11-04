@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Theme Switcher in Next.js'
 tags: ['Next.js', 'React', 'Theming', 'Dark Mode']
-summary: 'A ThemeProvider context is the standard way to manage themes in a React application, but in a Next.js app that mixes server and client components it needs more care: the server has to know the theme choice to render the correct colors on first paint. This post walks through how this blog persists the theme in a cookie, reads it on the server with await cookies(), and avoids the flash of the wrong theme on load.'
+summary: 'A ThemeProvider context is the standard way to manage themes in a React application, but in a Next.js app that mixes server and client components it needs more care: next-themes already prevents the flash of the wrong theme with an inline script, yet the server still has no idea which theme the visitor picked. This post walks through how this blog persists the theme in a cookie and reads it on the server with await cookies(), so the HTML the server sends and the theme the client applies agree from the first render.'
 subtitle: 'Cookie-persisted theming that keeps server components on the server'
 featured: false
 date: '2024-06-11'
@@ -14,15 +14,15 @@ Before getting into the implementation, one misconception is worth clearing up b
 
 The real problems are more practical:
 
-- **Flash of unstyled content (FOUC)**: if the theme is only resolved on the client (from `localStorage` or the system preference), the server renders the default theme and the page visibly flips once the client corrects it
+- **The server is blind**: if the theme is only resolved on the client (from `localStorage` or the system preference), the HTML the server sends assumes the default theme and only the client's inline script corrects it. There is no visible flip, because `next-themes` runs that script before paint, but the server has still rendered the wrong thing
 - **Server-side rendering**: for the server to render the right theme on first paint, the visitor's choice has to live somewhere the server can read. That means a cookie, not `localStorage`
 - **Hydration mismatches**: any component that renders differently per theme needs guarding, or React will complain that server and client markup disagree
 
 Generally speaking, implementing a theme switcher involves three main steps:
 
  1. **Create Theme Provider Component**: Develop a custom `ThemeProvider` component that handles theme switching and <Tooltip message="This will be needed to persist theme choice">cookie management</Tooltip>
- 2. **Use Theme Switcher**: Integrate a `ThemeSwitcher` component into your application to toggle the theme.
- 3. **Integrate Theme Provider**: Wire the `ThemeProvider` into your application layout so the client theme is synced with the server on hydration.
+ 2. **Use Theme Switcher**: Integrate a `ThemeSwitcher` component into your application to toggle the theme
+ 3. **Integrate Theme Provider**: Wire the `ThemeProvider` into your application layout so the client theme is synced with the server on hydration
 
 ## The old way
 
@@ -209,8 +209,8 @@ export default async function LayoutContainer({ children }) {
 This approach provides several advantages:
 
 1. **Server Components Stay Server Components**: children passed through the client provider are not converted to client components; only the provider itself ships to the client
-2. **Server-Side Theme Detection**: reading the cookie on the server ensures the correct theme is applied on the very first render
-3. **No FOUC**: prevents the flash of the incorrect theme on initial load
+2. **Server-Side Theme Detection**: reading the cookie on the server lets the server-rendered HTML and the `defaultTheme` handed to `next-themes` start from the visitor's choice rather than the site default, so server output and the inline script agree from the first render
+3. **No visible flash, with or without the cookie**: the inline script `next-themes` injects applies the stored theme before the page paints; the cookie's job is to keep the server honest, not to hide a flicker
 4. **Persistent Theme Selection**: the choice persists across sessions via the cookie
 5. **Hydration Safety**: the mounted-state check in the switcher prevents hydration mismatches
 

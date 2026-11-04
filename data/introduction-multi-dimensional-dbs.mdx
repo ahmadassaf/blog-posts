@@ -33,13 +33,13 @@ The mental model that ties these together is the cube.
 
 Take three dimensions (Time, Product, Region) and every combination of their values defines a cell holding that combination's measures. That's the whole idea, and it generalizes to as many dimensions as you need (nobody can picture a 9-dimensional "hypercube", but the math doesn't care).
 
-What makes the cube more than a storage layout is that the classic analytical operations become spatial verbs:
+What makes the cube more than a storage layout is that the classic analytical operations become spatial verbs: **slice** (fix one dimension at a single value and look at what remains), **dice** (restrict several dimensions at once to carve out a sub-cube), **roll-up** (climb a hierarchy, aggregating as you go) and **drill-down** (descend it, breaking totals back into their parts):
 
 <OlapCubeExplorer />
 
 Two things worth noticing about these verbs. First, they compose: a real dashboard interaction is usually a dice followed by a roll-up followed by a drill-down, and the model makes each step cheap to express. Second, they're symmetric around hierarchies: roll-up and drill-down are the same move in opposite directions along a dimension's hierarchy, which is why getting the hierarchies right during modeling matters more than almost anything else.
 
-Beyond slice, dice, roll-up and drill-down, there's a fifth operation families of tools like to add: **pivot** (rotate the cube to swap which dimensions are on which axis of your report). It changes nothing about the data, only the view, which is exactly why spreadsheet pivot tables were most people's first contact with multidimensional thinking.
+Beyond slice, dice, roll-up and drill-down, there's a fifth operation that families of tools like to add: **pivot** (rotate the cube to swap which dimensions are on which axis of your report). It changes nothing about the data, only the view, which is exactly why spreadsheet pivot tables were most people's first contact with multidimensional thinking.
 
 ## Star and snowflake schemas
 

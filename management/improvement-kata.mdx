@@ -28,7 +28,7 @@ I've written about [how I came to use this approach](/blog/category/management/a
 1. **Understand the direction.** What larger challenge makes this work worth improving? It might be helping customers receive small changes more predictably. The direction helps you choose which problems deserve attention.
 2. **Grasp the current condition.** Observe how the work happens now. Separate measurements from assumptions, and agree where the process starts and ends. “Reviews are slow” is a concern; knowing where requests wait gives you something to investigate.
 3. **Describe the next target condition.** Set a date and describe how you want the process to operate by then, with relevant measures. “Install a review bot” names a solution. “Routine requests receive a first review within one working day” describes a condition you could reach in several ways.
-4. **Experiment toward it.** Choose an obstacle, write what you expect a small test to show, run it, and compare the observation with the prediction. Use what you learn to choose the next step. [@Rother:PracticeGuide:17; Rother:CoachingKata:Web]
+4. **Experiment toward it.** Choose an obstacle, write what you expect a small test to show, run it, and compare the observation with the prediction. Use what you learn to choose the next step. [@Rother:PracticeGuide:17; @Rother:CoachingKata:Web]
 
 The distinction in step three matters. A target condition gives the work a direction without pretending we already know the intervention that will get us there. It describes both the operation we want and evidence that would tell us we're approaching it.
 
@@ -44,13 +44,13 @@ The team chooses one experiment: protect a daily review window for the next five
 
 <ImprovementKataExplorer id='improvement-kata-example' />
 
-Once you reveal the observations, compare them with your prediction before reading the explanation attached to each request. Whatever the count, those notes give the team a more specific problem to address than “reviews are slow”, and the next test follows from the obstacle they expose rather than from the number alone. More reminders might help someone who forgot, but they don't necessarily help someone who is already occupied.
+Once you reveal the observations, compare them with your prediction before reading the explanation attached to each request. Whatever the count, those notes give the team a more specific problem to address than “reviews are slow”, and the next test follows from the obstacle they expose rather than from the number alone. The explorer then offers two follow-up experiments: send a reminder before each review window, or nominate a backup reviewer for when the first is pulled into an incident. More reminders might help someone who forgot, but they don't necessarily help someone who is already occupied.
 
-Even a result that meets the target would leave work to do. Five requests are not two consecutive weeks of evidence, and a faster first response doesn't prove that the whole delivery process improved. I would also look at review quality, rework, and whether the queue simply moved to testing or release.
+Even a result in which all five requests were reviewed in time would leave work to do. Five requests are not two consecutive weeks of evidence, and a faster first response doesn't prove that the whole delivery process improved. I would also look at review quality, rework, and whether the queue simply moved to testing or release.
 
 ## The coach's part
 
-The Coaching Kata helps the learner examine their thinking. Its starter questions ask about the target condition, the actual condition, the obstacle being addressed, the next step and its expected result, and when the coach and learner can inspect what happened. [@Rother:CoachingKata:Web]
+The Coaching Kata helps the learner examine their thinking. Its starter questions, printed on a card for the coach to hold, ask about the target condition, the actual condition, the obstacle being addressed, the next step and its expected result, and when the coach and learner can inspect what happened. [@Rother:CoachingKata:Web]
 
 The step I value most comes immediately after the actual condition is established: **before discussing anything new, the learner sets the last prediction beside what actually happened and says what that changed in their thinking.** Skip that pause and the conversation slides back into an update about activity.
 
@@ -70,7 +70,7 @@ I would keep an experiment record simple: the obstacle, the next step, the predi
 
 Moving quickly means making the test smaller. Try the change on a limited set of work, keep the necessary checks, and inspect the result soon. Skipping those checks can make the result look encouraging while hiding the cost elsewhere.
 
-Lean already includes people development and learning through experimentation. Kata is one way to practice that thinking. Treating Lean as process optimization and Kata as the people side misses how closely they belong together. [@LEI:Lean:Web; LEI:ToyotaWayKata:Web]
+Lean already includes people development and learning through experimentation. Kata is one way to practice that thinking. Treating Lean as process optimization and Kata as the people side misses how closely they belong together. [@LEI:Lean:Web; @LEI:ToyotaWayKata:Web]
 
 The same applies to improvement across a system. Faster coding can make an overloaded review queue worse. Faster review can expose a release bottleneck. We need to judge local changes against the flow of value through the whole process, rather than assume that better-looking pieces add up to a better system. [@Womack:EndToEnd:Web]
 

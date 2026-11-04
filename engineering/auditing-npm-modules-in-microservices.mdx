@@ -49,15 +49,15 @@ generate_npm_report() {
 }
 ```
 
-This script is executed at the root folder that contains all of your repositories, will execute the `npm-check` command, and aggregate the results in the `npm-report.txt` at the root directory where you executed your script.
+This script is executed at the root folder that contains all of your repositories; it runs the `npm-check` command in each one and aggregates the results in the `npm-report.txt` at the root directory where you executed your script.
 The script also checks first if the `npm-check` command exists or if we need to install it via an `npm install -g npm-check`.
 
 To go step by step inside the main function:
 
 - `find . -maxdepth 1 -type d \( ! -name . \)`: Will find all the directories within one level down of the current folder
-- `printf 'Examining NPM modules for '{}'\n'` will just print out a message indicating which folder we are currently examining
-- `echo '{}' >> ../npm-report.txt` will print out the folder name examined in the output file `npm-report.txt`
-- `npm-check >> ../npm-report.txt` This will execute the `npm-check` command and pipe out the result into the output file
+- `printf 'Examining NPM modules for '{}'\n'`: Prints a message indicating which folder we are currently examining
+- `echo '{}' >> ../npm-report.txt`: Appends the name of the folder being examined to the output file `npm-report.txt`
+- `npm-check >> ../npm-report.txt`: Runs the `npm-check` command and appends its output to the same file
 
 ## Auditing NPM Modules
 

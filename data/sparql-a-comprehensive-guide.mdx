@@ -17,7 +17,7 @@ RDF organizes data into triples in the form of **subject-predicate-object**, whi
 
 Querying RDF data allows you to retrieve meaningful subsets of data, answer complex questions, or explore relationships between resources. The standard approach for querying RDF is [SPARQL](https://www.w3.org/TR/sparql11-query/), a language specifically designed to navigate and manipulate RDF graphs.
 
-[SPARQL](https://www.w3.org/TR/sparql11-query/), standardized by W3C, functions as both a query and update language. Its graph-based nature aligns perfectly with the RDF structure, enabling sophisticated querying mechanisms beyond the capabilities of traditional relational query languages like SQL. If this is the first time you look at SPARQL, but you are familiar with [SQL](https://en.wikipedia.org/wiki/SQL), you will see some similarities because it shares several keywords such as `SELECT`, `WHERE`, etc. It also has new keywords that you have never seen if you come from a SQL world such as `OPTIONAL`, `FILTER` and much more.
+[SPARQL](https://www.w3.org/TR/sparql11-query/), standardized by W3C, functions as both a query and update language. Its graph-based nature aligns perfectly with the RDF structure, enabling sophisticated querying mechanisms beyond the capabilities of traditional relational query languages like SQL. If this is the first time you look at SPARQL, but you are familiar with [SQL](https://en.wikipedia.org/wiki/SQL), you will see some similarities because it shares several keywords such as `SELECT`, `WHERE`, etc. It also has new keywords that you have never seen if you come from a SQL world such as `OPTIONAL`, `FILTER` and many more.
 
 
 
@@ -125,7 +125,7 @@ The result will be one row with the value `Ahmad Assaf` because he is the only o
 
 ### Query for Relationships
 
-If you have a triple pattern in a query where the predicate is a variable, then you can explore the database to find relationships. For example, the query
+If you have a triple pattern in a query where the predicate is a variable, then you can explore the database to find relationships. For example, consider the query:
 
 ```sparql
 SELECT ?p
@@ -134,7 +134,7 @@ WHERE {
 }
 ```
 
-The result is a single binding that reveals the relationship between **blog1** and **Assaf**: the value `aa:owner`. Magic ✨
+The result is a single binding that reveals the relationship between **blog1** and **Assaf**: the full IRI `<http://example.org/Personal#owner>`, which is what `aa:owner` abbreviates in the data. Magic ✨
 
 ## Transform Data with CONSTRUCT
 
@@ -266,19 +266,19 @@ WHERE {
 ```
 
 ```text
-+--------------------+----------------+
-| blogName           | personName    |
-+--------------------+----------------+
-| "Ahmad's Blog"     | "Ahmad Assaf" |
-| "Overfit.in"       | "Ahmad"       |
-+--------------------+----------------+
++----------------+---------------+
+| blogName       | personName    |
++----------------+---------------+
+| "Ahmad's Blog" | "Ahmad Assaf" |
+| "Overfit.in"   | "Ahmad"       |
++----------------+---------------+
 ```
 
 :::
 
 Against our sample data only the `aa:owner` branch matches, which produces the two rows above; the `foaf:maker` branch would additionally pick up data that uses the FOAF vocabulary directly, such as the graph produced by the `CONSTRUCT` query earlier.
 
-[SPARQL 1.1](https://www.w3.org/TR/sparql11-query/) which was chartered in 2009 came with a lot of the features that were missing from the SPARQL 1.0 specification like aggregates, sub-queries, and a natural negation operator. 
+[SPARQL 1.1](https://www.w3.org/TR/sparql11-query/), chartered in 2009 and published as a W3C Recommendation in 2013, came with a lot of the features that were missing from the SPARQL 1.0 specification like aggregates, sub-queries, and a natural negation operator. 
 
 - **Aggregates**: ability to group results and calculate aggregate values (e.g. count, min, max, avg, sum, …).
 - **Sub-queries**: allows a query to be embedded within another.

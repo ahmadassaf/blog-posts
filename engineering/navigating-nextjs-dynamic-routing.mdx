@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Working with Next.js Dynamic Routing and Pagination'
 tags: ['Next.js', 'Routing', 'Pagination', 'React']
-summary: 'Next.js dynamic routing is extremely powerful! However, I ran into a few issues trying to make that work with paginating dynamic category pages for my blog. I will share how I managed to work it out here'
+summary: 'How this blog reproduces its Jekyll-era URLs with a Next.js catch-all route, resolves posts from Contentlayer, and paginates category and tag listings statically at build time, including the parts that tripped me up along the way.'
 subtitle: 'How to create a dynamic pagination system for my Next.js blog'
 featured: false
 date: '2023-07-15'
@@ -73,7 +73,7 @@ export const generateStaticParams = async() => {
 };
 ```
 
-`published` filters out anything with `draft: true` in its frontmatter. It is the same helper the sitemap and the OG image route use, so a draft never becomes a route, a sitemap entry, or a shareable card by accident.
+`published` filters out anything with `draft: true` in its frontmatter. It is the same helper the sitemap and the tags page use, and the OG image route applies the same rule inline with its own `post?.draft` check, so a draft never becomes a route, a sitemap entry, or a shareable card by accident.
 
 The category and tag listings do the same thing with a single `[category]` or `[tag]` segment, but with one extra export that I initially missed:
 
@@ -82,15 +82,19 @@ The category and tag listings do the same thing with a single `[category]` or `[
 export const dynamicParams = false;
 
 export const generateStaticParams = async() => {
-  return categories.map((category) => {
-    return { 'category': category.slug };
+  const paths = categories.map((category) => {
+    return {
+      'category': category.slug
+    };
   });
+
+  return paths;
 };
 ```
 
 By default, a path that was not returned by `generateStaticParams` is still rendered on demand. For a post page that is harmless, since an unknown slug falls through to `notFound()`. For a listing page it is not: `/blog/categories/anything-at-all` would happily render an empty "Anything At All Posts" page with a 200 status. Setting `dynamicParams = false` makes those requests 404 instead, which is what I want for a taxonomy whose members are known at build time.
 
-The `categories` array itself is not hand-written. A build script runs after Contentlayer and before `next build`, walks the published posts, counts the category and tag values, and writes `app/content/categories.json` and `app/content/tags.json`. The routes and the root layout's navigation import those files, so adding a category is just using it in a post's frontmatter.
+The `categories` array itself is not hand-written. A build script runs after Contentlayer and before `next build`, walks the published posts, counts the category and tag values, and writes `app/content/categories.json` and `app/content/tags.json`. The routes and the root layout's navigation import those files. Adding a category means using it in a post's frontmatter and giving it a description in `navigationMetadata.categoriesMetadata`, which is where the script reads each category's blurb from.
 
 ## Paginating the category and tag lists
 

@@ -31,7 +31,7 @@ Here's a run down of the dotfiles in my repo and a description of what they can 
 
 When you open a new Terminal session, this file is loaded by Bash. It loads in the other dotfiles `path, bash_prompt, exports, aliases, functions, extra` (`.extra` is for anything you don't want to commit, so like `.path` it is not in the public repo) and configures some useful settings such as auto correcting typos when using cd completion.
 
-In some instances `.bashrc` can be loaded, so this file makes sure that .bash_profile is called.
+In some instances `.bashrc` can be loaded, so this file makes sure that `.bash_profile` is called.
 
 ### .path
 
@@ -74,7 +74,7 @@ Once patterns like this live in your `.functions` file, they follow you to every
 
 ### .gitconfig
 
-This file is only used by Git, for example, when a git command is invoked. So although there's an `.aliases` file, those aliases are run directly.
+This file is only read by Git, when a git command is invoked. Git's own aliases live here rather than in `.aliases`, since Git expands them itself without going through the shell.
 
 ### .gitignore
 
@@ -110,7 +110,7 @@ Some of the awesome things I love are:
 - Disable Notification Center and remove the menu bar icon
 - Enable access for assistive devices
 - Set a blazingly fast keyboard repeat rate
-- Finder: allow quitting via `⌘ + Q` doing so will also hide desktop icons
+- Finder: allow quitting via `⌘ + Q` (doing so will also hide desktop icons)
 - When performing a search, search the current folder by default
 - Speed up Mission Control animations
 
@@ -127,16 +127,16 @@ For `vim` I have also included the [powerline](https://github.com/Lokaltog/power
 **Important Notes**
 
 - I haven't included `powerline` in my main installation script, so if you wish to have it, then please proceed with installing it separately (`pip install --user powerline-status`) with the fonts dependency.
-- The `--user` parameter should be removed if you got an error while installation especially if you have python installed via Homebrew.
+- The `--user` parameter should be removed if you get an error during installation, especially if you have python installed via Homebrew.
 - A dependency is the [powerline fonts](https://github.com/powerline/fonts) pack. Installation instructions can be found directly in the repository.
 
 After installing powerline, enable it by adding to the `.vimrc`:
 
 ```vim
-set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
+set rtp+=~/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
 ```
 
-This can be changed **depending on the path to the `python` directory**
+This path is where a `--user` install lands on OS X; it changes **depending on where `pip` put the package**. Without `--user` on a Homebrew python, for example, it is `/usr/local/lib/python2.7/site-packages/powerline/bindings/vim`.
 
 ### .wgetrc
 

@@ -10,7 +10,7 @@ category: 'engineering'
 tableOfContents: true
 ---
 
-Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words: they seek engaging, interactive, and visually rich content. I faced this challenge directly when building this blog, wanting posts that are easy to write and maintain while still offering interactivity and customization. My answer was the [unified](https://github.com/unifiedjs/unified) ecosystem, along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com). In fact, the post you are reading right now is rendered by the very pipeline this article describes: this blog runs its own remark plugins (one that turns external links into preview cards, another that adds titles to code blocks) alongside a rehype plugin that transforms internal post links into interactive preview cards.
+Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words: they seek engaging, interactive, and visually rich content. I faced this challenge directly when building this blog, wanting posts that are easy to write and maintain while still offering interactivity and customization. My answer was the [unified](https://github.com/unifiedjs/unified) ecosystem, along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com). In fact, the post you are reading right now is rendered by the very pipeline this article describes: this blog runs its own remark plugins (one that turns external links into preview cards, another that normalizes the legacy `lang:filename` code-fence syntax so the design system's code plugin can render the file name as the block title) alongside a rehype plugin that transforms internal post links into interactive preview cards.
 
 Markdown has many different flavors and different people have different requirements for features they expect from it. [unified](https://github.com/unifiedjs/unified) provides a powerful and flexible framework for parsing, transforming, and rendering content in various formats, including Markdown, HTML, and JSX. It takes a string and turns it into structured data (syntax tree) that other plugins can work with. Plugins can do anything, from spellcheck to linting or transforming from one format to another (e.g. Markdown → HTML). Unified on its own doesn’t do much. It acts as a unifying package for all the other plugins out there.
 
@@ -106,13 +106,11 @@ Welcome to my blog. Here's an interactive chart:
     }
   ]
 }
-
-
 ```
 
 :::
 
-Remark parses this text into an MDAST, where each element (heading, paragraph, etc.) becomes a node in the tree. Plugins can then be applied to modify the structure, perhaps to add links, convert headings to anchor links, or inject custom elements. Once transformations are complete, Remark can convert the MDAST back into Markdown or directly to HTML.
+Remark parses this text into an MDAST, where each element (heading, paragraph, etc.) becomes a node in the tree. Plugins can then be applied to modify the structure, perhaps to add links, convert headings to anchor links, or inject custom elements. Once transformations are complete, Remark can serialize the MDAST back into Markdown, or hand it to Rehype (through `remark-rehype`) to produce HTML.
 
 By combining Remark with plugins, you can:
 
@@ -241,8 +239,6 @@ Welcome to my blog. Here's an interactive chart:
 - **Element Node**: Each `h1` (heading) and `p` (paragraph) in the original MDX content is converted to corresponding HTML elements (`<h1>` and `<p>`).
 - **JSX shown as a `div`**: The `<div class="chart">` standing in for `<Chart />` is an illustration I invented for this example; no step in the pipeline produces it. In a real MDX pipeline the `mdxJsxFlowElement` passes through `remark-rehype` untouched and is compiled into a call to your `Chart` component.
 
-In a real-world scenario, that node is rendered as a functional component or React element when integrated into a frontend framework like [React](https://react.dev).
-
 ## Rehype vs. Remark: Choosing the Right Tool
 
 There are several advantages to working with **MDAST** (Markdown Abstract Syntax Tree) over **HAST** (Hypertext Abstract Syntax Tree) in certain contexts, especially when you’re dealing with Markdown content and need to perform transformations or custom processing. Here are some reasons why MDAST might be preferable in specific use cases:
@@ -262,7 +258,7 @@ There are several advantages to working with **MDAST** (Markdown Abstract Syntax
 ### 3. **Preserving the Semantic Structure**
 - **Better Content Integrity**: MDAST allows you to maintain the integrity of the semantic structure of the content, such as distinguishing between different heading levels, paragraphs, and other semantic elements. This is crucial if you need to manipulate or analyze content while preserving its structure before converting it to another format like HTML.
 
-  - For example, when working with Markdown, you can easily identify the headings, lists, and other elements that are important for tasks such as content generation, indexing, or creating table of contents.
+  - For example, when working with Markdown, you can easily identify the headings, lists, and other elements that are important for tasks such as content generation, indexing, or creating a table of contents.
 
 ### When HAST Might Be Better
 - **HTML-Centric Transformations**: If your main goal is to manipulate the HTML output directly (such as optimizing the final HTML for SEO or adding specific HTML elements like classes or ids), HAST might be more suited to your needs. HAST provides a detailed representation of the HTML structure, which is better for fine-tuning HTML attributes and working with HTML-specific content.

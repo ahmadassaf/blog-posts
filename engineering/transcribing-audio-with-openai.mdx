@@ -16,7 +16,7 @@ When I first wrote this, Whisper had no UI and `whisper-1` was the only transcri
 
 ## The 25 MB limit
 
-<Callout type='warning'>By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB or less or use a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost</Callout>
+<Callout type='warning'>From the [OpenAI API documentation](https://developers.openai.com/api/reference/resources/audio): "By default, the Whisper API only supports files that are **less than 25 MB**. If you have an audio file that is longer than that, you will need to break it up into chunks of 25 MB or less or use a compressed audio format. To get the best performance, we suggest that you avoid breaking the audio up mid-sentence as this may cause some context to be lost."</Callout>
 
 That limit is the whole reason this post exists. For longer recordings, you divide the audio into smaller chunks, transcribe each chunk individually, and then combine the results. Keeping chunks comfortably under the limit also avoids timeouts and flaky uploads.
 
@@ -61,7 +61,7 @@ for i, chunk in enumerate(chunks):
 This script divides the audio into 1-minute chunks. You can adjust the `chunk_length_ms` parameter based on your needs, for example:
 
 ```python
-....
+# ...
 # create 10-minute chunks
 chunk_length_ms = 10 * 60 * 1000
 chunks = chunk_audio(os.path.join(script_dir, "<FILE_NAME>.mp3"), chunk_length_ms)
@@ -127,7 +127,7 @@ full_transcription = ' '.join(transcriptions)
 print(full_transcription)
 ```
 
-For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://developers.openai.com/api/reference/resources/audio)
+For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://developers.openai.com/api/reference/resources/audio).
 
 ## Update: How to transcribe video files
 
@@ -142,7 +142,7 @@ script_dir = os.path.dirname(__file__)
 
 # Define the input video file and output audio file
 mov_file = os.path.join(script_dir, "movie.mov")
-mp3_file = "audio.mp3"
+mp3_file = os.path.join(script_dir, "audio.mp3")
 
 # Load the video clip and write its audio to a separate file
 with VideoFileClip(mov_file) as video_clip:
