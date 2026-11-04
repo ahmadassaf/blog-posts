@@ -73,7 +73,7 @@ The four flow measures (WIP, throughput, work-item age, and cycle time) are defi
 
 <AgileChartsExplorer chart='control' id='cycle-time-example' />
 
-This is a **cycle-time scatterplot**: each dot is a completed item, positioned by its completion day. The line is calculated from the latest five completed items. It helps us inspect patterns; without calculated control limits, it doesn't tell us whether the process is statistically in control.
+This is a **cycle-time scatterplot**: each dot is a completed item, positioned by its completion day. The line is a trailing average of the latest five completed items. It helps us inspect patterns; without calculated control limits, it doesn't tell us whether the process is statistically in control.
 
 The narrow sample looks reassuring. Now reveal the unfinished work: one item is already 18 days old. It is absent from the completion history because it hasn't finished. A short average among completed items doesn't tell us that nothing is waiting.
 
@@ -125,7 +125,7 @@ DevEx offers a related lens: feedback loops, cognitive load, and flow state. Pai
 
 When the numbers and the team's account disagree, I don't want to pick a winner. I want to understand the gap. Sometimes the recording is wrong; sometimes the aggregate hides something people see every day; sometimes a familiar story doesn't survive the data.
 
-That's where [Improvement Kata](/blog/category/management/improvement-kata) becomes useful: it turns the gap into a small experiment with a written prediction, so the next chart has a prediction to compare against. The dashboard has done its job when it helps that conversation happen.
+That's where [Improvement Kata](/blog/category/management/improvement-kata) becomes useful: it turns the gap into a small experiment with a written prediction, so the next chart has something to compare against. The dashboard has done its job when it helps that conversation happen.
 
 ## Further reading
 

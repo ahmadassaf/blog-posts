@@ -185,8 +185,9 @@ const Giscus = dynamic(() => import('@giscus/react'), { 'ssr': false });
 
 export default function PostComments() {
   const { resolvedTheme } = useTheme();
+  const commentsTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
-  return <Giscus repo='ahmadassaf/blog-posts' mapping='og:title' theme={ resolvedTheme === 'dark' ? 'dark' : 'light' } />;
+  return <Giscus repo='ahmadassaf/blog-posts' mapping='og:title' theme={ commentsTheme } />;
 }
 ```
 

@@ -3,7 +3,7 @@ type: 'Post'
 title: 'Creating Rich & Interactive Blog Posts'
 tags: ['MDX', 'unified', 'mdast', 'remark', 'rehype']
 summary: 'We explore how to create engaging content with interactive elements using unified, mdast, rehype, remark, and MDX'
-subtitle: 'Understanding unified, mdast, rehype, remark, mdx'
+subtitle: 'Understanding unified, mdast, rehype, remark, MDX'
 featured: false
 date: '2025-01-22'
 category: 'engineering'
@@ -36,7 +36,7 @@ In this example, the `<Chart />` component is a React element that renders an in
 
 ## The Foundation: unified
 
-At the core of this ecosystem is [unified](https://github.com/unifiedjs/unified), a library that simplifies content processing by representing it as abstract syntax trees ([ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree)) using [unist](https://github.com/syntax-tree/unist) specification. These trees serve as structured representations of content, whether it's written in Markdown, HTML, or even JSX. By standardizing how content is processed, [unified](https://github.com/unifiedjs/unified) makes it possible to build reusable and extensible tools for transforming and manipulating text.
+At the core of this ecosystem is [unified](https://github.com/unifiedjs/unified), a library that simplifies content processing by representing it as abstract syntax trees ([ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree)) using the [unist](https://github.com/syntax-tree/unist) specification. These trees serve as structured representations of content, whether it's written in Markdown, HTML, or even JSX. By standardizing how content is processed, [unified](https://github.com/unifiedjs/unified) makes it possible to build reusable and extensible tools for transforming and manipulating text.
 
 One of the standout features of [unified](https://github.com/unifiedjs/unified) is its pipeline architecture. A pipeline processes input content (such as Markdown) through various stages, including parsing, transforming, and stringifying. Each stage can be enhanced with plugins to introduce new functionality, making it easy to customize your content workflow.
 
@@ -118,7 +118,7 @@ By combining Remark with plugins, you can:
 - Automatically generate tables of contents.
 - Convert Markdown into enriched formats such as HTML or MDX.
 
-<Callout type="info">Any package that starts with `remark-*` is operating on the markdown syntax tree (MDAST)</Callout>
+<Callout type="info">Any package that starts with `remark-*` is operating on the Markdown syntax tree (MDAST).</Callout>
 
 ### Breakdown of MDAST Structure
 
@@ -135,7 +135,7 @@ While Remark excels at handling Markdown, Rehype is the go-to tool for working w
 
 Rehype becomes particularly useful when converting Markdown to HTML. Using the `remark-rehype` plugin, you can transform an MDAST into a HAST, enabling a seamless transition from Markdown to HTML. From there, Rehype plugins can be used to enhance the HTML output, ensuring that your blog post is optimized for performance and accessibility.
 
-<Callout type="info">Any package that starts with `rehype-*` is operating on the HTML syntax tree (HAST)</Callout>
+<Callout type="info">Any package that starts with `rehype-*` is operating on the HTML syntax tree (HAST).</Callout>
 
 <UnifiedProcessorExplorer view="rehype" />
 
@@ -231,6 +231,7 @@ Welcome to my blog. Here's an interactive chart:
   ]
 }
 ```
+
 :::
 
 ### Breakdown of HAST Structure

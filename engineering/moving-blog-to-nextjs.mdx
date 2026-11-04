@@ -31,7 +31,7 @@ I believe in reusing existing solutions to save time and effort, and a quick sea
 The main features I relied on and extended are:
 
 - Easy styling customization and mobile-friendly views with [Tailwind CSS](https://tailwindcss.com/)
-- [MDX - write JSX in markdown documents!](https://mdxjs.com/)
+- [MDX - write JSX in Markdown documents!](https://mdxjs.com/)
 - [Contentlayer](https://contentlayer.dev/) for managing content
 - Server-side syntax highlighting with line numbers and line highlighting
 - Math display supported via [KaTeX](https://katex.org/)
@@ -54,7 +54,7 @@ Let's walk through the different folders that make up the blog as it exists toda
 <Aside>
 **Why `.mjs` extension?**
 
-Since Node.js was created, the ECMAScript module system (which uses import and export) has become standard and Node.js has added support for it. However, Node.js will treat .js files as CommonJS (which is the default module system for the project) unless package.json says `"type": "module"` or the file extension is `.mjs`.
+Since Node.js was created, the ECMAScript module system (which uses import and export) has become standard and Node.js has added support for it. However, Node.js will treat `.js` files as CommonJS (which is the default module system for the project) unless package.json says `"type": "module"` or the file extension is `.mjs`.
 </Aside>
 
 - `data`: The `data` folder contains the site metadata, authors, and blog posts in `.mdx`.

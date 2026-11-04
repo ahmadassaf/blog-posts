@@ -3,7 +3,7 @@ type: 'Project'
 title: 'Micromanage'
 tags: ['Microservices', 'Bash', 'Developer Tools', 'Git']
 summary: 'Shell helper functions built at Beamery to manage 50+ microservice repositories at once: switching branches, syncing remotes, and auditing npm modules across every repo from a single command.'
-subtitle: 'A Micro-services Helpers Framework | Easily manage multiple repositories and projects'
+subtitle: 'A Microservices Helpers Framework | Easily manage multiple repositories and projects'
 layout: 'ProjectLayout'
 github: 'ahmadassaf/micromanage'
 featured: false
@@ -45,7 +45,7 @@ Autocompletion worked in both shells: hitting tab after `beamery` listed the ava
 
 ## The architecture: `execute` as the single primitive
 
-The part of this project I'm still fond of is how little machinery it needed. Every helper reduced to the same prerequisite: run this function in every folder, but only where it makes sense. That lived in one dispatcher function, `execute`, which took the command to run plus flags describing what kind of folder qualified:
+The part of this project I'm still fond of is how little machinery it needed. Every helper reduced to the same requirement: run this function in every folder, but only where it makes sense. That lived in one dispatcher function, `execute`, which took the command to run plus flags describing what kind of folder qualified:
 
  - **-s**: only execute in the current folder
  - **-g**: only in git folders, verified by the existence of a valid `.git` directory

@@ -3,7 +3,7 @@ type: 'Project'
 title: 'Booklight'
 tags: ['Browser Extensions', 'Productivity', 'Search', 'JavaScript', 'Developer Tools']
 summary: 'Booklight helps people with hundreds or thousands of bookmarks keep every saved page organized and easy to find.'
-subtitle: 'Booklight is a clean Chrome Extension to ease the way of adding a bookmark'
+subtitle: 'Booklight is a clean Chrome extension that makes adding a bookmark easier'
 layout: 'ProjectLayout'
 github: 'ahmadassaf/booklight'
 featured: false
@@ -20,28 +20,28 @@ then you've come to the right place. **Booklight** is a Chrome extension that le
 
 > **Status**: The [repo](https://github.com/ahmadassaf/booklight) is alive (around 110 stars, last pushed August 2026), but the extension still targets Chrome's Manifest V2, which Chrome has been phasing out; it would need a Manifest V3 migration to run on current Chrome.
 
-- To launch, press `ctrl/Control + b`
-- To enable bookmarks search mode hit `space` after booklight is launched
+- To launch, press `ctrl/control + b`
+- To switch to URL search mode, hit `space` after Booklight is launched
 
 **Get it**: [Download from GitHub](https://github.com/ahmadassaf/booklight) or [watch the YouTube video](https://www.youtube.com/watch?v=fxqaToLRLNo).
 
 ## Features
 
 - Filter bookmarks based on manual entry
-- Show the path of the current selected folder
-- Navigate easily through the folders tree using keyboard
+- Show the path of the currently selected folder
+- Navigate easily through the folder tree using the keyboard
 - Bookmark directly when you find your target
 - Switch to URL search mode
 - Launch URLs in the current or a new tab
 - Fuzzy search for filtering on both folders and URLs
-- Clean current URL before bookmarking (sometimes the URL is polluted with query strings e.g `?source= ...` for various tracking information). To clean the URL from those, hit `ctrl+alt+x`.
+- Clean current URL before bookmarking (sometimes the URL is polluted with query strings e.g. `?source= ...` for various tracking information). To clean the URL from those, hit `ctrl+alt+x`.
 
-## Bookmark Search & Launch
+## Bookmark search & launch
 
 Booklight can search across your bookmarks, **and it is fast**. I have around 20,000 bookmarks, and through lazy loading and fuzzy search you can search and launch any of them from wherever you are browsing.
 To switch to the URL search mode just hit `space`; you will see the `|` symbol appear in the input box to indicate you are now searching URLs.
 To launch a URL in the current window, hit `enter`; to open it in a new tab, hit `ctrl/control + enter`.
 
-## Booklight Performance
+## Booklight performance
 
 I currently have over 1,000 folders and 20,000 bookmarked URLs, so performance was a real constraint rather than an afterthought. The two tricks that matter: minimizing DOM manipulation, and lazy-loading URL results in small batches (15 at a time by default) instead of rendering the whole result set. The batch size is tweakable, and the same mechanism drives both searching and filtering. The implementation lives in the extension's lazyloader in [the repo](https://github.com/ahmadassaf/booklight) if you want the details.

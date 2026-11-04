@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Theme Switcher in Next.js'
 tags: ['Next.js', 'React', 'Theming', 'Dark Mode']
-summary: 'A ThemeProvider context is the standard way to manage themes in a React application, but in a Next.js app that mixes server and client components it needs more care: next-themes already prevents the flash of the wrong theme with an inline script, yet the server still has no idea which theme the visitor picked. This post walks through how this blog persists the theme in a cookie and reads it on the server with await cookies(), so the HTML the server sends and the theme the client applies agree from the first render.'
+summary: 'A ThemeProvider context is the standard way to manage themes in a React application, but in a Next.js app that mixes server and client components it needs more care: next-themes already prevents the flash of the wrong theme with an inline script, yet the server still has no idea which theme the visitor picked. This post walks through how this blog persisted the theme in a cookie and read it on the server with await cookies(), so the HTML the server sends and the theme the client applies agree from the first render.'
 subtitle: 'Cookie-persisted theming that keeps server components on the server'
 featured: false
 date: '2024-06-11'
@@ -101,7 +101,7 @@ This works, and there is no visible flash either: `next-themes` injects a small 
 
 ## The new way
 
-This is the setup this blog runs on today (Next.js 15). The provider still wraps the layout, but two things change: the theme choice is persisted to a cookie so the server can read it, and the layout is a server component that resolves the theme before rendering. The children it wraps remain server components.
+This is the setup this blog ran on when I wrote this (Next.js 15). The provider still wraps the layout, but two things change: the theme choice is persisted to a cookie so the server can read it, and the layout is a server component that resolves the theme before rendering. The children it wraps remain server components.
 
 ### 1. Create Theme Provider Component
 
@@ -204,7 +204,7 @@ export default async function LayoutContainer({ children }) {
 }
 ```
 
-## Key Benefits
+## Key benefits
 
 This approach provides several advantages:
 
@@ -214,7 +214,7 @@ This approach provides several advantages:
 4. **Persistent Theme Selection**: the choice persists across sessions via the cookie
 5. **Hydration Safety**: the mounted-state check in the switcher prevents hydration mismatches
 
-## Common Gotchas
+## Common gotchas
 
 When implementing this pattern, watch out for:
 

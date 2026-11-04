@@ -2,8 +2,8 @@
 type: 'Post'
 title: 'Stepping Up Your Development Environment Game!'
 tags: ['Developer Environment', 'macOS', 'Bash', 'Automation', 'Dotfiles']
-summary: 'Setting up a proper development environment can be a tedious task. This post walks you through various configuration and automatic bash scripts that I have created to help automate setting up your development environment'
-subtitle: 'Setting-up a superhero development environment'
+summary: 'Setting up a proper development environment can be a tedious task. This post walks you through various configuration and automatic bash scripts that I have created to help automate setting up your development environment.'
+subtitle: 'Setting up a superhero development environment'
 featured: false
 date: '2015-05-23'
 category: 'engineering'
@@ -11,17 +11,17 @@ category: 'engineering'
 
 *This post is from 2015, the macOS Yosemite era. Nearly every tool named below has since died, been acquired, or been broken by later macOS releases; I keep the post as a record of what a carefully tuned Mac setup looked like at the time. The dotfiles philosophy is the only part that aged well.*
 
-Every developer eventually faces the moment of setting up a new working environment. For me, the transition from a Windows powered PC to a Mac OSX powered laptop was one of the best things I did in my career. I found the openness of things you can do on a Unix based system accompanied with a solid appealing set of software.
+Every developer eventually faces the moment of setting up a new working environment. For me, the transition from a Windows-powered PC to a Mac OS X-powered laptop was one of the best things I did in my career. I found the openness of things you can do on a Unix-based system accompanied with a solid appealing set of software.
 However, setting everything the way you **want** it can be time consuming, so I decided after a few trials and errors to share my experience in customizing my machine and how it can be easily transferred into other machines as well.
 
-<Callout type='info'>For up-to-date instructions on how to set up your machine and deal with dotfiles, head over to my article about my bash framework [**gaudi**](/blog/category/engineering/gaudi-my-bash-framework)</Callout>
+<Callout type='info'>For up-to-date instructions on how to set up your machine and deal with dotfiles, head over to my article about my bash framework [**gaudi**](/blog/category/engineering/gaudi-my-bash-framework).</Callout>
 
 ## Customizing the UI
 
 First, let's start with the lightweight things. The desktop and general UI enhancement. I always loved to show some nice widgets on my desktop, and for that I used [Übersicht](http://tracesof.net/uebersicht/). Before it I had used [Geektool](https://www.tynsoe.org/geektool/), which basically allows you to run custom scripts and display them on the desktop, but I wasn't at all happy with the experience of styling those "widgets" and the availability of 3rd party widgets.
-**Übersicht** lets you run system commands and display their output on your desktop in little containers, called widgets. Widgets are written using HTML5, which means they are:
+**Übersicht** lets you run system commands and display their output on your desktop in little containers, called widgets. Widgets are written using HTML5, which means they:
 
-- Easy to write and customize
+- Are easy to write and customize
 - Can show data in tables, charts, graphs ... you name it
 - Can react to different screen sizes
 
@@ -45,8 +45,8 @@ There was already a nice set of widgets published in the [gallery](http://traces
 ### Installation
 
 - Installing Übersicht could be done using the downloadable zip file, or the recommended way would be via cask (Homebrew's extension for installing native macOS apps) with `brew cask install ubersicht`
-- Installing the widgets is done by copying the **contents** of the widgets folder into `Library -> Application Support -> Übersicht -> widgets`. However, what I did was set up my widgets to be in my GitHub repo or dropbox folder so that they are synced and can be backed up, and I linked the folder directly to the desired location via `ln -s ~/Projects/Configurations/config/widgets/ ~/Library/Application\ Support/Übersicht/widgets` where the first parameter is the location of the `widgets/` folder cloned.
-  **Note** I have included the folder link in my `.osx` file, you may need to adjust the path of the first argument.
+- Installing the widgets is done by copying the **contents** of the widgets folder into `Library -> Application Support -> Übersicht -> widgets`. However, what I did was set up my widgets to be in my GitHub repo or Dropbox folder so that they are synced and can be backed up, and I linked the folder directly to the desired location via `ln -s ~/Projects/Configurations/config/widgets/ ~/Library/Application\ Support/Übersicht/widgets` where the first parameter is the location of the cloned `widgets/` folder.
+  **Note** I have included the folder link in my `.osx` file; you may need to adjust the path of the first argument.
 
 ## Other Widgets
 
@@ -61,7 +61,7 @@ In the `geeklets/` folder there is a backup of the deprecated Geeklet scripts th
 In the `flat-icons` folder you will find the set of flat icons I used for my mounted HDD icons and the dock.
 To easily change application icons, I used LiteIcon, which could also be installed via my `caskfile.sh`.
 
-To further customize the dock, I used Dockmod, which was the most feature-rich application for dock theming with support up to OSX Yosemite, in order to provide a transparent Dock background. That whole category of tooling is dead: System Integrity Protection, introduced right after Yosemite in El Capitan, put an end to dock theming of this kind.
+To further customize the dock, I used Dockmod, which was the most feature-rich application for dock theming with support up to OS X Yosemite, in order to provide a transparent Dock background. That whole category of tooling is dead: System Integrity Protection, introduced right after Yosemite in El Capitan, put an end to dock theming of this kind.
 
 I also removed the arrow icons for aliases/shortcuts, which was done automatically when executing my `.osx` file or manually by typing the following command in the terminal (another thing SIP no longer allows):
 
@@ -71,7 +71,7 @@ mv /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AliasBadgeIc
 
 ## Finder
 
-Although I had the latest OSX Yosemite update, I was still unhappy with the capabilities of the Finder. I found that [PathFinder](https://cocoatech.io/) was a great replacement. Just head over and you can check the list of things you can do with this great piece of software.
+Although I had the latest OS X Yosemite update, I was still unhappy with the capabilities of the Finder. I found that [PathFinder](https://cocoatech.io/) was a great replacement. Just head over and you can check the list of things you can do with this great piece of software.
 
 ## Other Tools
 
@@ -88,36 +88,36 @@ Workflows are one of the key features in Alfred v2; they provide a way for you t
 
 For example, with a workflow, you can launch a group of applications from a hotkey, create custom search filters for frequent searches or run scripts from a keyword.
 
-The Workflows I used are (Located in the `workflows` folder):
+The workflows I used are (located in the `workflows` folder):
 
-- **Fantastical**: Allow for easy adding of calendar events.
+- **Fantastical**: Allows for easy adding of calendar events.
 - **Kill Process**: When a process hangs, it's a hassle to open Activity Monitor, search for it, and kill it. Once again, Alfred makes a repetitive task much faster.
 - **Shorten URL**: Shortening URLs (for tweets, emails, etc.) is a pain; you have to go to the website you want, enter your URL, wait for the transformation to occur, copy it, and move on. This allows for a quicker process across all the famous URL shorteners.
 - **StackOverflow**: Search StackOverflow questions directly.
-- **[Encode/Decode](https://github.com/willfarrell/alfred-encode-decode-workflow)**: Encoding and decoding a string into multiple variations
+- **[Encode/Decode](https://github.com/willfarrell/alfred-encode-decode-workflow)**: Encoding and decoding a string into multiple variations.
 - **[GitHub](https://github.com/gharlan/alfred-github-workflow)**: A bunch of GitHub command integrations for Alfred.
-- **Search Safari and Chrome Tabs**: Search tabs in Safari and Chrome (also supports WebKit, Chromium, and Chrome Canary)
+- **Search Safari and Chrome Tabs**: Search tabs in Safari and Chrome (also supports WebKit, Chromium, and Chrome Canary).
 
 [Workflows Reference](https://github.com/hzlzh/Alfred-Workflows)
 
-## Setting-up the Machine
+## Setting Up the Machine
 
-Developers are very picky about their working environment. We may consolidate various `.` files tailored to our tastes over years and track the change in a version control system. It's no secret that in the UNIX world, dotfiles play a very important part when it comes to making your terminal look good, be it on Linux or on a Mac. Dotfiles are there so you can configure your favorite software to look just the way you like it.
+Developers are very picky about their working environment. We may consolidate various `.` files tailored to our tastes over the years and track the changes in a version control system. It's no secret that in the UNIX world, dotfiles play a very important part when it comes to making your terminal look good, be it on Linux or on a Mac. Dotfiles are there so you can configure your favorite software to look just the way you like it.
 
-Dotfiles can be used to customize the look of the terminal, to manage bundles with Vim and saving configuration for almost anything.
+Dotfiles can be used to customize the look of the terminal, to manage bundles with Vim and to save configuration for almost anything.
 
 One thing that normally annoys me is the fact that whenever I rebuild my machine (or build a new one) I need to copy over my dotfiles, and obviously make sure they are kept up-to-date on all my devices when I change something.
 
 My configuration consisted of the following:
 
-- Mac OSX terminal with bash shell configured with a forked [bash-it](http://github.com/ahmadassaf/bash-it) configuration
+- Mac OS X Terminal with the bash shell configured with a forked [bash-it](http://github.com/ahmadassaf/bash-it) configuration
 - iTerm2 terminal with zsh shell configured with [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh)
 - A cloned `gitignore` repo for easy fetching of `.gitignore` files into various projects
-- A Custom set of [dotfiles](http://github.com/ahmadassaf/dotfiles) for various machine-wide configurations
+- A custom set of [dotfiles](http://github.com/ahmadassaf/dotfiles) for various machine-wide configurations
 
 ## Installation
 
-First of all you will have to clone this repository into your local machine, and since there are a bunch of other git modules in this repo, you will need to recursively clone this repository and all of its children using:
+First of all you will have to clone this repository onto your local machine, and since there are a bunch of git submodules in this repo, you will need to recursively clone this repository and all of its children using:
 
 `git clone --recursive http://github.com/ahmadassaf/Configurations`
 
@@ -131,10 +131,10 @@ Afterwards you can launch the installation by running `sh install.sh`. What this
 - It will install the `oh-my-zsh` scripts by symlinking the folder and the `zshrc` into the `~` folder.
 - It will prompt if you wish to install `zsh-syntax-highlighting` and does that automatically.
 - It will install the `bash-it` script files and guide you through the installation process.
-- It will prompt if you would like to add the Aliases defined also to your `zsh` aliases _recommended_
+- It will prompt if you would like to add the defined aliases to your `zsh` aliases as well (recommended).
 - It will symlink the dotfiles into your `~` folder.
-- It will prompt if you wish to install type-based `ls`
-- It will prompt if you wish to install `grc` for command output coloring
+- It will prompt if you wish to install type-based `ls`.
+- It will prompt if you wish to install `grc` for command output coloring.
 - It will install `homebrew` and the following brew formulas:
 
   - **Core Modules** coreutils, moreutils, findutils, binutils
@@ -155,11 +155,11 @@ Afterwards you can launch the installation by running `sh install.sh`. What this
   - **Quick Look plugins** betterzipql, qlcolorcode, qlmarkdown, qlprettypatch, qlstephen, quicklook-csv, quicklook-json, quicknfo, suspicious-package, webp-quicklook
   - **Color pickers** colorpicker-developer, colorpicker-skalacolor
 
-- It will aggregate the `iTerm` and `Terminal` themes and prompt you for the name of the color scheme you want to apply and apply it for you
+- It will aggregate the `iTerm` and `Terminal` themes and prompt you for the name of the color scheme you want to apply and apply it for you.
 - It will prompt if you would like to run the `.osx` file which contains some system wide modifications and runs it for you.
   I recommend that you read the `.osx` file and enable or disable the features that you like. I also create some symlinks there for my Sublime Text 3 configurations and the widgets of Übersicht.
-- It will install the [powerline fonts](https://github.com/powerline/fonts)
-- It will prompt if you wish to set the bash to the updated version installed by Homebrew
+- It will install the [powerline fonts](https://github.com/powerline/fonts).
+- It will prompt if you wish to set the bash to the updated version installed by Homebrew.
 
 ## Updates
 

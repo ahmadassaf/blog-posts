@@ -25,7 +25,7 @@ Learn by doing. Sometimes you need to build the wrong thing first to understand 
 The test is the cost of reversal, and in a few places that cost is brutal:
 
 - **Core infrastructure.** Everything else is built on top of it, so a shortcut here gets baked into every service that depends on it. Reversing it means migrating all of them at once.
-- **Security.** You don't get to refactor after a breach. The downside is not rework, it's incident response, disclosure, and lost trust that no sprint pays back.
+- **Security.** You don't get to refactor after a breach. The downside is not rework; it's incident response, disclosure, and lost trust that no sprint pays back.
 - **Data integrity.** Bad code can be replaced; data corrupted or lost by bad code often cannot. Once wrong values have propagated into reports, decisions, and downstream systems, there is no clean rollback.
 
 ## The Key

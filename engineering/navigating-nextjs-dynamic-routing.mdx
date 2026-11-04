@@ -57,7 +57,7 @@ export default async function Page({ params }) {
 }
 ```
 
-Two small things earned their place here. `safeDecodeURI` wraps `decodeURI` in a try/catch, because a malformed percent-encoded URL would otherwise throw inside the render and surface as a 500 rather than a 404. And `resolveContentDocument` does more than a `find`: it sorts the published posts by date, locates the match, and returns the neighbouring entries as `next` and `prev`, which is how the previous/next navigation at the bottom of each post works without a second pass over the collection.
+Two small things earned their place here. `safeDecodeURI` wraps `decodeURI` in a try/catch, because a malformed percent-encoded URL would otherwise throw inside the render and surface as a 500 rather than a 404. And `resolveContentDocument` does more than a `find`: it sorts the published posts newest first, locates the match, and returns the neighbouring entries as `next` and `prev`, which is how the previous/next navigation at the bottom of each post works without a second pass over the collection.
 
 ## Telling Next.js what to build
 
@@ -128,7 +128,7 @@ export default async function Page({ params }) {
 
 The slicing and the validation live in one shared helper, because the tag route needs exactly the same logic and I did not want two copies drifting apart:
 
-```js caption="lib/utils/contentlayer.js"
+```js caption="lib/utils/contentlayer.js (trimmed)"
 export const paginate = (posts, pageParam, perPage) => {
   const currentPage = Number(pageParam);
   const totalPages = Math.ceil(posts.length / perPage);

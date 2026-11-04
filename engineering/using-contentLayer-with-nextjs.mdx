@@ -20,13 +20,13 @@ There is [news](https://github.com/contentlayerdev/contentlayer/issues/651#issue
 
 </Callout>
 
-I built this blog on Contentlayer. Then the project stalled, its maintainer moved on, and the Callout above is what I had to prepend to my own enthusiastic draft about it. So instead of paraphrasing its documentation, this is the shorter, more honest post: what Contentlayer actually did for me, what runs this blog today, and what I took away from the experience.
+I built this blog on Contentlayer. Then the project stalled, its maintainer moved on, and the callout above is what I had to prepend to my own enthusiastic draft about it. So instead of paraphrasing its documentation, this is the shorter, more honest post: what Contentlayer actually did for me, what runs this blog today, and what I took away from the experience.
 
 ## What Contentlayer did well
 
 The pitch was simple: your MDX files become typed, importable data. You describe your content schema in code, and the build turns every file into a validated document you can `import { allPosts } from 'contentlayer/generated'` anywhere in your app. This blog still works exactly that way. Here is a trimmed excerpt of its real config:
 
-```js caption="contentlayer.config.js"
+```js caption="contentlayer.config.js (trimmed)"
 import { defineDocumentType, makeSource } from 'contentlayer2/source-files';
 
 export const Post = defineDocumentType(() => ({

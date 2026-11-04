@@ -35,9 +35,9 @@ Modern versions of Next.js (13.3 and later) also ship the same functionality bui
 
 Next, create a dynamic API route in your Next.js project to serve OG images. Since I am using the `app` router, the route lives in `app/api/og/route.js`.
 
-I have a [contentlayer](https://contentlayer.dev/) setup in my project, which gives me all the blog posts as a generated `allPosts` collection. The route takes a `slug` query parameter, finds the matching post, and falls back to the site title and description when there is no match. In practice only post pages ever call this route: the shared metadata generator ([data/meta/generator/blog.js](https://github.com/ahmadassaf/blog/blob/main/data/meta/generator/blog.js)) gives the homepage and every other static page a pre-rendered `/static/images/og-card.jpg` unless a page passes its own `image`, so the fallback branch is a safety net rather than something the site relies on:
+I have a [Contentlayer](https://contentlayer.dev/) setup in my project, which gives me all the blog posts as a generated `allPosts` collection. The route takes a `slug` query parameter, finds the matching post, and falls back to the site title and description when there is no match. In practice only post pages ever call this route: the shared metadata generator ([data/meta/generator/blog.js](https://github.com/ahmadassaf/blog/blob/main/data/meta/generator/blog.js)) gives the homepage and every other static page a pre-rendered `/static/images/og-card.jpg` unless a page passes its own `image`, so the fallback branch is a safety net rather than something the site relies on:
 
-```javascript title="app/api/og/route.js"
+```javascript caption="app/api/og/route.js"
 import { ImageResponse } from '@vercel/og';
 import { allPosts } from 'contentlayer/generated';
 import { NextResponse } from 'next/server';

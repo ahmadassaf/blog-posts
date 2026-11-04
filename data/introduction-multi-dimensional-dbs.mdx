@@ -23,7 +23,7 @@ The multidimensional model exists for the second shape. Instead of scattering an
 
 Three terms carry the whole model:
 
-- **Facts** are the events worth analyzing: a sale, a click, a shipment. Each fact is one cell in the model, identified by the combination of dimension values it belongs to. Facts are usually paired with numbers, though a fact table with no measures at all (a "factless" fact table, recording that something merely happened, like an attendance) is legitimate and common.
+- **Facts** are the events worth analyzing: a sale, a click, a shipment. Each fact is one cell in the model, identified by the combination of dimension values it belongs to. Facts are usually paired with numbers, though a fact table with no measures at all (a "factless" fact table, recording that something merely happened, like attendance) is legitimate and common.
 - **Measures** are the numeric properties of a fact: units sold, revenue, duration. They're what you aggregate. A useful measure comes with an idea of *how* it aggregates: revenue sums cleanly across any dimension; an account balance sums across customers but not across time; a temperature averages but never sums. Getting this wrong is the classic silent bug of analytical reporting.
 - **Dimensions** are the contexts you slice by: time, product, geography, customer. Each dimension usually carries a **hierarchy**: day rolls into month into quarter into year; city into country into region. Hierarchies are what make the model navigable: they define what "zooming out" means.
 

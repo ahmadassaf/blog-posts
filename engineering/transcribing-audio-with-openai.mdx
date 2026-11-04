@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Transcribing Audio & Video Using OpenAI Whisper API'
 tags: ['OpenAI', 'Whisper', 'Audio Transcription', 'Automation', 'Developer Tools']
-summary: 'When I first wrote this, audio transcription with OpenAI models was not available via the UI; you had to use the API, and that comes with its own set of challenges. This post shows how to do this task using OpenAI with a bit of Python'
+summary: 'When I first wrote this, audio transcription with OpenAI models was not available via the UI; you had to use the API, and that comes with its own set of challenges. This post shows how to do this task using OpenAI with a bit of Python.'
 subtitle: 'Manage large audio or video files with pydub and OpenAI'
 featured: false
 date: '2024-05-23'
@@ -20,9 +20,9 @@ When I first wrote this, Whisper had no UI and `whisper-1` was the only transcri
 
 That limit is the whole reason this post exists. For longer recordings, you divide the audio into smaller chunks, transcribe each chunk individually, and then combine the results. Keeping chunks comfortably under the limit also avoids timeouts and flaky uploads.
 
-## Step-by-Step Guide to Transcribing Audio with Whisper API
+## Step-by-step guide to transcribing audio with the Whisper API
 
-### 1. Install Required Libraries
+### 1. Installing the required libraries
 
 First, you need to install the necessary Python libraries. You can do this using pip:
 
@@ -30,9 +30,9 @@ First, you need to install the necessary Python libraries. You can do this using
 pip install openai pydub
 ```
 
-The [pydub](https://github.com/jiaaro/pydub) library is used for audio processing, and openai is the official library to interact with OpenAI's APIs. One practical note: pydub is a wrapper around [ffmpeg](https://ffmpeg.org/), so ffmpeg needs to be installed on your machine (`brew install ffmpeg` on macOS, `apt install ffmpeg` on Debian/Ubuntu) or pydub will fail to open anything that isn't a plain WAV file.
+The [pydub](https://github.com/jiaaro/pydub) library is used for audio processing, and `openai` is the official library to interact with OpenAI's APIs. One practical note: pydub is a wrapper around [ffmpeg](https://ffmpeg.org/), so ffmpeg needs to be installed on your machine (`brew install ffmpeg` on macOS, `apt install ffmpeg` on Debian/Ubuntu) or pydub will fail to open anything that isn't a plain WAV file.
 
-### 2. Chunking the Audio File
+### 2. Chunking the audio file
 
 You can use the pydub library to split your audio file into smaller chunks. Here's a Python script to do that:
 
@@ -71,7 +71,7 @@ Keep the chunk duration honest against the 25 MB limit: how many minutes fit dep
 
 One more caveat worth being upfront about: slicing at fixed time boundaries will happily cut through the middle of a word or sentence, which is exactly what the warning above tells you to avoid; each cut can lose or garble a few words of context. The simple code is good enough for my use cases, but the upgrade path is silence-based splitting with pydub's [silence detection](https://github.com/jiaaro/pydub/blob/master/pydub/silence.py) (`split_on_silence` / `detect_silence`), which snaps the cut points to natural pauses.
 
-### 3. Transcribing Each Chunk
+### 3. Transcribing each chunk
 
 Next, you need to transcribe each chunk using the Whisper API:
 

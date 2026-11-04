@@ -81,7 +81,7 @@ Arguments in the mapping file are separated by `|` and can be paths into the inp
  - `@concatName(firstName|>>this_is_my_last_name)`: the `>>` prefix passes a hard-coded string instead of a path lookup
  - `@concatName(firstName|lastName|*>>default)`: the `*` prefix marks a default value, used when the other lookups come up empty
 
-If a plugin might receive a variable number of arguments, the JavaScript `arguments` keyword handles it cleanly:
+If a plugin might receive a variable number of arguments, the JavaScript `arguments` object handles it cleanly:
 
 ```javascript
 function concatName() {
@@ -98,9 +98,9 @@ A plugin's value can be fed into another plugin as a parameter by nesting the ca
 "value"  : "@cleanURI(value|@getLinkType(value,@getLinkService(value,service)))",
 ```
 
-### Plugins activation
+### Plugin activation
 
-Plugins are activated in the `/ditto/plugins/plugins.js` file by adding the plugin name (matching the `.js` filename of the definition) to the `plugins` array; each one is required and exported for the main mapping function:
+Plugins are activated in the `/ditto/plugins/plugins.js` file by adding an entry for the plugin (keyed by the `.js` filename of the definition) to the exported object; each one is required and exported for the main mapping function:
 
 ```javascript
 'use strict';

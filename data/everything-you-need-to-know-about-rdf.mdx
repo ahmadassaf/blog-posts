@@ -18,7 +18,6 @@ In today's data-driven world, efficiently managing and representing complex info
 
 Whether you're a web developer, data scientist, or just someone curious about how data can be organized and understood by machines, this comprehensive guide will walk you through everything you need to know about RDF. From its foundational concepts and components to practical examples and applications, we will explore how RDF works, why it matters, and how you can leverage it to enhance your data projects. Get ready to dive into the world of RDF and discover how it can transform the way you handle information.
 
-
 ## Natural Language vs. Machine-Readable Data
 
 In our daily lives, we effortlessly communicate complex ideas through natural language. For instance, consider the simple fact:
@@ -64,7 +63,6 @@ ex:Ahmad ex:owns ex:Blog.
 
 :::
 
-
 All three XML variants are valid, yet nothing in XML says which of them means "Ahmad owns a blog": the syntax carries structure, not shared meaning, so every producer and consumer has to agree on an interpretation out of band. The Turtle and JSON-LD versions, by contrast, state the fact the way humans intuitively structure information, as `Subject - Verb/Predicate/Action - Object`, with each part identified unambiguously. It was this lack of shared meaning, not XML itself, that motivated RDF, which adopts a three-part structure to represent knowledge:
 
 - **Resource**: Refers to anything that can be uniquely identified with a URI, such as web pages, locations, individuals, or products.
@@ -73,12 +71,11 @@ All three XML variants are valid, yet nothing in XML says which of them means "A
 
 The Framework is a combination of web-based protocols (URI, HTTP, XML, etc.) that are based on formal models and defines all the allowed relationships among resources.
 
-RDF is an intuitive knowledge representation using directed graphs, where the subjects and objects are the **nodes** and the predicates are the **edges** of that graph. This statement, which comprises these three parts, is called **RDF-Triple** where the resource is a URI or a blank (empty) node, the property is a URI and the object can be a URI, literal or a [Blank Node](#blank-nodes). If we wish to transform this knowledge into the traditional relational model (tables) it will look like:
+RDF is an intuitive knowledge representation using directed graphs, where the subjects and objects are the **nodes** and the predicates are the **edges** of that graph. This statement, which comprises these three parts, is called an **RDF triple**, where the subject is a URI or a blank (empty) node, the predicate is a URI and the object can be a URI, a literal or a [Blank Node](#blank-nodes). If we wish to transform this knowledge into the traditional relational model (tables) it will look like:
 
 | **Subject** | **Predicate** |        **Object**         |
 | :---------: | :-----------: | :-----------------------: |
 |    Ahmad    |  has a blog   | assaf.website/blog |
-
 
 In plain English, an RDF statement states facts, relationships and data by linking resources of different kinds. With the help of an RDF statement, just about anything can be expressed by a uniform structure, consisting of three linked data pieces.
 
@@ -121,13 +118,15 @@ Strings that describe data values that do not have a separate existence. In RDF 
 
 We should note that literals are wrapped with quotation marks. The hash after the `XMLSchema` URI denotes the fragment identifier that points to the `string` datatype. Instead of a datatype I can specify a language tag that describes the "natural" language of the text. For example, `"Semantic"@en` means that this literal is an English word; its datatype is then `rdf:langString`.
 
-Literals are written either using double-quotes when they do not contain linebreaks like `"simple literal"` or triple double-quotes like `"""long literal"""` when they may contain linebreaks. Datatypes are a bit tricky. Let's think of the datatype for [floating-point numbers](http://en.wikipedia.org/wiki/Floating_point "Floating point"). At an abstract level, the floating-point numbers themselves are different from the text we use to represent them on paper. For instance, the text “5.1” represents the number 5.1, but so does “5.1000” and “05.10”. Here there are multiple textual representations (what are called lexical representations) for the same value.
+Literals are written either using double-quotes when they do not contain linebreaks like `"simple literal"` or triple double-quotes like `"""long literal"""` when they may contain linebreaks. Datatypes are a bit tricky. Let's think of the datatype for [floating-point numbers](http://en.wikipedia.org/wiki/Floating_point "Floating point"). At an abstract level, the floating-point numbers themselves are different from the text we use to represent them on paper. For instance, the text "5.1" represents the number 5.1, but so does "5.1000" and "05.10". Here there are multiple textual representations (what are called lexical representations) for the same value.
 
 A datatype tells us how to map lexical representations to values, and vice versa. RDF reuses the XML Schema (W3C) datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date`. RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. If you omit the datatype, the literal is simply an `xsd:string`: `"Ahmad Assaf"` and `"Ahmad Assaf"^^xsd:string` are the same literal. (Under the original RDF specification an untyped "plain literal" was a distinct thing from a typed string; RDF 1.1, published in 2014, removed that distinction, and tools have supported this for years.)
 
 The semantics of RDF takes language tags and datatypes into account. This means two things. First, a literal with a language tag (an `rdf:langString`) is different from the same text without one (an `xsd:string`), and literals with different language tags are different from each other. These three statements say three different things and none can be inferred from the others:
 
 ```turtle
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
 # ahmad's name is an xsd:string (no language tag)
 <#ahmad> foaf:name "ahmad assaf" .
 # ahmad's name, in English, is ahmad assaf (an rdf:langString)
@@ -139,11 +138,16 @@ The semantics of RDF takes language tags and datatypes into account. This means 
 So, a literal with a language tag is never the same as a literal without one. The second part of the semantics of literals is that two typed literals that appear different may be the same if their datatype maps their **lexical representations** to the same value. The following statements are equivalent (at least for an RDF application that has been given the semantics of the XSD datatypes):
 
 ```turtle
+@prefix ex: <http://example.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
 <#ahmad> ex:age "20"^^xsd:float .
 <#ahmad> ex:age "20.000"^^xsd:float .
 ```
 
-Both mean that Ahmad's age is 20. That is, the textual representation of the number is beside the point and is not part of the meaning encoded by the triples. Note that if the float datatype were not specified, both literals would be `xsd:string`s, the triples would not be equivalent, and the textual representation of the 20 would be maintained as part of the information content. Sometimes the value of a property needs to be a fragment of XML, or text that might contain XML markup. RDF/XML provides a special notation to make it easy to write literals of this kind. This is done using the `rdf:parseType` attribute (we will meet its other values, `Resource` and `Collection`, further on). Giving an element the attribute `rdf:parseType="Literal"` indicates that the contents of the element are to be interpreted as an XML fragment:
+Both mean that Ahmad's age is 20. That is, the textual representation of the number is beside the point and is not part of the meaning encoded by the triples. Note that if the float datatype were not specified, both literals would be `xsd:string`s, the triples would not be equivalent, and the textual representation of the 20 would be maintained as part of the information content.
+
+Sometimes the value of a property needs to be a fragment of XML, or text that might contain XML markup. RDF/XML provides a special notation to make it easy to write literals of this kind. This is done using the `rdf:parseType` attribute (we will meet its other values, `Resource` and `Collection`, further on). Giving an element the attribute `rdf:parseType="Literal"` indicates that the contents of the element are to be interpreted as an XML fragment:
 
 ```xml
 <rdf:Description rdf:ID="ahmadassaf">
@@ -170,7 +174,6 @@ This is a visual way of modeling RDF as a Node-Edge-Node Triple. It's directed, 
 <RdfTripleExplorer />
 
 <Highlight>Directionality matters in RDF triples. Defining reverse relationships is possible, but not always necessary.</Highlight> This is the territory of the [Web Ontology Language (OWL)](https://www.w3.org/OWL/), which offers a simple way to define the "opposite" property using the `inverseOf` relationship.
-
 
 ### RDF/XML Notation
 
@@ -222,7 +225,7 @@ and I have changed my URI from `http://assaf.website` to `http://assaf.website/A
 <rdf:Description rdf:about="#AhmadAssaf" aa:hasEmail="......"></rdf:Description>
 ```
 
-instead of using `rdf:about` and then put the hash # in front of the fragment URI, I can use the `rdf:ID` which has the hash tag complemented in it so that I can write:
+Instead of using `rdf:about` and then putting the hash `#` in front of the fragment URI, I can use `rdf:ID`, which has the hash built in, so that I can write:
 
 ```xml
 <rdf:Description rdf:ID="AhmadAssaf" aa:hasEmail="......"></rdf:Description>
@@ -252,7 +255,7 @@ And if the same subject is repeated, but with different predicates, one may use 
 
 ### Turtle (Terse RDF Triple Language)
 
-A simplified form of the N3 notation. URIs are wrapped in angle brackets and Literals in quotation marks. Every triple ends with a period, and whitespace or indentation will be ignored.
+A simplified form of the N3 notation. URIs are wrapped in angle brackets and literals in quotation marks. Every triple ends with a period, and whitespace or indentation will be ignored.
 
 ```turtle
 <http://assaf.website>
@@ -260,7 +263,7 @@ A simplified form of the N3 notation. URIs are wrapped in angle brackets and Lit
 <http://assaf.website/blog> .
 ```
 
-We have talked about namespaces and base URIs in XML. The same concepts are transferred into the turtle notation:
+We have talked about namespaces and base URIs in XML. The same concepts are transferred into the Turtle notation:
 
 ```turtle
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
@@ -292,8 +295,8 @@ Note that we have used a semicolon to express that we want to keep stating facts
 
 #### Notes
 
-*   Turtle strings can use the usual backslash escapes (`\t`, `\n`, `\"`, etc.), and both strings and URIs can write Unicode code points as `\uXXXX` or `\UXXXXXXXX`; the string escapes are not allowed inside URIs
-*   Comments in Turtle take the form of `#`, outside a relative URI or strings, and continue to the end of line
+*   Turtle strings can use the usual backslash escapes (`\t`, `\n`, `\"`, etc.), and both strings and URIs can write Unicode code points as `\uXXXX` or `\UXXXXXXXX`; the string escapes are not allowed inside URIs.
+*   Comments in Turtle take the form of `#`, outside a relative URI or strings, and continue to the end of the line.
 *   The `,` symbol may be used to repeat the subject and predicate of triples that only differ in the object RDF term.
 
 ```turtle
@@ -360,7 +363,7 @@ We simply introduce blank nodes in Turtle by using the brackets `[ ]`. So far we
 </rdf:Description>
 ```
 
-In Turtle we use `_:`, the reserved blank-node prefix, followed by the Blank Node name
+In Turtle we use `_:`, the reserved blank-node prefix, followed by the Blank Node name:
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -377,7 +380,7 @@ So Blank Nodes do **NOT** need to be dereferenceable and accessed from the outsi
 
 ## Data Structures in RDF
 
-In RDF there exists some kind of collections (in computer science terms) that will allow us to aggregate nodes or facts together. They are general data structures to enumerate any resource or literal. They are basically a syntactic sugar that will ease the process of writing code with no semantic expressiveness whatsoever. We have in RDF two different aggregators:
+In RDF there exist some kinds of collections (in computer science terms) that will allow us to aggregate nodes or facts together. They are general data structures to enumerate any resource or literal. They are basically syntactic sugar that will ease the process of writing code with no semantic expressiveness whatsoever. We have in RDF two different aggregators:
 
 ### Containers
 
@@ -416,7 +419,7 @@ We notice that the container node has an `rdf:type` of `rdf:Seq`, which means th
 :administrators rdf:_3 <C> .
 ```
 
-**or written as:**
+**Or written as:**
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -431,7 +434,7 @@ We notice that the container node has an `rdf:type` of `rdf:Seq`, which means th
     rdf:_3 <C> .
 ```
 
-In **RDF/XML**
+In **RDF/XML**:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -457,7 +460,7 @@ In **RDF/XML**
 
 ### Collections
 
-These are closed lists where there is no extension possible. Elements of the list are already predefined. It really resembles the traditional list data structure with the fact that it is closed to insert operations. It is split recursively into a **Head** (first) and a **Tail** (rest); we end the list by linking to `rdf:nil`
+These are closed lists where there is no extension possible. Elements of the list are already predefined. It really resembles the traditional list data structure with the fact that it is closed to insert operations. It is split recursively into a **Head** (first) and a **Tail** (rest); we end the list by linking to `rdf:nil`.
 
 <RdfCollectionExplorer />
 
@@ -481,7 +484,7 @@ Each of the blank nodes forming this list structure is implicitly of type `rdf:L
 ] .
 ```
 
-However, in Turtle there are shortcuts to simplify the syntax. We do that by using a new type of brackets `( )`
+However, in Turtle there are shortcuts to simplify the syntax. We do that by using a new type of brackets, `( )`:
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -492,7 +495,7 @@ However, in Turtle there are shortcuts to simplify the syntax. We do that by usi
 :blog aa:hasAdmins (<A> <B> <C>) .
 ```
 
-**RDF/XML** provides a special notation to make it easy to describe collections using graphs of this form. In **RDF/XML**, a collection can be described by a property element that has the attribute `rdf:parseType="Collection"`, and that contains a group of nested elements representing the members of the collection. **RDF/XML** provides the `rdf:parseType` attribute to indicate that the contents of an element are to be interpreted in a special way. In this case, the `rdf:parseType="Collection"` attribute indicates that the enclosed elements are to be used to create the corresponding list structure in the RDF graph
+**RDF/XML** provides a special notation to make it easy to describe collections using graphs of this form. In **RDF/XML**, a collection can be described by a property element that has the attribute `rdf:parseType="Collection"`, and that contains a group of nested elements representing the members of the collection. **RDF/XML** provides the `rdf:parseType` attribute to indicate that the contents of an element are to be interpreted in a special way. In this case, the `rdf:parseType="Collection"` attribute indicates that the enclosed elements are to be used to create the corresponding list structure in the RDF graph:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -523,7 +526,7 @@ At first the community tried using reification to solve this data segmentation p
 <Named Graph>, <Subject>, <Predicate>, <Object>
 ```
 
-When using named graphs, `TriG` is the standard serialization (a W3C Recommendation since 2014). It's the same as Turtle except that statements in a single graph are grouped with `{}`
+When using named graphs, `TriG` is the standard serialization (a W3C Recommendation since 2014). It's the same as Turtle except that statements in a single graph are grouped with `{}`:
 
 ```trig
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -532,7 +535,7 @@ When using named graphs, `TriG` is the standard serialization (a W3C Recommendat
 @base <http://assaf.website/> .
 
 :blogGraph {
-    :blog aa:hasAdmins (<A> <B> <C> ) .
+    :blog aa:hasAdmins (<A> <B> <C>) .
 }
 ```
 
@@ -547,11 +550,13 @@ RDF applications sometimes need to describe other RDF statements using RDF, for 
 RDF provides a built-in vocabulary intended for describing RDF statements. A description of a statement using this vocabulary is called a reification of the statement. The RDF reification vocabulary consists of:
 
  - `rdf:Statement`: describes an RDF statement, consisting of the following properties:
- - `rdf:subject`: the described resource
- - `rdf:predicate`: the original property
- - `rdf:object`: the value of the property
+     - `rdf:subject`: the described resource
+     - `rdf:predicate`: the original property
+     - `rdf:object`: the value of the property
 
 ```turtle
+@prefix ex: <http://example.org/> .
+
 ex:Gardener ex:hasKilled ex:Butler .
 # ex:Sherlock ex:deduces ... but what should the object be?
 ```
@@ -559,6 +564,9 @@ ex:Gardener ex:hasKilled ex:Butler .
 The use of reification makes it fairly simple to represent this information:
 
 ```turtle
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ex: <http://example.org/> .
+
 ex:Sherlock ex:deduces ex:StatementOnGardener .
 ex:StatementOnGardener a rdf:Statement ;
     rdf:subject ex:Gardener ;
@@ -638,15 +646,21 @@ The subject of these reification triples is a URI ref formed by resolving the fr
 </rdf:RDF>
 ```
 
-In this case, specifying the attribute `rdf:ID="triple12345"` in the aa:hasAdmins element results in the original triple describing the blog administrator:
+In this case, specifying the attribute `rdf:ID="triple12345"` in the `aa:hasAdmins` element results in the original triple describing the blog administrator:
 
 ```turtle
+@prefix aa: <http://assaf.website/Personal#> .
+
 <http://assaf.website/blog> aa:hasAdmins <http://assaf.website/triples#ahmadassaf> .
 ```
 
 plus the reification triples:
 
 ```turtle
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix aa: <http://assaf.website/Personal#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
 <http://assaf.website/triples#triple12345> rdf:type rdf:Statement .
 <http://assaf.website/triples#triple12345> rdf:subject <http://assaf.website/blog> .
 <http://assaf.website/triples#triple12345> rdf:predicate aa:hasAdmins .
@@ -663,10 +677,10 @@ plus the reification triples:
 ## Wrap Up
 
 *   An RDF Model is a set of RDF statements
-*   An RDF statement consists of subject, property, object
+*   An RDF statement consists of subject, predicate, object
 *   Subjects are resources, while an object can be either a literal or a resource
 
-So far we have talked about several RDF representations (A serialization format is a way to encode information so that when it's passed between machines it can be parsed, XML is a serialization format, RDF is a data model); however one more deserves a mention, and two we have already met deserve a recap:
+So far we have talked about several RDF representations (a serialization format is a way to encode information so that when it's passed between machines it can be parsed; XML is a serialization format, RDF is a data model); however one more deserves a mention, and two we have already met deserve a recap:
 
 *   **TriG**: TriG is Turtle but with support for named graphs. It has been the W3C Recommendation for serializing RDF with named graphs since 2014.
 *   **RDFa (RDF embedded in HTML)**: You can embed RDF data within normal web pages by using RDFa.
