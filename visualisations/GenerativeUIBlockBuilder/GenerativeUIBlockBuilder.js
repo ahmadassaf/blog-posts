@@ -105,6 +105,14 @@ const GenerativeUIBlockBuilder = ({
     setFeedback(`${block.name} moved ${direction === -1 ? 'up' : 'down'}.`);
   };
 
+  const reset = () => {
+    setComposition([ ...initialComposition ]);
+    setNotes(initialNotes);
+    setPrompt(promptExamples[0]);
+    setError('');
+    setFeedback('Example reset: the starting blocks, note and example prompt are back.');
+  };
+
   const compose = (event) => {
     event.preventDefault();
     const result = composeView(prompt, composition);
@@ -221,7 +229,13 @@ const GenerativeUIBlockBuilder = ({
       </section>
 
       <p className={ styles.feedback } role='status' aria-live='polite'>{feedback || (mode === 'manual' ? 'You choose each piece and its position.' : 'One description arranges the same pieces. You can still switch back and adjust them.')}</p>
-      <p className={ styles.simulation }>Local simulation with fictional GBP figures. A small text parser arranges the blocks; no AI or network is connected. Changes last while this page stays open.</p>
+      <footer className={ styles.footer }>
+        <span className={ styles.simulation }>Local simulation with fictional GBP figures. A small text parser arranges the blocks; no AI or network is connected. Changes last while this page stays open.</span>
+        <Button variant='ghost' tone='neutral' size='sm' onClick={ reset }>
+          <Icon name='RotateCcw' decorative />
+          Reset example
+        </Button>
+      </footer>
     </figure>
   );
 };

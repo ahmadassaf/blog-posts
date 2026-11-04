@@ -170,13 +170,8 @@
   border-left-color: color-mix(in srgb, var(--scene-ink) 10%, transparent);
 }
 
-.region:not(:disabled):hover {
+.region:hover {
   background: color-mix(in srgb, var(--scene-ink) 9%, transparent);
-}
-
-.region:disabled {
-  cursor: default;
-  opacity: 1;
 }
 
 .region[data-empty='true'] {

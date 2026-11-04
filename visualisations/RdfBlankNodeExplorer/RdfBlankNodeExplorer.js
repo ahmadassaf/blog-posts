@@ -8,21 +8,21 @@
  * FORM: An interactive RDF constellation built as one continuous network.
  */
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import styles from './RdfBlankNodeExplorer.module.css';
 
 const branches = [
   {
     'id': 'blog-a',
-    'link': 'https://bloga.com',
+    'link': 'http://www.blogA.com',
     'name': 'Blog A',
     'node': '_:influence1',
     'y': 130
   },
   {
     'id': 'blog-b',
-    'link': 'https://blogb.com',
+    'link': 'http://www.blogB.com',
     'name': 'Blog B',
     'node': '_:influence2',
     'y': 330
@@ -38,6 +38,9 @@ const RdfBlankNodeExplorer = ({
   description = 'Choose either dashed junction to trace the local facts it holds together without assigning it a public IRI.',
   className = ''
 }) => {
+  const uid = useId();
+  const titleId = `${uid}-title`;
+  const descriptionId = `${uid}-description`;
   const [ activeBranchId, setActiveBranchId ] = useState('blog-a');
   const activeBranch = branches.find((branch) => branch.id === activeBranchId);
 
@@ -69,9 +72,9 @@ const RdfBlankNodeExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF blank-node graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 20 1000 475' role='group' aria-labelledby='rdf-blank-title rdf-blank-description'>
-          <title id='rdf-blank-title'>RDF blank-node constellation</title>
-          <desc id='rdf-blank-description'>Ahmad Assaf’s Blog connects to two anonymous nodes. Each anonymous node groups a blog name and a blog link.</desc>
+        <svg className={ styles.graph } viewBox='0 20 1000 475' role='group' aria-labelledby={ `${titleId} ${descriptionId}` }>
+          <title id={ titleId }>RDF blank-node constellation</title>
+          <desc id={ descriptionId }>Ahmad Assaf’s Blog connects to two anonymous nodes. Each anonymous node groups a blog name and a blog link.</desc>
 
           {branches.map((branch) => {
             const active = activeBranchId === branch.id;
@@ -89,16 +92,16 @@ const RdfBlankNodeExplorer = ({
                   className={ `${styles.edgeLabel} ${styles.influenceLabel}` }
                   transform={ `translate(340 ${influenceLabelY})` }
                 >
-                  <text textAnchor='middle'>ex:isInfluencedBy</text>
+                  <text textAnchor='middle'>aa:isInfluencedBy</text>
                 </g>
 
                 <path d={ `M 496 ${branch.y} C 585 ${branch.y}, 600 ${nameY}, 704 ${nameY}` } className={ styles.nameEdge } />
                 <path d={ `M 496 ${branch.y} C 585 ${branch.y}, 600 ${linkY}, 704 ${linkY}` } className={ styles.linkEdge } />
                 <g className={ `${styles.edgeLabel} ${styles.nameLabel}` } transform={ `translate(620 ${nameLabelY})` }>
-                  <text textAnchor='middle'>ex:name</text>
+                  <text textAnchor='middle'>aa:name</text>
                 </g>
                 <g className={ `${styles.edgeLabel} ${styles.linkLabel}` } transform={ `translate(620 ${linkLabelY})` }>
-                  <text textAnchor='middle'>ex:link</text>
+                  <text textAnchor='middle'>aa:link</text>
                 </g>
 
                 <g className={ styles.blankNode } { ...selectBranch(branch.id) }>
@@ -126,7 +129,7 @@ const RdfBlankNodeExplorer = ({
             <rect x='95' y='191' width='190' height='68' rx='34' />
             <text x='190' y='179' textAnchor='middle' className={ styles.sourceKind }>NAMED RESOURCE</text>
             <text x='190' y='220' textAnchor='middle' className={ styles.sourceTitle }>Ahmad Assaf’s Blog</text>
-            <text x='190' y='242' textAnchor='middle' className={ styles.sourceCode }>ex:Blog</text>
+            <text x='190' y='242' textAnchor='middle' className={ styles.sourceCode }>&lt;http://assaf.website/blog&gt;</text>
           </g>
 
           <text x='68' y='471' className={ styles.readoutNode }>{activeBranch.node}</text>

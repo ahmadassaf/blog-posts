@@ -22,6 +22,7 @@ const accessibleSteps = ({ source, platform, pipeline, destination }) => {
   pipeline.stages.forEach((stage) => {
     const outcomes = [];
 
+    if (stage.detail) outcomes.push(stage.detail);
     if (stage.failure) outcomes.push(`Failure stops the pipeline with ${stage.failure}.`);
     if (stage.output) outcomes.push(`${stage.action || 'Output'} goes to ${stage.output}.`);
 
@@ -44,11 +45,15 @@ const getStageOutcome = (stage) => {
   return null;
 };
 
+/*
+ * Position relative to the selected step only. 'earlier' means earlier in the
+ * flow, not that the stage passed: any stage can stop the run.
+ */
 const getStepState = (index, activeStepIndex) => {
-  if (index < activeStepIndex) return 'complete';
-  if (index === activeStepIndex) return 'current';
+  if (index < activeStepIndex) return 'earlier';
+  if (index === activeStepIndex) return 'selected';
 
-  return 'upcoming';
+  return 'later';
 };
 
 const createFlowSteps = ({ destination, pipeline, platform, source }) => {
@@ -71,7 +76,7 @@ const createFlowSteps = ({ destination, pipeline, platform, source }) => {
     },
     ...pipeline.stages.map((stage, index) => {
       return {
-        'detail': `${stage.label} is stage ${index + 1} of ${pipeline.stages.length} in ${pipeline.label}.`,
+        'detail': stage.detail || `${stage.label} runs in ${pipeline.label}.`,
         'failure': stage.failure,
         'id': stage.id || `stage-${index}`,
         'label': stage.label,
@@ -131,7 +136,7 @@ const FeedbackLoop = ({ active, destination, platform }) => {
  * @param {string} props.description - Short explanation of the workflow.
  * @param {{ label: string, action: string }} props.source - Workflow origin.
  * @param {{ label: string, detail?: string, success?: string, feedback?: string }} props.platform - Shared repository or system of record.
- * @param {{ label: string, trigger: string, stages: Array<{ id?: string, label: string, failure?: string, output?: string, action?: string }> }} props.pipeline - Ordered automation stages.
+ * @param {{ label: string, trigger: string, stages: Array<{ id?: string, label: string, detail?: string, failure?: string, output?: string, action?: string }> }} props.pipeline - Ordered automation stages; `detail` is the readout sentence for the stage.
  * @param {{ label: string }} [props.destination] - Optional external destination.
  * @param {string} [props.className] - Additional root class.
  * @returns {JSX.Element}
@@ -184,7 +189,7 @@ const PipelineDiagram = ({
                     variant='ghost'
                     tone='neutral'
                     className={ styles.stepButton }
-                    aria-current={ state === 'current' ? 'step' : undefined }
+                    aria-current={ state === 'selected' ? 'step' : undefined }
                     aria-controls={ readoutId }
                     aria-label={ `${step.label}. ${step.detail}` }
                     onClick={ () => setActiveStepIndex(index) }
@@ -199,7 +204,7 @@ const PipelineDiagram = ({
                   </Button>
 
                   {step.failure && (
-                    <span className={ styles.failureBranch } data-active={ state === 'current' }>
+                    <span className={ styles.failureBranch } data-active={ state === 'selected' }>
                       <svg viewBox='0 0 14 14' aria-hidden='true' focusable='false'>
                         <path d='M2 1.5v3.75a4 4 0 0 0 4 4h6m-3-3 3 3-3 3' />
                       </svg>

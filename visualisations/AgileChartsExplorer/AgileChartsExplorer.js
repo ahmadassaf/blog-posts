@@ -30,9 +30,9 @@ const Axes = ({ max, first = '1', middle, last = '8' }) => (
       </g>
     ))}
     <line x1={ X0 } x2={ X0 } y1={ Y0 } y2={ Y1 } className={ styles.axis } />
-    <text x={ X0 } y='366' textAnchor='middle' className={ styles.tickLabel }>{first}</text>
+    {first && <text x={ X0 } y='366' textAnchor='middle' className={ styles.tickLabel }>{first}</text>}
     {middle && <text x='520' y='366' textAnchor='middle' className={ styles.tickLabel }>{middle}</text>}
-    <text x={ X1 } y='366' textAnchor='end' className={ styles.tickLabel }>{last}</text>
+    {last && <text x={ X1 } y='366' textAnchor='end' className={ styles.tickLabel }>{last}</text>}
   </g>
 );
 

@@ -128,9 +128,9 @@ The first step to achieving this new workflow was to have rigorous rules set up 
     label: 'Travis CI',
     trigger: 'Trigger Travis',
     stages: [
-      { label: 'Build', failure: 'Broken build' },
-      { label: 'Validate', failure: 'Broken build' },
-      { label: 'Deploy', action: 'Upload', output: 'Server' }
+      { label: 'Build', failure: 'Broken build', detail: 'Travis runs build.sh, where grunt build generates the site into _site; a broken build stops the run here.' },
+      { label: 'Validate', failure: 'Broken build', detail: 'test.sh runs HTML-Proofer over _site to validate the HTML, check external links for 4xx errors and confirm the favicon; a failure stops the run before anything is deployed.' },
+      { label: 'Deploy', action: 'Upload', output: 'Server', detail: 'Only after the build and validation pass, deploy.sh commits _site to a fresh repository and force-pushes it over SSH to the server.' }
     ]
   }}
   destination={{ label: 'Server' }}
