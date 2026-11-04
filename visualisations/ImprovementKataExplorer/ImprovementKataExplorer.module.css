@@ -8,6 +8,8 @@
 .pattern li { padding-left:.2rem; }
 .context { padding-block:1rem; }
 .context>div { display:grid;grid-template-columns:12rem minmax(0,1fr);gap:1rem;padding-block:1rem;border-bottom:1px solid var(--ds-color-border); }
+/* The experiment section below draws its own top border; keep one rule between them. */
+.context>div:last-child { border-bottom:0; }
 .context dt { font-weight:700; }
 .context dd { margin:0; }
 .inspect { margin-top:.75rem; }
