@@ -6,6 +6,7 @@ tags: ['Linked Data', 'Data Quality', 'Semantic Web', 'Metadata']
 summary: 'The standardization of Semantic Web technologies and specifications has resulted in a staggering volume of data being published. In this post, I propose an objective assessment framework for Linked Data quality after having surveyed the landscape of Linked Data quality tools to discover that they only cover a subset of the proposed quality indicators'
 featured: true
 date: '2016-02-22'
+updated: '2026-08-31'
 category: 'data'
 bibliography: ['meta/bibliography/references.bib']
 tableOfContents: true
@@ -13,7 +14,7 @@ tableOfContents: true
 
 <Callout type='info'>This work has been [published](https://www.igi-global.com/article/towards-an-objective-assessment-framework-for-linked-data-quality/160174) in the International Journal on Semantic Web and Information Systems (IJSWIS)</Callout>
 
-# Introduction
+## Introduction
 
 In the last few years the Semantic Web gained a momentum supported by the introduction of many related initiatives like the [Linked Open Data Cloud (LOD Cloud)](http://lod-cloud.net). From 12 datasets cataloged in 2007, the Linked Open Data cloud has grown to nearly 1000 datasets containing more than 82 billion triples. Data is being published by both public and private sectors and covers a diverse set of domains from life sciences to military. This success lies in the cooperation between data publishers and consumers where users are empowered to find, share and combine information in their applications easily.
 
@@ -21,7 +22,7 @@ In the last few years the Semantic Web gained a momentum supported by the introd
 
 Traditional data quality is a thoroughly researched field with several benchmarks and frameworks to grasp its dimensions [@Kahn:ACM:02; @Stvilia:ASIST:07; @Wang:MIS:96]. Data quality principles typically rely on many subjective indicators that are complex to measure automatically. The quality of data is indeed realized when it is used [@Juran:McGraw:99], thus directly relating to the ability of satisfying users' continuous needs.
 
-Web documents that are by nature unstructured and interlinked require different quality metrics and assessment techniques than traditional datasets. For example, the importance and quality of Web documents can be subjectively calculated via algorithms like Page Rank [@Page:TechReport:98]. Ensuring data quality in Linked Open Data is a complex process as it consists of structured information supported by models, ontologies and vocabularies and contains queryable endpoints and links. This makes data quality assurance a challenge. Despite the fact that Linked Open Data quality is a trending and highly demanded topic, very few efforts are currently trying to standardize, track and formalize frameworks to issue scores or certificates that will help data consumers in their integration tasks.
+Web documents that are by nature unstructured and interlinked require different quality metrics and assessment techniques than traditional datasets. For example, the importance and quality of Web documents can be subjectively calculated via algorithms like PageRank [@Page:TechReport:98]. Ensuring data quality in Linked Open Data is a complex process as it consists of structured information supported by models, ontologies and vocabularies and contains queryable endpoints and links. This makes data quality assurance a challenge. Despite the fact that Linked Open Data quality is a trending and highly demanded topic, very few efforts are currently trying to standardize, track and formalize frameworks to issue scores or certificates that will help data consumers in their integration tasks.
 
 Data quality assessment is the process of evaluating if a piece of data meets consumers' needs in a specific use case [@Bizer:WebSemantics:09]. The dimensionality of data quality makes it dependent on the task and users' requirements. For example, DBpedia [@Bizer:WebSemJorunal:09] and YAGO [@Suchanek::WWW:07] are knowledge bases containing data extracted from structured and semi-structured sources. They are used in a variety of applications e.g., annotation systems [@Mendes:ICS:11], exploratory search [@Marie:ICS:13] and recommendation engines [@DiNoia:iSemantics:12]. However, their data is not integrated into critical systems e.g., life critical (medical applications) or safety critical (aviation applications) as its data quality is found to be insufficient. In this work, we first propose a comprehensive objective framework to evaluate the quality of Linked Data sources. Secondly, we present an extensible quality measurement tool that helps on one hand data owners to rate the quality of their dataset and get some hints on possible improvements, and on the other hand data consumers to choose their data sources from a ranked set. <Highlight>The aim of this work is to provide researchers and practitioners with a comprehensive understanding of the objective issues surrounding Linked Data quality.</Highlight>
 
@@ -29,7 +30,7 @@ The framework we propose is based on a refinement of the data quality principles
 
 Furthermore, we surveyed the landscape of Linked Data quality tools to discover that they only cover a subset of the proposed objective quality indicators. As a result, we extend Roomba which is a framework to assess and build dataset profiles with an extensible quality measurement tool and evaluate it by measuring the quality of the LOD cloud group. The results demonstrate that the general quality of LOD cloud needs more attention as most of the datasets suffer from various quality issues.
 
-# Related Work
+## Related Work
 
 In [@Zaveri:SemWebJorunal:12], the authors present a comprehensive systematic review of data quality assessment methodologies applied to LOD. They have extracted 26 quality dimensions and a total of 110 objective and subjective quality indicators. However, some of those objective indicators are dependent on the use case thus there is no clear separation on what can be automatically measured. For example, data completeness is generally a subjective dimension. However, the authors specified that the detection of the degree on which all the real-world objects are represented, detection of number of missing values for specific property and detection of the degree to which instances in the dataset are interlinked are considered as objective indicators given the presence of a gold standard or the original data source to compare with. Moreover, lots of the defined performance dimensions like low latency, high throughput or scalability of a data source were defined as objective but are still dependent on multiple subjective factors like network congestion. In addition, there were some missing objective indicators vital to the quality of LOD e.g., indication of the openness of the dataset.
 
@@ -43,7 +44,7 @@ The emerging critical need for large, distributed, heterogeneous, and complex st
 
 In [@Anisa:LDQ:14], the authors propose a methodology for assessing Linked Data quality. It consists of three main steps: (1) requirement analysis, (2) quality assessment and (3) quality improvement. Considering the multidimensionality of data quality, the methodology requires users to provide the details of a use case or a scenario that describes the intended usage of the data. Moreover, quality issues identification is done with the help of a checklist. The user must have prior knowledge about the details of the data in order to fill this list. Tools implementing the proposed methodology should be able to generate comprehensive quality measures. However, they will require heavy manual intervention and deep knowledge on the data examined. These issues highly affect detecting quality issue on large scale.
 
-# Objective Linked Data Quality Classification
+## Objective Linked Data Quality Classification
 
 The basic idea behind Linked Data is that its usefulness increases when it is more interlinked with other datasets. Tim Berners-Lee defined four main principles for publishing data that can ensure a certain level of uniformity reflecting directly data's usability [@Berners-Lee:W3C:06]:
 
@@ -70,7 +71,7 @@ Independent indicators for entity quality are mainly subjective e.g., the degree
 -   Surveying the landscape of data quality tools and frameworks.
 -   Examining the properties of the most prominent linked data models from the survey done in [@Assaf:PROFILES:15].
 
-## Completeness
+### Completeness
 
 Data completeness can be judged in the presence of a task where the ideal set of attributes and objects are known. It is generally a subjective measure depending highly on the scenario and use-case in hand, opposite to other measures like availability where I can measure if a dataset is available or not regardless of the underlying use case. For example, an entity is considered to be complete if it contains all the attributes needed for a given task, has complete language coverage [@Mader:TBDL:12] and has documentation properties [@Miles:W3C:09; @Mader:TBDL:12]. Dataset completeness has some objective indicators which we include in our framework. A dataset is considered to be complete if it:
 
@@ -85,69 +86,77 @@ Data completeness can be judged in the presence of a task where the ideal set of
 
 Links are considered to be complete if the dataset and all its resources have defined links [@Hogan:LDOW:10; @Mader:TBDL:12; @Gueret:ESWC:12]. Models are considered to be complete if they do not contain disconnected graph clusters [@Mader:TBDL:12]. Disconnected graphs are the result of incomplete data acquisition or accidental deletion of terms that leads to deprecated terms. In addition to that, models are considered to be complete if they have complete language coverage (each concept labeled in each of the languages that are also used on the other concepts) [@Mader:TBDL:12], do not contain omitted top concepts or unidirectional related concepts [@Hogan:LDOW:10] and if they are not missing labels [@Mader:TBDL:12], equivalent properties, inverse relationships, domain or range values in properties [@Maria:KEOD:13].
 
-## Availability
+### Availability
 
 A dataset is considered to be available if the publisher provides data dumps e.g., RDF dump, that can be downloaded by users [@Flemming:Thesis:10; @Hogan:LDOW:10], its queryable endpoints e.g., SPARQL endpoint, are reachable and respond to direct queries and if all of its inbound and outbound links are dereferencable.
 
-## Correctness
+### Licensing
+
+A dataset is considered to be properly licensed if it contains human or machine readable license information, if that license is dereferencable and if it indicates the permissions, copyrights and attributions specified by the author [@Zaveri:SemWebJorunal:12].
+
+### Correctness
 
 A dataset is considered to be correct if it includes the correct MIME-type and size for the content [@Hogan:LDOW:10] and doesn't contain syntactic errors [@Hogan:LDOW:10]. Links are considered to be correct if they lack syntactic errors and use the HTTP URI scheme (avoid using URNs or DOIs) [@Mader:TBDL:12]. Models are considered to be correct if the top concepts are marked and do not have broader concepts (for example having incoming `hasTopConcept` or outgoing `topConceptOf` relationships) [@Mader:TBDL:12]. Moreover, models are considered correct if they don't contain incorrect data types for typed literals, have no omitted or invalid language tags [@Suominen:IKEM:12; @Mader:TBDL:12], and do not contain "orphan terms" (terms without any associative or hierarchical relationships). In addition, labels should not be empty and should not contain unprintable characters [@Acosta:ISWC:13; @Mader:TBDL:12] or extra white spaces [@Suominen:IKEM:12].
 
-## Consistency
+### Consistency
 
-Consistency implies lack of contradictions and conflicts. The objective indicators are mainly associated with the modeling quality. A model is considered to be consistent if it does not contain overlapping labels (two concepts having the same preferred lexical label in a given language when they belong to the same schema) [@Isaac:W3C:09; @Mader:TBDL:12], consistent preferred labels per language tag [@Mader:TBDL:12; @Suominen:IKEM:12], atypical use of collections, containers and reification [@Hogan:LDOW:10], wrong equivalent, symmetric or transitive relationships [@Maria:KEOD:13], consistent naming criteria in the model [@Mader:TBDL:12; @Maria:KEOD:13], overlapping labels in a given language for concepts in the same scheme [@Mader:TBDL:12] and membership violations for disjoint classes [@Hogan:LDOW:10; @Maria:KEOD:13].
+Consistency implies lack of contradictions and conflicts. The objective indicators are mainly associated with the modeling quality. A model is considered to be consistent if it does not contain overlapping labels (two concepts having the same preferred lexical label in a given language when they belong to the same scheme) [@Isaac:W3C:09; @Mader:TBDL:12], inconsistent preferred labels per language tag [@Mader:TBDL:12; @Suominen:IKEM:12], atypical use of collections, containers and reification [@Hogan:LDOW:10], wrong equivalent, symmetric or transitive relationships [@Maria:KEOD:13], inconsistent naming criteria in the model [@Mader:TBDL:12; @Maria:KEOD:13] and membership violations for disjoint classes [@Hogan:LDOW:10; @Maria:KEOD:13].
 
-## Freshness
+### Freshness
 
-Freshness is a measure for the recency of data. The basic assumption is that old information is more likely to be outdated and unreliable [@Flouris:EvoDyn:12]. Dataset freshness can be identified if the dataset contains time and date information in the documentation of the dataset or its source [@Hogan:WebSemJorunal:12] and the indication of permissions, copyrights and attributions specified by the author [@Zaveri:SemWebJorunal:12].
+Freshness is a measure for the recency of data. The basic assumption is that old information is more likely to be outdated and unreliable [@Flouris:EvoDyn:12]. Dataset freshness can be identified if the dataset contains time and date information in the documentation of the dataset or its source [@Hogan:WebSemJorunal:12].
 
-## Comprehensibility
+### Comprehensibility
 
-Dataset comprehensibility is identified if the publisher provides general information about the dataset (e.g., title, description, URI). In addition, if he indicates at least one exemplary RDF file and SPARQL query and provides an active communication channel (mailing list, message board or e-mail) [@Flemming:Thesis:10]. A model is considered to be comprehensible if there is no misuse of ontology annotations and that all the concepts are documented and annotated [@Mader:TBDL:12; @Maria:KEOD:13].
+Dataset comprehensibility is identified if the publisher provides general information about the dataset (e.g., title, description, URI). In addition, if he indicates at least one exemplary RDF file and SPARQL query and provides an active communication channel (mailing list, message board or e-mail) [@Flemming:Thesis:10]. A model is considered to be comprehensible if there is no misuse of ontology annotations and that all the concepts are documented and annotated [@Mader:TBDL:12; @Maria:KEOD:13].
 
-## Coherence
+### Provenance
+
+Dataset provenance is identified if the dataset contains information about its authors, maintainers and publishing organization, uses a provenance vocabulary to describe it and carries versioning information.
+
+### Coherence
 
 Coherence is the ability to interpret data as expected by the publisher or vocabulary maintainer [@Hogan:LDOW:10]. The objective coherence measures are mainly associated with the modeling quality. A model is considered to be coherent when it does not contain undefined classes and properties [@Hogan:LDOW:10], blank nodes [@Hogan:WebSemJorunal:12], deprecated classes or properties [@Hogan:LDOW:10], relations and mappings clashes [@Suominen:IKEM:12], invalid inverse-functional values [@Hogan:LDOW:10], cyclic hierarchical relations [@Dagobert:DL:02; @Suominen:IKEM:12; @Mader:TBDL:12], solely transitive related concepts [@Mader:TBDL:12], redefinitions of existing vocabularies [@Hogan:LDOW:10] and valueless associative relations [@Mader:TBDL:12].
 
-## Security
+### Security
 
 Security is a quality attribute that is measured on the dataset level. It is identified if the publishers use login credentials, SSL or SSH to provide access to their dataset, or if they only grant access to specific users [@Zaveri:SemWebJorunal:12].
 
-# Linked Data Quality Tools
+## Linked Data Quality Tools
 
 In this section, we present the results of our survey on the Linked Data quality tools. There exists a number of data quality frameworks and tools that are either standalone or implemented as modules in data integration tools. These approaches can be classified into automatic, semi-automatic, manual or crowdsourced approaches.
 
-## Information Quality
+### Information Quality
 
 RDF is the standard to model information in the Semantic Web. Linked Data publishers can pick from a [plethora of tools](http://www.w3.org/2001/sw/wiki/SWValidators) that can automatically check their RDF files for quality problems. Syntactic RDF checkers are able to detect errors in RDF documents like the [W3C RDF Validator](http://www.w3.org/RDF/Validator), the RDF:about validator and converter (now defunct) and the Validating RDF Parser (VRP), an academic tool that is no longer online. [The RDF Triple-Checker](http://graphite.ecs.soton.ac.uk/checker) is an online tool that helps find typos and common errors in RDF data. Vapour [@Berrueta:SFSW:08] is a validation service to check whether semantic Web data is correctly published according to the current best practices [@Berners-Lee:W3C:06].
 
 ProLOD [@Bohm:ICDEW:10], ProLOD++ [@Abedjan:ICDE:14], Aether [@Makela:ESWC:14] and LODStats [@Auer:EKAW:12] are not purely quality assessment tools. They are Linked Data profiling tools providing clustering and labeling capabilities, schema discovery and statistics about data types and patterns. The statistics are about properties distribution, link-to-literal ratio, number of entities and RDF triples, average properties per entity and average error.
 
-## Modeling Quality
+### Modeling Quality
 
 Reusing existing ontologies is a common practice that Linked Data publishers are always trying to adopt. However, ontologies and vocabularies development is often a long error-prone process especially when many contributors are working consecutively or collaboratively [@Suominen:DataSemantics:13]. This can introduce deficiencies such as redundant concepts or conflicting relationships [@Harpring:Getty:10]. Getting to choose the right ontology or vocabulary is vital to ensure modeling correctness and consistency.
 
-### Semi-automatic Modeling Approaches
+#### Semi-automatic Modeling Approaches
 
 DL-Learner [@Lehmann:MLResearch:09] uses supervised machine learning techniques to learn concepts from user-provided examples. CROCUS [@Cherix:WASABI:14] applies a cluster-based approach for instance-level error detection. It validates identified errors by non-expert users and iterate to reach higher quality ontologies that can be safely used in industrial environments.
 
-### Automatic Modeling Approaches
+#### Automatic Modeling Approaches
 
 [qSKOS](https://github.com/cmader/qSKOS) [@Mader:TBDL:12] scans SKOS vocabularies to provide reports on vocabulary resources and relations that are problematic. [PoolParty checker](http://www.poolparty.biz) is an online service based on qSKOS. Skosify [@Suominen:IKEM:12] supports OWL and RDFS ontologies by converting them into well-structured SKOS vocabularies. It includes automatic correction abilities for quality issues that have been observed by reviewing vocabularies on the Web. The OOPS! pitfall scanner [@PovedaVillalon:EKAW:12] evaluates OWL ontologies against a rules catalog and provides the user with a set of guidelines to solve them. [ASKOSI](http://www.w3.org/2001/sw/wiki/ASKOSI) retrieves vocabularies from different sources, stores and displays the usage frequency of the different concepts used by different applications. It promotes reusing existing information systems by providing better management and presentation tools.
 
 Some errors in RDF will only appear after reasoning (incorrect inferences). In [@Sirin:OWLED:08; @Tao:HICSS:09] the authors perform quality checking on OWL ontologies using integrity constraints involving the Unique Name Assumption (UNA) and the Closed World Assumption (CWA). [Pellet](https://github.com/stardog-union/pellet) provides reasoning services for OWL ontologies. It incorporates a number of heuristics to detect and repair quality issues among disjoint properties, negative property assertions and reflexive, irreflexive, symmetric, and anti-symmetric properties. [Eyeball](https://jena.apache.org/documentation/archive/eyeball/eyeball-manual.html) provides quality inspection for RDF models (including OWL). It provides checks for a variety of problems including the usage of unknown predicates, classes, poorly formed namespaces, literal syntax validation, type consistency and other heuristics. [RDF:Alerts](https://www.w3.org/2001/sw/wiki/RDF_Alerts) provides validation for many issues highlighted in [@Hogan:LDOW:10] like misplaced, undefined or deprecated classes or properties.
 
-## Dataset Quality
+### Dataset Quality
 
 Considering the large amount of available datasets in the Linked Open Data, users have a hard time trying to identify appropriate datasets that suit certain tasks. The most adopted approaches are based on link assessment. Provenance-based approaches and entity-based approaches are also used to compute not only dataset rankings, but also rankings on the entity level.
 
-### Manual Ranking Approaches
+#### Manual Ranking Approaches
 
 Sieve [@Mendes:EDBT:12] is a framework for expressing quality assessment and fusion methods. It is implemented as a component of the [Linked Data Integration Framework (LDIF)](https://ld4pe.dublincore.org/learning_resource/ldif-a-framework-for-large-scale-linked-data-integration/). Sieve leverages the LDIF provenance metadata as quality indicators to produce quality assessment scores. However, despite its nice features, it is only targeted to perform data fusion based on user-configurable conflict resolution tasks. Moreover, since Sieve main input is provenance metadata, it is only limited to domains that can provide such metadata associated with their data.
 
 SWIQA [@Furber:ECIS:11] is a framework providing policies or formulas controlling information quality assessment. It is composed of three layers: data acquisition, query and ontology layers. It uses query templates based on the [SPARQL Inferencing Notation (SPIN)](http://spinrdf.org/) to express quality requirements. The queries are built to compute weighted and unweighted quality scores. At the end of the assessment, it uses vocabulary elements to annotate important values of properties and classes, assigning inferred quality scores to ontology elements and classifying the identified data quality problems.
 
-### Crowd-sourcing Approaches
+#### Crowd-sourcing Approaches
 
 There are several quality issues that can be difficult to spot and fix automatically. In [@Acosta:ISWC:13] the authors highlight the fact that the RDFification process of some data can be more challenging than others, leading to errors in the Linked Data provisioning process that needs manual intervention. This can be more visible in datasets that have been semi-automatically translated to RDF from their primary source (the best example for this case is DBpedia [@Bizer:WebSemJorunal:09]). The authors introduce a methodology to adjust crowdsourcing input from two types of audience:
 
@@ -156,7 +165,7 @@ There are several quality issues that can be difficult to spot and fix automatic
 
 TripleCheckMate [@Kontokostas:KESW:13] is a crowdsourcing tool used by the authors to run out their assessment supported by a semi-automatic quality verification metrics. The tool allows users to select resources, identify and classify possible issues according to a pre-defined taxonomy of quality problems. It measures inter-rater agreements, meaning that the resources defined are checked multiple times. These features turn out to be extremely useful to analyze the performance of users and allow better identification of potential quality problems. TripleCheckMate is used to identify accuracy issues in the object extraction (completeness of the extraction value for object values and data types), relevancy of the extracted information, representational consistency and interlinking with other datasets.
 
-### Semi-automatic Approaches
+#### Semi-automatic Approaches
 
 Luzzu [@Debattista:CoRR:14] is a generic Linked Data quality assessment framework. It can be easily extended through a declarative interface to integrate domain specific quality measures. The framework consists of three stages closely corresponding to the methodology in [@Anisa:LDQ:14]. They believe that data quality cannot be tackled in isolation. As a result, they require domain experts to identify quality assessment metrics in a schema layer. Luzzu is ontology driven. The core vocabulary for the schema layer is the Dataset Quality Ontology (daQ) [@Debattista:WWW:14]. Any additional quality metrics added to the framework should extend it.
 
@@ -168,15 +177,15 @@ Quality Assessment of Data Sources (Flemming's Data Quality Assessment Tool) cal
 
 LODGRefine [@Verlic:iSemantics:12] is the [Open Refine](http://openrefine.org) of Linked Data. It does not act as a quality assessment tool, but it is powerful in cleaning and refining raw instance data. LODGRefine can help detect duplicates, empty values, spot inconsistencies, extract Named Entities, discover patterns and more. LODGRefine helps in improving the quality of the dataset by improving the quality of the data at the instance level.
 
-### Automatic Ranking Approaches
+#### Automatic Ranking Approaches
 
 The Project Open Data Dashboard tracks and measures how US government websites implement the Open Data principles to understand the progress and current status of their public data listings. A validator analyzes machine readable files e.g., JSON files for automated metrics like the resolved URLs, HTTP status and content-type. However, deep schema information about the metadata is missing like description, license information or tags.
 
 Similarly on the LOD cloud, the [Data Hub LOD Validator](https://github.com/lod-cloud/ckan-lod-validator) gives an overview of Linked Data sources cataloged on the Data Hub. It offers a step-by-step validator guidance to check a dataset completeness level for inclusion in the LOD cloud. The results are divided into four different compliance levels from basic to reviewed and included in the LOD cloud. Although it is an excellent tool to monitor LOD compliance, it still lacks the ability to give detailed insights about the completeness of the metadata and overview on the state of the whole LOD cloud group and is very specific to the LOD cloud group rules and regulations.
 
-The basic idea behind link assessment tools is to provide rankings for datasets based on the cardinality and types of the relationships with other datasets. Traditional link analysis has proven to be an effective way to measure the quality of Web documents search. Algorithms like PageRank [@Page:TechReport:98] and HITS [@Kleinberg:ACM:99] became successful based on the assumption that a certain Web document is considered to have higher importance or rank if it has more incoming links that other Web documents [@Brin:WWW:98][@Chakrabarti:IEEE:99]. However, the basic assumption that links are equivalent does not suit the heterogeneous nature of links in the Linked Open Data. Thus, the previous approaches fall short to provide reliable rankings as the types of the links can have a direct impact on the ranking computation [@Toupikov:LDOW:09]. 
+The basic idea behind link assessment tools is to provide rankings for datasets based on the cardinality and types of the relationships with other datasets. Traditional link analysis has proven to be an effective way to measure the quality of Web documents search. Algorithms like PageRank [@Page:TechReport:98] and HITS [@Kleinberg:ACM:99] became successful based on the assumption that a certain Web document is considered to have higher importance or rank if it has more incoming links than other Web documents [@Brin:WWW:98; @Chakrabarti:IEEE:99]. However, the basic assumption that links are equivalent does not suit the heterogeneous nature of links in the Linked Open Data. Thus, the previous approaches fall short to provide reliable rankings as the types of the links can have a direct impact on the ranking computation [@Toupikov:LDOW:09]. 
 
-The first adaption of PageRank for Semantic Web resources was the Ontology Rank algorithm implemented in the Swoogle search engine [@Ding:CIKM:04]. They use a rational random surfing model that takes into account the different types of links between discovered sets and compute rankings based on three levels of granularity: documents, terms and RDF graphs. ReConRank [@Hogan:SSKB:06] rankings are computed at query time based on two levels of granularity: resources and context graphs. DING [@Toupikov:LDOW:09] adapted the PageRank to rank datasets based on their interconnections. DING can also automatically assign weights to different link types based on the nature of the predicate involved in the link. Broken links are a major threat to Linked Data. They occur when resources are removed, moved or updated. DSNotify (now defunct) [@Haslhofer:IWS:09] is a framework that informs data consumers about the various types of events that occur on data sources. Their approach is based on an indexing infrastructure that extracts feature vectors and stores them to an index. A monitoring module detects events on sources and write them to a central event log which pushes notifications to registered applications. LinkQA [@Gueret:ESWC:12][@Hogan:SSKB:06] is a fully automated approach which takes a set of RDF triples as an input and analyzes it to extract topological measures (links quality). However, the authors depend only on five metrics to determine the quality of data (degree, clustering coefficient, centrality, sameAs chains and descriptive richness through sameAs).
+The first adaption of PageRank for Semantic Web resources was the Ontology Rank algorithm implemented in the Swoogle search engine [@Ding:CIKM:04]. They use a rational random surfing model that takes into account the different types of links between discovered sets and compute rankings based on three levels of granularity: documents, terms and RDF graphs. ReConRank [@Hogan:SSKB:06] rankings are computed at query time based on two levels of granularity: resources and context graphs. DING [@Toupikov:LDOW:09] adapted the PageRank to rank datasets based on their interconnections. DING can also automatically assign weights to different link types based on the nature of the predicate involved in the link. Broken links are a major threat to Linked Data. They occur when resources are removed, moved or updated. DSNotify (now defunct) [@Haslhofer:IWS:09] is a framework that informs data consumers about the various types of events that occur on data sources. Their approach is based on an indexing infrastructure that extracts feature vectors and stores them to an index. A monitoring module detects events on sources and writes them to a central event log which pushes notifications to registered applications. LinkQA [@Gueret:ESWC:12; @Hogan:SSKB:06] is a fully automated approach which takes a set of RDF triples as an input and analyzes it to extract topological measures (links quality). However, the authors depend only on five metrics to determine the quality of data (degree, clustering coefficient, centrality, sameAs chains and descriptive richness through sameAs).
 
 Provenance-based assessment methods are an important step towards transparency of data quality in the Semantic Web. In [@Hartig:ISWC:09] the authors use a [provenance model](http://trdf.sourceforge.net) as an assessment method to evaluate the timeliness of Web data. Their model identifies types of "provenance elements" and the relationships between them. Provenance elements are classified into three types: actors, executions and artifacts. The assessment procedure is divided into three steps:
  1. Creating provenance graph based on the defined model
@@ -189,11 +198,11 @@ In [@Harth:ISWC:09] the authors introduce the notion of naming authority which 
 
 Sindice [@Tummarello:ISWC:07], a Semantic Web index that has since been discontinued, used a set of techniques to rank Web data. They used a combination of query dependent and query independent rankings implemented in the Semantic Information Retrieval Engine (SIREn) to produce a final entity rank. Their query dependent approach rates individual entities by aggregating the score of the matching terms with a term frequency-inverse subject frequency (tf-isf) algorithm. Their query independent ranking is done using hierarchical links analysis algorithms [@Delbru:ESWC:10]. The combination of these two approaches is used to generate a global weighted rank based on the dataset, entities and links ranks.
 
-## Queryable End-point Quality
+### Queryable End-point Quality
 
 The availability of Linked Data is highly dependent on the performance qualities of its queryable end-points. The standard query language for Semantic Web resources is SPARQL. As a result, we focus on tools measuring the quality of SPARQL endpoints. In [@BuilAranda:ISWC:13] the authors present their findings to measure the discoverability of SPARQL endpoints by analyzing how they are located and the metadata used to describe them. In addition to that, they also analyze endpoints interoperability by identifying features of SPARQL 1.0 and SPARQL 1.1 that are supported. The authors tackled the endpoints efficiency by testing the time taken to answer generic, content-agnostic SPARQL queries over HTTP.
 
-# An Extensible Objective Quality Assessment Framework
+## An Extensible Objective Quality Assessment Framework
 
 Looking at the list of objective quality indicators, we found out that a large amount of those indicators can be examined automatically from attached datasets metadata found in data portals. As a result, we have chosen to extend [Roomba](https://github.com/ahmadassaf/roomba), a scalable automatic approach for extracting, validating, correcting and generating descriptive linked dataset profiles [@Assaf:ESWC:PROFILES:15]. Roomba is built as a Command Line Interface (CLI) application using Node.js. Instructions on installing and running the framework are available on its public Github repository.
 
@@ -205,7 +214,7 @@ In our framework, we have presented 30 objective quality indicators related to d
 
 We have extended Roomba with 7 submodules that check the various dataset quality indicators listed in the next section. Some indicators have to be examined against a finite set. For example, to measure the quality indicator no.3 (having different data access points), we need to have a defined set of access points in order to calculate a quality score. Since Roomba runs on CKAN-based data portals, we built our quality extension to calculate the scores against the [CKAN standard model](https://docs.ckan.org/en/latest/api/).
 
-## Quality Indicators
+### Quality Indicators
 
 Note that the QI numbering below follows the full quality indicators table in the paper; only the subset that the Roomba extension can check is listed here, which is why some numbers are skipped.
 
@@ -232,7 +241,7 @@ Note that the QI numbering below follows the full quality indicators table in th
 - **[QI.44]** Check if the dataset and its resources contain provenance metadata `maintainer, owner_org, organization, author, maintainer_email, author_email`
 - **[QI.46]** Check if the dataset and its resources contain versioning information `version, revision_id`
 
-## Quality Score Calculation
+### Quality Score Calculation
 
 A CKAN dataset model describes four main sections in addition to the core dataset's properties. These sections are:
 
@@ -241,35 +250,35 @@ A CKAN dataset model describes four main sections in addition to the core datase
 -   **Groups**: A dataset can belong to one or more group that share common semantics. A group can be seen as a cluster or a curation of datasets based on shared categories or themes.
 -   **Organizations**: A dataset can belong to one or more organization controlled by a set of users. Organizations are different from groups as they are not constructed by shared semantics or properties, but solely on their association to a specific administration party.
 
-A CKAN portal contains a set of datasets $\textbf{D} = \{D_1,...D_n\}$. We denote the set of resources $R_i = \{r_1,...,r_k\}$, groups $G_i = \{g_1,...,g_k\}$ and tags $T_i = \{t_1,...,t_k\}$ for $D_i \in \textbf{D} (i=1,...,n)$ by $\textbf{R}=\{R_1,...,R_n\}, \textbf{G}=\{G_1,...,G_n\}$ and $\textbf{T}=\{T_1,...,t_n\}$ respectively.
+A CKAN portal contains a set of datasets $\textbf{D} = \{D_1,...D_n\}$. We denote the set of resources $R_i = \{r_1,...,r_k\}$, groups $G_i = \{g_1,...,g_k\}$ and tags $T_i = \{t_1,...,t_k\}$ for $D_i \in \textbf{D} (i=1,...,n)$ by $\textbf{R}=\{R_1,...,R_n\}, \textbf{G}=\{G_1,...,G_n\}$ and $\textbf{T}=\{T_1,...,T_n\}$ respectively.
 
 Our quality framework contains a set of measures $\textbf{M} = \{M_1,...,M_n\}$. We denote the set of quality indicators $Q_i = \{q_1,...,q_k\}$ for $M_i \in \textbf{M} (i=1,...,n)$ by $\textbf{Q} = \{Q_1,...,Q_n\}$. Each quality indicator has a weight, context and a score $Q_i<weight, context, score>$. Each $Q_i$ of $M_i$ (for $i$ = 1,\...$n$) is applied to one or more of the resources, tags or groups. The indicator context is defined where $\exists Q_i \in \textbf{R} \cup \textbf{G} \cup \textbf{T}$.
 
-The quality indicator score is based on a ratio between the number of violations $\textbf{V}$ and the total number of instances where the rule applies $\textbf{T}$ multiplied by the specified weight for that indicator. In some cases, the quality indicator score is a boolean value (0 or 1). For example, checking if there is a valid metadata file **[QI.1]** or checking if the `license_url` is dereferencable **[QI.22]**.
+The quality indicator score is based on a ratio between the number of violations $\textbf{V}$ and the total number of instances where the rule applies $\textbf{N}$ multiplied by the specified weight for that indicator. In some cases, the quality indicator score is a boolean value (0 or 1). For example, checking if there is a valid metadata file **[QI.1]** or checking if the `license_url` is dereferencable **[QI.22]**.
 
-$$Q = (V/T) * weight$$
+$$Q = (V/N) * weight$$
 
-$Q$ is an error ratio. A quality measure score should reflect the alignment of the dataset with respect to the quality indicators. The quality measure score **M** is calculated by dividing the weighted quality indicator scores sum by the total number of instances in its context, as the following formula shows:
+$Q$ is an error ratio. A quality measure score should reflect the alignment of the dataset with respect to the quality indicators. The quality measure score **M** is calculated by dividing the weighted quality indicator scores sum by the number of quality indicators in that measure, as the following formula shows:
 
 $$M =  1 - ((\sum_{i=1}^{n} Q_{i}) / \mid Q_{i} \mid )$$
 
-## Evaluation & Motivation
+### Evaluation & Motivation
 
 In our evaluation, similarly to Roomba we focused on two aspects: **i) quality profiling correctness** which manually assesses the validity of the errors generated in the report, and **ii) quality profiling completeness** which assesses if Roomba covers all the [quality indicators](#quality-indicators) above. The motivation behind these two metrics is to assess if Roomba's extension can generate accurate and reliable reports that reflect the objective quality of the examined dataset.
 
-### Profiling Correctness
+#### Profiling Correctness
 
 To measure profile correctness, we need to make sure that the issues reported by Roomba are valid. On the dataset level, we chose five datasets from the LOD Cloud.
 
-After running Roomba and examining the results on the selected datasets and groups, we found out that our framework provides 100% correct results on the individual dataset level. Roomba's aggregation have been evaluated in [@Assaf:ESWC:PROFILES:15], thus we can infer that the quality profiler at the group and portal level also produces correct profiles. 
+After running Roomba and examining the results on the selected datasets and groups, we found out that our framework provides 100% correct results on the individual dataset level. Roomba's aggregation has been evaluated in [@Assaf:ESWC:PROFILES:15], thus we can infer that the quality profiler at the group and portal level also produces correct profiles. 
 
-### Profiling Completeness
+#### Profiling Completeness
 
 We analyzed the completeness of our framework by manually constructing a [synthetic set of profiles](https://github.com/ahmadassaf/opendata-checker/tree/master/test). These profiles cover the indicators in the full quality indicators table of the [paper](https://www.igi-global.com/article/towards-an-objective-assessment-framework-for-linked-data-quality/160174). After running our framework at each of these profiles, we measured the completeness and correctness of the results. We found out that our framework covers indeed all the quality problems discussed. The result is expected as we have specifically tailored Roomba to completely cover all the previously mentioned indicators.
 
-# Experiments and Analysis
+## Experiments and Analysis
 
-In this section, we provide the experiments done using the proposed framework. An excerpt of the generated quality report can be found in the [paper](https://www.igi-global.com/article/towards-an-objective-assessment-framework-for-linked-data-quality/160174). All the experiments are reproducible by Roomba and their results are available on its Github repository. We have run the framework on the LOD cloud containing 259 datasets at the time of writing this post. We ran the instance and resource extractor in order to cache the metadata files for these datasets locally and ran the quality assessment process which took around two hours on a 2.6 Ghz Intel Core i7 processor with 16GB of DDR3 memory machine. In this experiment, we assumed that all the quality indicator weights are equal and set to 1.
+In this section, we provide the experiments done using the proposed framework. An excerpt of the generated quality report can be found in the [paper](https://www.igi-global.com/article/towards-an-objective-assessment-framework-for-linked-data-quality/160174). All the experiments are reproducible by Roomba and their results are available on its Github repository. We have run the framework on the LOD cloud group on the Data Hub, which contained 259 datasets at the time of writing this post. We ran the instance and resource extractor in order to cache the metadata files for these datasets locally and ran the quality assessment process which took around two hours on a 2.6 GHz Intel Core i7 processor with 16GB of DDR3 memory machine. In this experiment, we assumed that all the quality indicator weights are equal and set to 1.
 
 We found out that licensing, availability and comprehensibility had the worst quality measures scores: 19.59%, 26.22% and 31.62% respectively. On the other hand, the LOD cloud datasets have good quality scores for freshness, correctness and provenance as most of the datasets have an average of 75% for each one of those measures.
 
@@ -281,6 +290,6 @@ We notice that there is a plethora of tools (syntactic checkers or statistical p
 
 These shortcomings are mainly due to the limitations in the CKAN dataset model. However, due to the modularity of Roomba, syntactic checkers and additional modules to examine vocabularies usage can be easily integrated in Roomba to fix **[QI.27]**, **[QI.8]** and **[QI.45]**. Roomba's metadata quality profiler can fix **[QI.23]** as we have manually created a mapping file standardizing the set of possible [license names and their information](https://github.com/ahmadassaf/opendata-checker/blob/master/util/licenseMappings.json). We have also used the [open source and knowledge license information](https://github.com/okfn/licenses) to normalize license information and add extra metadata like the domain, maintainer and open data conformance.
 
-# Looking Back from 2026
+## Looking Back from 2026
 
 A decade on, the core observation of this work still holds: metadata quality remains one of the weakest links in open data publishing, and licensing and availability are still the indicators that fail most often. The split between objective, automatically measurable indicators and subjective, use-case dependent ones has aged well and is now a common framing in data quality work. Much of what we had to survey and map by hand has since been standardized, with DCAT revisions and related W3C vocabularies covering a large part of the dataset description landscape this framework had to reconstruct from heterogeneous models.

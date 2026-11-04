@@ -16,17 +16,17 @@ Jekyll is a static site generator that is simple, reliable, and supported by Git
 
 - **Performance**: While Jekyll is fast for simple blogs, it can become sluggish as your content grows.
 - **Customization**: Advanced customization often requires diving into Liquid templates and custom plugins, which can be cumbersome.
-- **Modern Workflow**: Jekyll lacks some modern development features like hot-reloading and advanced state management.
+- **Modern Workflow**: Jekyll can refresh the browser with `--livereload`, but every change still goes through a full site rebuild; there is no hot module replacement, and anything stateful on the page is left entirely to you.
 
 I decided to use a more "modern" stack with Next.js, which is a React-based framework that offers the perfect balance of flexibility and performance with the following features:
 
-- **[Server-Side Rendering (SSR)](https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering)** and **[Static Site Generation (SSG)](https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation)**: Next.js allows you to choose between SSR and SSG, optimizing performance and SEO.
-- [**Dynamic Routing**](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes): Easy creation of dynamic routes without complex configuration.
+- **[Server-Side Rendering (SSR)](https://nextjs.org/docs/app/getting-started/server-and-client-components)** and **[Static Site Generation (SSG)](https://nextjs.org/docs/app/api-reference/functions/generate-static-params)**: Next.js allows you to choose between SSR and SSG, optimizing performance and SEO.
+- [**Dynamic Routing**](https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes): Easy creation of dynamic routes without complex configuration.
 - **API Routes**: Built-in API routes simplify backend logic integration.
 
 ## Starting from the Tailwind Nextjs Starter Blog
 
-I believe in reusing existing solutions to save time and effort, and a quick search led me to a great starting point: Timothy Lin's <Preview url='https://github.com/timlrx/tailwind-nextjs-starter-blog' title="Tailwind Next.js Starter Blog"/>. It is a [Next.js](https://nextjs.org/) <Tooltip text="In version 13, Next.js introduced a new App Router built on React Server Components, which supports shared layouts, nested routing, loading states, error handling, and more. The App Router works in a new directory named app. The app directory works alongside the pages directory to allow for incremental adoption. This allows you to opt some routes of your application into the new behavior while keeping other routes in the pages directory for previous behavior. If your application uses the pages directory, please also see the Pages Router documentation.">13+</Tooltip> and [Tailwind CSS](https://tailwindcss.com/) blogging template that comes preconfigured for technical writing, and it was a solid foundation to build on. I should be clear that what runs this blog today has been heavily reworked since: the routing, layouts, content pipeline, and the entire component layer have all been rewritten or replaced. But the template is what got me moving, and several of its ideas survive in the current codebase.
+I believe in reusing existing solutions to save time and effort, and a quick search led me to a great starting point: Timothy Lin's <Preview url='https://github.com/timlrx/tailwind-nextjs-starter-blog' title="Tailwind Next.js Starter Blog"/>. It is a [Next.js](https://nextjs.org/) <Tooltip text="In version 13, Next.js introduced a new App Router built on React Server Components, which supports shared layouts, nested routing, loading states, error handling, and more. The App Router works in a new directory named app. The app directory works alongside the pages directory to allow for incremental adoption. This allows you to opt some routes of your application into the new behavior while keeping other routes in the pages directory for previous behavior.">13+</Tooltip> and [Tailwind CSS](https://tailwindcss.com/) blogging template that comes preconfigured for technical writing, and it was a solid foundation to build on. I should be clear that what runs this blog today has been heavily reworked since: the routing, layouts, content pipeline, and the entire component layer have all been rewritten or replaced. But the template is what got me moving, and several of its ideas survive in the current codebase.
 
 The main features I relied on and extended are:
 
@@ -48,11 +48,12 @@ Let's walk through the different folders that make up the blog as it exists toda
 
 - `public/static`: Next.js serves static files, like images, from the `public` folder in the root directory. Files inside `public` can be referenced by your code starting from the base URL `/`. The `static` folder contains images used in the blog, logos, icons, and favicons.
 - `scripts`: This folder contains scripts that help with the development and maintenance of the blog.
-  - The `build.mjs` script performs a bunch of steps after the `build` command, like generating the RSS feed and the tags and categories pages.
+  - The `build.mjs` script runs after the Contentlayer build and before `next build` (or `next dev`): it writes the tag, category, and publication data as JSON files under `app/content` that the pages read, and generates the RSS feed.
   - The `rss.mjs` script generates the RSS feed for the blog.
 
 <Aside>
 **Why `.mjs` extension?**
+
 Since Node.js was created, the ECMAScript module system (which uses import and export) has become standard and Node.js has added support for it. However, Node.js will treat .js files as CommonJS (which is the default module system for the project) unless package.json says `"type": "module"` or the file extension is `.mjs`.
 </Aside>
 
@@ -70,7 +71,7 @@ Since Node.js was created, the ECMAScript module system (which uses import and e
   - `mdx`: contains the remark plugins for the MDX pipeline, like `remark-code-title.js`, which adds a title to code blocks.
 - `app`: the `app` folder contains the application routes and application shell: the blog pages, the API routes (like the [dynamic OG image route](/blog/category/engineering/build-dynamic-og-images)), the sitemap, and the robots configuration.
 
-One structural decision worth calling out: the reusable React components, MDX components, design tokens, and Tailwind preset do not live in this repository at all. They were extracted into a separate design-system package (`@gaudi/design-system`), which the blog installs as a pinned dependency. The root `tailwind.config.js` consumes the design system's Tailwind preset and scans both the app and the installed package for classes. This keeps the blog repository focused on content and routing, and lets the visual layer evolve independently.
+One structural decision worth calling out: the reusable React components, MDX components, design tokens, and Tailwind preset do not live in this repository at all. They were extracted into a separate design-system package (`@gaudi/design-system`), which the blog installs as a local workspace link (`link:../design-system`) rather than a published version. The root `tailwind.config.js` consumes the design system's Tailwind preset and scans both the app and the installed package for classes. This keeps the blog repository focused on content and routing, and lets the visual layer evolve independently.
 
 ## Was It Worth It?
 

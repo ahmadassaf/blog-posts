@@ -6,6 +6,7 @@ summary: 'A ThemeProvider context is the standard way to manage themes in a Reac
 subtitle: 'Cookie-persisted theming that keeps server components on the server'
 featured: false
 date: '2024-06-11'
+updated: '2026-08-31'
 category: 'engineering'
 ---
 
@@ -50,6 +51,8 @@ export function ThemeProviders({ children }) {
 To accompany the `ThemeProvider`, you would need a `ThemeSwitcher` component to toggle between themes. You can already see the reliance on the `useTheme` hook from the `next-themes` package to get the current theme and toggle it.
 
 ```jsx caption="ThemeSwitcher.js"
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 
@@ -76,7 +79,7 @@ export default ThemeSwitch;
 
 What happens now is that in our application we will need to wrap all of our content with the `ThemeProvider` as shown below.
 
-```jsx caption="App.js" {9,11}
+```jsx caption="app/layout.js" {9,11}
 ...
 import { ThemeProviders } from '@/components/utils/ThemeProviders';
 ...
@@ -94,7 +97,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-This works, but the theme choice lives only on the client. On a hard refresh the server has no idea what the visitor picked, so it renders the default theme and the page flashes when `next-themes` kicks in.
+This works, and there is no visible flash either: `next-themes` injects a small blocking inline script that reads `localStorage` and sets the class on `<html>` before the page paints. The problem is the server. On a hard refresh it has no idea what the visitor picked, so the HTML it sends, and anything rendered on the server from the theme, assumes the default theme and only the client-side script corrects it.
 
 ## The new way
 
@@ -139,7 +142,7 @@ export default AppThemeProvider;
 
 ### 2. Use Theme Switcher
 
-The `ThemeSwitcher` no longer creates any provider of its own; it simply consumes the shared context from the app-level `ThemeProvider` above. We still need a mounted-state check to prevent hydration mismatches, since the button's icon depends on the resolved theme:
+The `ThemeSwitcher` barely changes: it still just consumes the shared context from the app-level `ThemeProvider` above. We still need a mounted-state check to prevent hydration mismatches, since the button's icon depends on the resolved theme:
 
 ```jsx caption="ThemeSwitcher.js"
 'use client';
@@ -149,7 +152,7 @@ import { useTheme } from 'next-themes';
 import { RiMoonClearFill, RiSunFill } from 'react-icons/ri';
 
 function ThemeSwitch() {
-  const { setTheme, theme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [ mounted, setMounted ] = useState(false);
 
   useEffect(() => {
@@ -166,8 +169,8 @@ function ThemeSwitch() {
   }
 
   return (
-    <button type='button' aria-label='Toggle Dark Mode' onClick={ () => setTheme(theme === 'dark' ? 'light' : 'dark') }>
-        {theme === 'dark' ? (<RiMoonClearFill />) : (<RiSunFill />)}
+    <button type='button' aria-label='Toggle Dark Mode' onClick={ () => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark') }>
+        {resolvedTheme === 'dark' ? (<RiMoonClearFill />) : (<RiSunFill />)}
     </button>
   );
 }
@@ -179,7 +182,7 @@ This sample is simplified for the post; it uses `react-icons` for brevity, while
 
 ### 3. Integrate Theme Provider
 
-The layout container is a **server component**. It reads the theme cookie with `await cookies()` (cookies are async in Next.js 15) and passes the value as the provider's default theme, so the very first server render already has the correct theme and there is no flash on load. The provider is dynamically imported and wraps the children; since they are passed through as props, they stay server components:
+The layout container is a **server component**. It reads the theme cookie with `await cookies()` (cookies are async in Next.js 15) and passes the value as the provider's `defaultTheme`. To be precise about what that buys: with `attribute='class'` the class on `<html>` is still applied by the inline script `next-themes` injects before paint; the cookie seeds the default so the server starts from the visitor's choice instead of the site default, and server output and script agree from the first render. The provider is dynamically imported and wraps the children; since they are passed through as props, they stay server components:
 
 ```jsx caption="LayoutContainer.js" {2,3,9,10,13}
 import dynamic from 'next/dynamic';

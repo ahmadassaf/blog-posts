@@ -2,17 +2,17 @@
 type: 'Post'
 title: 'Creating Rich & Interactive Blog Posts'
 tags: ['MDX', 'unified', 'mdast', 'remark', 'rehype']
-summary: 'We explore how to create engaging content with interactive elements using unifiedJS, mdast, rehype, remark, and MDX'
-subtitle: 'Understanding unifiedJS, mdast, rehype, remark, mdx'
+summary: 'We explore how to create engaging content with interactive elements using unified, mdast, rehype, remark, and MDX'
+subtitle: 'Understanding unified, mdast, rehype, remark, mdx'
 featured: false
 date: '2025-01-22'
 category: 'engineering'
 tableOfContents: true
 ---
 
-Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words: they seek engaging, interactive, and visually rich content. I faced this challenge directly when building this blog, wanting posts that are easy to write and maintain while still offering interactivity and customization. My answer was the [Unified.js](https://github.com/unifiedjs/unified) ecosystem, along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com). In fact, the post you are reading right now is rendered by the very pipeline this article describes: this blog runs its own remark plugins (one that turns external links into preview cards, another that adds titles to code blocks) alongside a rehype plugin that transforms internal post links into interactive preview cards.
+Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words: they seek engaging, interactive, and visually rich content. I faced this challenge directly when building this blog, wanting posts that are easy to write and maintain while still offering interactivity and customization. My answer was the [unified](https://github.com/unifiedjs/unified) ecosystem, along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com). In fact, the post you are reading right now is rendered by the very pipeline this article describes: this blog runs its own remark plugins (one that turns external links into preview cards, another that adds titles to code blocks) alongside a rehype plugin that transforms internal post links into interactive preview cards.
 
-Markdown has many different flavors and different people have different requirements for features they expect from it. [Unified.js](https://github.com/unifiedjs/unified) provides a powerful and flexible framework for parsing, transforming, and rendering content in various formats, including Markdown, HTML, and JSX.  It takes a string and turns it into structured data (syntax tree) that other plugins can work with. Plugins can do anything, from spellcheck to linting or transforming from one format to another (e.g. Markdown → HTML). Unified on its own doesn’t do much. It acts as a unifying package for all the other plugins out there.
+Markdown has many different flavors and different people have different requirements for features they expect from it. [unified](https://github.com/unifiedjs/unified) provides a powerful and flexible framework for parsing, transforming, and rendering content in various formats, including Markdown, HTML, and JSX. It takes a string and turns it into structured data (syntax tree) that other plugins can work with. Plugins can do anything, from spellcheck to linting or transforming from one format to another (e.g. Markdown → HTML). Unified on its own doesn’t do much. It acts as a unifying package for all the other plugins out there.
 
 By leveraging these tools, I get interactive and engaging blog posts that combine the simplicity of Markdown with the capabilities of modern JavaScript frameworks, and in this post I'll walk through how each piece fits together.
 
@@ -34,31 +34,31 @@ Another paragraph follows the chart.
 
 In this example, the `<Chart />` component is a React element that renders an interactive chart. With [MDX](https://mdxjs.com), you can seamlessly integrate such components into your posts without sacrificing readability or maintainability.
 
-## The Foundation: Unified.js
+## The Foundation: unified
 
-At the core of this ecosystem is [Unified.js](https://github.com/unifiedjs/unified), a library that simplifies content processing by representing it as abstract syntax trees ([ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree)) using [unist](https://github.com/syntax-tree/unist) specification. These trees serve as structured representations of content, whether it's written in Markdown, HTML, or even JSX. By standardizing how content is processed, [Unified.js](https://github.com/unifiedjs/unified) makes it possible to build reusable and extensible tools for transforming and manipulating text.
+At the core of this ecosystem is [unified](https://github.com/unifiedjs/unified), a library that simplifies content processing by representing it as abstract syntax trees ([ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree)) using [unist](https://github.com/syntax-tree/unist) specification. These trees serve as structured representations of content, whether it's written in Markdown, HTML, or even JSX. By standardizing how content is processed, [unified](https://github.com/unifiedjs/unified) makes it possible to build reusable and extensible tools for transforming and manipulating text.
 
-One of the standout features of [Unified.js](https://github.com/unifiedjs/unified) is its pipeline architecture. A pipeline processes input content (such as Markdown) through various stages, including parsing, transforming, and stringifying. Each stage can be enhanced with plugins to introduce new functionality, making it easy to customize your content workflow.
+One of the standout features of [unified](https://github.com/unifiedjs/unified) is its pipeline architecture. A pipeline processes input content (such as Markdown) through various stages, including parsing, transforming, and stringifying. Each stage can be enhanced with plugins to introduce new functionality, making it easy to customize your content workflow.
 
 <Callout type="info">
 Syntax trees are representations of source code or even natural language. These trees are abstractions that make it possible to analyze, transform, and generate code.
 
-- **Concrete Syntax Trees (CST)** : structures that represent every detail (such as white-space in white-space insensitive languages)
+- **Concrete Syntax Trees (CST)**: structures that represent every detail (such as white-space in white-space insensitive languages)
 - **Abstract Syntax Trees (AST)**: structures that only represent details relating to the syntactic structure of code (such as ignoring whether a double or single quote was used in languages that support both, such as JavaScript).
 
 </Callout>
 
 ## Remark: Markdown Processing Made Easy
 
-Remark is a [Unified.js](https://github.com/unifiedjs/unified) processor specifically designed for working with Markdown. It transforms Markdown text into a Markdown Abstract Syntax Tree (MDAST), which provides a structured format for analyzing and manipulating the content.
+Remark is a [unified](https://github.com/unifiedjs/unified) processor specifically designed for working with Markdown. It transforms Markdown text into a Markdown Abstract Syntax Tree (MDAST), which provides a structured format for analyzing and manipulating the content.
 
 <UnifiedProcessorExplorer view="remark" />
 
-For example, consider a blog post written in Markdown:
+For example, consider a blog post written in MDX (remark learns the JSX syntax through the `remark-mdx` plugin):
 
-::: code-group labels=[Markdown, MDAST/JSON]
+::: code-group labels=[MDX, MDAST/JSON]
 
-```markdown
+```mdx
 # My Interactive Blog
 
 Welcome to my blog. Here's an interactive chart:
@@ -90,8 +90,19 @@ Welcome to my blog. Here's an interactive chart:
       ]
     },
     {
-      "type": "jsx",
-      "value": "<Chart data={[1, 2, 3, 4]} />"
+      "type": "mdxJsxFlowElement",
+      "name": "Chart",
+      "attributes": [
+        {
+          "type": "mdxJsxAttribute",
+          "name": "data",
+          "value": {
+            "type": "mdxJsxAttributeValueExpression",
+            "value": "[1, 2, 3, 4]"
+          }
+        }
+      ],
+      "children": []
     }
   ]
 }
@@ -116,13 +127,13 @@ By combining Remark with plugins, you can:
 - **Root Node**: The root node represents the entire document.
 - **Heading Node**: The first child is a heading (indicated by the `#` symbol in Markdown). It has a `depth` of 1, indicating that it is a top-level heading.
 - **Paragraph Node**: The next child is a paragraph, as indicated by the plain text following the heading. The paragraph is further broken down into text nodes for each segment of text.
-- **JSX Node**: Represents the JSX component `<Chart data={[1, 2, 3, 4]} />`.
+- **MDX JSX Node**: An `mdxJsxFlowElement` named `Chart` represents the `<Chart data={[1, 2, 3, 4]} />` component; its props become `attributes`, with the `data` expression kept as raw source.
 
 Each of the Markdown elements (headings, paragraphs, etc.) is mapped to a specific node in the MDAST. This enables manipulation, transformation, or further processing of the content in a programmatic way.
 
 ## Rehype: HTML and Beyond
 
-While Remark excels at handling Markdown, Rehype is the go-to tool for working with HTML. Like Remark, Rehype parses content into an abstract syntax tree, known as HAST (HTML Abstract Syntax Tree). This tree is ideal for making HTML-specific transformations, such as adding classes, optimizing images, or embedding scripts.
+While Remark excels at handling Markdown, Rehype is the go-to tool for working with HTML. Like Remark, Rehype parses content into an abstract syntax tree, known as HAST (Hypertext Abstract Syntax Tree). This tree is ideal for making HTML-specific transformations, such as adding classes, optimizing images, or embedding scripts.
 
 Rehype becomes particularly useful when converting Markdown to HTML. Using the `remark-rehype` plugin, you can transform an MDAST into a HAST, enabling a seamless transition from Markdown to HTML. From there, Rehype plugins can be used to enhance the HTML output, ensuring that your blog post is optimized for performance and accessibility.
 
@@ -130,9 +141,9 @@ Rehype becomes particularly useful when converting Markdown to HTML. Using the `
 
 <UnifiedProcessorExplorer view="rehype" />
 
-::: code-group labels=[Markdown, MDAST/JSON, HAST/JSON]
+::: code-group labels=[MDX, MDAST/JSON, HAST/JSON]
 
-```markdown
+```mdx
 # My Interactive Blog
 
 Welcome to my blog. Here's an interactive chart:
@@ -164,8 +175,19 @@ Welcome to my blog. Here's an interactive chart:
       ]
     },
     {
-      "type": "jsx",
-      "value": "<Chart data={[1, 2, 3, 4]} />"
+      "type": "mdxJsxFlowElement",
+      "name": "Chart",
+      "attributes": [
+        {
+          "type": "mdxJsxAttribute",
+          "name": "data",
+          "value": {
+            "type": "mdxJsxAttributeValueExpression",
+            "value": "[1, 2, 3, 4]"
+          }
+        }
+      ],
+      "children": []
     }
   ]
 }
@@ -213,17 +235,17 @@ Welcome to my blog. Here's an interactive chart:
 ```
 :::
 
-### Breakdown of HAST Structure:
+### Breakdown of HAST Structure
 
 - **Root Node**: Represents the HTML structure.
 - **Element Node**: Each `h1` (heading) and `p` (paragraph) in the original MDX content is converted to corresponding HTML elements (`<h1>` and `<p>`).
-- **JSX Converted to `div`**: The JSX component `<Chart />` is converted to a `div` element (for simplicity in this example). It could also be rendered dynamically via React, but in the HAST tree, it’s represented as a `div` for static rendering.
+- **JSX shown as a `div`**: The `<div class="chart">` standing in for `<Chart />` is an illustration I invented for this example; no step in the pipeline produces it. In a real MDX pipeline the `mdxJsxFlowElement` passes through `remark-rehype` untouched and is compiled into a call to your `Chart` component.
 
-In a real-world scenario, the `div` would likely be rendered into a functional component or React element when integrated into a frontend framework like [React](https://react.dev).
+In a real-world scenario, that node is rendered as a functional component or React element when integrated into a frontend framework like [React](https://react.dev).
 
 ## Rehype vs. Remark: Choosing the Right Tool
 
-There are several advantages to working with **MDAST** (Markdown Abstract Syntax Tree) over **HAST** (HTML Abstract Syntax Tree) in certain contexts, especially when you’re dealing with Markdown content and need to perform transformations or custom processing. Here are some reasons why MDAST might be preferable in specific use cases:
+There are several advantages to working with **MDAST** (Markdown Abstract Syntax Tree) over **HAST** (Hypertext Abstract Syntax Tree) in certain contexts, especially when you’re dealing with Markdown content and need to perform transformations or custom processing. Here are some reasons why MDAST might be preferable in specific use cases:
 
 ### 1. **Markdown-Centric Workflow**
 - **Designed for Markdown**: MDAST is specifically tailored for representing Markdown content, which means it’s optimized for the structure and elements found in Markdown (headings, paragraphs, lists, links, etc.). This makes it more intuitive and efficient when you are working directly with Markdown content.
@@ -261,6 +283,6 @@ The real power of these tools emerges when they are used together. Here’s a ty
 
 ## Conclusion
 
-[Unified.js](https://github.com/unifiedjs/unified) offers a robust toolkit for creating modern, interactive, and engaging blog posts, and it is the toolkit this blog itself runs on: every post here, including the one you have just read, passes through the remark and rehype pipeline described above before it reaches your screen.
+[unified](https://github.com/unifiedjs/unified) offers a robust toolkit for creating modern, interactive, and engaging blog posts, and it is the toolkit this blog itself runs on: every post here, including the one you have just read, passes through the remark and rehype pipeline described above before it reaches your screen.
 
 By leveraging this ecosystem, I have been able to turn static posts into richer, more interactive experiences while keeping my writing workflow as simple as editing a Markdown file.
