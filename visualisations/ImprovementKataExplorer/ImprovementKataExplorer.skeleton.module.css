@@ -1,0 +1,8 @@
+.root { display:grid;gap:.6rem;width:100%;min-width:0;margin-block:2.5rem; }
+.root .title { height:1.4rem;width:min(26rem,70%);border-radius:.4rem; }
+.root .text { height:.9rem;width:min(48rem,95%);border-radius:.3rem; }
+.root .textShort { height:.9rem;width:min(22rem,55%);border-radius:.3rem; }
+.cards { display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.5rem; }
+.cards .card { flex:1 1 11rem;height:5.5rem;border-radius:.75rem; }
+.root .trigger { height:3.25rem;margin-top:.5rem;border-radius:.4rem; }
+.root .body { height:22rem;border-radius:.4rem; }

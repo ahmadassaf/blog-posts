@@ -10,14 +10,17 @@
 
 import { lazy, Suspense } from 'react';
 
+import ImprovementKataExplorerSkeleton from './ImprovementKataExplorer/ImprovementKataExplorer.skeleton';
+import DiagramSkeleton from './DiagramSkeleton';
+
 /*
  * Each diagram loads as its own chunk and still renders on the server. next/dynamic is avoided: it
  * renders a server-only preload sibling, which shifts React's useId tree between the server and the
  * browser, so every diagram using useId failed to hydrate.
  */
-const diagram = (load) => {
+const diagram = (load, Fallback = DiagramSkeleton) => {
   const Component = lazy(load);
-  const Diagram = (props) => <Suspense fallback={ null }><Component { ...props } /></Suspense>;
+  const Diagram = (props) => <Suspense fallback={ <Fallback /> }><Component { ...props } /></Suspense>;
 
   return Diagram;
 };
@@ -30,7 +33,7 @@ const GenerativeRoutingExplorer = diagram(() => import('./GenerativeRoutingExplo
 const GenerativeUIComparison = diagram(() => import('./GenerativeUIComparison'));
 const GenerativeUIBlockBuilder = diagram(() => import('./GenerativeUIBlockBuilder'));
 const GrowthLevelsExplorer = diagram(() => import('./GrowthLevelsExplorer'));
-const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'));
+const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'), ImprovementKataExplorerSkeleton);
 const JsonLdGraphExplorer = diagram(() => import('./JsonLdGraphExplorer'));
 const OlapCubeExplorer = diagram(() => import('./OlapCubeExplorer'));
 const SparqlPatternExplorer = diagram(() => import('./SparqlPatternExplorer'));
