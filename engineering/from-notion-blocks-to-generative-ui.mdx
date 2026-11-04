@@ -1,7 +1,7 @@
 ---
 type: 'Post'
-title: 'Why I Think Generative UI Comes Next'
-subtitle: 'From self-service data and Notion blocks to interfaces and workflows shaped by intent'
+title: 'Generate the View, Keep the Work'
+subtitle: 'Why generative UI comes next, and what it has to preserve as the question changes'
 summary: 'What self-service BI, Notion, and recent research on generative interfaces reveal about helping people shape both their tools and their path through a task.'
 tags: ['Generative UI', 'AI', 'Notion', 'Structured Data', 'Software Engineering']
 category: 'engineering'
@@ -16,7 +16,7 @@ My interest in generative UI goes back to my time working in business intelligen
 
 I later found myself loving Notion and becoming attached to the systems I built in it. Only after using it did I start to understand why: its blocks let me arrange a workspace around how I worked. The result felt like something I had made myself.
 
-Generative AI gave more people another way to start building: describe an idea in a conversation, see something take shape, and refine it. That could mean creating an entire app. What interests me here is what happens inside a product someone already uses: generating a view for their question, then bringing in the next useful tool as the question develops. I'd like people to keep their decisions, notes, and evidence as they go. That's the version of generative UI I want to explore.
+Generative AI gave more people another way to start building: describe an idea in a conversation, see something take shape, and refine it. That could mean creating an entire app. What interests me here is what happens inside a product someone already uses: generating a view for their question, then bringing in the next useful tool as the question develops. I'd like people to keep their decisions, notes, and evidence as they go. That's the version of generative UI I want to explore: not a new app for every question, but a product that can assemble a view, bring in the next tool, and leave what I've already done intact.
 
 ## Self-service leaves more work than we admit
 
@@ -54,11 +54,11 @@ DynaVis demonstrates a useful combination. A natural-language request edits a vi
 
 The broader *Generative Interfaces for Language Models* study reports favorable human evaluations across a range of queries, especially where organization and interaction help. Its limitations matter for a product: it generates frontends without backend logic, and generation can take several minutes. Preference for an interface is encouraging; it still leaves the question of whether the whole task becomes easier. [@Chen:ACL:26]
 
-The example below follows the idea in the [Thesys comparison demo](https://demo.thesys.dev/compare). **Try one thing: compare the responses, then change the region on the UI side.** Both responses start from the same fictional figures. The control lets you continue exploring without composing another question.
+The example below follows the idea in the [Thesys comparison demo](https://demo.thesys.dev/compare). It shows only the first half of the argument: an answer that arrives with its own controls. **Try one thing: compare the responses, then change the region on the UI side.** Both responses start from the same fictional figures. The control lets you continue exploring without composing another question.
 
 <GenerativeUIComparison id="generative-ui-comparison" />
 
-This illustrates the value of having controls alongside an answer. A well-designed dashboard can offer those controls too. The generative opportunity is assembling a useful selection for a question the product designer didn't anticipate.
+A well-designed dashboard can offer those same controls, so this alone is not a case for generation. The generative opportunity is choosing which controls and blocks belong together for a question the product designer didn't anticipate. The next example is about that composition.
 
 ## Keep what I've already built
 
@@ -82,17 +82,15 @@ The page someone is looking at tells you what they're reading, but not necessari
 
 That was part of what I wanted to explore with [SNARC](https://github.com/ahmadassaf/PhD/tree/main/Papers/ESWC%2713%20-%20SNARC%20An%20Approach%20for%20Aggregating%20and%20Recommending%20Contextualized%20Social%20Content): could we bring useful context into the page someone was already browsing? We built a Chrome extension that extracted entities, concepts, and categories from the content, queried other services, and brought related social content back into the page. The implementation used the page as a clue to relevance. My broader interest was the question behind it: why am I here, and what else would help me? [@Assaf:ESWC:13]
 
-Browsing rarely follows a tidy plan. You start with an article, notice an unfamiliar term, follow it, and discover that your real question is slightly different. Sometimes you find the words for what you need only after seeing a few examples.
-
-Exploratory-search research examines that process. A 2024 study of master's students explored how they judged relevance and built knowledge while searching the literature. Although the setting differs from business analysis, it helps explain why reading and searching are part of working out the question itself. [@Soufan:CHIIR:24]
-
-Semantic query expansion can help with retrieval. A narrow phrase can be expanded with related terms or concepts, so a search isn't limited to the exact words someone typed. Query2doc generates a short pseudo-document and adds it to the query to improve retrieval. Its benchmark results concern finding relevant material; they don't establish understanding of a person's wider purpose. [@Wang:EMNLP:23]
+Browsing rarely follows a tidy plan. You start with an article, notice an unfamiliar term, follow it, and discover that your real question is slightly different. Exploratory-search research describes the same process: a 2024 study of master's students found that reading and searching were how they worked out the question itself, not just how they answered it. [@Soufan:CHIIR:24] Retrieval techniques such as query expansion can widen a narrow phrase to related concepts, but that improves finding material; it says nothing about a person's wider purpose. [@Wang:EMNLP:23]
 
 I'd like to make some of those connections available as choices. Someone looking at revenue growth might want to explore pricing, customer retention, or an acquisition that changed the comparison. Those are possible directions to offer, not explanations to assume. The prompt, current page, selected records, and subsequent choices all provide clues. The person still needs an easy way to correct the direction.
 
 ## From generating a view to generating a route through the work
 
 I use **generative routing** as a working term for composing and adapting a path through an application's capabilities around a person's goal and context. Here, routing means which view, evidence, or action to offer next. It isn't about choosing which language model handles a request.
+
+In agent terms, this is tool selection where the result is an interface rather than a text reply, and the capability catalog I describe later is the tool manifest. Naming it that way is useful because the failure modes are already known: calling the wrong tool, calling it without its preconditions, or producing a plausible call that the evidence doesn't support.
 
 Consider a hypothetical [Mav9](https://mav9.com) query: “This company's EBITDA looks different from what we recorded at acquisition.” The person has expressed a concern without specifying its cause. A useful response could begin by comparing the observations, their periods, and their definitions.
 
@@ -117,6 +115,8 @@ A good filter or a well-designed workflow may already solve the problem. For a f
 The more interesting cases involve combinations we haven't anticipated: a different comparison, an unusual source, or a question that changes midway through the work. A product can't expose every possible combination without becoming difficult to use. Generation could assemble the relevant pieces for that moment while keeping familiar controls and shared definitions underneath.
 
 That puts a useful constraint on the idea. A generated view has to save more effort than it introduces through explanation, checking, and learning its controls. Sometimes a short answer will do. Sometimes the best next step is opening an existing tool. I'd want the system to recognize those cases too.
+
+There is a second cost that is easy to underrate. Two analysts asking the same question could receive two different workspaces. That erodes the shared vocabulary a team relies on when they talk about a number, train a new colleague, or explain a decision to an auditor. My current answer is to let the arrangement be personal while the definitions, measures, and sources underneath it stay shared and named. A generated view can change how something is shown; it should not be able to change what the thing is.
 
 ## The pieces are becoming practical
 
@@ -144,7 +144,7 @@ It also needs to help people check the work. A study of 22 analysts using an AI-
 
 I would keep sources, calculations, and assumptions inspectable. A saved finding should show the state it depended on. Changing an upstream assumption should flag affected conclusions for review. Familiar navigation should remain available, with ways to decline suggestions and return to earlier decisions.
 
-To test whether this helps, I'd compare the same tasks in a well-designed dashboard with filters and workflows, a good chat interface, and a generated workspace. **Time to a correct result matters more than time to the first rendered screen.** I'd also look at whether people spot conflicting definitions, recover from a wrong interpretation, resume saved work, and keep using the result after the novelty wears off.
+To test whether this helps, I'd compare the same tasks in a well-designed dashboard with filters and workflows, a good chat interface, and a generated workspace. **Time to a correct result matters more than time to the first rendered screen.** I'd also look at whether people spot conflicting definitions, recover from a wrong interpretation, resume saved work, and keep using the result after the novelty wears off. That last point is where the Notion question returns: if, a week later, the workspace still feels like theirs and they would rather adjust it than ask for a fresh one, the agent did its setup without taking the ownership away.
 
 ## Where this leaves me
 
