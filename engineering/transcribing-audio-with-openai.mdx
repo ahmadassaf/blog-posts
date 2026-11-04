@@ -2,11 +2,11 @@
 type: 'Post'
 title: 'Transcribing Audio & Video Using OpenAI Whisper API'
 tags: ['OpenAI', 'Whisper', 'Audio Transcription', 'Automation', 'Developer Tools']
-summary: 'Audio transcription using OpenAI Generative AI model is not supported yet via the UI. To do this, you need to use the API and this comes with its own set of challenges. This post will show you how to do this task using OpenAI with a bit of Python'
+summary: 'When I first wrote this, audio transcription with OpenAI models was not available via the UI; you had to use the API, and that comes with its own set of challenges. This post shows how to do this task using OpenAI with a bit of Python'
 subtitle: 'Manage large audio or video files with pydub and OpenAI'
 featured: false
 date: '2024-05-23'
-updated: '2024-11-21'
+updated: '2026-08-31'
 category: 'engineering'
 ---
 
@@ -26,7 +26,7 @@ That limit is the whole reason this post exists. For longer recordings, you divi
 
 First, you need to install the necessary Python libraries. You can do this using pip:
 
-```
+```bash
 pip install openai pydub
 ```
 
@@ -127,7 +127,7 @@ full_transcription = ' '.join(transcriptions)
 print(full_transcription)
 ```
 
-For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/audio)
+For more information on the Whisper API and its capabilities, check the [OpenAI API documentation](https://developers.openai.com/api/reference/resources/audio)
 
 ## Update: How to transcribe video files
 
@@ -141,11 +141,11 @@ from moviepy import VideoFileClip
 script_dir = os.path.dirname(__file__)
 
 # Define the input video file and output audio file
-mp4_file = os.path.join(script_dir, "movie.mov")
+mov_file = os.path.join(script_dir, "movie.mov")
 mp3_file = "audio.mp3"
 
 # Load the video clip and write its audio to a separate file
-with VideoFileClip(mp4_file) as video_clip:
+with VideoFileClip(mov_file) as video_clip:
     video_clip.audio.write_audiofile(mp3_file)
 
 print("Audio extraction successful!")

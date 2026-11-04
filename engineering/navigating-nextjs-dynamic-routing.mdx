@@ -2,10 +2,155 @@
 type: 'Post'
 title: 'Working with Next.js Dynamic Routing and Pagination'
 tags: ['Next.js', 'Routing', 'Pagination', 'React']
-summary: 'Next.js dynamic routing is extremely powerful! However, I ran into few issues trying to make that work with paginating dynamic category pages for my blog. I will share how I managed to work it out here'
+summary: 'Next.js dynamic routing is extremely powerful! However, I ran into a few issues trying to make that work with paginating dynamic category pages for my blog. I will share how I managed to work it out here'
 subtitle: 'How to create a dynamic pagination system for my Next.js blog'
 featured: false
 date: '2023-07-15'
+updated: '2026-11-04'
 category: 'engineering'
-draft: true
+draft: false
 ---
+
+When I [moved this blog from Jekyll to Next.js](/blog/category/engineering/moving-blog-to-nextjs), the one thing I refused to change was the URLs. Years of posts lived at `/blog/category/<category>/<slug>`, and Jekyll's permalinks had baked that shape into search results and other people's links. So the routing had to reproduce it exactly, and then go further: category and tag listings, each with its own paginated pages, all generated statically at build time.
+
+Next.js makes most of that easy. The parts that tripped me up were the catch-all segment, the mismatch between what [Contentlayer](/blog/category/engineering/using-contentLayer-with-nextjs) computes as a slug and what the router hands you as params, and deciding where pagination actually belongs. This post walks through what runs the site today. If you want the wider picture of how the `app` directory is organised, that is in [Understanding the Next.js App Directory](/blog/category/engineering/understanding-nextjs-app-dir).
+
+## One catch-all route for every post
+
+In the App Router a dynamic segment is a folder in square brackets. `[slug]` matches a single segment; `[...slug]` is a catch-all and matches one or more. Because my post URLs have two segments after `/blog/category/` (the category, then the post), a single catch-all folder covers all of them:
+
+```text
+app/blog/category/[...slug]/page.js
+```
+
+For `/blog/category/engineering/moving-blog-to-nextjs`, Next.js calls that page with `params.slug` set to `['engineering', 'moving-blog-to-nextjs']`. It is an array, not a string, which is the first thing to internalise about catch-all routes. Everything downstream either joins it back together or splits a known string into it.
+
+<Aside>In Next.js 15 `params` is a Promise in page components and in `generateMetadata`, so every page below starts with `await params`. Older examples that destructure `params` synchronously still work with a warning, but the await is the supported form.</Aside>
+
+## Resolving a post from Contentlayer
+
+Contentlayer gives me `allPosts`, one object per MDX file, and a computed `slug` field derived from the file path. A post at `data/blog/engineering/moving-blog-to-nextjs.mdx` gets the slug `category/engineering/moving-blog-to-nextjs`. That `category/` prefix is deliberate: links across the site are written as `/blog/${post.slug}`, so the slug carries the full path after `/blog`.
+
+The route, however, already lives under `app/blog/category/`, so the params never contain the prefix. The page strips it on the Contentlayer side and compares against the joined params:
+
+```js caption="app/blog/category/[...slug]/page.js (trimmed)"
+export default async function Page({ params }) {
+  const resolvedParams = await params;
+  const slug = safeDecodeURI(resolvedParams.slug.join('/'));
+
+  if (slug === null) notFound();
+
+  const resolved = resolveContentDocument(
+    allPosts, (post) => post.slug.replace('category/', '') === slug
+  );
+
+  if (!resolved) notFound();
+
+  const { content, next, prev } = resolved;
+  const post = resolved.document;
+
+  return (
+    <PostLayout content={ content } next={ next } prev={ prev } toc={ post.toc }>
+      <MDXLayoutRenderer code={ post.body.code } />
+    </PostLayout>
+  );
+}
+```
+
+Two small things earned their place here. `safeDecodeURI` wraps `decodeURI` in a try/catch, because a malformed percent-encoded URL would otherwise throw inside the render and surface as a 500 rather than a 404. And `resolveContentDocument` does more than a `find`: it sorts the published posts by date, locates the match, and returns the neighbouring entries as `next` and `prev`, which is how the previous/next navigation at the bottom of each post works without a second pass over the collection.
+
+## Telling Next.js what to build
+
+With `generateStaticParams`, a dynamic route becomes a list of concrete pages rendered at build time. For the catch-all route, the function has to return the params in the same array shape the page receives, so each slug is stripped of its prefix and split on `/`:
+
+```js caption="app/blog/category/[...slug]/page.js"
+export const generateStaticParams = async() => {
+  const paths = published(allPosts).map((post) => {
+    return { 'slug': post.slug.replace('category/', '').split('/') };
+  });
+
+  return paths;
+};
+```
+
+`published` filters out anything with `draft: true` in its frontmatter. It is the same helper the sitemap and the OG image route use, so a draft never becomes a route, a sitemap entry, or a shareable card by accident.
+
+The category and tag listings do the same thing with a single `[category]` or `[tag]` segment, but with one extra export that I initially missed:
+
+```js caption="app/blog/categories/[category]/page.js (trimmed)"
+// Every valid category comes from generateStaticParams; unknown slugs must 404 instead of rendering empty lists
+export const dynamicParams = false;
+
+export const generateStaticParams = async() => {
+  return categories.map((category) => {
+    return { 'category': category.slug };
+  });
+};
+```
+
+By default, a path that was not returned by `generateStaticParams` is still rendered on demand. For a post page that is harmless, since an unknown slug falls through to `notFound()`. For a listing page it is not: `/blog/categories/anything-at-all` would happily render an empty "Anything At All Posts" page with a 200 status. Setting `dynamicParams = false` makes those requests 404 instead, which is what I want for a taxonomy whose members are known at build time.
+
+The `categories` array itself is not hand-written. A build script runs after Contentlayer and before `next build`, walks the published posts, counts the category and tag values, and writes `app/content/categories.json` and `app/content/tags.json`. The routes and the root layout's navigation import those files, so adding a category is just using it in a post's frontmatter.
+
+## Paginating the category and tag lists
+
+The blog index at `/blog` is not paginated; it renders a featured strip and a year-grouped archive of everything. Pagination only exists where a filtered list can grow long: categories and tags. Each of those has two routes:
+
+```text
+app/blog/categories/[category]/page.js                 → page 1
+app/blog/categories/[category]/page/[page]/page.js     → pages 2..n
+```
+
+Splitting page 1 off from the rest keeps the canonical URL for a category clean (`/blog/categories/engineering`, not `/blog/categories/engineering/page/1`) and means the nested route only has to deal with numbers greater than one. The page-numbered route reads both params, slices the posts, and refuses anything out of range:
+
+```js caption="app/blog/categories/[category]/page/[page]/page.js (trimmed)"
+export default async function Page({ params }) {
+  const { 'category': categoryParam, 'page': pageParam } = await params;
+  const category = safeDecodeURI(categoryParam);
+
+  if (category === null) notFound();
+
+  const title = titleFromSlug(category);
+  const posts = getPublishedPosts(allPosts).filter((post) => slugify(post.category) === category);
+  const page = paginate(posts, pageParam, POSTS_PER_PAGE);
+
+  if (!page) notFound();
+
+  return (
+    <ListLayout posts={ page.pagePosts } listTitle={ `${title} Posts` } currentPage={ page.currentPage } totalPages={ page.totalPages } paginationURL={ `blog/categories/${category}/page` } baseURL={ `blog/categories/${category}` }/>
+  );
+}
+```
+
+The slicing and the validation live in one shared helper, because the tag route needs exactly the same logic and I did not want two copies drifting apart:
+
+```js caption="lib/utils/contentlayer.js"
+export const paginate = (posts, pageParam, perPage) => {
+  const currentPage = Number(pageParam);
+  const totalPages = Math.ceil(posts.length / perPage);
+
+  if (!Number.isInteger(currentPage) || currentPage < 1 || currentPage > totalPages) return null;
+
+  return {
+    currentPage,
+    'pagePosts': posts.slice(perPage * (currentPage - 1), perPage * currentPage),
+    totalPages
+  };
+};
+
+export const paginationPageNumbers = (itemCount, perPage) => {
+  const totalPages = Math.ceil(itemCount / perPage);
+
+  return Array.from({ 'length': Math.max(0, totalPages - 1) }, (_, index) => index + 2);
+};
+```
+
+`paginate` returns `null` for `page/0`, `page/abc`, `page/1.5` or a page past the end, and the route turns that into a 404. `paginationPageNumbers` is its build-time counterpart: given a post count it returns `[2, 3, ...]`, which `generateStaticParams` combines with every category slug to produce the full list of `{ category, page }` pairs. Seven posts per page is a constant exported from my design system, so the layout and the routes can never disagree about it.
+
+The last piece is rendering the controls. `ListLayout` is a server component, so it cannot hand a click handler to the pagination bar. Instead it passes two strings, `firstPageHref` and an `hrefTemplate` with a `{page}` placeholder, and the bar renders real anchor links. Every page of every category is a plain URL that a crawler, or a reader with JavaScript disabled, can follow.
+
+## What I would do the same again
+
+Keep the URL contract in one place (the computed `slug`) and translate at the route boundary, rather than letting each page invent its own idea of what a slug is. Put validation in the helpers that `generateStaticParams` and the page both call, so the set of pages built and the set of pages that render are the same set. And be explicit about `dynamicParams` on any route whose members you fully know; the default is convenient for posts and wrong for taxonomies.
+
+None of this is clever. The lesson from the migration was that the routing layer is mostly a translation between three shapes of the same identifier: the file path on disk, the `slug` Contentlayer computes, and the array Next.js gives you from the URL. Get those three agreeing and the rest is slicing arrays.

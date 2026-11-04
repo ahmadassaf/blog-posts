@@ -5,17 +5,15 @@ tags: ['Microservices', 'Bash', 'Developer Tools', 'Git']
 summary: 'Shell helper functions built at Beamery to manage 50+ microservice repositories at once: switching branches, syncing remotes, and auditing npm modules across every repo from a single command.'
 subtitle: 'A Micro-services Helpers Framework | Easily manage multiple repositories and projects'
 layout: 'ProjectLayout'
-github: 'BeameryHQ/micromanage'
+github: 'ahmadassaf/micromanage'
 featured: false
-date: '2018-08-07'
+date: '2017-03-14'
 category: 'projects'
 ---
 
-## Beamery Micromanage - A Micro-services Helpers Framework
-
-> **Status**: This code lived in a former employer's GitHub organization and is no longer public; both the original repo and its install scripts 404 today. This page is kept as a retrospective on the design, which I still think holds up for anyone building shell tooling over many repos.
-
 At [Beamery](http://beamery.com) we followed a [microservices architecture](https://en.wikipedia.org/wiki/Microservices), which has real advantages: easier scaling, independently deployable services, no long-term commitment to a single technology stack. It also has a very mundane cost that architecture diagrams never show. We had over 50 git repositories, and developing a feature very often touched several of them at once. Changing branches, syncing remotes, and keeping every checkout in order meant endlessly flipping between terminal tabs.
+
+> **Status**: This code lived in a former employer's GitHub organization and is no longer public; both the original repo and its install scripts 404 today, though a [fork](https://github.com/ahmadassaf/micromanage) of the code survives under my account. This page is kept as a retrospective on the design, which I still think holds up for anyone building shell tooling over many repos.
 
 Micromanage was a set of shell helper functions (bash >= 4.0 and zsh >= 5.0) that automated operations across all the repos in a directory: one command, executed in every folder that qualified. It shipped as a plugin for both the [bash-it](https://github.com/Bash-it/bash-it) and [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh) plugin frameworks, with a manual fallback of sourcing a single entry script from your `.bash_profile` or `.bashrc`.
 

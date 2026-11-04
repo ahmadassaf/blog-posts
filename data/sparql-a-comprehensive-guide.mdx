@@ -63,6 +63,8 @@ Find all the names in the database, then narrow the results down to just the blo
 ::: code-group labels=[Finding All Names, Finding Blog Owners' Names]
 
 ```sparql
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
 SELECT ?name
 WHERE {
   ?x foaf:name ?name
@@ -70,6 +72,9 @@ WHERE {
 ```
 
 ```sparql
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX aa: <http://example.org/Personal#>
+
 SELECT ?ownerName
 WHERE {
   ?blog aa:owner ?owner .
@@ -81,7 +86,7 @@ WHERE {
 
 Let’s break down the first query, which gets every name in the database. The query starts with the keyword `SELECT` and afterwards are the variable names that we would like to project, which in this case is `?name`. <Highlight>Note that all variable names have a question mark in the beginning</Highlight>.  Afterwards, we find the `WHERE` keyword which is followed by a triple between curly braces. This triple is the most interesting part. The triple in the query must also consist of a **subject**, **predicate** and an **object** but in this case, either one can be a variable. In this case, the subject and the object are variables while the predicate is a constant value. This triple in the query is evaluated against all the RDF triples in your database. Constant values in the query triples are matched with constant values of the RDF triples in your database. For example, in our query triple, the only constant value is in the predicate which is `foaf:name`. Out of our eight RDF triples, four of them have `foaf:name` as a constant in the predicate, therefore these four RDF triples match our query triple. Note that nothing in the query restricts `?x` to blogs: anything with a `foaf:name`, blogs and owners alike, matches.
 
-```shell
+```text
 ?x = http://example.org/blog1, ?name = "Ahmad's Blog"
 ?x = http://example.org/Assaf, ?name = "Ahmad Assaf"
 ?x = http://example.org/blog2, ?name = "Overfit.in"
@@ -96,13 +101,16 @@ Because our query is only selecting the values assigned to the variable `?name`,
 
 The second query shows how to narrow that down by chaining two triples. In the first triple, the predicate has a constant value of `aa:owner` and the object is a variable. This triple will match the RDF triples that have the predicate `aa:owner` and will assign the value of the object to the variable `?owner`. The second triple will then match the RDF triples that have the predicate `foaf:name` for those owners and assign the value of the object to the variable `?ownerName`. 
 
-The result will be two triples with the values `Ahmad Assaf` and `Ahmad` because these are the only owners of the blogs in our RDF triples.
+The result will be two solution rows with the values `Ahmad Assaf` and `Ahmad` because these are the only owners of the blogs in our RDF triples.
 
 ### Filtering by Location
 
 Find the names of blog owners based near London.
 
 ```sparql
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX aa: <http://example.org/Personal#>
+
 SELECT ?ownerName
 WHERE {
   ?blog aa:owner ?owner .
@@ -158,12 +166,17 @@ An interesting operator in [SPARQL](https://www.w3.org/TR/sparql11-query/) is `O
 ::: code-group labels=[Data/RDF, Query/SPARQL]
 
 ```turtle
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix : <http://example.org/> .
+
 :id1 foaf:name "Ahmad Assaf" .
 :id1 foaf:based_near :London .
 :id2 foaf:name "Ahmad" .
 ```
 
 ```sparql
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
 SELECT ?name ?loc
 WHERE {
   ?x foaf:name ?name .
@@ -177,6 +190,8 @@ WHERE {
 If you are coming from the SQL world, you would expect two results: `{?name = "Ahmad Assaf", ?loc = :London}` and `{?name = "Ahmad", ?loc = null}`. However, there is no triple with subject `:id2` and predicate `foaf:based_near`, therefore there is nothing to join on. Additionally, <Highlight>there are no nulls in RDF</Highlight> so you can't explicitly say that Ahmad has a location which is `null`. Therefore, this solution is not possible. The actual answer is just `{?name = "Ahmad Assaf", ?loc = :London}`. So how do I get the previous results? This is where `OPTIONAL` comes in. The query would have to be:
 
 ```sparql
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
 SELECT ?name ?loc
 WHERE {
   ?x foaf:name ?name .
@@ -191,6 +206,9 @@ This query can be read as: “find all the names, and oh by the way, if there is
 The `FILTER` operator is used to filter results based on a condition. For example, if you want to find all the names of blog owners who are not based near London, you can use the following query:
 
 ```sparql
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX aa: <http://example.org/Personal#>
+
 SELECT ?name
 WHERE {
   ?blog aa:owner ?x .
@@ -210,6 +228,9 @@ This query will return the name of the owner who is not based near London, which
 Negation in SPARQL 1.0 is weird. It is based on Negation as Failure and it is implemented using `OPTIONAL`, the `bound` filter, and the `logical-not` operator. The `OPTIONAL` block tries to match the pattern we want to exclude and binds a fresh variable (here `?london`) only when it succeeds; the outer filter then keeps only the solutions where that variable stayed unbound. It is a bit convoluted, but it works and returns the same answer as the query above: `Ahmad`.
 
 ```sparql
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX aa: <http://example.org/Personal#>
+
 SELECT ?name
 WHERE {
   ?blog aa:owner ?x .
@@ -244,7 +265,7 @@ WHERE {
 }
 ```
 
-```shell
+```text
 +--------------------+----------------+
 | blogName           | personName    |
 +--------------------+----------------+

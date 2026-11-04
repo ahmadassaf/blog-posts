@@ -17,7 +17,7 @@ When creating content for the web, ensuring that it looks great when shared acro
 <meta property="og:image" content="https://example.com/path-to-image.jpg" />
 ```
 
-This guide will show you how to dynamically generate OG images for your blog using [Next.js](https://nextjs.org/), enabling each post to have a unique, shareable image that stands out. The example is the actual implementation this blog runs in production, so everything below is lifted from working code.
+This guide will show you how to dynamically generate OG images for your blog using [Next.js](https://nextjs.org/), enabling each post to have a unique, shareable image that stands out. The route below is a simplified version of the one this blog runs in production: the real route renders an `OgCard` component from my design system and takes its dimensions from the `ogImageSize` constant exported next to it, but I have inlined a small card here so the mechanics stay visible.
 
 ## Step 1: Install the Dependency
 
@@ -63,14 +63,14 @@ export async function GET(request) {
 
     return new ImageResponse(
       (
-        <div tw='flex flex-col h-[600px] w-[1200px] border-b-[20px] border-blue-600 px-24'>
+        <div tw='flex flex-col h-[630px] w-[1200px] border-b-[20px] border-blue-600 px-24'>
           {post.category && (
             <h1 tw='text-2xl leading-[60px] uppercase text-blue-700'>
               {post.category}
             </h1>
           )}
           <div tw='flex flex-col'>
-            <div tw='flex flex-row justify-between flex-row-reverse'>
+            <div tw='flex flex-row-reverse justify-between'>
               {/* Site logo SVG, inlined here in the real implementation */}
               <h1 tw='text-5xl w-[60%] leading-[60px]'>
                 {post.title}
@@ -85,7 +85,7 @@ export async function GET(request) {
           </div>
         </div>
       ),
-      { 'height': 600, 'width': 1200 }
+      { 'height': 630, 'width': 1200 }
     );
   } catch {
     return new Response(`Failed to generate the image`, {
@@ -97,7 +97,8 @@ export async function GET(request) {
 
 A few notes on the real version of this file, which you can read in full in the [blog's repository](https://github.com/ahmadassaf/blog/blob/main/app/api/og/route.js):
 
-- The logo is an inline SVG dropped straight into the JSX; I trimmed it above because its path data adds nothing to the explanation.
+- The card markup lives in the design system as an `OgCard` component (inline styles only, since Satori supports a subset of CSS), and the route passes `ogImageSize` (1200×630, the recommended Open Graph size) as the `ImageResponse` options instead of hardcoding the numbers.
+- The logo is an inline SVG passed to the card as a prop; I trimmed it above because its path data adds nothing to the explanation.
 - Custom fonts have to be fetched as `ArrayBuffer`s and passed via the `fonts` option of `ImageResponse`. I download four weights of Inter, cache the promise at module scope so each serverless instance fetches them at most once, and fall back to the default font if the download fails.
 - The route refuses to render drafts, so unpublished titles never leak through a guessable OG URL.
 
@@ -106,14 +107,18 @@ A few notes on the real version of this file, which you can read in full in the 
 The route on its own does nothing until your pages reference it. In the `app` router, that means returning the OG image URL from `generateMetadata` (or the `metadata` export) of your post page. The minimal version looks like this:
 
 ```javascript
-export function generateMetadata({ params }) {
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+
   return {
     openGraph: {
-      images: [`/api/og?slug=${params.slug}`]
+      images: [`/api/og?slug=${slug}`]
     }
   };
 }
 ```
+
+Two details worth knowing: `params` is a Promise in Next.js 15, so it has to be awaited, and a relative image path like this only resolves to an absolute URL if your root metadata sets `metadataBase` to your site's origin.
 
 This blog centralizes that logic in a shared metadata generator ([data/meta/generator/post.js](https://github.com/ahmadassaf/blog/blob/main/data/meta/generator/post.js)), which resolves the post for the requested slug and passes `/api/og?slug=${post.slug}` as the image to both the Open Graph and Twitter card metadata.
 

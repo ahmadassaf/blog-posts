@@ -6,7 +6,171 @@ tags: ['Next.js', 'React', 'MDX']
 summary: 'In Next.js 13, the app directory (also known as the app router) was introduced as a new way to build Next.js applications. But, even though the app directory is now stable and the recommended approach, there is still some confusion around what it is, how it works, and how it can make our lives easier as developers.'
 featured: false
 date: '2023-09-15'
+updated: '2026-11-04'
 category: 'engineering'
 tableOfContents: true
-draft: true
+draft: false
 ---
+
+When I [migrated this blog from Jekyll](/blog/category/engineering/moving-blog-to-nextjs), the starter template I built on was already using the `app` directory, and I spent the first few weeks fighting my own Pages Router habits: looking for `_app.js`, reaching for `getStaticProps`, wondering where `next/head` had gone. Those habits were the problem, not the directory. Once the file conventions clicked, most of the site collapsed into small files that each do one thing.
+
+This is a tour of the `app` directory as this blog actually uses it. Everything below is lifted from the running code, and where I summarise what Next.js does I have kept to what the App Router documentation says today. Routing and pagination have [their own post](/blog/category/engineering/navigating-nextjs-dynamic-routing), and the content pipeline behind `allPosts` is covered in [Using Contentlayer with Next.js](/blog/category/engineering/using-contentLayer-with-nextjs).
+
+## The root layout and the metadata API
+
+The App Router is file-system routing where folders are URL segments and a few reserved file names carry meaning. `page.js` makes a segment publicly reachable; `layout.js` wraps every page beneath it and keeps its state across navigations. The one layout every app must have is the root one, and it has to render `<html>` and `<body>` itself, because there is no `_document.js` to do it any more:
+
+```js caption="app/layout.js (trimmed)"
+import { Plus_Jakarta_Sans as PlusJakartaSans } from 'next/font/google';
+
+import '@gaudi/design-system/global.css';
+import './responsive.css';
+
+export const metadata = {
+  ...metadataGenerator(),
+  'icons': { 'apple': '/static/favicons/apple-touch-icon.png', /* ... */ }
+};
+
+export function generateViewport() {
+  return { 'initialScale': 1, 'themeColor': [ /* light and dark */ ], 'width': 'device-width' };
+}
+
+const font = PlusJakartaSans({ display: 'swap', subsets: [ 'latin' ], variable: '--font-body' });
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang='en' className={ font.variable } suppressHydrationWarning>
+      <body>
+        <LayoutContainer menuProps={ menuProps } navigation={ NavigationMetadata }>{children}</LayoutContainer>
+      </body>
+    </html>
+  );
+}
+```
+
+Three things in that file used to be scattered across `_app.js`, `_document.js` and a `<Head>` in every page. Global CSS is imported once. The font comes through `next/font`, which self-hosts it and exposes a CSS variable, so there is no external request and no layout shift. And the `<head>` is described as data: the exported `metadata` object is the site-wide default, and any page can export its own `metadata` (or a `generateMetadata` function when it depends on route params) to extend it. Next.js merges them per route. The viewport moved out into `generateViewport` in Next.js 15, hence the separate export.
+
+The layout also reads `allPosts` and `allProjects` from Contentlayer directly, builds the navigation menus and footer links, and passes them down as plain props. It runs on the server, so there is no data-fetching lifecycle. It is a function that imports data and returns JSX.
+
+## The special files
+
+Beyond `page.js` and `layout.js`, the App Router reserves a few more file names. This blog uses five, and they are tiny.
+
+`not-found.js` is rendered whenever a route calls `notFound()` or nothing matches. The post page calls it for unknown slugs, and the category pages rely on it through `dynamicParams = false`. It is an ordinary server component that exports `metadata = { 'title': 'Page not found' }` and renders a 404 with two buttons.
+
+`error.js` is the runtime counterpart: an error boundary for the segment it sits in. It receives the thrown `error` and a `reset` function that re-renders the segment. Error boundaries have to be client components (they use React state under the hood), so this is one of the few files in the tree that starts with `'use client'`:
+
+```js caption="app/error.js (trimmed)"
+'use client';
+
+export default function RouteError({ error, reset }) {
+  return (
+    <div>
+      <Typography variant='error-title'>500</Typography>
+      <Typography variant='paragraph-md'>
+        {error?.digest ? `The error has been logged (reference ${error.digest}). ` : ''}
+        You can retry, or head back to the homepage.
+      </Typography>
+      <Button variant='solid' tone='blue' onClick={ () => reset() }>Try again</Button>
+    </div>
+  );
+}
+```
+
+The `digest` is worth surfacing: in production Next.js strips the error message before it reaches the browser and leaves a hash you can match against the server logs.
+
+The other three are metadata files. Each is a plain function that returns an object, and Next.js serialises it into the right format at a fixed URL. `sitemap.js` becomes `/sitemap.xml`:
+
+```js caption="app/sitemap.js (trimmed)"
+export default function sitemap() {
+  const blogRoutes = published(allPosts).map((post) => {
+    return { 'lastModified': post.updated || post.date, 'url': `${siteUrl}/blog/${post.slug}` };
+  });
+
+  return [ ...routes, ...blogRoutes, ...projectRoutes, ...categoryRoutes, ...tagRoutes ];
+}
+```
+
+`robots.js` becomes `/robots.txt` and `manifest.js` becomes `/manifest.webmanifest`. The robots file allows `/api/og` while disallowing the rest of `/api/`, so crawlers can fetch share images but never index the preview endpoint. Under Jekyll each of these was a plugin or a Liquid template; here they are twenty lines that import the same `siteMetadata` and `allPosts` the pages use, so they cannot drift.
+
+## Route handlers
+
+API routes became `route.js` files that export a function per HTTP method. This blog has two; the one from [Build Dynamic Open Graph Images](/blog/category/engineering/build-dynamic-og-images) is the clearer example:
+
+```js caption="app/api/og/route.js (trimmed)"
+export async function GET(request) {
+  const slug = request.nextUrl.searchParams.get('slug').replace('category/', '');
+  let post = allPosts.find((_post) => _post.slug.replace('category/', '') === slug);
+
+  // Never leak unpublished titles through OG images
+  if (post?.draft) return NextResponse.json(
+    { 'error': 'Post not found', 'status': 404 }, { 'status': 404 }
+  );
+
+  return new ImageResponse(
+    <OgCard title={ post.title } subtitle={ post.subtitle } category={ titleFromSlug(post.category) } />,
+    imageOptions
+  );
+}
+```
+
+A handler takes a web-standard `Request` and returns a `Response`; `NextResponse` and `ImageResponse` are conveniences on top. A `route.js` and a `page.js` cannot share a folder, which keeps endpoints and UI visibly separate in the tree.
+
+## Server components by default, client components where it matters
+
+Every file under `app` is a React Server Component unless it opts out. That default is the real shift. Server components can import Contentlayer and await data at the top of the function, and none of that code or data ships to the browser. What they cannot do is hold state or attach event handlers.
+
+The tags page shows the split. The server page prepares only the fields the browser needs and hands them to a client component:
+
+```js caption="app/blog/tags/page.js (trimmed)"
+import TagsExplorer from '@/app/blog/tags/TagsExplorer';
+
+export default function Tags() {
+  const posts = sortPosts(published(allPosts)).map((post) => {
+    return {
+      'date': post.date,
+      'slug': post.slug,
+      'summary': post.summary || post.description,
+      'tagSlugs': (post.tags || []).map(slugify),
+      'title': post.title
+    };
+  });
+
+  return <TagsExplorer tags={ tags } posts={ posts } />;
+}
+```
+
+`TagsExplorer` starts with `'use client'`, keeps the selected tag and search query in `useState`, and opens a drawer. The boundary is the props: they must be serialisable, which is why the page maps the Contentlayer documents down to five plain fields instead of passing `allPosts` through. Drafts are filtered on the server too, so unpublished titles never reach the client bundle.
+
+The comments widget is the other kind of client component, one that exists because of a browser-only dependency rather than interaction:
+
+```js caption="layouts/PostComments.js (trimmed)"
+'use client';
+
+const Giscus = dynamic(() => import('@giscus/react'), { 'ssr': false });
+
+export default function PostComments() {
+  const { resolvedTheme } = useTheme();
+
+  return <Giscus repo='ahmadassaf/blog-posts' mapping='og:title' theme={ resolvedTheme === 'dark' ? 'dark' : 'light' } />;
+}
+```
+
+It needs `useTheme` (a hook) and loads Giscus with `ssr: false` because the widget talks to `window`. The post page that renders it stays a server component; a server component can render a client one, it just cannot be imported by one.
+
+<Callout type='info'>A useful rule of thumb from the docs: push `'use client'` as far down the tree as you can. Mark the leaf that needs state or browser APIs, not the page that contains it.</Callout>
+
+## What moved from the Pages Router
+
+The translation table I wish I had written down on day one:
+
+- `_app.js` and `_document.js` became the root `layout.js`; nested layouts replace per-page layout wrappers.
+- `getStaticProps` is gone, a server component just imports or awaits its data. `getStaticPaths` became `generateStaticParams`, with `dynamicParams` deciding what happens to paths it did not return.
+- `next/head` became the `metadata` export and `generateMetadata`, plus `generateViewport`.
+- `pages/api/*.js` default exports became named `GET`, `POST` and friends in `route.js`.
+- `pages/404.js` and `pages/_error.js` became `not-found.js` and `error.js`, at any segment, not only the root.
+- `sitemap.xml`, `robots.txt` and the manifest stopped being static files or plugins and became code.
+
+`next.config.js` is mostly unchanged: Contentlayer still wraps it with `withContentlayer`, and security headers, redirects and `pageExtensions` are still declared there.
+
+What I appreciate most, a couple of years in, is how little of this site is framework ceremony. Pages import data and return JSX. The special files are each one function. The one real discipline is the server/client boundary, and once you treat props as the contract across it, the rest of the `app` directory is just folders.

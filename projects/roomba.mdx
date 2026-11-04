@@ -7,16 +7,13 @@ subtitle: 'Automatic Validation, Correction and Generation of Dataset Metadata'
 layout: 'ProjectLayout'
 github: 'ahmadassaf/roomba'
 featured: false
-date: '2018-08-07'
+date: '2015-01-08'
 category: 'projects'
 ---
 
-## Roomba
-### Automatic Validation, Correction and Generation of Dataset Metadata
+Linked Open Data (LOD) is one of the largest collections of interlinked datasets on the web. But benefiting from that mine of data depends on each dataset shipping descriptive metadata, and in practice such metadata is limited to a few portals, entered manually, and often wrong. I built Roomba to attack this problem automatically: it is a command-line [node.js](http://nodejs.org) tool that extracts dataset metadata from data portals, validates and corrects it where possible, and generates descriptive profiles. Running it against prominent data portals confirmed the suspicion: most datasets suffer from bad quality metadata, and the general state of Linked Open Data needs attention.
 
 > **Status**: Research code from my PhD work around 2015, kept online as a record of the papers it supported. The [repo](https://github.com/ahmadassaf/roomba) still gets occasional housekeeping pushes (last in August 2026), but the tool is not actively developed.
-
-Linked Open Data (LOD) is one of the largest collections of interlinked datasets on the web. But benefiting from that mine of data depends on each dataset shipping descriptive metadata, and in practice such metadata is limited to a few portals, entered manually, and often wrong. I built Roomba to attack this problem automatically: it is a command-line [node.js](http://nodejs.org) tool that extracts dataset metadata from data portals, validates and corrects it where possible, and generates descriptive profiles. Running it against prominent data portals confirmed the suspicion: most datasets suffer from bad quality metadata, and the general state of Linked Open Data needs attention.
 
 ## Architecture
 
@@ -28,7 +25,7 @@ Data portals can be considered as data access points providing tools to facilita
 Identifying the software powering data portals is a vital first step to understand the API calls structure. Web scraping is a technique for extracting data from Web pages. Roomba relies on several scraping techniques in the identification process, combining:
 
 - **URL inspection**: Check the existence of certain URL patterns.
-- **Meta tags inspection**: For example, `meta[content*="ckan"]` (all meta tags with the attribute content containing the string `CKAN`). This selector can identify CKAN portals whereas the `meta[content*="Drupal"]` can identify DKAN portals.
+- **Meta tags inspection**: For example, `meta[content*="ckan"]` (all meta tags whose `content` attribute contains the lowercase string `ckan`; the match is case-sensitive). This selector can identify CKAN portals whereas the `meta[content*="Drupal"]` can identify DKAN portals.
 - **Document Object Model (DOM) inspection**: Similar to the meta tags inspection, Roomba checks the existence of certain DOM elements or properties.
 
 The identification process for each portal can be easily customized by overriding the `prototype.check` function for each parser. Moreover, adding or removing steps from the identification process can be easily configured.
@@ -100,9 +97,9 @@ Roomba gives you the ability to perform the following:
 - Execute aggregation report on a specific group or on the whole data portal
 - Profile a specific dataset, a whole group or the whole data portal
 
-**A screencast is available on: http://youtu.be/p7Y-mDN_Y2s**
+**A screencast is available on:** [YouTube](https://youtu.be/p7Y-mDN_Y2s)
 
-> Note that the demo above uses `publicdata.eu`. However, it seems that they no longer support CKAN access as PublicData.eu is archived and no longer active. You can try `http://datahub.io` instead to demonstrate the tool
+> Note that the demo above uses `publicdata.eu`. However, it seems that they no longer support CKAN access as PublicData.eu is archived and no longer active. You can try `https://demo.ckan.org` instead to demonstrate the tool
 
 ### Report Generation
 
@@ -114,7 +111,7 @@ Data portal administrators need to have an overview of the datasets in their por
 
 ### Profile Generation
 
-The generated profile contains the information spotted in the profile as well as general statistics for them.
+The generated profile records the issues spotted during validation (missing or invalid fields, and the corrections applied where possible) together with general statistics about them.
 
 ## Roomba Quality (Objective Linked Data Quality Assessment)
 
