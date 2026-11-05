@@ -40,17 +40,23 @@ const diagram = (load, Fallback = DiagramSkeleton) => {
 const AgileCadenceExplorer = diagram(() => import('./AgileCadenceExplorer'));
 const AgileChartsExplorer = diagram(() => import('./AgileChartsExplorer'));
 const DittoStagesExplorer = diagram(() => import('./DittoStagesExplorer'));
+const DittoStagesExplorerV2 = diagram(() => import('./DittoStagesExplorerV2'));
 const GaudiBarLayout = diagram(() => import('./GaudiBarLayout'));
+const GaudiBarLayoutV2 = diagram(() => import('./GaudiBarLayoutV2'));
 const GenerativeRoutingExplorer = diagram(() => import('./GenerativeRoutingExplorer'));
+const GenerativeRoutingExplorerV2 = diagram(() => import('./GenerativeRoutingExplorerV2'));
 const GenerativeUIComparison = diagram(() => import('./GenerativeUIComparison'));
 const GenerativeUIBlockBuilder = diagram(() => import('./GenerativeUIBlockBuilder'));
 const GrowthLevelsExplorer = diagram(() => import('./GrowthLevelsExplorer'));
+const GrowthLevelsExplorerV2 = diagram(() => import('./GrowthLevelsExplorerV2'));
 const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'), ImprovementKataExplorerSkeleton);
 const JsonLdGraphExplorer = diagram(() => import('./JsonLdGraphExplorer'));
 const OlapCubeExplorer = diagram(() => import('./OlapCubeExplorer'));
 const SparqlPatternExplorer = diagram(() => import('./SparqlPatternExplorer'));
 const LinkedDataQualityFramework = diagram(() => import('./LinkedDataQualityFramework'));
+const LinkedDataQualityFrameworkV2 = diagram(() => import('./LinkedDataQualityFrameworkV2'));
 const PipelineDiagram = diagram(() => import('./PipelineDiagram'));
+const PipelineDiagramV2 = diagram(() => import('./PipelineDiagramV2'));
 const RdfBlankNodeExplorer = diagram(() => import('./RdfBlankNodeExplorer'));
 const RdfCollectionExplorer = diagram(() => import('./RdfCollectionExplorer'));
 const RdfContainerExplorer = diagram(() => import('./RdfContainerExplorer'));
@@ -62,16 +68,22 @@ export const VisualisationComponents = {
   AgileCadenceExplorer,
   AgileChartsExplorer,
   DittoStagesExplorer,
+  DittoStagesExplorerV2,
   GaudiBarLayout,
+  GaudiBarLayoutV2,
   GenerativeRoutingExplorer,
+  GenerativeRoutingExplorerV2,
   GenerativeUIBlockBuilder,
   GenerativeUIComparison,
   GrowthLevelsExplorer,
+  GrowthLevelsExplorerV2,
   ImprovementKataExplorer,
   JsonLdGraphExplorer,
   LinkedDataQualityFramework,
+  LinkedDataQualityFrameworkV2,
   OlapCubeExplorer,
   PipelineDiagram,
+  PipelineDiagramV2,
   RdfBlankNodeExplorer,
   RdfCollectionExplorer,
   RdfContainerExplorer,

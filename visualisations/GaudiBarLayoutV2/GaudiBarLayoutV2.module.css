@@ -1,0 +1,293 @@
+.root {
+  container-type: inline-size;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-block: 2.75rem;
+  color: var(--ds-color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.root p,
+.root h3,
+.root dl,
+.root dd {
+  margin: 0;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.caption {
+  display: grid;
+  max-width: 72ch;
+  padding-bottom: 1.25rem;
+  gap: 0.375rem;
+}
+
+.caption > strong {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.caption > span {
+  color: var(--ds-color-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Desktop on the left, config on the right; the two columns stack below 48rem of container width. */
+.layout {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.25rem;
+}
+
+/* The desktop: two bars pinned to the edges, wallpaper between them. Nothing here has a fixed height. */
+.desktop {
+  display: grid;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-card, 0.75rem);
+  grid-template-rows: auto minmax(5rem, 1fr) auto;
+  gap: 0.75rem;
+  background:
+    radial-gradient(circle at 80% 15%, color-mix(in srgb, var(--ds-color-accent) 14%, transparent) 0, transparent 40%),
+    radial-gradient(circle at 15% 85%, color-mix(in srgb, var(--ds-color-accent) 9%, transparent) 0, transparent 38%),
+    var(--ds-color-surface-muted);
+}
+
+.bar {
+  display: grid;
+  min-width: 0;
+  gap: 0.35rem;
+}
+
+.barLabel {
+  color: var(--ds-color-text-subtle);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.bar[data-bar='bottom'] {
+  grid-template-rows: auto auto;
+}
+
+.bar[data-bar='bottom'] .barLabel {
+  order: 2;
+}
+
+/* Three equal regions across the bar, like the real flex row; the DS group is `w-fit`, so the module takes over the box. */
+.root .regions {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-radius: var(--ds-radius-control, 0.5rem);
+  background: var(--ds-color-surface);
+}
+
+/* The DS toggle fixes `h-8`; the region grows with its plugin names instead so nothing clips. */
+.root .region {
+  display: grid;
+  height: auto;
+  min-width: 0;
+  min-height: 3.25rem;
+  padding: 0.5rem 0.6rem;
+  grid-template-rows: auto auto;
+  align-content: start;
+  justify-items: start;
+  gap: 0.35rem;
+  color: var(--ds-color-text);
+  font: inherit;
+  text-align: left;
+  white-space: normal;
+  transition: background-color var(--ds-motion-duration-state, 160ms) var(--ds-motion-ease-standard, ease), border-color var(--ds-motion-duration-state, 160ms) var(--ds-motion-ease-standard, ease);
+}
+
+.root .region[data-state='on'] {
+  position: relative;
+  z-index: 1;
+  border-color: var(--ds-color-accent);
+  background: var(--ds-color-accent-subtle);
+  box-shadow: inset 0 0 0 1px var(--ds-color-accent);
+}
+
+.regionName {
+  color: var(--ds-color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+.root .region[data-state='on'] .regionName {
+  color: var(--ds-color-accent-dark);
+}
+
+/* Plugin names wrap onto as many rows as they need; no ellipsis anywhere. */
+.plugins {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.plugins code {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--ds-color-code-inline-border);
+  border-radius: var(--ds-radius-sm, 0.25rem);
+  background: var(--ds-color-code-inline-bg);
+  color: var(--ds-color-code-inline-text);
+  font-family: var(--ds-font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.plugins em {
+  color: var(--ds-color-text-subtle);
+  font-size: 0.75rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.root .region[data-empty] {
+  background: repeating-linear-gradient(135deg, transparent 0 0.4rem, color-mix(in srgb, var(--ds-color-border) 55%, transparent) 0.4rem 0.45rem);
+}
+
+.root .region[data-empty][data-state='on'] {
+  background-color: var(--ds-color-accent-subtle);
+}
+
+.wallpaper {
+  align-self: center;
+  color: var(--ds-color-text-subtle);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.config {
+  display: grid;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.root .code {
+  min-width: 0;
+}
+
+.root .codeHeader {
+  gap: 0.5rem;
+}
+
+.root .copy {
+  margin-inline-start: auto;
+}
+
+.inspector {
+  display: grid;
+  min-width: 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-card, 0.75rem);
+  gap: 0.5rem;
+  background: var(--ds-color-surface);
+}
+
+.root .inspectorTitle {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-transform: capitalize;
+}
+
+.inspectorTitle > span:nth-child(2) {
+  color: var(--ds-color-text-subtle);
+}
+
+.lineRef {
+  color: var(--ds-color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.pluginList {
+  display: grid;
+  margin-top: 0.25rem;
+  gap: 0.5rem;
+}
+
+.pluginList > div {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, max-content) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.pluginList dt code,
+.empty code {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--ds-color-code-inline-border);
+  border-radius: var(--ds-radius-sm, 0.25rem);
+  background: var(--ds-color-code-inline-bg);
+  color: var(--ds-color-code-inline-text);
+  font-family: var(--ds-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.pluginList dd,
+.empty {
+  color: var(--ds-color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+@container (max-width: 47.99rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .desktop {
+    grid-template-rows: auto minmax(3.5rem, auto) auto;
+  }
+}
+
+@container (max-width: 30rem) {
+  .root .regions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pluginList > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root .region {
+    transition: none;
+  }
+}

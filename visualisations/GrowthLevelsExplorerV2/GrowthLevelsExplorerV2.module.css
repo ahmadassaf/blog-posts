@@ -1,0 +1,235 @@
+.root {
+  container-type: inline-size;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-block: 2rem;
+  color: var(--ds-color-text);
+  font-family: var(--ds-font-sans);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.root p,
+.root h3,
+.root h4,
+.root dl,
+.root dd {
+  margin: 0;
+}
+
+.caption {
+  display: grid;
+  max-width: 72ch;
+  margin-bottom: 1rem;
+  gap: 0.4rem;
+}
+
+.caption strong {
+  font-size: 1.125rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.caption span {
+  color: var(--ds-color-text-muted);
+}
+
+/* Scope ladder: six equal rungs in a row; a column below 40rem. No artwork behind them. */
+.root .ladder {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.root .rung {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 4.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.6rem 0.65rem;
+  gap: 0.15rem;
+  border: 1px solid var(--ds-color-border);
+  border-radius: 0.625rem;
+  color: var(--ds-color-text);
+  background: var(--ds-color-surface);
+  font: inherit;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  cursor: pointer;
+  transition: background-color 140ms ease-out, border-color 140ms ease-out;
+}
+
+.root .rung:hover {
+  border-color: var(--ds-color-accent);
+  background: var(--ds-color-accent-subtle);
+}
+
+.root .rung[data-state='on'],
+.root .rung[data-state='on']:hover {
+  border-color: var(--ds-color-accent-dark);
+  color: var(--ds-color-accent-foreground);
+  background: var(--ds-color-accent);
+}
+
+.root .rung:focus-visible {
+  outline: 2px solid var(--ds-color-accent);
+  outline-offset: 3px;
+}
+
+.rungName {
+  font-family: var(--ds-font-mono);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.rungKind {
+  color: var(--ds-color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.root .rung[data-state='on'] .rungKind {
+  color: inherit;
+}
+
+.readout {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ds-color-border);
+  animation: reveal 160ms ease-out;
+}
+
+.root .heading {
+  margin-bottom: 0.3rem;
+  color: var(--ds-color-accent-dark);
+  font-size: 1.0625rem;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.scope {
+  max-width: 72ch;
+}
+
+/* Examples, evidence, support and experiment sit side by side; nothing is collapsed. */
+.panels {
+  display: grid;
+  margin-top: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.panel {
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--ds-color-border);
+  border-radius: 0.625rem;
+  background: var(--ds-color-surface);
+}
+
+.panel:first-child {
+  grid-column: 1 / -1;
+}
+
+.root .panel h4 {
+  margin-bottom: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.panel p,
+.panel dd {
+  color: var(--ds-color-text-muted);
+}
+
+.examples {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+.examples > div {
+  min-width: 0;
+}
+
+.root .examples dt {
+  margin-bottom: 0.2rem;
+  font-weight: 650;
+}
+
+.technical {
+  color: var(--ds-color-accent-dark);
+}
+
+.leadership {
+  color: var(--ds-color-discovery);
+}
+
+.root .source {
+  margin-top: 1rem;
+  color: var(--ds-color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.source a {
+  color: var(--ds-color-accent-dark);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.source a:focus-visible {
+  outline: 2px solid var(--ds-color-accent);
+  outline-offset: 3px;
+}
+
+/* Visually hidden; announces the selected level name only. */
+.root .status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@container (max-width: 40rem) {
+  .root .ladder {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .root .rung {
+    min-height: 0;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .panels,
+  .examples {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@keyframes reveal {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root .rung {
+    transition: none;
+  }
+
+  .readout {
+    animation: none;
+  }
+}
