@@ -3,275 +3,250 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  margin-block: 2rem;
+  margin-block: 2.5rem;
   color: var(--ds-color-text);
+  font-family: var(--ds-font-sans);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.root p,
+.root h3,
+.root pre {
+  margin: 0;
 }
 
 .caption {
   display: grid;
   max-width: 72ch;
-  padding-bottom: 1rem;
-  gap: 0.5rem;
+  margin-bottom: 1rem;
+  gap: 0.4rem;
 }
 
-.title {
-  font-size: 1rem;
+.caption strong {
+  font-size: 1.125rem;
   font-weight: 750;
   line-height: 1.35;
 }
 
-.description {
+.caption span {
   color: var(--ds-color-text-muted);
-  font-size: 0.8125rem;
-  line-height: 1.55;
 }
 
-.scrollHint {
-  display: none;
-  margin: 0;
-  padding-bottom: 0.35rem;
-  color: var(--ds-color-text-muted);
-  font-size: 0.75rem;
-  font-weight: 650;
-  line-height: 1.4;
-  text-align: right;
-}
-
-.scrollFrame {
+/* Stage switch: five attached stops reading left to right, wrapping into two rows when narrow. */
+.root .stages {
+  display: flex;
   width: 100%;
   max-width: 100%;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scrollbar-color: color-mix(in srgb, var(--ds-color-accent) 52%, var(--ds-color-border)) transparent;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
+  flex-wrap: wrap;
 }
 
-.scrollFrame::-webkit-scrollbar {
-  height: 0.45rem;
+.root .stage {
+  display: grid;
+  min-width: 0;
+  height: auto;
+  min-height: 3.25rem;
+  flex: 1 1 9rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  gap: 0.6rem;
+  color: var(--ds-color-text);
+  background: var(--ds-color-surface);
+  font: inherit;
+  line-height: 1.3;
+  text-align: left;
+  white-space: normal;
+  cursor: pointer;
+  transition: background-color 140ms ease-out, border-color 140ms ease-out, color 140ms ease-out;
 }
 
-.scrollFrame::-webkit-scrollbar-track {
-  background: transparent;
+.root .stage:hover {
+  border-color: var(--ds-color-accent);
+  background: var(--ds-color-accent-subtle);
 }
 
-.scrollFrame::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ds-color-accent) 52%, var(--ds-color-border));
-}
-
-.scrollFrame::-webkit-scrollbar-thumb:hover {
+.root .stage[data-state='on'],
+.root .stage[data-state='on']:hover {
+  z-index: 1;
+  border-color: var(--ds-color-accent-dark);
+  color: var(--ds-color-accent-foreground);
   background: var(--ds-color-accent);
 }
 
-.scrollFrame:focus-visible {
-  outline: 2px solid var(--ds-color-accent);
-  outline-offset: 3px;
+.root .stage:focus-visible {
+  z-index: 2;
+  outline: 2px solid var(--ds-color-focus);
+  outline-offset: 2px;
 }
 
-.graph {
-  display: block;
-  width: 100%;
-  max-width: 58rem;
-  min-width: 48rem;
-  height: auto;
-  margin-inline: auto;
-  font-family: var(--ds-font-sans);
+.stageIndex {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  place-items: center;
+  background: var(--ds-color-surface-muted);
+  color: var(--ds-color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
-@container (max-width: 53.99rem) {
-  .scrollHint {
-    display: block;
-  }
+.root .stage[data-state='on'] .stageIndex {
+  background: color-mix(in srgb, var(--ds-color-accent-foreground) 18%, transparent);
+  color: var(--ds-color-accent-foreground);
 }
 
-/* Quiet dashed connectors between the stops */
-.path {
-  fill: none;
-  stroke: color-mix(in srgb, var(--ds-color-accent) 55%, var(--ds-color-border));
-  stroke-dasharray: 0.5 9;
-  stroke-linecap: round;
-  stroke-width: 2.5;
-}
-
-/* Stage pills */
-.stageNode {
-  cursor: pointer;
-}
-
-.stageNode rect {
-  fill: var(--ds-color-surface-muted);
-  stroke: var(--ds-color-accent);
-  stroke-width: 2;
-  transition: fill 120ms ease, stroke-width 120ms ease;
-}
-
-.stageNode[data-active='true'] rect {
-  fill: var(--ds-color-accent);
-  stroke: var(--ds-color-accent-dark);
-  stroke-width: 3;
-}
-
-.stageKind {
-  fill: var(--ds-color-text-subtle);
-  font-size: 9.5px;
-  font-weight: 850;
-  letter-spacing: 1px;
-  pointer-events: none;
+.stageCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
 }
 
 .stageName {
-  fill: var(--ds-color-text);
-  font-size: 13.5px;
-  font-weight: 800;
-  pointer-events: none;
-}
-
-.stageMono {
-  fill: var(--ds-color-text);
-  font-family: var(--ds-font-mono);
-  font-size: 13px;
-  font-weight: 750;
-  pointer-events: none;
-}
-
-.stageNode[data-active='true'] .stageKind,
-.mapNode[data-active='true'] .stageKind {
-  fill: color-mix(in srgb, var(--ds-color-accent-foreground) 78%, transparent);
-}
-
-.stageNode[data-active='true'] .stageName,
-.stageNode[data-active='true'] .stageMono {
-  fill: var(--ds-color-accent-foreground);
-}
-
-.stageNode:focus-visible,
-.mapNode:focus-visible {
-  outline: 2px solid var(--ds-color-accent);
-  outline-offset: 3px;
-}
-
-/* _map: the big central stop */
-.mapNode {
-  cursor: pointer;
-}
-
-.mapNode circle {
-  fill: var(--ds-color-surface-muted);
-  stroke: var(--ds-color-accent);
-  stroke-width: 2.5;
-  transition: fill 120ms ease, stroke-width 120ms ease;
-}
-
-.mapNode[data-active='true'] circle {
-  fill: var(--ds-color-accent);
-  stroke: var(--ds-color-accent-dark);
-  stroke-width: 4;
-}
-
-.mapName {
-  fill: var(--ds-color-text);
-  font-family: var(--ds-font-mono);
-  font-size: 16px;
-  font-weight: 800;
-  pointer-events: none;
-}
-
-.mapNode[data-active='true'] .mapName {
-  fill: var(--ds-color-accent-foreground);
-}
-
-/* The mappings file feeding _map */
-.mappingsLabel {
-  fill: var(--ds-color-text-muted);
-  font-family: var(--ds-font-mono);
-  font-size: 10.5px;
-  pointer-events: none;
-}
-
-.mappingsDoc rect {
-  fill: var(--ds-color-surface-muted);
-  stroke: color-mix(in srgb, var(--ds-color-text-muted) 65%, transparent);
-  stroke-width: 1.5;
-  transition: stroke 120ms ease;
-}
-
-.mappingsDoc line {
-  stroke: color-mix(in srgb, var(--ds-color-text-muted) 55%, transparent);
-  stroke-linecap: round;
-  stroke-width: 2;
-}
-
-.mapNode[data-active='true'] .mappingsDoc rect {
-  stroke: var(--ds-color-accent);
-}
-
-.mappingsFeed {
-  fill: none;
-  stroke: color-mix(in srgb, var(--ds-color-accent) 55%, var(--ds-color-border));
-  stroke-dasharray: 0.5 7;
-  stroke-linecap: round;
-  stroke-width: 2;
-}
-
-.pipelineHint {
-  fill: var(--ds-color-text-muted);
-  font-family: var(--ds-font-mono);
-  font-size: 11px;
-}
-
-/* Readout */
-.readout {
-  display: grid;
-  width: 100%;
-  max-width: 58rem;
-  margin-inline: auto;
-  padding-top: 1rem;
-  gap: 0.5rem;
-}
-
-.readoutPrimary {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: baseline;
-  gap: 1rem;
-}
-
-.readoutType {
-  color: var(--ds-color-accent-dark);
-  font-family: var(--ds-font-mono);
-  font-size: 13px;
-  font-weight: 850;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.readoutText {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  line-height: 1.55;
-}
-
-.readoutJson {
-  margin: 0;
-  padding: 0.6rem 0.85rem;
-  overflow-x: auto;
-  border: 1px solid var(--ds-color-border);
-  border-radius: 0.5rem;
-  background: var(--ds-color-surface-muted);
-  color: var(--ds-color-text);
+.stageName[data-code='true'] {
   font-family: var(--ds-font-mono);
-  font-size: 11.5px;
-  line-height: 1.6;
+  font-size: 0.8125rem;
 }
 
-.readoutMeta {
+.stageKind {
+  color: var(--ds-color-text-muted);
+  font-size: 0.75rem;
+}
+
+.root .stage[data-state='on'] .stageKind {
+  color: color-mix(in srgb, var(--ds-color-accent-foreground) 80%, transparent);
+}
+
+/* Two panels side by side: the document is the hero, the mapping file sits beside it. */
+.stageHead {
+  display: grid;
+  margin-top: 1.25rem;
+  gap: 0.35rem;
+}
+
+.panels {
+  display: grid;
+  margin-top: 0.9rem;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.panel {
+  display: grid;
+  min-width: 0;
+  gap: 0;
+}
+
+/* Mirrors the design-system code block header on the mapping side, so both boxes read as files. */
+.documentTitle {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--ds-color-border);
+  border-bottom: 0;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: var(--ds-color-surface-muted);
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-mono);
-  font-size: 11px;
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 
-.liveRegion {
+.panelHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.heading {
+  font-size: 0.9375rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.legend {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-mono);
+  font-size: 0.75rem;
+}
+
+.line {
+  max-width: 60ch;
+  color: var(--ds-color-text-muted);
+}
+
+/* The document after the stage, one line per span so each can carry its change marker. */
+.document {
+  overflow-x: auto;
+  padding: 0.75rem 0;
+  border: 1px solid var(--ds-color-border);
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: var(--ds-color-surface);
+  font-family: var(--ds-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  animation: settle 160ms ease-out;
+}
+
+.root .document code {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.docLine {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  padding-inline-end: 0.75rem;
+  padding-inline-start: calc(var(--depth, 0) * 1.5rem);
+  border-inline-start: 3px solid transparent;
+  white-space: pre;
+}
+
+.glyph {
+  color: var(--ds-color-text-subtle);
+  text-align: center;
+  user-select: none;
+}
+
+.docLine[data-change='added'],
+.docLine[data-change='changed'] {
+  border-inline-start-color: var(--ds-color-accent);
+  background: var(--ds-color-accent-subtle);
+}
+
+.docLine[data-change='added'] .glyph,
+.docLine[data-change='changed'] .glyph {
+  color: var(--ds-color-accent-dark);
+  font-weight: 700;
+}
+
+.docLine[data-change='removed'] {
+  border-inline-start-color: var(--ds-color-danger);
+  background: var(--ds-color-danger-subtle);
+  color: var(--ds-color-text-muted);
+  text-decoration: line-through;
+}
+
+.docLine[data-change='removed'] .glyph {
+  color: var(--ds-color-danger);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.srOnly {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -283,17 +258,56 @@
   white-space: nowrap;
 }
 
-@container (max-width: 38rem) {
-  .readoutPrimary {
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
+/* The design-system code block aligns with the document panel's heading row. */
+.root .mapping {
+  min-width: 0;
+}
+
+.disclosure {
+  display: block;
+  margin-top: 1rem;
+  color: var(--ds-color-text-subtle);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.disclosure a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0.6;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@container (max-width: 44rem) {
+  .panels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .root .stage {
+    flex-basis: 45%;
+  }
+}
+
+@container (max-width: 26rem) {
+  .root .stage {
+    flex-basis: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stageNode rect,
-  .mapNode circle,
-  .mappingsDoc rect {
+  .root .stage {
     transition: none;
+  }
+
+  .document {
+    animation: none;
   }
 }
