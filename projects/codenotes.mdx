@@ -2,8 +2,8 @@
 type: 'Project'
 title: 'Code-Notes'
 tags: ['Node.js', 'npm', 'CLI', 'Developer Tools', 'Code Quality']
-summary: 'code-notes is a node.js version of Rails rake notes functionality. It allows you to put comments in your code and then have them annotated across your whole project'
-subtitle: 'Tool to summarise all code annotation like TODO or FIXME'
+summary: 'code-notes is a Node.js version of Rails'' rake notes functionality. It allows you to put comments in your code and then have them annotated across your whole project.'
+subtitle: 'Tool to summarise all code annotations like TODO or FIXME'
 layout: 'ProjectLayout'
 github: 'ahmadassaf/code-notes'
 featured: false
@@ -11,7 +11,7 @@ date: '2017-02-22'
 category: 'projects'
 ---
 
-code-notes is a node.js version of Rails' "rake notes" functionality. It scans your source for annotation comments (NOTE, OPTIMIZE, TODO, HACK, XXX, FIXME, BUG) and summarises them across your whole project, so the promises buried in your codebase actually surface somewhere.
+code-notes is a Node.js version of Rails' "rake notes" functionality. It scans your source for annotation comments (NOTE, OPTIMIZE, TODO, HACK, XXX, FIXME, BUG) and summarises them across your whole project, so the promises buried in your codebase actually surface somewhere.
 
 > **Status**: Actively maintained. The [repo](https://github.com/ahmadassaf/code-notes) has around 190 stars and was last pushed in August 2026.
 
@@ -24,7 +24,7 @@ So the fork exists to make scanning scope a first-class concern:
  - Flexibility in defining the source scanning directory
  - Exclude patterns compatible with [multimatch](https://github.com/sindresorhus/multimatch) globbing
  - The ability to read the exclusion list straight from a `.gitignore` file, so the tool skips exactly what git does
- - Include-only patterns that overwrite any exclusions, for scanning just one slice of a project
+ - Include-only patterns that override any exclusions, for scanning just one slice of a project
 
 code-notes also exits with proper error codes: it terminates with an error code if any annotations are found, which makes it usable as a CI gate ("no FIXMEs reach master").
 

@@ -168,25 +168,25 @@
   transition: color 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.step[data-state='complete'] .marker {
+.step[data-state='earlier'] .marker {
   border-color: var(--ds-color-accent);
   background: var(--ds-color-accent);
 }
 
-.step[data-state='complete'] .marker > span {
+.step[data-state='earlier'] .marker > span {
   background: var(--ds-color-accent-foreground);
 }
 
-.step[data-state='complete'] .markerIcon {
+.step[data-state='earlier'] .markerIcon {
   color: var(--ds-color-accent-foreground);
 }
 
-.step[data-state='current'] .marker {
+.step[data-state='selected'] .marker {
   border-color: var(--ds-color-accent);
   transform: scale(1.22);
 }
 
-.step[data-state='current'] .marker::after {
+.step[data-state='selected'] .marker::after {
   position: absolute;
   inset: -0.45rem;
   border: 1px solid color-mix(in srgb, var(--ds-color-accent) 45%, transparent);
@@ -194,13 +194,13 @@
   content: '';
 }
 
-.step[data-state='current'] .marker > span,
+.step[data-state='selected'] .marker > span,
 .stepButton:hover .marker > span {
   background: var(--ds-color-accent-dark);
   transform: scale(1.35);
 }
 
-.step[data-state='current'] .markerIcon,
+.step[data-state='selected'] .markerIcon,
 .stepButton:hover .markerIcon {
   color: var(--ds-color-accent-dark);
 }
@@ -224,13 +224,13 @@
   line-height: 1.35;
 }
 
-.step[data-state='upcoming'] .stepLabel,
-.step[data-state='upcoming'] .stepMeta {
+.step[data-state='later'] .stepLabel,
+.step[data-state='later'] .stepMeta {
   opacity: 0.58;
 }
 
 .stepButton:hover .stepLabel,
-.step[data-state='current'] .stepLabel {
+.step[data-state='selected'] .stepLabel {
   color: var(--ds-color-accent-dark);
 }
 
@@ -468,7 +468,7 @@
     content: '';
   }
 
-  .step[data-state='complete']:not(:last-child)::after {
+  .step[data-state='earlier']:not(:last-child)::after {
     background: var(--ds-color-accent);
   }
 

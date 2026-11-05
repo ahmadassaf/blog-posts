@@ -1,0 +1,5 @@
+.root { display:grid;gap:.6rem;width:100%;min-width:0;margin-block:2.5rem; }
+.root .title { height:1.4rem;width:min(28rem,70%);border-radius:.4rem; }
+.root .text { height:.9rem;width:min(44rem,95%);border-radius:.3rem; }
+.root .textShort { height:.9rem;width:min(30rem,60%);border-radius:.3rem;margin-bottom:.6rem; }
+.root .body { width:100%;border-radius:.9rem; }

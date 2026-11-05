@@ -46,13 +46,24 @@ export default function GenerativeRoutingExplorer({ id }) {
   return period === 'FY2025' ? `${money(normalized)} for FY2025 versus £10m for FY2024. The normalized difference is ${money(normalized - 10)} (${((normalized / 10 - 1) * 100).toFixed(1)}%). This comparison alone does not explain the cause.` : `${money(normalized)} versus £10m, both for FY2024. At this rate the remaining difference is ${money(normalized - 10)}.`;
  }
  function record() {setFindings(old => ({...old, [step]: {text: result(step), period, rate, adjustment, source}}));}
+  function reset() {
+    setFindings({});
+    setNotes({});
+    setTrail([]);
+    setStep('evidence');
+    setStarted(false);
+    setPeriod('FY2025');
+    setRate(1.2);
+    setAdjustment(true);
+    setSource('signed');
+  }
  function stale(key, item) {return (['currency','period'].includes(key) && (item.rate !== rate || item.period !== period)) || (key === 'definition' && item.adjustment !== adjustment) || (key === 'sources' && item.source !== source);}
  return <section id={id || uid} className={styles.root} aria-label="Generative routing interactive example">
   <header className={styles.header}><h3>Follow the question, then the evidence.</h3><p>Try it: save a currency finding, then change the exchange rate. Watch which conclusion needs another look.</p></header>
   <p className={styles.disclosure}>Simulation · Fictional data and predefined routes; no live AI. Notes and findings last until reload.</p>
   <div className={styles.intent}>
    <p><strong>“Why has EBITDA changed?”</strong></p>
-   <div className={styles.fields}><div><strong>Company</strong><p>Northstar</p></div><Field className={styles.field}><FieldLabel htmlFor={`${uid}-period`}>Latest reporting period</FieldLabel><NativeSelect id={`${uid}-period`} className={styles.select} value={period} onChange={e => setPeriod(e.target.value)}><NativeSelectOption>FY2025</NativeSelectOption><NativeSelectOption>FY2024</NativeSelectOption></NativeSelect></Field></div>
+   <div className={styles.fields}><div><strong>Company</strong><p>Northstar</p></div><Field className={styles.field}><FieldLabel htmlFor={`${uid}-period`}>Latest reporting period</FieldLabel><NativeSelect id={`${uid}-period`} className={styles.select} value={period} onChange={e => setPeriod(e.target.value)}><NativeSelectOption value='FY2025'>FY2025</NativeSelectOption><NativeSelectOption value='FY2024'>FY2024</NativeSelectOption></NativeSelect></Field></div>
    <p className={styles.hint}>Compare reported EBITDA with the FY2024 acquisition record. Changing the period updates the comparison immediately.</p>
    {!started && <Button className={styles.primary} onClick={() => {setStarted(true);open('evidence');}}>Start the investigation</Button>}
   </div>
@@ -75,5 +86,12 @@ export default function GenerativeRoutingExplorer({ id }) {
     </>}
    </div></div><aside className={styles.sidebar}><h4>{alternative ? 'Separate what-if example · FY2024' : `${company} · Reported EBITDA`}</h4>{alternative ? <><dl><div><dt>{step === 'definition' ? 'Reported EBITDA' : 'Signed report'}</dt><dd>£10m</dd></div><div><dt>{step === 'definition' ? 'Adjusted EBITDA' : 'Draft report'}</dt><dd>£12m</dd></div></dl><p>GBP throughout. This example has its own evidence; it does not change the main investigation.</p></> : <><dl><div><dt>Acquisition · FY2024</dt><dd>£10m</dd></div><div><dt>Latest · {period}</dt><dd>€{latest}m</dd></div></dl><p>Same metric definition. Different currencies{period === 'FY2025' ? ' and reporting periods' : ''}.</p></>}<div className={styles.history}><h4>Saved findings</h4>{Object.keys(findings).length === 0 && <p>Your findings will appear here.</p>}{Object.entries(findings).map(([key,item]) => <div className={styles.saved} key={key}><Button variant="subtle" size="sm" onClick={() => open(key)}>{paths[key]}</Button><p>{['definition','sources'].includes(key) ? 'What-if example · ' : `${item.period} · €${item.rate.toFixed(2)} per £1 · `}{item.text}</p>{stale(key,item) && <strong role="status">Assumptions changed · review and update this finding</strong>}</div>)}</div></aside></div>
   </>}
+    <footer>
+      <span>Fictional data and predefined routes; nothing leaves this page.</span>
+      <Button variant='ghost' tone='neutral' size='sm' onClick={ reset }>
+        <Icon name='RotateCcw' decorative />
+        Reset example
+      </Button>
+    </footer>
  </section>;
 }

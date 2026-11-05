@@ -12,16 +12,16 @@ tableOfContents: true
 
 As a developer and customization enthusiast, I've always been fascinated by the idea of having a sleek, informative system bar on my desktop. That's why I created [gaudiBar](https://github.com/g-udi/gaudiBar.ubersicht.widget), an extensible, adaptive, and responsive system information bar for [Übersicht](http://tracesof.net/uebersicht/). In this post, I'll walk you through my development process and the key features that make gaudiBar stand out.
 
-The main decision behind developing gaudiBar was to allow usage of adaptive widgets. Like many developers, I've used various system information tools over the years, and my recurring frustration was their lack of flexibility. If you have been using Übersicht, you will know that to customize the location of any widget, you had to dig into the code and position it, most probably with absolute positioning. For the case of information bars, I did not find that to be a good experience, especially when the information is dynamic, e.g.:
+The main decision behind developing gaudiBar was to allow usage of adaptive widgets. Like many developers, I've used various system information tools over the years, and my recurring frustration was their lack of flexibility. If you have been using Übersicht, you will know that to customize the location of any widget, you have to dig into the code and position it, most probably with absolute positioning. For the case of information bars, I did not find that to be a good experience, especially when the information is dynamic, e.g.:
 
 - Displaying Wi-Fi information, where the network SSID can be long (you can work around this with a maximum width and text overflow... but really?)
 - System information, application names, and opened window names of varying lengths
 
 To overcome this, I have designed gaudiBar utilizing flex layout capabilities and using modules for each widget, allowing the content to be:
 
- - **Extensible**: You can add/remove widgets using a centralized configuration file.
- - **Adaptive**: Information or appearance adapt to the context (e.g., location) of the user. For example, the weather widget automatically detects your location and shows the relevant weather condition for you, or the battery widget background color changes to reflect the amount of charge left.
- - **Responsive**: The flex layout allows gaudiBar to adapt to different screen widths and numbers of widgets, so that you can have a consistent look and feel to your desktop.
+- **Extensible**: You can add/remove widgets using a centralized configuration file.
+- **Adaptive**: Information or appearance adapts to the context (e.g., location) of the user. For example, the weather widget automatically detects your location and shows the relevant weather condition for you, or the battery widget background color changes to reflect the amount of charge left.
+- **Responsive**: The flex layout allows gaudiBar to adapt to different screen widths and numbers of widgets, so that you can have a consistent look and feel to your desktop.
 
 [Übersicht](http://tracesof.net/uebersicht/) provided the perfect foundation for all of this: it lets you run system commands and display their output on your desktop in customizable widgets.
 
@@ -35,14 +35,13 @@ WIDGETS_HOME="$HOME/Library/Application Support/Übersicht/widgets"
 git clone https://github.com/g-udi/gaudiBar.ubersicht.widget "$WIDGETS_HOME/gaudiBar.ubersicht.widget"
 ```
 
-> You can always know your widgets folder by clicking on the Übersicht menu bar icon and clicking on *Open widgets folder*
+> You can always know your widgets folder by clicking on the Übersicht menu bar icon and clicking on *Open widgets folder*.
 
-Some widgets may require installing some additional packages, they are all documented under each widget's README.
-
+Some widgets may require installing additional packages; they are all documented in each widget's README.
 
 ## The Development Process
 
-[Übersicht](http://tracesof.net/uebersicht/) creates a webview and places it on your desktop, just above the wallpaper but behind everything else. Übersicht widgets are written as `.coffee` or `.js` files (and other flavors like `.jsx`) which let you format elements with html, style them with css and manipulate data with javascript and coffeescript. For dynamic widgets, Übersicht lets you run terminal commands and insert the output into html, so just about any language can be used to write scripts for widgets.
+[Übersicht](http://tracesof.net/uebersicht/) creates a webview and places it on your desktop, just above the wallpaper but behind everything else. Übersicht widgets are written as `.coffee` or `.js` files (and other flavors like `.jsx`) which let you format elements with HTML, style them with CSS, and manipulate data with JavaScript and CoffeeScript. For dynamic widgets, Übersicht lets you run terminal commands and insert the output into HTML, so just about any language can be used to write scripts for widgets.
 
 ### Layout Design
 
@@ -51,12 +50,12 @@ I started by designing a flexible layout. The main container spans the entire de
 <GaudiBarLayout />
 
 The interactive diagram above shows how gaudiBar overlays on your desktop:
- - The main container covering the whole desktop
- - Two main `primary-bar` components on the top and bottom of the screen
- - Each `primary-bar` has three `secondary-bar` regions (left, middle, right)
- - Each `secondary-bar` can contain N widgets that are distributed evenly
+- The main container covering the whole desktop
+- Two main `primary-bar` components on the top and bottom of the screen
+- Each `primary-bar` has three `secondary-bar` regions (left, middle, right)
+- Each `secondary-bar` can contain N widgets that are distributed evenly
 
-### Setting up the layout (widgets configuration)
+### Setting Up the Layout (Widgets Configuration)
 
 The layout is controlled by `lib/configs.js`: you add widget names to the bar and region where you want them to appear.
 

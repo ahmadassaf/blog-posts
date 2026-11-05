@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-Three things in that file used to be scattered across `_app.js`, `_document.js` and a `<Head>` in every page. Global CSS is imported once. The font comes through `next/font`, which self-hosts it and exposes a CSS variable, so there is no external request and no layout shift. And the `<head>` is described as data: the exported `metadata` object is the site-wide default, and any page can export its own `metadata` (or a `generateMetadata` function when it depends on route params) to extend it. Next.js merges them per route. The viewport moved out into `generateViewport` in Next.js 15, hence the separate export.
+Three things in that file used to be scattered across `_app.js`, `_document.js` and a `<Head>` in every page. Global CSS is imported once. The font comes through `next/font`, which self-hosts it and exposes a CSS variable, so there is no external request and no layout shift. And the `<head>` is described as data: the exported `metadata` object is the site-wide default, and any page can export its own `metadata` (or a `generateMetadata` function when it depends on route params) to extend it. Next.js merges them per route. The viewport moved out of `metadata` into its own `viewport` or `generateViewport` export in Next.js 14, hence the separate function.
 
 The layout also reads `allPosts` and `allProjects` from Contentlayer directly, builds the navigation menus and footer links, and passes them down as plain props. It runs on the server, so there is no data-fetching lifecycle. It is a function that imports data and returns JSX.
 
@@ -79,7 +79,7 @@ export default function RouteError({ error, reset }) {
 
 The `digest` is worth surfacing: in production Next.js strips the error message before it reaches the browser and leaves a hash you can match against the server logs.
 
-The other three are metadata files. Each is a plain function that returns an object, and Next.js serialises it into the right format at a fixed URL. `sitemap.js` becomes `/sitemap.xml`:
+The other three are metadata files. Each is a plain function that returns data (an array of entries for the sitemap, an object for the other two), and Next.js serialises it into the right format at a fixed URL. `sitemap.js` becomes `/sitemap.xml`:
 
 ```js caption="app/sitemap.js (trimmed)"
 export default function sitemap() {
@@ -91,7 +91,7 @@ export default function sitemap() {
 }
 ```
 
-`robots.js` becomes `/robots.txt` and `manifest.js` becomes `/manifest.webmanifest`. The robots file allows `/api/og` while disallowing the rest of `/api/`, so crawlers can fetch share images but never index the preview endpoint. Under Jekyll each of these was a plugin or a Liquid template; here they are twenty lines that import the same `siteMetadata` and `allPosts` the pages use, so they cannot drift.
+`robots.js` becomes `/robots.txt` and `manifest.js` becomes `/manifest.webmanifest`. The robots file allows `/api/og` while disallowing the rest of `/api/`, so crawlers can fetch share images but never index the preview endpoint. Under Jekyll each of these was a plugin or a Liquid template; here each is a single function. The sitemap imports the same `siteMetadata`, `allPosts` and taxonomy files the pages use, the manifest takes its name and description from `siteMetadata`, and the robots file is a static object with no imports at all, so there is nothing to drift.
 
 ## Route handlers
 
@@ -99,18 +99,44 @@ API routes became `route.js` files that export a function per HTTP method. This 
 
 ```js caption="app/api/og/route.js (trimmed)"
 export async function GET(request) {
-  const slug = request.nextUrl.searchParams.get('slug').replace('category/', '');
-  let post = allPosts.find((_post) => _post.slug.replace('category/', '') === slug);
+  const slugParam = request.nextUrl.searchParams.get('slug');
 
-  // Never leak unpublished titles through OG images
-  if (post?.draft) return NextResponse.json(
-    { 'error': 'Post not found', 'status': 404 }, { 'status': 404 }
+  if (!slugParam) return NextResponse.json(
+    { 'error': 'Missing required "slug" parameter', 'status': 400 }, { 'status': 400 }
   );
 
-  return new ImageResponse(
-    <OgCard title={ post.title } subtitle={ post.subtitle } category={ titleFromSlug(post.category) } />,
-    imageOptions
-  );
+  try {
+    const slug = slugParam.replace('category/', '');
+    let post = allPosts.find((_post) => _post.slug.replace('category/', '') === slug);
+
+    // Never leak unpublished titles through OG images
+    if (post?.draft) return NextResponse.json(
+      { 'error': 'Post not found', 'status': 404 }, { 'status': 404 }
+    );
+
+    if (!post) post = {
+      'category': slug,
+      'subtitle': siteMetadata.description,
+      'title': siteMetadata.title
+    };
+
+    // …
+    const imageOptions = { ...ogImageSize };
+
+    return new ImageResponse(
+      <OgCard
+        title={ post.title }
+        subtitle={ post.subtitle }
+        category={ post.category ? titleFromSlug(post.category) : undefined }
+        siteName={ siteMetadata.siteUrl.replace(/^https?:\/\//, '') }
+        logo={ <SiteMark width={ 120 } height={ 104 } /> }
+      />, imageOptions
+    );
+  } catch {
+    return new Response(`Failed to generate the image`, {
+      'status': 500
+    });
+  }
 }
 ```
 
@@ -123,7 +149,15 @@ Every file under `app` is a React Server Component unless it opts out. That defa
 The tags page shows the split. The server page prepares only the fields the browser needs and hands them to a client component:
 
 ```js caption="app/blog/tags/page.js (trimmed)"
+import { allPosts } from 'contentlayer/generated';
+
 import TagsExplorer from '@/app/blog/tags/TagsExplorer';
+import tags from '@/app/content/tags';
+import { metadataGenerator } from '@/data/meta/generator/blog';
+import { published, sortPosts } from '@/lib/utils/contentlayer';
+import { slugify } from '@/lib/utils/slugs.mjs';
+
+export const metadata = metadataGenerator({ 'path': '/blog/tags', 'title': 'Tags' });
 
 export default function Tags() {
   const posts = sortPosts(published(allPosts)).map((post) => {
@@ -151,8 +185,9 @@ const Giscus = dynamic(() => import('@giscus/react'), { 'ssr': false });
 
 export default function PostComments() {
   const { resolvedTheme } = useTheme();
+  const commentsTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
-  return <Giscus repo='ahmadassaf/blog-posts' mapping='og:title' theme={ resolvedTheme === 'dark' ? 'dark' : 'light' } />;
+  return <Giscus repo='ahmadassaf/blog-posts' mapping='og:title' theme={ commentsTheme } />;
 }
 ```
 
@@ -165,7 +200,7 @@ It needs `useTheme` (a hook) and loads Giscus with `ssr: false` because the widg
 The translation table I wish I had written down on day one:
 
 - `_app.js` and `_document.js` became the root `layout.js`; nested layouts replace per-page layout wrappers.
-- `getStaticProps` is gone, a server component just imports or awaits its data. `getStaticPaths` became `generateStaticParams`, with `dynamicParams` deciding what happens to paths it did not return.
+- `getStaticProps` is gone; a server component just imports or awaits its data. `getStaticPaths` became `generateStaticParams`, with `dynamicParams` deciding what happens to paths it did not return.
 - `next/head` became the `metadata` export and `generateMetadata`, plus `generateViewport`.
 - `pages/api/*.js` default exports became named `GET`, `POST` and friends in `route.js`.
 - `pages/404.js` and `pages/_error.js` became `not-found.js` and `error.js`, at any segment, not only the root.

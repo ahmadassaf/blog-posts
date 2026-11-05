@@ -50,7 +50,7 @@ const WidgetPreview = ({ widget }) => (
     {widget.trend && (
       // The value beside it carries the meaning, so the trend stays a decorative glyph outside the tab order.
       <span className={ styles.sparkline } aria-hidden='true' inert>
-        <Sparkline data={ widget.trend } color='currentColor' height={ 16 } showEndpoint={ false } ariaLabel={ `${widget.label} trend` } />
+        <Sparkline data={ widget.trend } color='currentColor' height={ 16 } showEndpoint={ false } />
       </span>
     )}
   </span>
@@ -67,13 +67,12 @@ const RegionButton = ({ active, readoutId, region, onSelect }) => {
       className={ styles.region }
       data-active={ active }
       data-empty={ empty }
-      aria-controls={ empty ? undefined : readoutId }
+      aria-controls={ readoutId }
       aria-pressed={ active }
       aria-label={ empty ? `${region.bar} bar, ${region.label}. Empty region.` : `${region.bar} bar, ${region.label}. ${region.widgets.length} widgets.` }
-      disabled={ empty }
-      onClick={ empty ? undefined : onSelect }
-      onFocus={ empty ? undefined : onSelect }
-      onMouseEnter={ empty ? undefined : onSelect }
+      onClick={ onSelect }
+      onFocus={ onSelect }
+      onMouseEnter={ onSelect }
     >
       <span className={ styles.regionLabel }>{region.label.replace(' region', '')}</span>
       <span className={ styles.regionPreview } aria-hidden='true'>

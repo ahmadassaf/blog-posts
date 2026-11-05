@@ -69,17 +69,17 @@ What bothers me is using velocity as a score. Points aren't a common unit across
 
 ### Completed cycle time and unfinished work
 
-Cycle time measures elapsed time from a defined start to a defined finish. Work-item age measures elapsed time since starting something that is still unfinished. Throughput counts finished items per period; work in progress counts started, unfinished items. These four measures belong together. [@KanbanGuides:Guide:25]
+The four flow measures (WIP, throughput, work-item age, and cycle time) are defined in [the introduction](/blog/category/management/introduction-to-classical-agile). The distinction that matters here is that cycle time describes completed items, while work-item age describes items still in progress. The four belong together. [@KanbanGuides:Guide:25]
 
 <AgileChartsExplorer chart='control' id='cycle-time-example' />
 
-This is a **cycle-time scatterplot**: each dot is a completed item, positioned by its completion day. The line is calculated from the latest five completed items. It helps us inspect patterns; without calculated control limits, it doesn't tell us whether the process is statistically in control.
+This is a **cycle-time scatterplot**: each dot is a completed item, positioned by its completion day. The line is a trailing average of the latest five completed items. It helps us inspect patterns; without calculated control limits, it doesn't tell us whether the process is statistically in control.
 
 The narrow sample looks reassuring. Now reveal the unfinished work: one item is already 18 days old. It is absent from the completion history because it hasn't finished. A short average among completed items doesn't tell us that nothing is waiting.
 
 A long completed item deserves investigation, even if it is the only one. A rising average also deserves context: work mix, waiting, dependencies, and changes to the finish boundary can all matter. Inspect actual item histories and active ages; don't assume equal point estimates make two items comparable.
 
-Variation doesn't make forecasting impossible. It makes an average alone less informative. A service level expectation combines a duration with a probability, grounded in relevant history, rather than promising every item will match the mean. Revisit it as the workflow changes. [@KanbanGuides:Guide:25]
+Variation doesn't make forecasting impossible. It makes an average alone less informative, which is why the [introduction](/blog/category/management/introduction-to-classical-agile) describes a service level expectation as a duration with a probability attached, revisited as the workflow changes. [@KanbanGuides:Guide:25]
 
 ### Cumulative flow
 
@@ -125,12 +125,12 @@ DevEx offers a related lens: feedback loops, cognitive load, and flow state. Pai
 
 When the numbers and the team's account disagree, I don't want to pick a winner. I want to understand the gap. Sometimes the recording is wrong; sometimes the aggregate hides something people see every day; sometimes a familiar story doesn't survive the data.
 
-That's where [Improvement Kata](/blog/category/management/improvement-kata) becomes useful: it turns the gap into a small experiment with a written prediction, so the next chart has something to be compared against. The dashboard has done its job when it helps that conversation happen.
+That's where [Improvement Kata](/blog/category/management/improvement-kata) becomes useful: it turns the gap into a small experiment with a written prediction, so the next chart has something to compare against. The dashboard has done its job when it helps that conversation happen.
 
 ## Further reading
 
-- [*Accelerate* — Nicole Forsgren, Jez Humble, and Gene Kim](https://itrevolution.com/product/accelerate/) explores the research connecting delivery capability and organizational performance. Pair the book with the [current DORA guide](https://dora.dev/guides/dora-metrics/) for today's metric definitions.
-- [*Actionable Agile Metrics for Predictability* — Daniel Vacanti](https://actionableagile.com/books/) goes deeper into flow data, cycle-time distributions, and forecasting with uncertainty.
-- [*DevEx: What Actually Drives Productivity*](https://www.michaelagreiler.com/wp-content/uploads/2024/06/DevEx-WhatDrivesProductivity.pdf) is a practical companion when the next question concerns interruptions, feedback, or cognitive load.
+- [Accelerate, by Nicole Forsgren, Jez Humble, and Gene Kim](https://itrevolution.com/product/accelerate/) explores the research connecting delivery capability and organizational performance. Pair the book with the [current DORA guide](https://dora.dev/guides/dora-metrics/) for today's metric definitions.
+- [Actionable Agile Metrics for Predictability, by Daniel Vacanti](https://actionableagile.com/books/) goes deeper into flow data, cycle-time distributions, and forecasting with uncertainty.
+- [DevEx: What Actually Drives Productivity, by Abi Noda, Margaret-Anne Storey, Nicole Forsgren, and Michaela Greiler](https://www.michaelagreiler.com/wp-content/uploads/2024/06/DevEx-WhatDrivesProductivity.pdf) is a practical companion when the next question concerns interruptions, feedback, or cognitive load.
 
 *This is the middle post in Classical Agile. Start with the [introduction to Scrum and Kanban](/blog/category/management/introduction-to-classical-agile), then continue with [Improvement Kata](/blog/category/management/improvement-kata) to turn observations into experiments.*

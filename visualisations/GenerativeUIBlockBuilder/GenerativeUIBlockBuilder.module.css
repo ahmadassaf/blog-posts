@@ -220,8 +220,16 @@
   color: var(--ds-color-text);
 }
 
-.root .simulation {
+.root .footer {
+  display: flex;
   margin-top: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+}
+
+.root .simulation {
   font-size: 0.75rem;
 }
 

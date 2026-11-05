@@ -3,7 +3,7 @@ type: 'Post'
 title: 'Auditing NPM Modules in Microservices'
 tags: ['Node.js', 'npm', 'Microservices', 'Dependency Management', 'Software Maintenance']
 summary: 'Where I work at Beamery we follow Microservices Architecture and have dozens of git repositories. With time, these repos become bloated with old NPM modules that are either outdated or not used anymore at all. I wanted to find a way to easily audit and clean this mess.'
-subtitle: 'Clean-up some of the mess across your repositories'
+subtitle: 'Clean up some of the mess across your repositories'
 featured: false
 date: '2016-10-01'
 category: 'engineering'
@@ -49,25 +49,25 @@ generate_npm_report() {
 }
 ```
 
-This script is executed at the root folder that contains all of your repositories, will execute the `npm-check` command, and aggregate the results in the `npm-report.txt` at the root directory where you executed your script.
+This script is executed at the root folder that contains all of your repositories; it runs the `npm-check` command in each one and aggregates the results in the `npm-report.txt` at the root directory where you executed your script.
 The script also checks first if the `npm-check` command exists or if we need to install it via an `npm install -g npm-check`.
 
 To go step by step inside the main function:
 
-- `find . -maxdepth 1 -type d \( ! -name . \)`: Will find all the directories within one level down of the current folder
-- `printf 'Examining NPM modules for '{}'\n'` will just print out a message indicating which folder we are currently examining
-- `echo '{}' >> ../npm-report.txt` will print out the folder name examined in the output file `npm-report.txt`
-- `npm-check >> ../npm-report.txt` This will execute the `npm-check` command and pipe out the result into the output file
+- `find . -maxdepth 1 -type d \( ! -name . \)`: Finds all the directories one level down from the current folder
+- `printf 'Examining NPM modules for '{}'\n'`: Prints a message indicating which folder we are currently examining
+- `echo '{}' >> ../npm-report.txt`: Appends the name of the folder being examined to the output file `npm-report.txt`
+- `npm-check >> ../npm-report.txt`: Runs the `npm-check` command and appends its output to the same file
 
 ## Auditing NPM Modules
 
-After knowing the various modules used, I cleaned my file, pasted the results in an Excel sheet, sorted the cells, and created a subTotal on the count. This generated a list of all my NPM modules and their respective count.
+After knowing the various modules used, I cleaned my file, pasted the results in an Excel sheet, sorted the cells, and created a subtotal on the count. This generated a list of all my NPM modules and their respective count.
 
 ## Cleaning out unused NPM modules
 
 The previous function gives us an idea of the modules and frequency used. However, we might have a bunch of unused modules that were left over from old code and will just increase the size of our containers with no actual use.
 
-We can easily clean out those modules by taking advantage of the [npm-clean](https://github.com/afc163/npm-clean) and plug that into a similar wrapper as the function above, reusing the same `command_exists` helper:
+We can easily clean out those modules by taking advantage of [npm-clean](https://github.com/afc163/npm-clean) and plugging it into a similar wrapper as the function above, reusing the same `command_exists` helper:
 
 ```bash
 # Clean unused NPM modules from each repository

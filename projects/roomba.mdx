@@ -11,7 +11,7 @@ date: '2015-01-08'
 category: 'projects'
 ---
 
-Linked Open Data (LOD) is one of the largest collections of interlinked datasets on the web. But benefiting from that mine of data depends on each dataset shipping descriptive metadata, and in practice such metadata is limited to a few portals, entered manually, and often wrong. I built Roomba to attack this problem automatically: it is a command-line [node.js](http://nodejs.org) tool that extracts dataset metadata from data portals, validates and corrects it where possible, and generates descriptive profiles. Running it against prominent data portals confirmed the suspicion: most datasets suffer from bad quality metadata, and the general state of Linked Open Data needs attention.
+Linked Open Data (LOD) is one of the largest collections of interlinked datasets on the web. But benefiting from that mine of data depends on each dataset shipping descriptive metadata, and in practice such metadata is limited to a few portals, entered manually, and often wrong. I built Roomba to attack this problem automatically: it is a command-line [Node.js](http://nodejs.org) tool that extracts dataset metadata from data portals, validates and corrects it where possible, and generates descriptive profiles. Running it against prominent data portals confirmed the suspicion: most datasets suffer from bad quality metadata, and the general state of Linked Open Data needs attention.
 
 > **Status**: Research code from my PhD work around 2015, kept online as a record of the papers it supported. The [repo](https://github.com/ahmadassaf/roomba) still gets occasional housekeeping pushes (last in August 2026), but the tool is not actively developed.
 
@@ -19,38 +19,40 @@ Linked Open Data (LOD) is one of the largest collections of interlinked datasets
 
 <LinkedDataQualityFramework />
 
-### Data Portal Identification
+### Data portal identification
 
-Data portals can be considered as data access points providing tools to facilitate data publishing, sharing, searching and visualization. [CKAN](http://ckan.org) is the world's leading open-source data portal platform powering websites like the DataHub, Europe's Public Data and the U.S. Government's open data. Modeled on CKAN, [DKAN](http://drupal.org/project/dkan) is a standalone Drupal distribution that is used in various public data portals as well.
+Data portals can be considered as data access points providing tools to facilitate data publishing, sharing, searching and visualization. [CKAN](http://ckan.org) is the world's leading open-source data portal platform; at the time it powered websites like the DataHub, Europe's PublicData.eu and the U.S. Government's open data. Modeled on CKAN, [DKAN](http://drupal.org/project/dkan) is a standalone Drupal distribution that is used in various public data portals as well.
+
 Identifying the software powering data portals is a vital first step to understand the API calls structure. Web scraping is a technique for extracting data from Web pages. Roomba relies on several scraping techniques in the identification process, combining:
 
 - **URL inspection**: Check the existence of certain URL patterns.
-- **Meta tags inspection**: For example, `meta[content*="ckan"]` (all meta tags whose `content` attribute contains the lowercase string `ckan`; the match is case-sensitive). This selector can identify CKAN portals whereas the `meta[content*="Drupal"]` can identify DKAN portals.
+- **Meta tags inspection**: For example, `meta[content*="ckan"]` (all meta tags whose `content` attribute contains the lowercase string `ckan`; the match is case-sensitive). This selector can identify CKAN portals whereas `meta[content*="Drupal"]` can identify DKAN portals.
 - **Document Object Model (DOM) inspection**: Similar to the meta tags inspection, Roomba checks the existence of certain DOM elements or properties.
 
 The identification process for each portal can be easily customized by overriding the `prototype.check` function for each parser. Moreover, adding or removing steps from the identification process can be easily configured.
 
-### Metadata Extraction
+### Metadata extraction
 
 Data portals expose a set of information about each dataset as metadata. The model used varies across portals. However, a standard model should contain information about the dataset's title, description, maintainer email, update and creation date, etc.
 
 Although Roomba is generic and accepts any data model to check against, I used the [CKAN standard model](https://docs.ckan.org/en/latest/api/).
 
 After identifying the underlying portal software, Roomba performs iterative queries to the API in order to fetch datasets metadata and persist them in a file-based cache system.
+
 Depending on the portal software, specific extraction jobs can be issued. For example, in CKAN based portals, Roomba is able to crawl and extract the metadata of a specific dataset, all the datasets in a specific group e.g. LOD Cloud, or all the datasets in the portal.
 
-### Instance and Resource Extraction
+### Instance and resource extraction
 
 From the extracted metadata Roomba identifies all the resources associated with a dataset. They can have various types like a SPARQL endpoint, API, file, visualization, etc. Before extracting the resource instance(s), it performs the following steps:
 
-- **Resource metadata validation and enrichment**: Check the resource attached metadata values. Similar to the dataset metadata, each resource should include information about its mimetype, name, description, format, valid dereferenceable URL, size, type and provenance. The validation process issues an HTTP request to the resource and automatically fills up various missing information when possible, like the mimetype and size by extracting them from the HTTP response header. However, missing fields like name and description that need manual input are marked as missing and will appear in the generated summary report.
+- **Resource metadata validation and enrichment**: Check the metadata values attached to the resource. Similar to the dataset metadata, each resource should include information about its mimetype, name, description, format, valid dereferenceable URL, size, type and provenance. The validation process issues an HTTP request to the resource and automatically fills up various missing information when possible, like the mimetype and size by extracting them from the HTTP response header. However, missing fields like name and description that need manual input are marked as missing and will appear in the generated summary report.
 - **Format validation**: Validate specific resource formats against a linter or a validator.
 
-### Profile Validation
+### Profile validation
 
 The metadata validation process identifies missing information and, where possible, corrects it automatically. Each set of metadata (general, access, ownership and provenance) is validated and corrected automatically when possible. Each profiler task has a set of metadata fields to check against. The validation process checks if each field is defined and if the value assigned is valid.
 
-There are special validation steps for various fields. For example, for ownership information where the maintainer email has to be defined, the validator checks if the email field is an actual valid email address. A similar process is done to URLs whenever found, including an HTTP `HEAD` request to check if the URL is reachable. For the dataset resources, the `content-header` information from a successful request is used to extract, compare and correct further metadata values like mimetype and content size.
+There are special validation steps for various fields. For example, for ownership information where the maintainer email has to be defined, the validator checks if the email field is an actual valid email address. A similar process is done to URLs whenever found, including an HTTP `HEAD` request to check if the URL is reachable. For the dataset resources, the `Content-Type` and `Content-Length` headers from a successful response are used to extract, compare and correct further metadata values like mimetype and content size.
 
 The excerpt below (trimmed from a full CKAN dataset record) shows the kind of metadata being validated:
 
@@ -94,36 +96,36 @@ Roomba gives you the ability to perform the following:
 - Fetch all the information about datasets from a data portal
 - Fetch all the groups information from a data portal
 - Crawl datasets (a specific dataset, datasets in a specific group, datasets in the whole portal)
-- Execute aggregation report on a specific group or on the whole data portal
+- Execute an aggregation report on a specific group or on the whole data portal
 - Profile a specific dataset, a whole group or the whole data portal
 
 **A screencast is available on:** [YouTube](https://youtu.be/p7Y-mDN_Y2s)
 
-> Note that the demo above uses `publicdata.eu`. However, it seems that they no longer support CKAN access as PublicData.eu is archived and no longer active. You can try `https://demo.ckan.org` instead to demonstrate the tool
+> Note that the demo above uses `publicdata.eu`. However, it seems that they no longer support CKAN access as PublicData.eu is archived and no longer active. You can try `https://demo.ckan.org` instead to demonstrate the tool.
 
-### Report Generation
+### Report generation
 
-Data portal administrators need to have an overview of the datasets in their portal or in a specific group. The reporting tool gives the freedom for admins to execute various types of queries and mining information about the datasets. The reports are of three types:
+Data portal administrators need to have an overview of the datasets in their portal or in a specific group. The reporting tool gives admins the freedom to execute various types of queries and mine information about the datasets. The reports are of three types:
 
-- **meta-field values** report: Aggregate all the values of a certain `key` e.g. `license_title` will aggregate all the licenses titles
-- **key:object meta-field values** report: Aggregate all the values of a certain key with an aggregate of another field as its object. e.g. `license_title:title` will aggregate all the license titles used and also will aggregate all the titles for all the datasets using that license title
-- **Check Empty field values** report: Check all the datasets containing an empty value of the passed field key
+- **meta-field values** report: Aggregate all the values of a certain `key` e.g. `license_title` will aggregate all the license titles
+- **key:object meta-field values** report: Aggregate all the values of a certain key with an aggregate of another field as its object, e.g. `license_title:title` will aggregate all the license titles used and also will aggregate all the titles for all the datasets using that license title
+- **empty field values** report: Check all the datasets containing an empty value of the passed field key
 
-### Profile Generation
+### Profile generation
 
 The generated profile records the issues spotted during validation (missing or invalid fields, and the corrections applied where possible) together with general statistics about them.
 
-## Roomba Quality (Objective Linked Data Quality Assessment)
+## Roomba Quality (objective Linked Data quality assessment)
 
 Roomba grew out of my research on Linked Data quality, and its quality-assessment layer follows the papers directly. In [earlier work](https://hal.archives-ouvertes.fr/file/index/docid/823586/filename/Data_Quality_Principles_in_the_Semantic_Web_-_Camera_Ready_Version.pdf), I identified potential quality issues of Linked Data and listed quality principles for all stages of data management. Building on that, I proposed an objective assessment framework: rather than trying to grade subjective qualities, it focuses only on quality indicators that can be measured automatically. Surveying the landscape of Linked Data quality tools showed they covered just a subset of those indicators, so Roomba Quality became the extensible measurement tool that fills the gap. It helps data owners rate the quality of their datasets and get hints on possible improvements, and helps data consumers choose their data sources from a ranked set.
 
 Traditional data quality is a thoroughly researched field, but ensuring quality in Linked Open Data is harder: the data is structured information supported by models, ontologies and vocabularies, and contains queryable endpoints and links, all of which can degrade independently.
 
-### Quality Measures
+### Quality measures
 
-The **objective measures** identified are: completeness, availability, licensing, freshness, correctness, comprehensibility, provenance
+The **objective measures** identified are: completeness, availability, licensing, freshness, correctness, comprehensibility, and provenance.
 
-### Quality Indicators
+### Quality indicators
 
 Each measure is backed by indicators Roomba can check automatically:
 

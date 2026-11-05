@@ -1,7 +1,6 @@
 'use client';
 
 import { useId, useRef, useState } from 'react';
-
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaudi/design-system/core/Accordion';
 import Button from '@gaudi/design-system/core/Button';
 import { Field, FieldLabel } from '@gaudi/design-system/core/Field';
@@ -9,35 +8,22 @@ import Icon from '@gaudi/design-system/core/Icon';
 import { NativeSelect, NativeSelectOption } from '@gaudi/design-system/core/Select';
 import Textarea from '@gaudi/design-system/core/Textarea';
 import { ToggleGroupItem, ToggleGroupRoot } from '@gaudi/design-system/core/ToggleGroup';
-import { TableBodyPrimitive, TableCaption, TableCellPrimitive, TableHeadPrimitive, TableHeader, TableRoot, TableRowPrimitive } from '@gaudi/design-system/mdx/Table';
+import { TableBodyPrimitive, TableCaption, TableCellPrimitive, TableHeader, TableHeadPrimitive, TableRoot, TableRowPrimitive } from '@gaudi/design-system/mdx/Table';
 
 import { baselineHours, comparePrediction, predictionSnapshot, trials, withinWorkingDay } from './ImprovementKataExplorer.data';
 
 import styles from './ImprovementKataExplorer.module.css';
 
-const stageNotes = {
-  'current': { 'name': 'Current condition', 'text': 'Start with what you can observe. Here, four of ten routine requests received substantive first feedback within one working day. The baseline is a sample to investigate, not an explanation of why work waited.' },
-  'direction': { 'name': 'Direction', 'text': 'Small changes should reach users predictably, with the review checks intact. That larger purpose gives the local experiment context: faster first feedback is useful only if quality holds and waiting does not simply move downstream.' },
-  'experiments': { 'name': 'Experiment, learn, adjust', 'text': 'Choose one obstacle, predict what a small test will show, and compare that prediction with the observation. The next step follows what you learned. Try the review-queue example below to keep a record of that loop.' },
-  'obstacles': { 'name': 'Obstacles emerge', 'text': 'You do not need to know the entire route. In the worked example, a protected review window exposes an interruption problem. Coverage becomes something to test, instead of assuming more reminders will solve the waiting.' },
-  'target': { 'name': 'Next target condition', 'text': 'Describe how the work should operate by a date. Here: at least eight of ten routine requests get first feedback within one working day in each of two consecutive weeks, with existing checks intact. A review bot or a protected window is an intervention toward it.' }
-};
-
 const ImprovementKataExplorer = ({
   id,
-  title = 'The Improvement Kata, as a journey',
-  description = 'From the current condition toward a target, one experiment at a time. Select a part of the diagram, then try the worked example below.',
+  title = 'The Improvement Kata, as practice',
+  description = 'Predict what a small experiment will show, reveal what happened, and let the difference choose the next step. The strip below tracks where the fictional team stands against its target.',
   className = ''
 }) => {
   const generatedId = useId();
   const uid = id || generatedId;
   const experimentHeading = useRef(null);
   const [ active, setActive ] = useState('window');
-  const [ selectedStage, setSelectedStage ] = useState('direction');
-  const stage = stageNotes[selectedStage];
-  const stageProps = (name) => {
-    return { 'aria-controls': `${uid}-diagram-readout`, 'value': name };
-  };
   const [ drafts, setDrafts ] = useState({});
   const [ records, setRecords ] = useState({});
   const [ notice, setNotice ] = useState('');
@@ -45,6 +31,13 @@ const ImprovementKataExplorer = ({
   const draft = drafts[active] || { 'expected': 4, 'note': '' };
   const record = records[active];
   const result = comparePrediction(trial.hours, record?.expected ?? draft.expected);
+
+  // Revealed experiments, in the order the example runs them, for the progress strip.
+  const progress = [ 'window', 'backup', 'reminder' ]
+    .filter((trialId) => records[trialId]?.revealed)
+    .map((trialId) => {
+      return { 'actual': withinWorkingDay(trials[trialId].hours), 'id': trialId, 'title': trials[trialId].title };
+    });
 
   const updateDraft = (patch) => setDrafts((current) => {
     return { ...current, [active]: { ...draft, ...patch } };
@@ -98,33 +91,26 @@ const ImprovementKataExplorer = ({
         <strong>{title}</strong>
         <span>{description}</span>
       </figcaption>
-      <ToggleGroupRoot
-        type='single'
-        spacing={ 0 }
-        className={ styles.journey }
-        aria-label='Explore the Improvement Kata diagram'
-        value={ selectedStage }
-        onValueChange={ (value) => value && setSelectedStage(value) }
-      >
-        <svg className={ styles.journeyLines } viewBox='0 0 1000 360' aria-hidden='true'>
-          <rect className={ styles.unknownZone } x='288' y='65' width='324' height='230' rx='20' />
-          <text className={ styles.zoneLabel } x='450' y='93' textAnchor='middle'>UNKNOWN TERRITORY</text>
-          <path className={ styles.path } d='M 258 175 H 334 M 386 175 H 425 M 477 175 H 516 M 568 175 H 645' />
-          <path className={ styles.futurePath } d='M 810 175 H 852' />
-        </svg>
-        <ToggleGroupItem className={ `${styles.stageNode} ${styles.diagramNode} ${styles.currentNode}` } { ...stageProps('current') }>
-          <span>Current condition</span><strong>4 of 10 within a day</strong>
-        </ToggleGroupItem>
-        <ToggleGroupItem className={ `${styles.stageNode} ${styles.experimentNode}` } { ...stageProps('experiments') } aria-label='Explore experiments'>
-          <span className={ styles.loopStrip } aria-hidden='true'>{[ 0, 1, 2 ].map((loop) => <svg key={ loop } viewBox='0 0 64 64'><circle cx='32' cy='32' r='28' /><path d='M 32 11 A 21 21 0 1 1 17 17' /><path d='M 17 17 L 8 15 L 13 7' /></svg>)}</span>
-          <span>experiment · learn · adjust</span>
-        </ToggleGroupItem>
-        <ToggleGroupItem className={ `${styles.stageNode} ${styles.obstacleNode}` } { ...stageProps('obstacles') }><svg viewBox='0 0 24 24' aria-hidden='true'><path d='M12 2 22 12 12 22 2 12Z' /></svg><span>Obstacles emerge</span></ToggleGroupItem>
-        <ToggleGroupItem className={ `${styles.stageNode} ${styles.diagramNode} ${styles.targetNode}` } { ...stageProps('target') }><span>Next target condition</span><strong>8 of 10, sustained</strong></ToggleGroupItem>
-        <ToggleGroupItem className={ `${styles.stageNode} ${styles.directionNode}` } { ...stageProps('direction') }><svg viewBox='0 0 100 100' aria-hidden='true'><circle cx='50' cy='50' r='46'/><path d='M50 23 56 43 77 43 60 56 66 77 50 64 34 77 40 56 23 43 44 43Z'/></svg><span>Direction</span></ToggleGroupItem>
-      </ToggleGroupRoot>
-      <div className={ styles.diagramReadout } id={ `${uid}-diagram-readout` } aria-live='polite' aria-atomic='true'><strong>{stage.name}</strong><p>{stage.text}</p></div>
-      <Collapsible className={ styles.practice }>
+      <ol className={ styles.progress } aria-label='Progress toward the target condition'>
+        <li className={ styles.progressBaseline }>
+          <span>Current condition</span>
+          <strong>{withinWorkingDay(baselineHours)} of {baselineHours.length}</strong>
+          <small>within one working day</small>
+        </li>
+        {progress.map((item) => (
+          <li key={ item.id } className={ item.id === active ? styles.progressActive : undefined }>
+            <span>{item.title}</span>
+            <strong>{item.actual} of 5</strong>
+            <small>{item.actual >= 4 ? 'target rate, one week only' : 'below the target rate'}</small>
+          </li>
+        ))}
+        <li className={ styles.progressTarget }>
+          <span>Next target condition</span>
+          <strong>8 of 10</strong>
+          <small>two consecutive weeks</small>
+        </li>
+      </ol>
+      <Collapsible className={ styles.practice } defaultOpen>
         <CollapsibleTrigger asChild>
           <Button variant='ghost' tone='neutral' size='lg' className={ styles.practiceTrigger }>
             <Icon name='ChevronRight' decorative />

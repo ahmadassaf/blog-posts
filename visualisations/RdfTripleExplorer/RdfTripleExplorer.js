@@ -8,7 +8,7 @@
  * FORM: A native SVG knowledge-graph fragment with direct node and edge inspection.
  */
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import styles from './RdfTripleExplorer.module.css';
 
@@ -38,6 +38,10 @@ const RdfTripleExplorer = ({
   description = 'Select either node or the connecting edge to inspect the three terms inside an RDF triple.',
   className = ''
 }) => {
+  const uid = useId();
+  const titleId = `${uid}-title`;
+  const descriptionId = `${uid}-description`;
+  const arrowId = `${uid}-arrow`;
   const [ activePartId, setActivePartId ] = useState('predicate');
   const activePart = tripleParts[activePartId];
 
@@ -69,12 +73,12 @@ const RdfTripleExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF triple graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 40 1000 390' role='group' aria-labelledby='rdf-triple-title rdf-triple-description'>
-          <title id='rdf-triple-title'>RDF triple graph</title>
-          <desc id='rdf-triple-description'>Ahmad Assaf has blog assaf.website/blog. Each part can be selected for an explanation.</desc>
+        <svg className={ styles.graph } viewBox='0 40 1000 390' role='group' aria-labelledby={ `${titleId} ${descriptionId}` }>
+          <title id={ titleId }>RDF triple graph</title>
+          <desc id={ descriptionId }>Ahmad Assaf has blog assaf.website/blog. Each part can be selected for an explanation.</desc>
 
           <defs>
-            <marker id='rdf-triple-arrow' viewBox='0 0 12 12' refX='10' refY='6' markerWidth='10' markerHeight='10' orient='auto'>
+            <marker id={ arrowId } viewBox='0 0 12 12' refX='10' refY='6' markerWidth='10' markerHeight='10' orient='auto'>
               <path d='M 1 1 L 11 6 L 1 11 Z' className={ styles.arrowHead } />
             </marker>
           </defs>
@@ -83,7 +87,7 @@ const RdfTripleExplorer = ({
             d='M 286 208 C 402 138, 595 138, 706 208'
             className={ styles.edgeLine }
             data-active={ activePartId === 'predicate' }
-            markerEnd='url(#rdf-triple-arrow)'
+            markerEnd={ `url(#${arrowId})` }
           />
 
           <g className={ styles.edgeTarget } { ...interactionProps('predicate') }>

@@ -109,12 +109,9 @@ const AgileCadenceExplorer = ({
           tone='neutral'
           size='sm'
           onClick={ () => {
-            if (mode === 'scrum') {
-              setScrum(createScrumState());
-              setSelectedEvent(1);
-            } else {
-              setKanban(createKanbanState());
-            }
+            setScrum(createScrumState());
+            setKanban(createKanbanState());
+            setSelectedEvent(1);
           } }
         >
           <Icon name='RotateCcw' decorative />

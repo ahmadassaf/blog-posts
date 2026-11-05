@@ -2,8 +2,8 @@
 type: 'Post'
 title: 'Gaudi-bash: My Bash Framework'
 tags: ['Bash', 'Dotfiles', 'Developer Environment', 'Shell']
-summary: 'Gaudi-bash is a collection of bash scripts that I use to power up my machine. It is a modular framework that allows you to add new scripts and features easily.'
-subtitle: 'Powering up your machine with a modular bash framework'
+summary: 'Gaudi-bash is a collection of Bash scripts that I use to power up my machine. It is a modular framework that allows you to add new scripts and features easily.'
+subtitle: 'Powering up your machine with a modular Bash framework'
 featured: false
 date: '2024-02-21'
 category: 'engineering'
@@ -13,18 +13,18 @@ If you have read my [post on dotfiles](/blog/category/engineering/dotfiles-for-t
 
 ## What It Is
 
-Gaudi-bash is a fork of bash-it, rebuilt with opinionated changes for consistency, maintainability, and adherence to [bash best practices](http://mywiki.wooledge.org/BashPitfalls). Like its inspiration [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh), it provides autocompletion, themes, aliases, plugins, and custom functions for Bash. The pitch is simple: stop polluting your `~/bin` directory and your `.bashrc` file, and keep all those little scripts organized in a framework instead.
+Gaudi-bash is a fork of bash-it, rebuilt with opinionated changes for consistency, maintainability, and adherence to [Bash best practices](http://mywiki.wooledge.org/BashPitfalls). Like its inspiration [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh), it provides autocompletion, themes, aliases, plugins, and custom functions for Bash. The pitch is simple: stop polluting your `~/bin` directory and your `.bashrc` file, and keep all those little scripts organized in a framework instead.
 
 The rework of the bash-it codebase focused on a few principles:
 
 - The core engine is separated from the components (aliases, completions, plugins, themes) so each can be updated independently.
 - Code is split into small, focused files rather than monolithic scripts.
-- Everything follows a single coding convention and complies with [shellcheck](http://shellcheck.net) wherever possible.
+- Everything follows a single coding convention and complies with [ShellCheck](http://shellcheck.net) wherever possible.
 - The core functions are covered by unit tests written with [bats](https://github.com/bats-core/bats-core).
 
 ## How It Is Structured
 
-The core lives in `lib/`: a command dispatcher, logging, theming, history configuration, and helpers for enabling, disabling, and diagnosing components. The user-facing pieces live in `components/`, split into `aliases`, `completions`, `plugins`, and `themes`. Components are enabled by creating symlinks in `components/enabled/`, which a loader script walks and sources at shell startup. A `components/custom/` directory holds machine-local scripts that are ignored by git, so private tweaks never end up in the repository.
+The core lives in `lib/`: a command dispatcher, logging, theming, history configuration, and helpers for enabling, disabling, and diagnosing components. The user-facing pieces live in `components/`, split into `aliases`, `completions`, `plugins`, and `themes`. Components are enabled by creating symlinks in `components/enabled/`, which a loader script walks and sources at shell startup. A `components/custom/` directory holds machine-local scripts that are ignored by Git, so private tweaks never end up in the repository.
 
 Everything is managed through one `gaudi-bash` command:
 
@@ -68,4 +68,4 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/g-udi/gaudi-bash/master/in
 
 As always with piped installers, read the script first. By default the installer only enables a sane set of components to keep your shell clean; the rest is there when you want it via `gaudi-bash enable`.
 
-I will not pretend gaudi-bash is for everyone: if you live in zsh, oh-my-zsh and its ecosystem are more active. But if you are a Bash holdout like me and want your shell configuration modular, tested, and consistent across machines, the [repository](https://github.com/g-udi/gaudi-bash) has everything you need to get going.
+I will not pretend gaudi-bash is for everyone: if you live in Zsh, oh-my-zsh and its ecosystem are more active. But if you are a Bash holdout like me and want your shell configuration modular, tested, and consistent across machines, the [repository](https://github.com/g-udi/gaudi-bash) has everything you need to get going.

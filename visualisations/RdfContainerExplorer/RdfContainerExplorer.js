@@ -8,7 +8,7 @@
  * FORM: A responsive SVG hub-and-spoke graph with semantic layout switching.
  */
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import styles from './RdfContainerExplorer.module.css';
 
@@ -50,7 +50,10 @@ const RdfContainerExplorer = ({
   description = 'Change the container type and watch the graph reorganize around order, equivalence, or preference.',
   className = ''
 }) => {
-  const [ activeTypeId, setActiveTypeId ] = useState('alt');
+  const uid = useId();
+  const titleId = `${uid}-title`;
+  const descriptionId = `${uid}-description`;
+  const [ activeTypeId, setActiveTypeId ] = useState('seq');
   const [ extended, setExtended ] = useState(false);
   const activeType = containerTypes[activeTypeId];
   const members = extended ? [ ...baseMembers, 'D' ] : baseMembers;
@@ -94,15 +97,15 @@ const RdfContainerExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the graph</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF container graph' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 534' role='img' aria-labelledby='rdf-container-title rdf-container-description'>
-          <title id='rdf-container-title'>Interactive RDF container graph</title>
-          <desc id='rdf-container-description'>Ahmad Assaf’s Blog points to an open RDF container. The selected container type changes how member nodes A, B, C, and optional D are arranged.</desc>
+        <svg className={ styles.graph } viewBox='0 0 1000 534' role='img' aria-labelledby={ `${titleId} ${descriptionId}` }>
+          <title id={ titleId }>Interactive RDF container graph</title>
+          <desc id={ descriptionId }>Ahmad Assaf’s Blog points to an open RDF container. The selected container type changes how member nodes A, B, C, and optional D are arranged.</desc>
 
           <rect x='60' y='114' width='880' height='390' rx='64' className={ styles.openBoundary } />
           <text x='884' y='142' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
           <path d='M 500 82 C 500 104, 500 126, 500 147' className={ styles.subjectEdge } />
-          <text x='484' y='100' textAnchor='end' className={ styles.subjectEdgeLabel }>ex:hasAdmins</text>
+          <text x='484' y='100' textAnchor='end' className={ styles.subjectEdgeLabel }>aa:hasAdmins</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];
@@ -174,7 +177,7 @@ const RdfContainerExplorer = ({
                   className={ styles.memberNode }
                 />
                 <text x={ x } y={ y - 4 } textAnchor='middle' className={ styles.memberName }>{member}</text>
-                <text x={ x } y={ y + 16 } textAnchor='middle' className={ styles.memberIri }>https://assaf.website/{member}</text>
+                <text x={ x } y={ y + 16 } textAnchor='middle' className={ styles.memberIri }>http://assaf.website/{member}</text>
                 {preferred && <text x={ x } y={ y + 54 } textAnchor='middle' className={ styles.preferredLabel }>PREFERRED</text>}
               </g>
             );
@@ -184,7 +187,7 @@ const RdfContainerExplorer = ({
             <rect x='415' y='24' width='170' height='54' rx='27' />
             <text x='500' y='14' textAnchor='middle' className={ styles.nodeKind }>SUBJECT</text>
             <text x='500' y='47' textAnchor='middle' className={ styles.subjectTitle }>Ahmad Assaf’s Blog</text>
-            <text x='500' y='67' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
+            <text x='500' y='67' textAnchor='middle' className={ styles.nodeCode }>:blog</text>
           </g>
 
           <g className={ styles.hub } data-type={ activeTypeId }>

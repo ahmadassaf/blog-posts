@@ -63,7 +63,14 @@ export const createScrumState = () => {
   return { 'day': 5, 'feedback': '', 'releasedDay': null };
 };
 
-export const moveScrumDay = (state, day) => (Number.isInteger(day) && day >= 1 && day <= SCRUM_REVIEW_DAY ? { ...state, day, 'feedback': '' } : state);
+export const moveScrumDay = (state, day) => {
+  if (!Number.isInteger(day) || day < 1 || day > SCRUM_REVIEW_DAY) return state;
+
+  // Moving to a day before the release means the release has not happened yet on that day.
+  const releasedDay = state.releasedDay !== null && day < state.releasedDay ? null : state.releasedDay;
+
+  return { ...state, day, 'feedback': '', releasedDay };
+};
 
 export const getScrumStatus = (state) => {
   return {

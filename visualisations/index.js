@@ -8,16 +8,31 @@
  * to compiled blog and project MDX through the local MDX renderer.
  */
 
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useSyncExternalStore } from 'react';
+
+import ImprovementKataExplorerSkeleton from './ImprovementKataExplorer/ImprovementKataExplorer.skeleton';
+import DiagramSkeleton from './DiagramSkeleton';
 
 /*
- * Each diagram loads as its own chunk and still renders on the server. next/dynamic is avoided: it
- * renders a server-only preload sibling, which shifts React's useId tree between the server and the
- * browser, so every diagram using useId failed to hydrate.
+ * Each diagram loads as its own chunk. next/dynamic is avoided: it renders a server-only preload
+ * sibling, which shifts React's useId tree between the server and the browser, so every diagram using
+ * useId failed to hydrate. The diagram is not server-rendered either: its CSS module travels with the
+ * lazy chunk, so server HTML would paint unstyled until the chunk arrived. The server and the hydration
+ * pass render the skeleton; the diagram mounts once the browser owns the tree.
  */
-const diagram = (load) => {
+// The store never changes (mounted-ness is fixed once true), so the subscribe function has nothing to do.
+const subscribeNoop = () => () => undefined;
+const useMounted = () => useSyncExternalStore(subscribeNoop, () => true, () => false);
+
+const diagram = (load, Fallback = DiagramSkeleton) => {
   const Component = lazy(load);
-  const Diagram = (props) => <Suspense fallback={ null }><Component { ...props } /></Suspense>;
+  const Diagram = (props) => {
+    const mounted = useMounted();
+
+    if (!mounted) return <Fallback />;
+
+    return <Suspense fallback={ <Fallback /> }><Component { ...props } /></Suspense>;
+  };
 
   return Diagram;
 };
@@ -30,7 +45,7 @@ const GenerativeRoutingExplorer = diagram(() => import('./GenerativeRoutingExplo
 const GenerativeUIComparison = diagram(() => import('./GenerativeUIComparison'));
 const GenerativeUIBlockBuilder = diagram(() => import('./GenerativeUIBlockBuilder'));
 const GrowthLevelsExplorer = diagram(() => import('./GrowthLevelsExplorer'));
-const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'));
+const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'), ImprovementKataExplorerSkeleton);
 const JsonLdGraphExplorer = diagram(() => import('./JsonLdGraphExplorer'));
 const OlapCubeExplorer = diagram(() => import('./OlapCubeExplorer'));
 const SparqlPatternExplorer = diagram(() => import('./SparqlPatternExplorer'));

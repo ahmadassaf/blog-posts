@@ -16,17 +16,17 @@ draft: false
 
 As of July 2024, Contentlayer is effectively unmaintained. In its current state, the project cannot be used with Next.js 14 due to dependency conflicts. You can see more info [here](https://github.com/contentlayerdev/contentlayer/issues/429#issuecomment-1974928678) or some alternatives like [Content Collections](https://www.content-collections.dev/).
 
-There is [news](https://github.com/contentlayerdev/contentlayer/issues/651#issuecomment-2030335434) that Netlify is working on a new version of Contentlayer, but no release date has been announced yet.
+There is [news](https://github.com/contentlayerdev/contentlayer/issues/651#issuecomment-2030335434) that Netlify is working on a new version of Contentlayer, but as of July 2024 no release date had been announced.
 
 </Callout>
 
-I built this blog on Contentlayer. Then the project stalled, its maintainer moved on, and the Callout above is what I had to prepend to my own enthusiastic draft about it. So instead of paraphrasing its documentation, this is the shorter, more honest post: what Contentlayer actually did for me, what runs this blog today, and what I took away from the experience.
+I built this blog on Contentlayer. Then the project stalled, its maintainer moved on, and the callout above is what I had to prepend to my own enthusiastic draft about it. So instead of paraphrasing its documentation, this is the shorter, more honest post: what Contentlayer actually did for me, what runs this blog today, and what I took away from the experience.
 
 ## What Contentlayer did well
 
 The pitch was simple: your MDX files become typed, importable data. You describe your content schema in code, and the build turns every file into a validated document you can `import { allPosts } from 'contentlayer/generated'` anywhere in your app. This blog still works exactly that way. Here is a trimmed excerpt of its real config:
 
-```js caption="contentlayer.config.js"
+```js caption="contentlayer.config.js (trimmed)"
 import { defineDocumentType, makeSource } from 'contentlayer2/source-files';
 
 export const Post = defineDocumentType(() => ({
@@ -49,7 +49,7 @@ The two ideas that earned their keep:
 - **Schema as code**: every post is validated at build time against field definitions (`category` and `date` are required, `draft` is a boolean, a `series` is a nested type with a title and an order). A typo in frontmatter fails the build instead of silently rendering wrong.
 - **Computed fields**: values derived from the content rather than written by hand. This blog computes each post's `slug` from its file path, `readingTime` from the raw body, and the table of contents from the headings:
 
-```js caption="lib/contentLayer/computedFields.js"
+```js caption="lib/contentLayer/computedFields.js (trimmed)"
 const computedFields = {
   'readingTime': { 'resolve': (doc) => readingTime(doc.body.raw), 'type': 'json' },
   'slug': { 'resolve': (doc) => `category/${relPath(doc)}`, 'type': 'string' },
