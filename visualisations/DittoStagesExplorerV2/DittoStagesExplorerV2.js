@@ -66,13 +66,18 @@ const DittoStagesExplorerV2 = ({
         ))}
       </ToggleGroupRoot>
 
+      {/* Stage heading spans both columns so the document and the mapping file start on the same line. */}
+      <div className={ styles.stageHead }>
+        <header className={ styles.panelHeader }>
+          <h3 className={ styles.heading } id={ headingId } aria-live='polite' aria-atomic='true'>{stage.name}</h3>
+          <span className={ styles.legend }>{hasChanges ? '+ added · − removed by this stage' : 'unchanged by this stage'}</span>
+        </header>
+        <p className={ styles.line }>{stage.line}</p>
+      </div>
+
       <div className={ styles.panels }>
         <section className={ styles.panel } aria-labelledby={ headingId }>
-          <header className={ styles.panelHeader }>
-            <h3 className={ styles.heading } id={ headingId } aria-live='polite' aria-atomic='true'>{stage.name}</h3>
-            <span className={ styles.legend }>{hasChanges ? '+ added · − removed by this stage' : 'unchanged by this stage'}</span>
-          </header>
-          <p className={ styles.line }>{stage.line}</p>
+          <div className={ styles.documentTitle } aria-hidden='true'>document.json</div>
           <pre className={ styles.document } id={ documentId } key={ stage.id }>
             <code>
               {lines.map((line, index) => (
