@@ -3,19 +3,30 @@
 /**
  * THESIS: Explain gaudiBar as a nested desktop compositor, not a diagram of coloured boxes.
  * OWN-WORLD: A dark macOS desktop field, translucent edge bars, and a precise region inspector.
- * STORY: Select a region, see its widgets share space, and understand the four-level layout hierarchy.
+ * STORY: Select a region, see its widgets share space, and understand the four-level layout hierarchy;
+ *        the line in `lib/configs.js` that fills that region lights up beneath the scene.
  * FIRST VIEWPORT: Top and bottom primary bars frame a selected-region inspector inside one desktop canvas.
  * FORM: Interactive desktop anatomy; an extension of Gaudi's editorial diagram catalogue.
  */
 
-import { useId, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { Sparkline } from '@gaudi/design-system/charts/Sparkline';
 import Button from '@gaudi/design-system/core/Button';
+import { CodeBlock, CodeBlockContent, CodeBlockCopyButton, CodeBlockHeader, CodeBlockLanguage, CodeBlockTitle, toPlainLines } from '@gaudi/design-system/core/CodeBlock';
 import Icon from '@gaudi/design-system/core/Icon';
 
+import { configRegionsById, configSource, pluginNotes, regionLineNumbers } from './GaudiBarLayout.config';
 import { gaudiBarRegions, gaudiBarRegionsById } from './GaudiBarLayout.data';
 
 import styles from './GaudiBarLayout.module.css';
+
+/*
+ * The code block receives prepared lines instead of a `highlightedLines` spec. A spec change makes the design
+ * system re-tokenise the source asynchronously and show plain text until the new tokens arrive, so every
+ * selection would flash. Plain lines with a `highlighted` state render synchronously and keep shiki out of this chunk.
+ */
+const codeLines = toPlainLines(configSource);
+const lineNumbersByRegion = regionLineNumbers();
 
 const accessibleRegion = (region) => {
   const widgets = region.widgets.map((widget) => `${widget.label}: ${widget.value}`).join(', ');
@@ -48,6 +59,7 @@ const WidgetPreview = ({ widget }) => (
     )}
 
     {widget.trend && (
+
       // The value beside it carries the meaning, so the trend stays a decorative glyph outside the tab order.
       <span className={ styles.sparkline } aria-hidden='true' inert>
         <Sparkline data={ widget.trend } color='currentColor' height={ 16 } showEndpoint={ false } />
@@ -122,6 +134,14 @@ const GaudiBarLayout = ({
   const readoutId = useId();
   const [ activeRegionId, setActiveRegionId ] = useState('top-left');
   const activeRegion = gaudiBarRegionsById[activeRegionId];
+
+  // Scene ids (`top-left`, ...) are the config helper's region keys, so the selection drives the highlight directly.
+  const configRegion = configRegionsById[activeRegionId];
+  const highlighted = lineNumbersByRegion[activeRegionId];
+
+  const lines = useMemo(() => codeLines.map((line) => {
+    return { ...line, 'state': { 'highlighted': highlighted.includes(line.number) } };
+  }), [ highlighted ]);
 
   return (
     <figure className={ `${styles.root} ${className}`.trim() }>
@@ -200,6 +220,40 @@ const GaudiBarLayout = ({
             <strong>{activeRegion.widgets.length} flexible widgets</strong>
           </div>
         </div>
+      </div>
+
+      <div className={ styles.config }>
+        <p id={ `${readoutId}-config` } className={ styles.configLabel }>
+          The line in <code>lib/configs.js</code> that fills the selected region
+        </p>
+
+        <CodeBlock
+          code={ configSource }
+          lines={ lines }
+          language='javascript'
+          label='The layout object in lib/configs.js'
+          className={ styles.code }
+          showLineNumbers
+        >
+          <CodeBlockHeader className={ styles.codeHeader }>
+            <CodeBlockTitle>lib/configs.js</CodeBlockTitle>
+            <CodeBlockLanguage>js</CodeBlockLanguage>
+            <CodeBlockCopyButton className={ styles.copy } alwaysVisible />
+          </CodeBlockHeader>
+          <CodeBlockContent />
+        </CodeBlock>
+
+        <p className={ styles.pluginLine } aria-live='polite'>
+          <span className={ styles.lineRef }>Line {highlighted.join(', ')} · {activeRegion.bar} bar · {activeRegion.label}</span>
+          {configRegion.plugins.length > 0 && (
+            <span className={ styles.plugins }>
+              {configRegion.plugins.map((plugin) => <code key={ plugin } title={ pluginNotes[plugin] }>{plugin}</code>)}
+            </span>
+          )}
+          {configRegion.plugins.length === 0 && (
+            <span className={ styles.empty }>empty array · renders nothing, costs no space</span>
+          )}
+        </p>
       </div>
     </figure>
   );

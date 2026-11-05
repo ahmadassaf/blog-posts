@@ -47,15 +47,9 @@ Some widgets may require installing additional packages; they are all documented
 
 I started by designing a flexible layout. The main container spans the entire desktop, with primary bars at the top and bottom. Each primary bar is divided into three secondary regions (left, middle, right), which can contain multiple widgets.
 
-**Before (current)**
-
 <GaudiBarLayout />
 
-**After (rework)**
-
-<GaudiBarLayoutV2 />
-
-The interactive diagram above shows how gaudiBar overlays on your desktop:
+The interactive diagram above shows how gaudiBar overlays on your desktop; select any region and the line in `lib/configs.js` that fills it lights up underneath:
 - The main container covering the whole desktop
 - Two main `primary-bar` components on the top and bottom of the screen
 - Each `primary-bar` has three `secondary-bar` regions (left, middle, right)

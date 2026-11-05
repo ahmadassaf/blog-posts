@@ -1,7 +1,10 @@
 /**
  * The layout object from gaudiBar's `lib/configs.js`, as the post shows it, plus a pure mapping from
- * that object to the source lines it occupies. The component highlights lines through this mapping, so
- * the diagram and the snippet in the post cannot drift apart without the contract test noticing.
+ * that object to the source lines it occupies. The diagram highlights lines through this mapping, so
+ * the config panel and the snippet in the post cannot drift apart without the contract test noticing.
+ *
+ * Region keys are `${bar}-${region}` (`top-left`, `bottom-right`, ...) and match the ids in
+ * `GaudiBarLayout.data.js`, so the scene's selection drives the highlight without translation.
  */
 
 // Rendering order. The object itself is keyed alphabetically; these arrays carry the order the file uses.
@@ -94,8 +97,8 @@ export function barLineRanges(config = layoutConfig) {
 
 export const configSource = buildConfigLines().map((line) => line.text).join('\n');
 
-export const regions = primaryBars.flatMap((bar) => secondaryRegions.map((region) => {
+export const configRegions = primaryBars.flatMap((bar) => secondaryRegions.map((region) => {
   return { bar, 'id': regionId(bar, region), 'plugins': layoutConfig[bar][region], region };
 }));
 
-export const regionsById = Object.fromEntries(regions.map((region) => [ region.id, region ]));
+export const configRegionsById = Object.fromEntries(configRegions.map((region) => [ region.id, region ]));

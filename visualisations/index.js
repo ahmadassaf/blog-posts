@@ -42,7 +42,6 @@ const AgileChartsExplorer = diagram(() => import('./AgileChartsExplorer'));
 const DittoStagesExplorer = diagram(() => import('./DittoStagesExplorer'));
 const DittoStagesExplorerV2 = diagram(() => import('./DittoStagesExplorerV2'));
 const GaudiBarLayout = diagram(() => import('./GaudiBarLayout'));
-const GaudiBarLayoutV2 = diagram(() => import('./GaudiBarLayoutV2'));
 const GenerativeRoutingExplorer = diagram(() => import('./GenerativeRoutingExplorer'));
 const GenerativeRoutingExplorerV2 = diagram(() => import('./GenerativeRoutingExplorerV2'));
 const GenerativeUIComparison = diagram(() => import('./GenerativeUIComparison'));
@@ -70,7 +69,6 @@ export const VisualisationComponents = {
   DittoStagesExplorer,
   DittoStagesExplorerV2,
   GaudiBarLayout,
-  GaudiBarLayoutV2,
   GenerativeRoutingExplorer,
   GenerativeRoutingExplorerV2,
   GenerativeUIBlockBuilder,
