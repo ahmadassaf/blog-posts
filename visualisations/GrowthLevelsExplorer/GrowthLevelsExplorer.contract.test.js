@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { defaultLevelId, findLevel, levelLabel, levels } from './GrowthLevelsExplorerV2.data.js';
+import { defaultLevelId, findLevel, levelLabel, levels } from './GrowthLevelsExplorer.data.js';
 
 const requiredFields = [ 'description', 'evidence', 'experiment', 'id', 'kind', 'leadership', 'name', 'support', 'technical' ];
 

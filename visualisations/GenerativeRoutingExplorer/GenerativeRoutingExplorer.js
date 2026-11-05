@@ -3,95 +3,413 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaudi/design-system/core/Accordion';
 import Button from '@gaudi/design-system/core/Button';
+import { CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardRoot, CardTitle } from '@gaudi/design-system/core/Card';
 import Checkbox from '@gaudi/design-system/core/Checkbox';
-import Field, { FieldLabel } from '@gaudi/design-system/core/Field';
+import { Field, FieldLabel } from '@gaudi/design-system/core/Field';
 import Icon from '@gaudi/design-system/core/Icon';
 import { RadioGroupItem, RadioGroupRoot } from '@gaudi/design-system/core/RadioGroup';
 import { NativeSelect, NativeSelectOption } from '@gaudi/design-system/core/Select';
 import { Slider } from '@gaudi/design-system/core/Slider';
 import Textarea from '@gaudi/design-system/core/Textarea';
+
+import { acquisitionRecord, assumptionLabels, company, computeFinding, countStale, defaultAssumptions, definitionExample, describeAssumption, followUp, formatDelta, formatMoney, formatRate, latestEurByPeriod, rateRange, reviewFinding, routes, sourceDocuments } from './GenerativeRoutingExplorer.data';
+
 import styles from './GenerativeRoutingExplorer.module.css';
 
-const paths = { currency: 'Check exchange rate', definition: 'Inspect adjustments', sources: 'Compare documents', period: 'Check reporting period' };
-const evidence = {
- currency: 'The acquisition record uses GBP; the new report uses EUR. Currency conversion is a useful first check.',
- definition: 'One observation is reported EBITDA; the other is adjusted EBITDA. Inspect the add-backs before comparing.',
- sources: 'Two documents give different values for the same measure and period. Review their provenance.',
- period: 'The original record covers FY2024. The latest observation covers FY2025. A remaining difference may be a period change.'
+const saveLabel = (saved, review) => {
+  if (!saved) return 'Save finding';
+  if (review.stale) return 'Recompute and save';
+
+  return 'Update saved finding';
 };
-const money = n => `${n < 0 ? "−" : ""}£${Math.abs(n).toFixed(2)}m`;
-export default function GenerativeRoutingExplorer({ id }) {
- const uid = useId();
- const company = 'Northstar';
- const heading = useRef(null);
- const [navigation, setNavigation] = useState(0);
- useEffect(() => { if (navigation) heading.current?.focus({preventScroll:false}); }, [navigation]);
- const [period, setPeriod] = useState('FY2025');
- const [started, setStarted] = useState(false);
- const [step, setStep] = useState('evidence');
- const [rate, setRate] = useState(1.2);
- const [adjustment, setAdjustment] = useState(true);
- const [source, setSource] = useState('signed');
- const [notes, setNotes] = useState({});
- const [findings, setFindings] = useState({});
- const [trail, setTrail] = useState([]);
- const alternative = ['definition','sources'].includes(step);
- const latest = period === 'FY2025' ? 14.4 : 12;
- const normalized = latest / rate;
- function open(key) { setStep(key); setNavigation(n => n + 1); setTrail(old => key === 'evidence' || old.includes(key) ? old : [...old, key]); }
- function result(key) {
-  if (key === 'currency') return `${money(normalized)} after conversion at €${rate.toFixed(2)} per £1; a ${money(normalized - 10)} difference from the £10m acquisition record. ${period === 'FY2025' ? 'The reporting years differ; this alone does not explain performance.' : 'The reporting year matches; any remaining gap depends on the conversion assumption.'}`;
-  if (key === 'definition') return adjustment ? '£12m adjusted − £2m restructuring add-back = £10m reported EBITDA. Definitions explain this illustrative gap.' : '£12m still includes the £2m add-back. This is not yet comparable with £10m reported EBITDA.';
-  if (key === 'sources') return `${source === 'signed' ? '£10m from the signed report' : '£12m from the draft'} selected for review. ${source === 'draft' ? 'Unresolved: the later signed report supersedes this draft.' : 'The 9 June signed report supersedes the 2 June draft.'}`;
-  return period === 'FY2025' ? `${money(normalized)} for FY2025 versus £10m for FY2024. The normalized difference is ${money(normalized - 10)} (${((normalized / 10 - 1) * 100).toFixed(1)}%). This comparison alone does not explain the cause.` : `${money(normalized)} versus £10m, both for FY2024. At this rate the remaining difference is ${money(normalized - 10)}.`;
- }
- function record() {setFindings(old => ({...old, [step]: {text: result(step), period, rate, adjustment, source}}));}
-  function reset() {
+
+const staleSentence = (count) => {
+  if (count === 0) return 'All saved findings are current again.';
+
+  return `${count} saved ${count === 1 ? 'finding needs' : 'findings need'} review.`;
+};
+
+const GenerativeRoutingExplorer = ({
+  id,
+  title = 'Follow the question, then the evidence',
+  description = 'A predefined investigation into one fictional EBITDA discrepancy. Each saved finding keeps the assumptions it was computed under; change an assumption upstream and the finding tells you it needs another look.',
+  className = ''
+}) => {
+  const generatedId = useId();
+  const uid = id || generatedId;
+  const heading = useRef(null);
+  const [ started, setStarted ] = useState(false);
+  const [ step, setStep ] = useState('evidence');
+  const [ trail, setTrail ] = useState([ 'evidence' ]);
+  const [ assumptions, setAssumptions ] = useState(defaultAssumptions);
+  const [ findings, setFindings ] = useState({});
+  const [ notes, setNotes ] = useState({});
+  const [ notice, setNotice ] = useState('');
+  const [ navigation, setNavigation ] = useState(0);
+
+  // The step heading only exists once the investigation has started, so focus runs after commit.
+  useEffect(() => {
+    if (navigation) heading.current?.focus();
+  }, [ navigation ]);
+
+  const live = step === 'evidence' ? null : computeFinding(step, assumptions);
+  const savedFinding = findings[step];
+  const savedReview = savedFinding ? reviewFinding(savedFinding, assumptions) : null;
+  const next = followUp(step, assumptions);
+  const savedList = Object.entries(findings);
+  const staleCount = countStale(findings, assumptions);
+  const latestEur = latestEurByPeriod[assumptions.period];
+  const differentYears = assumptions.period !== acquisitionRecord.period;
+
+  const open = (routeId) => {
+    setStep(routeId);
+    setTrail((current) => (current.includes(routeId) ? current : [ ...current, routeId ]));
+    setNavigation((count) => count + 1);
+  };
+
+  const start = () => {
+    setStarted(true);
+    setNotice('Investigation started. Compare the observations, then choose a route.');
+    open('evidence');
+  };
+
+  const updateAssumption = (key, value) => {
+    const nextAssumptions = { ...assumptions, [key]: value };
+    const before = countStale(findings, assumptions);
+    const after = countStale(findings, nextAssumptions);
+
+    setAssumptions(nextAssumptions);
+    if (after !== before) setNotice(`${assumptionLabels[key]} set to ${describeAssumption(key, value)}. ${staleSentence(after)}`);
+  };
+
+  const save = () => {
+    const finding = computeFinding(step, assumptions);
+    const under = Object.entries(finding.assumptions).map(([ key, value ]) => describeAssumption(key, value)).join(', ');
+
+    setFindings((current) => {
+      return { ...current, [step]: finding };
+    });
+    setNotice(`${routes[step].title} ${savedFinding ? 'updated' : 'saved'}: ${formatMoney(finding.value)} under ${under}.`);
+  };
+
+  const recompute = (routeId) => {
+    const review = reviewFinding(findings[routeId], assumptions);
+
+    setFindings((current) => {
+      return { ...current, [routeId]: review.current };
+    });
+    setNotice(`${routes[routeId].title} recomputed: ${formatMoney(findings[routeId].value)} → ${formatMoney(review.current.value)} (${formatDelta(review.delta)}).`);
+  };
+
+  const reset = () => {
+    setStarted(false);
+    setStep('evidence');
+    setTrail([ 'evidence' ]);
+    setAssumptions(defaultAssumptions);
     setFindings({});
     setNotes({});
-    setTrail([]);
-    setStep('evidence');
-    setStarted(false);
-    setPeriod('FY2025');
-    setRate(1.2);
-    setAdjustment(true);
-    setSource('signed');
-  }
- function stale(key, item) {return (['currency','period'].includes(key) && (item.rate !== rate || item.period !== period)) || (key === 'definition' && item.adjustment !== adjustment) || (key === 'sources' && item.source !== source);}
- return <section id={id || uid} className={styles.root} aria-label="Generative routing interactive example">
-  <header className={styles.header}><h3>Follow the question, then the evidence.</h3><p>Try it: save a currency finding, then change the exchange rate. Watch which conclusion needs another look.</p></header>
-  <p className={styles.disclosure}>Simulation · Fictional data and predefined routes; no live AI. Notes and findings last until reload.</p>
-  <div className={styles.intent}>
-   <p><strong>“Why has EBITDA changed?”</strong></p>
-   <div className={styles.fields}><div><strong>Company</strong><p>Northstar</p></div><Field className={styles.field}><FieldLabel htmlFor={`${uid}-period`}>Latest reporting period</FieldLabel><NativeSelect id={`${uid}-period`} className={styles.select} value={period} onChange={e => setPeriod(e.target.value)}><NativeSelectOption value='FY2025'>FY2025</NativeSelectOption><NativeSelectOption value='FY2024'>FY2024</NativeSelectOption></NativeSelect></Field></div>
-   <p className={styles.hint}>Compare reported EBITDA with the FY2024 acquisition record. Changing the period updates the comparison immediately.</p>
-   {!started && <Button className={styles.primary} onClick={() => {setStarted(true);open('evidence');}}>Start the investigation</Button>}
-  </div>
-  {started && <>
-   <nav className={styles.trail} aria-label="Visited investigation steps"><span>Revisit a step:</span><Button variant="outline" size="sm" onClick={() => open('evidence')} aria-current={step === 'evidence' ? 'step' : undefined}>Compare observations</Button>{trail.map(key => <Button variant="outline" size="sm" key={key} onClick={() => open(key)} aria-current={step === key ? 'step' : undefined}>{paths[key]}</Button>)}</nav>
-   <div className={styles.workspace}>
-   <div className={styles.main}><div className={styles.reveal} key={step}>
-    {step === 'evidence' ? <><h4 ref={heading} tabIndex={-1}>The currencies differ. Start there?</h4><p>{evidence.currency} {period === 'FY2025' && 'The periods also differ; keep that as the next check.'}</p><Button className={styles.primary} onClick={() => open('currency')}>Inspect currency conversion</Button><div className={styles.choices}><Button variant="outline" onClick={() => open('period')}>Check the period first</Button></div><Collapsible className={styles.alternatives}><CollapsibleTrigger asChild><Button variant="ghost" className={styles.alternativesTrigger}><Icon name="ChevronRight" size="sm" decorative />Explore different evidence instead</Button></CollapsibleTrigger><CollapsibleContent><p>These standalone what-if cases show how another finding would call for a different tool.</p><Button variant="outline" onClick={() => open('definition')}>What if the definitions differ?</Button><Button variant="outline" onClick={() => open('sources')}>What if the sources disagree?</Button></CollapsibleContent></Collapsible></> : <>
-     <h4 ref={heading} tabIndex={-1}>{paths[step]}</h4><p>{step === 'period' ? (period === 'FY2025' ? evidence.period : 'Both observations cover FY2024. The reporting periods match; inspect any remaining currency-normalized difference.') : evidence[step]}</p>
-     {step === 'currency' && <><div className={styles.notes}><span>Conversion assumption: €{rate.toFixed(2)} per £1</span><Slider className={styles.slider} aria-label="Euros per pound" getValueText={v => `€${v.toFixed(2)} per £1`} min={1} max={1.5} step={0.01} value={[rate]} onValueChange={([v]) => setRate(v)}/></div><div className={styles.metric}><span>€{latest}m ÷ {rate.toFixed(2)}</span><strong>{money(normalized)}</strong><span>Latest EBITDA in GBP</span></div></>}
-     {step === 'definition' && <><p className={styles.hint}>Separate example · Same period, GBP throughout.</p><div className={styles.bridge}><span>Adjusted EBITDA <b>£12m</b></span><Checkbox className={styles.check} checked={adjustment} onCheckedChange={v => setAdjustment(v === true)} label={<>Remove restructuring add-back <b>−£2m</b></>}/><span>{adjustment ? 'Reported basis' : 'Still adjusted — not comparable'} <b>£{adjustment ? 10 : 12}m</b></span></div></>}
-     {step === 'sources' && <><p className={styles.hint}>Separate example · Same period and reported EBITDA definition, GBP throughout.</p><RadioGroupRoot className={styles.documents} name={`${uid}-source`} aria-label="Source document" value={source} onValueChange={setSource}>{[['draft','Draft report','2 June','£12m','Preliminary, pending final adjustments.'],['signed','Signed report','9 June','£10m','Final version; supersedes the 2 June draft.']].map(([key,title,date,value,detail])=><label key={key} data-checked={source===key || undefined}><RadioGroupItem value={key}/><strong>{title}</strong><span>{date} · {value}</span><p>{detail}</p></label>)}</RadioGroupRoot></>}
-     {step === 'period' && <div className={styles.bridge}><span>Acquisition record · FY2024 <b>£10m</b></span><span>Latest · {period}, converted at {rate.toFixed(2)} <b>{money(normalized)}</b></span><p>Inspect the reporting period above or revisit currency conversion. A change in either updates this comparison.</p></div>}
-     <p className={styles.evidence} aria-live="polite">{result(step)}</p><Button className={styles.primary} onClick={record}>{findings[step] ? 'Update saved finding' : 'Save finding'}</Button>
-     {findings[step] && !stale(step,findings[step]) && <p role="status">Finding saved.</p>}
-     <Field className={styles.notes}><FieldLabel>Your notes for this step</FieldLabel><Textarea className={styles.textarea} value={notes[step] || ''} onChange={e=>setNotes({...notes,[step]:e.target.value})} placeholder="What would you check next?" /></Field>
-     {step === 'currency' && <div className={styles.followup}><h4>{period === 'FY2025' ? 'Next: the periods differ too.' : 'Next: compare on the same-period basis.'}</h4><p>{period === 'FY2025' ? 'The latest report covers FY2025, but the acquisition record covers FY2024. Keep those dates visible when interpreting the difference.' : 'Both records cover FY2024. Carry the converted value into a comparison with the acquisition record.'}</p><Button variant="outline" onClick={()=>open('period')}>Continue to reporting periods <Icon name="ArrowRight" size="sm" decorative /></Button></div>}
-     {step === 'period' && <div className={styles.followup}><h4>{Math.abs(normalized - 10) < 0.005 ? (period === 'FY2024' ? 'The figures now reconcile.' : 'Equal amounts, different years.') : 'What would explain the remaining difference?'}</h4><p>{Math.abs(normalized - 10) < 0.005 ? (period === 'FY2024' ? 'For the same period at this sample rate, currency explains the apparent gap. Save the finding or change an assumption to explore further.' : 'The converted amounts are equal at this sample rate, but they cover different years. Equal totals do not establish unchanged operating performance.') : (period === 'FY2024' ? 'Both records cover the same year. Check the conversion assumption first: the sample reconciles at €1.20 per £1. A different assumed rate creates a difference; it is not evidence of a business change.' : 'We would need a revenue and cost bridge, along with the appropriate currency basis for both years, to explain the difference. That evidence is missing from this sample; the next step would be to request it, rather than guess a cause.')}</p><Button variant="outline" onClick={() => open('currency')}>Revisit exchange-rate assumption</Button></div>}
-     <Button variant="ghost" onClick={()=>open('evidence')}><Icon name="ArrowLeft" size="sm" decorative />Back to observations</Button>
-    </>}
-   </div></div><aside className={styles.sidebar}><h4>{alternative ? 'Separate what-if example · FY2024' : `${company} · Reported EBITDA`}</h4>{alternative ? <><dl><div><dt>{step === 'definition' ? 'Reported EBITDA' : 'Signed report'}</dt><dd>£10m</dd></div><div><dt>{step === 'definition' ? 'Adjusted EBITDA' : 'Draft report'}</dt><dd>£12m</dd></div></dl><p>GBP throughout. This example has its own evidence; it does not change the main investigation.</p></> : <><dl><div><dt>Acquisition · FY2024</dt><dd>£10m</dd></div><div><dt>Latest · {period}</dt><dd>€{latest}m</dd></div></dl><p>Same metric definition. Different currencies{period === 'FY2025' ? ' and reporting periods' : ''}.</p></>}<div className={styles.history}><h4>Saved findings</h4>{Object.keys(findings).length === 0 && <p>Your findings will appear here.</p>}{Object.entries(findings).map(([key,item]) => <div className={styles.saved} key={key}><Button variant="subtle" size="sm" onClick={() => open(key)}>{paths[key]}</Button><p>{['definition','sources'].includes(key) ? 'What-if example · ' : `${item.period} · €${item.rate.toFixed(2)} per £1 · `}{item.text}</p>{stale(key,item) && <strong role="status">Assumptions changed · review and update this finding</strong>}</div>)}</div></aside></div>
-  </>}
-    <footer>
-      <span>Fictional data and predefined routes; nothing leaves this page.</span>
-      <Button variant='ghost' tone='neutral' size='sm' onClick={ reset }>
-        <Icon name='RotateCcw' decorative />
-        Reset example
-      </Button>
-    </footer>
- </section>;
-}
+    setNotice('Example reset.');
+  };
+
+  return (
+    <figure className={ `${styles.root} ${className}` } aria-label='Generative routing worked example'>
+      <figcaption className={ styles.caption }>
+        <strong>{title}</strong>
+        <span>{description}</span>
+      </figcaption>
+      <p className={ styles.disclosure }>Fictional company and figures with predefined routes; no live model. Notes and findings last until reload.</p>
+
+      <section className={ styles.question } aria-label='The question and the observations'>
+        <p className={ styles.prompt }>“{company}’s EBITDA looks different from what we recorded at acquisition. Why?”</p>
+        <dl className={ styles.observations }>
+          <div>
+            <dt>Acquisition record · FY2024</dt>
+            <dd>£{acquisitionRecord.valueGbp}m</dd>
+          </div>
+          <div>
+            <dt>Latest report · {assumptions.period}</dt>
+            <dd>€{latestEur}m</dd>
+          </div>
+        </dl>
+        <p className={ styles.small }>Same metric definition. Different currencies{differentYears ? ' and reporting periods' : ''}.</p>
+        {!started && (
+          <Button onClick={ start }>Start the investigation</Button>
+        )}
+      </section>
+
+      {started && (
+        <>
+          <section className={ styles.assumptions } aria-label='Assumptions in force'>
+            <div className={ styles.assumptionsIntro }>
+              <h3>Assumptions in force</h3>
+              <p className={ styles.small }>Every saved finding records the values it used. Changing one here marks the findings that depend on it.</p>
+            </div>
+            <Field className={ styles.period }>
+              <FieldLabel htmlFor={ `${uid}-period` }>Latest reporting period</FieldLabel>
+              <NativeSelect id={ `${uid}-period` } value={ assumptions.period } onChange={ (event) => updateAssumption('period', event.target.value) }>
+                <NativeSelectOption value='FY2025'>FY2025</NativeSelectOption>
+                <NativeSelectOption value='FY2024'>FY2024</NativeSelectOption>
+              </NativeSelect>
+            </Field>
+            <div className={ styles.rate }>
+              <span id={ `${uid}-rate-label` } className={ styles.rateLabel }>Exchange rate</span>
+              <Slider
+                aria-labelledby={ `${uid}-rate-label` }
+                getValueText={ (value) => formatRate(value) }
+                min={ rateRange.min }
+                max={ rateRange.max }
+                step={ rateRange.step }
+                value={ [ assumptions.rate ] }
+                onValueChange={ ([ value ]) => updateAssumption('rate', value) }
+              />
+              <output aria-hidden='true'>{formatRate(assumptions.rate)}</output>
+            </div>
+          </section>
+
+          <ol className={ styles.trail } aria-label='Route taken so far'>
+            {trail.map((routeId, index) => (
+              <li key={ routeId }>
+                <Button
+                  variant={ step === routeId ? 'soft' : 'ghost' }
+                  tone={ step === routeId ? 'accent' : 'neutral' }
+                  size='sm'
+                  aria-current={ step === routeId ? 'step' : undefined }
+                  onClick={ () => open(routeId) }
+                >
+                  <span className={ styles.trailIndex }>{index + 1}</span>
+                  {routes[routeId].title}
+                </Button>
+              </li>
+            ))}
+          </ol>
+
+          <div className={ styles.workspace }>
+            <section className={ styles.step } aria-label='Current step'>
+              <div className={ styles.reveal } key={ step }>
+                <h3 ref={ heading } tabIndex={ -1 }>{step === 'evidence' ? 'The currencies differ. Start there?' : routes[step].title}</h3>
+                <p>{routes[step].evidence}{step === 'evidence' && differentYears ? ' The periods also differ; keep that as the next check.' : ''}</p>
+                {routes[step].whatIf && (
+                  <p className={ styles.small }>Separate what-if example: same period, GBP throughout. It has its own evidence and does not change the main investigation.</p>
+                )}
+
+                {step === 'evidence' && (
+                  <>
+                    <div className={ styles.actions }>
+                      <Button onClick={ () => open('currency') }>Inspect currency conversion</Button>
+                      <Button variant='outline' onClick={ () => open('period') }>Check the period first</Button>
+                    </div>
+                    <Collapsible className={ styles.alternatives }>
+                      <CollapsibleTrigger asChild>
+                        <Button variant='ghost' tone='neutral' size='sm' className={ styles.alternativesTrigger }>
+                          <Icon name='ChevronRight' decorative />
+                          Explore different evidence instead
+                        </Button>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <p className={ styles.small }>Standalone what-if cases showing how another finding would call for a different tool.</p>
+                        <div className={ styles.actions }>
+                          <Button variant='outline' onClick={ () => open('definition') }>What if the definitions differ?</Button>
+                          <Button variant='outline' onClick={ () => open('sources') }>What if the sources disagree?</Button>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </>
+                )}
+
+                {step === 'currency' && (
+                  <div className={ styles.metric }>
+                    <span>€{latestEur}m ÷ {assumptions.rate.toFixed(2)}</span>
+                    <strong>{formatMoney(live.value)}</strong>
+                    <span>Latest EBITDA in GBP · {formatDelta(live.value - acquisitionRecord.valueGbp)} against the £10m record</span>
+                  </div>
+                )}
+
+                {step === 'period' && (
+                  <dl className={ styles.bridge }>
+                    <div>
+                      <dt>Acquisition record · FY2024</dt>
+                      <dd>{formatMoney(acquisitionRecord.valueGbp)}</dd>
+                    </div>
+                    <div>
+                      <dt>Latest · {assumptions.period}, converted at {formatRate(assumptions.rate)}</dt>
+                      <dd>{formatMoney(live.value)}</dd>
+                    </div>
+                    <div>
+                      <dt>Difference</dt>
+                      <dd>{formatDelta(live.value - acquisitionRecord.valueGbp)}</dd>
+                    </div>
+                  </dl>
+                )}
+
+                {step === 'definition' && (
+                  <dl className={ styles.bridge }>
+                    <div>
+                      <dt>Adjusted EBITDA</dt>
+                      <dd>£{definitionExample.adjustedGbp}m</dd>
+                    </div>
+                    <div className={ styles.bridgeControl }>
+                      <Checkbox
+                        checked={ assumptions.adjustment }
+                        onCheckedChange={ (value) => updateAssumption('adjustment', value === true) }
+                        label={ `Remove the £${definitionExample.addBackGbp}m restructuring add-back` }
+                      />
+                    </div>
+                    <div>
+                      <dt>{assumptions.adjustment ? 'Reported basis' : 'Still adjusted, not comparable'}</dt>
+                      <dd>£{live.value}m</dd>
+                    </div>
+                  </dl>
+                )}
+
+                {step === 'sources' && (
+                  <RadioGroupRoot className={ styles.documents } aria-label='Source document' value={ assumptions.source } onValueChange={ (value) => updateAssumption('source', value) }>
+                    {Object.entries(sourceDocuments).map(([ key, document ]) => (
+                      <label key={ key } data-checked={ assumptions.source === key || undefined }>
+                        <RadioGroupItem value={ key } aria-label={ document.title } />
+                        <strong>{document.title}</strong>
+                        <span>{document.date} · £{document.valueGbp}m</span>
+                        <p>{document.detail}</p>
+                      </label>
+                    ))}
+                  </RadioGroupRoot>
+                )}
+
+                {live && (
+                  <>
+                    <p className={ styles.result }>{live.summary}</p>
+                    {next && (
+                      <div className={ styles.followUp }>
+                        <h4>{next.title}</h4>
+                        <p>{next.body}</p>
+                      </div>
+                    )}
+                    <div className={ styles.actions }>
+                      <Button onClick={ save }>{saveLabel(savedFinding, savedReview)}</Button>
+                      {next && (
+                        <Button variant='outline' onClick={ () => open(next.target) }>
+                          {next.action}
+                          <Icon name='ArrowRight' decorative />
+                        </Button>
+                      )}
+                    </div>
+                    <Field className={ styles.notes }>
+                      <FieldLabel htmlFor={ `${uid}-note-${step}` }>Your notes for this step <span className={ styles.small }>(optional)</span></FieldLabel>
+                      <Textarea
+                        id={ `${uid}-note-${step}` }
+                        rows={ 2 }
+                        value={ notes[step] || '' }
+                        placeholder='What would you check next?'
+                        onChange={ (event) => setNotes({ ...notes, [step]: event.target.value }) }
+                      />
+                    </Field>
+                    <Button variant='ghost' tone='neutral' size='sm' className={ styles.back } onClick={ () => open('evidence') }>
+                      <Icon name='ArrowLeft' decorative />
+                      Back to observations
+                    </Button>
+                  </>
+                )}
+              </div>
+            </section>
+
+            <aside className={ styles.findings } aria-labelledby={ `${uid}-findings` }>
+              <div className={ styles.findingsHeader }>
+                <h3 id={ `${uid}-findings` }>Saved findings</h3>
+                {staleCount > 0 && (
+                  <span className={ styles.staleCount }>
+                    <Icon name='TriangleAlert' decorative />
+                    {staleCount} {staleCount === 1 ? 'needs' : 'need'} review
+                  </span>
+                )}
+              </div>
+              {savedList.length === 0 && (
+                <p className={ styles.small }>Save a finding from a step. Each card keeps the assumptions it was computed under, so you can see the moment one goes stale.</p>
+              )}
+              <ul className={ styles.findingList }>
+                {savedList.map(([ routeId, finding ]) => {
+                  const review = reviewFinding(finding, assumptions);
+
+                  return (
+                    <li key={ routeId }>
+                      <CardRoot variant='outline' padding='sections' radius='lg' className={ styles.finding } data-stale={ review.stale || undefined }>
+                        <CardHeader>
+                          <CardTitle as='h4'>{routes[routeId].title}</CardTitle>
+                          <CardDescription as='p' className={ styles.findingState }>
+                            <Icon name={ review.stale ? 'TriangleAlert' : 'CircleCheck' } decorative />
+                            {review.stale ? 'Needs review: an assumption changed' : 'Current'}
+                          </CardDescription>
+                          <CardAction>
+                            <Button variant='subtle' size='sm' aria-current={ step === routeId ? 'step' : undefined } onClick={ () => open(routeId) }>Open step</Button>
+                          </CardAction>
+                        </CardHeader>
+                        <CardContent className={ styles.findingBody }>
+                          <p className={ styles.findingValue }>
+                            <strong>{formatMoney(finding.value)}</strong>
+                            {routes[routeId].whatIf && <span>what-if example</span>}
+                          </p>
+                          <p>{finding.summary}</p>
+                          <dl className={ styles.under }>
+                            {Object.entries(finding.assumptions).map(([ key, value ]) => (
+                              <div key={ key }>
+                                <dt>{assumptionLabels[key]}</dt>
+                                <dd>{describeAssumption(key, value)}</dd>
+                              </div>
+                            ))}
+                          </dl>
+                          {review.stale && (
+                            <div className={ styles.changed }>
+                              <h5>What changed</h5>
+                              <dl>
+                                {review.changes.map((change) => (
+                                  <div key={ change.key }>
+                                    <dt>{change.label}</dt>
+                                    <dd>
+                                      <s>{describeAssumption(change.key, change.from)}</s>
+                                      <Icon name='ArrowRight' decorative />
+                                      <b>{describeAssumption(change.key, change.to)}</b>
+                                    </dd>
+                                  </div>
+                                ))}
+                                <div>
+                                  <dt>Finding</dt>
+                                  <dd>
+                                    <s>{formatMoney(finding.value)}</s>
+                                    <Icon name='ArrowRight' decorative />
+                                    <b>{formatMoney(review.current.value)}</b>
+                                    <em>({formatDelta(review.delta)})</em>
+                                  </dd>
+                                </div>
+                              </dl>
+                            </div>
+                          )}
+                        </CardContent>
+                        {review.stale && (
+                          <CardFooter className={ styles.findingFooter }>
+                            <Button tone='warning' size='sm' onClick={ () => recompute(routeId) }>
+                              <Icon name='RefreshCw' decorative />
+                              Recompute with current assumptions
+                            </Button>
+                          </CardFooter>
+                        )}
+                      </CardRoot>
+                    </li>
+                  );
+                })}
+              </ul>
+            </aside>
+          </div>
+        </>
+      )}
+
+      <p className={ styles.status } role='status'>{notice}</p>
+      <footer>
+        <span>Fictional company and figures; nothing leaves this page.</span>
+        <Button variant='ghost' tone='neutral' size='sm' onClick={ reset }>
+          <Icon name='RotateCcw' decorative />
+          Reset example
+        </Button>
+      </footer>
+    </figure>
+  );
+};
+
+export default GenerativeRoutingExplorer;

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { acquisitionRecord, computeFinding, countStale, defaultAssumptions, describeAssumption, followUp, formatDelta, formatMoney, latestEurByPeriod, reviewFinding, routeOrder, routes } from './GenerativeRoutingExplorerV2.data.js';
+import { acquisitionRecord, computeFinding, countStale, defaultAssumptions, describeAssumption, followUp, formatDelta, formatMoney, latestEurByPeriod, reviewFinding, routeOrder, routes } from './GenerativeRoutingExplorer.data.js';
 
 test('every route lists the assumptions it depends on and appears once in the trail order', () => {
   assert.deepEqual([ ...routeOrder ].sort(), Object.keys(routes).sort());

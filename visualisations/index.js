@@ -42,11 +42,9 @@ const AgileChartsExplorer = diagram(() => import('./AgileChartsExplorer'));
 const DittoStagesExplorer = diagram(() => import('./DittoStagesExplorer'));
 const GaudiBarLayout = diagram(() => import('./GaudiBarLayout'));
 const GenerativeRoutingExplorer = diagram(() => import('./GenerativeRoutingExplorer'));
-const GenerativeRoutingExplorerV2 = diagram(() => import('./GenerativeRoutingExplorerV2'));
 const GenerativeUIComparison = diagram(() => import('./GenerativeUIComparison'));
 const GenerativeUIBlockBuilder = diagram(() => import('./GenerativeUIBlockBuilder'));
 const GrowthLevelsExplorer = diagram(() => import('./GrowthLevelsExplorer'));
-const GrowthLevelsExplorerV2 = diagram(() => import('./GrowthLevelsExplorerV2'));
 const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'), ImprovementKataExplorerSkeleton);
 const JsonLdGraphExplorer = diagram(() => import('./JsonLdGraphExplorer'));
 const OlapCubeExplorer = diagram(() => import('./OlapCubeExplorer'));
@@ -66,11 +64,9 @@ export const VisualisationComponents = {
   DittoStagesExplorer,
   GaudiBarLayout,
   GenerativeRoutingExplorer,
-  GenerativeRoutingExplorerV2,
   GenerativeUIBlockBuilder,
   GenerativeUIComparison,
   GrowthLevelsExplorer,
-  GrowthLevelsExplorerV2,
   ImprovementKataExplorer,
   JsonLdGraphExplorer,
   LinkedDataQualityFramework,
