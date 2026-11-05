@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { defaultStageId, diffDocuments, findStage, inputDocument, map, mappingLinesFor, mappings, mappingSource, postMap, preMap, runPipeline, stages, stageView } from './DittoStagesExplorerV2.data.js';
+import { defaultStageId, diffDocuments, findStage, inputDocument, map, mappingLinesFor, mappings, mappingSource, postMap, preMap, runPipeline, stages, stageView } from './DittoStagesExplorer.data.js';
 
 const expectedMapOutput = {
   'email': { 'value': 'mina@example.org' },

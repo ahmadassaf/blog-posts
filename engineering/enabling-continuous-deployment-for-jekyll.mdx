@@ -114,35 +114,9 @@ As a result of my failed attempts, I had to try another approach and I decided t
 
 The first step to achieving this new workflow was to have rigorous rules set up on the server. No more deployments as root; from now on we’re doing things correctly.
 
-**Before (current)**
-
 <PipelineDiagram
   title='Continuous deployment with Travis CI'
   description='A push to GitHub triggers a build, validation, and deployment pipeline. Failed stages stop early; a successful deployment publishes the site and returns its link to GitHub.'
-  source={{ label: 'Local changes', action: 'Push changes' }}
-  platform={{
-    label: 'GitHub',
-    detail: 'Push to a branch or open a pull request',
-    success: 'Build passes',
-    feedback: 'Link to deployed site'
-  }}
-  pipeline={{
-    label: 'Travis CI',
-    trigger: 'Trigger Travis',
-    stages: [
-      { label: 'Build', failure: 'Broken build', detail: 'Travis runs build.sh, where grunt build generates the site into _site; a broken build stops the run here.' },
-      { label: 'Validate', failure: 'Broken build', detail: 'test.sh runs HTML-Proofer over _site to validate the HTML, check external links for 4xx errors and confirm the favicon; a failure stops the run before anything is deployed.' },
-      { label: 'Deploy', action: 'Upload', output: 'Server', detail: 'Only after the build and validation pass, deploy.sh commits _site to a fresh repository and force-pushes it over SSH to the server.' }
-    ]
-  }}
-  destination={{ label: 'Server' }}
-/>
-
-**After (rework)**
-
-<PipelineDiagramV2
-  title='Continuous deployment with Travis CI'
-  description='A push to GitHub starts a Travis CI run: build.sh builds the site, test.sh validates it with HTML-Proofer, and only then does deploy.sh force-push _site to the server over SSH; any failure stops the run before deployment.'
   source={{ label: 'Local changes', action: 'Push changes' }}
   platform={{
     label: 'GitHub',
