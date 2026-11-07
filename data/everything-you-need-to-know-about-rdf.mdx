@@ -179,8 +179,11 @@ This is a visual way of modeling RDF as a Node-Edge-Node Triple. It's directed, 
 
 Using XML syntax to represent RDF triples. We should point out that we do use namespaces in order to minimize the writing that we have to do. So, if we are using many URIs repeatedly throughout our representation then it's better to define some global namespace and start referring to these namespaces with a shorthand.
 
-> [!NOTE]
-> RDF/XML uses the namespace mechanism of XML, but in an expanded way. In XML, namespaces are only used for disambiguation purposes. In RDF/XML, external namespaces are expected to be RDF documents defining resources, which are then used in the importing RDF document. This mechanism allows the reuse of resources by other people who may decide to insert additional features into these resources. The result is the emergence of large, distributed collections of knowledge.
+<Callout type='info'>
+
+RDF/XML uses the namespace mechanism of XML, but in an expanded way. In XML, namespaces are only used for disambiguation purposes. In RDF/XML, external namespaces are expected to be RDF documents defining resources, which are then used in the importing RDF document. This mechanism allows the reuse of resources by other people who may decide to insert additional features into these resources. The result is the emergence of large, distributed collections of knowledge.
+
+</Callout>
 
 ```xml
 <?xml version="1.0"?>

@@ -1,0 +1,69 @@
+---
+type: 'Post'
+title: 'Trust Is a System You Design'
+subtitle: 'Three attempts to get out of the merge queue'
+summary: 'Our engineers waited for the founders to merge their work, while the founders bypassed the review rules. What happened when I tried reminders, automatic reviewers, and a different division of responsibility between merging code and releasing it.'
+tags: ['Leadership', 'Engineering Management', 'Teams', 'Trust', 'Code Review']
+date: '2026-09-11'
+category: 'management'
+featured: false
+draft: true
+tableOfContents: false
+series:
+  order: 3
+  title: 'Becoming a CTO'
+---
+
+When we started, three of us could merge anything. The rules required a review on every pull request, but the founders had a bypass, and we used it. Everyone's changes came through us. We merged quickly, often without recording an approval, and told ourselves it was about speed.
+
+Then our compliance tool started flagging almost every merged pull request. The merges did not reliably come with a record of an independent person approving the change.
+
+The more uncomfortable part was what the arrangement said to the engineers. They could write the code, test it, and explain it, but they needed one of us for the final step. Meanwhile, the rules that stopped them did not stop us. I had helped create that arrangement without really deciding whether it was how I wanted to lead.
+
+## First, ask everyone to remember
+
+The first fix was a rule: the person reviewing someone else's change should record their approval before merging it. If you wanted to merge your own change, you needed an independent approval first.
+
+We changed no configuration. We just agreed to behave differently.
+
+It worked for a few months. When I checked again, a large share of recent pull requests had merged without a review. The bypass was still there, and remembering an extra step had become optional in practice. That applied to me too.
+
+I had treated agreement as implementation. Everyone understanding the rule had felt like finishing the job. But the path through the tooling was exactly as it had been before.
+
+## Then, let the tooling choose
+
+The next attempt was automatic reviewer assignment from code-ownership files. Every pull request would get a person, and nobody would have to work out whom to ask.
+
+We got more requests for review. We didn't get the kind of attention I wanted. People were asked about code they had not touched in months. The requests became noise, and approving them became another thing to clear.
+
+We removed those files and switched off the automatic assignment. Authors now choose whom to ask. The questions are ordinary ones: who knows this part of the application, who understands the tool involved, and who could spot something I would miss?
+
+I wouldn't take that experience as a reason for every team to delete its ownership files. Ours were choosing reviewers badly. A file can help when it reflects how a team actually works; ours had become a substitute for asking who had useful context.
+
+## Merging and releasing need different answers
+
+The model we're moving towards separates integrating code from releasing it to production. That distinction matters. Saying that engineers can merge their own changes sounds very different if merging also deploys them immediately.
+
+For an ordinary change, the author would be able to merge after the automated gates pass. Changes involving authentication, secrets, infrastructure, or migrations would require a second engineer before merging. Production releases would still require independent human approval. That was the condition our auditor gave us when we discussed the proposal.
+
+For example, under this model an engineer could merge a routine interface change into the integration branch after the checks pass. It would still wait for an independent approval before reaching production. An authentication change would need review earlier, before integration, as well as meeting the release requirements.
+
+Where merging triggers a production deployment, the independent approval must happen before that merge. There is no useful separation if the tooling does both in one step.
+
+The emergency exception also needs to say which gate can be bypassed and when the retrospective review happens. Reviewing within days was the idea; it needs clear limits before we rely on it. We already know how easily an exception can become the route everyone uses.
+
+This is the arrangement I want to get to, and the proof will be a few months of merges under it rather than this description of it.
+
+## The part that was mine to change
+
+I still want someone to look carefully at consequential changes. I also want engineers to be able to finish work without finding a founder who can press a button for them.
+
+Those aims are compatible, but I had made them look like a choice. The founders held the permissions, so involving a founder became the default answer to every kind of change. Giving the team more responsibility means being specific about where another person's judgement is needed and making that judgement visible.
+
+Years ago, in a post about [managing very smart people](/blog/category/thoughts/managing-smart-people), I told managers to get out of their team's way. Reading our own repository rules was an awkward way to discover how much of the queue I had created myself.
+
+## A few useful reads
+
+- Rouan Wilsenach, [Ship / Show / Ask](https://martinfowler.com/articles/ship-show-ask.html). Useful vocabulary for deciding when feedback should block integration. Our production approval requirement adds a separate constraint.
+- Google Engineering Practices, [The Standard of Code Review](https://google.github.io/eng-practices/review/reviewer/standard.html). A useful reference for what a reviewer is actually deciding, especially when approval starts feeling like a formality.
+- Martin Fowler, [Patterns for Managing Source Code Branches](https://martinfowler.com/articles/branching-patterns.html). Helpful for separating the branching choices from the review and release choices that can otherwise get bundled together.

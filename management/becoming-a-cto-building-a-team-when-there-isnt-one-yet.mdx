@@ -1,0 +1,65 @@
+---
+type: 'Post'
+title: "Building a Team When There Isn't One Yet"
+subtitle: 'Ten engineers, no product manager, and a dashboard only I looked at'
+summary: 'The engineers asked for clearer priorities. I had built a dashboard. How I came to see the difference, and the working agreement we are trying while we cannot yet hire a product manager.'
+tags: ['Leadership', 'Engineering Management', 'Teams', 'Product Management', 'Startups']
+date: '2026-09-25'
+category: 'management'
+featured: false
+draft: true
+tableOfContents: false
+series:
+  order: 4
+  title: 'Becoming a CTO'
+---
+
+We're about ten engineers and no product manager. A few months in, the engineers asked for one. Scope was unclear, priorities moved, and it was hard to know what “done” meant on any given ticket. All of that was true.
+
+We wanted to hire a PM, but we couldn't yet afford to. That left me with a question I found harder than the hiring conversation: what were we going to do about the work that person would have owned in the meantime?
+
+I had already spent quite a lot of time on a different answer. I had built a dashboard.
+
+## The window only I had open
+
+The real work lived in pull requests. Our project board was not reliably linked to them, so it was always a little wrong. Because it was wrong, nobody looked at it. Because nobody looked at it, nobody updated it, which made it more wrong.
+
+My dashboard sat on top of that board. It had views for delivery, risk, gates, and people. I liked it. Nobody but me opened it. I was running engineering from a window only I had open, fed by a board only I maintained, and then wondering why the picture was unclear to everyone else.
+
+When I pulled the numbers for the month, most pull requests did not name the issue they closed. A large share of the ones that did were mine. That told me something about how we recorded work. It did not tell me who was contributing most, because most of the work was missing from that particular view.
+
+The dashboard had given me somewhere to arrange the information I wanted. It had not given the team a reason to supply it. Keeping the board current was an extra task, and the benefit mostly came back to me.
+
+There was a more uncomfortable problem underneath that one. Even a perfectly current board would not tell an engineer why a priority had changed, which customer problem mattered most, or who could settle an argument about scope. I was treating visibility as though it would provide direction.
+
+## The work we still owed the team
+
+A product manager could help us understand customer needs, choose what to pursue, define useful outcomes, and decide what to leave out. Those responsibilities did not disappear because we couldn't hire someone. They remained with leadership, including me.
+
+We also had engineering habits to improve. Linking a pull request to its issue, testing beyond the edge of a ticket, and flagging a change in scope belonged to the people doing the work. A PM could help make those habits easier. Hiring one would not remove our responsibility for them.
+
+I needed to keep those two conversations separate. The team asking for a PM was not an excuse to avoid updating tickets. My asking for better tickets could not become an excuse to avoid providing product direction.
+
+We wrote a working agreement with obligations on both sides. Leadership owed context before work started, an answer to a blocking question within one working day, and a scope description short enough to fit in six lines. The length was a constraint on us: if we couldn't say what we were asking for simply, an engineer should not have to discover it halfway through implementation.
+
+The team owned the connection between the ticket and the change, checking how that change behaved in the wider application, and saying when the original scope no longer fitted what they were finding. I wanted an engineer to be able to bring that back for a decision rather than quietly absorb more work.
+
+Writing those expectations down was the easy part. If someone tells me the scope is wrong and I respond as though they are being difficult, the agreement will not survive contact with me. My response matters more than the paragraph.
+
+There is still a hiring question to make concrete. “Not yet” needs a condition we can revisit, and we need to be explicit about who makes each product decision until then. A sentence saying that everyone owns the product cannot settle a disagreement over priorities.
+
+## Giving the board a job people could see
+
+We put the agreement into the meetings we already had. The stand-up runs from the board. The show-and-tell every second Friday demos the whole application. The planning day names area owners. I didn't want another meeting whose purpose was to maintain the machinery of the other meetings.
+
+The board now has a job in that agreement: it should be where context arrives and where changes in scope get resolved. If keeping an issue current helps the person doing the work get an answer, the maintenance has a purpose they can see. Whether it actually does that is what we need to check.
+
+I kept the per-person numbers out of the team document. A ranking would have encouraged a conversation about who looked busy in an incomplete dataset. I wanted us to discuss the missing connection between decisions, issues, and code. I've written about [measuring teams](/blog/category/management/measuring-agile-teams) before; this was an uncomfortable reminder to apply the same care to my own dashboard.
+
+We set a review date for the agreement a month out. The test is whether people can get the context they need, bring back scope changes, and use the board without relying on me to explain it. A tidier board would be welcome. Those are the changes that would make it useful.
+
+## A few useful reads
+
+- Ryan Singer's [Shape Up](https://basecamp.com/shapeup). The chapters on appetite and boundaries are the ones I reread. They are useful when I need to turn a broad request into work a team can make decisions about.
+- Sarah Milstein's [How team agreements promote high performance](https://leaddev.com/culture/how-team-agreements-promote-high-performance). A practical companion to writing an agreement, including a distinction relevant to our situation: good working habits do not make unclear priorities disappear.
+- Marty Cagan's [Product is Hard](https://vimeo.com/333559833). I would pair this with the agreement article when discussing the PM role. It keeps the conversation connected to product value, beyond how neatly the engineering work is tracked.
