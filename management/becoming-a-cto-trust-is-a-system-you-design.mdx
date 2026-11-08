@@ -1,69 +1,114 @@
 ---
 type: 'Post'
 title: 'Trust Is a System You Design'
-subtitle: 'Three attempts to get out of the merge queue'
-summary: 'Our engineers waited for the founders to merge their work, while the founders bypassed the review rules. What happened when I tried reminders, automatic reviewers, and a different division of responsibility between merging code and releasing it.'
-tags: ['Leadership', 'Engineering Management', 'Teams', 'Trust', 'Code Review']
+subtitle: 'What the team needed from me before they could act with confidence'
+summary: 'I trusted the team to make decisions. They needed to trust me to provide context, hear disagreement, and stand behind the responsibility I had given them. Two conversations made me realise how much I had left them to infer, and how much they still needed from me.'
+tags: ['Leadership', 'Engineering Management', 'Teams', 'Trust', 'Decision-Making']
 date: '2026-10-02'
+updated: '2026-11-08'
 category: 'management'
 featured: false
-draft: true
+draft: false
 tableOfContents: false
 series:
   order: 3
   title: 'Becoming a CTO'
 ---
 
-When we started, three of us could merge anything. The rules required a review on every pull request, but the founders had a bypass, and we used it. Everyone's changes came through us. We merged quickly, often without recording an approval, and told ourselves it was about speed.
+An engineer told me that our commitment to the new front end had never been formally communicated. I was surprised. I felt as though I had said it in every call for a month.
 
-Then our compliance tool started flagging almost every merged pull request. The merges did not reliably come with a record of an independent person approving the change.
+In the same fortnight, a new engineer asked whether he could assign himself the goals he was already, in practice, owning, or whether each one had to wait for the planning meeting.
 
-The more uncomfortable part was what the arrangement said to the engineers. They could write the code, test it, and explain it, but they needed one of us for the final step. Meanwhile, the rules that stopped them did not stop us. I had helped create that arrangement without really deciding whether it was how I wanted to lead.
+One person could not tell whether a company decision was settled. The other could not tell which decisions were his to make. Both were missing information I thought they already had.
 
-## First, ask everyone to remember
+I had [brought people I already trusted](/blog/category/management/becoming-a-cto-nobody-handed-me-a-manual), so they could run with work while I was not looking. For most of the first year I treated that as the whole arrangement. I trusted their judgement and assumed they knew where to use it. Those two conversations showed me how much I had left them to infer.
 
-The first fix was a rule: the person reviewing someone else's change should record their approval before merging it. If you wanted to merge your own change, you needed an independent approval first.
+## They needed to be able to trust me too
 
-We changed no configuration. We just agreed to behave differently.
+When I said I trusted the team, I meant I believed they could work things out, make sound choices and tell me when they needed help. I had spent much less time asking what they needed to believe about me. Would I stand behind a decision I had given them the authority to make? Would I explain a changed priority? Could they tell me my plan was wrong without the conversation becoming about their attitude?
 
-It worked for a few months. When I checked again, a large share of recent pull requests had merged without a review. The bypass was still there, and remembering an extra step had become optional in practice. That applied to me too.
+Some of us had years of working together to draw on. That history could help, but it did not explain who could decide what in this company. Someone joining the team should not have to infer their authority from how familiar they are with me. My title tells them who is responsible. They still need to see how I carry that responsibility.
 
-I had treated agreement as implementation. Everyone understanding the rule had felt like finishing the job. But the path through the tooling was exactly as it had been before.
+Much of that is ordinary follow-through. If I promise an answer, I need to return with it, or say why I cannot yet give one and when I will come back. If someone raises a concern, they should be able to find out what happened to it, including when I decide not to act on it. A clear refusal leaves someone able to plan. An unanswered concern leaves them guessing whether I heard it at all.
 
-## Then, let the tooling choose
+## A decision needs to look decided
 
-The next attempt was automatic reviewer assignment from code-ownership files. Every pull request would get a person, and nobody would have to work out whom to ask.
+At my last company, much of the structure already existed: levels, review processes, who signed off on what, which meetings a decision went through. I had not had to design it from scratch. Here, I was relying on habits we had not yet established and boundaries I had not explained.
 
-We got more requests for review. We didn't get the kind of attention I wanted. People were asked about code they had not touched in months. The requests became noise, and approving them became another thing to clear.
+People filled the gaps by watching me. Sometimes I was involved in a decision; sometimes I was buried in payroll. My absence could mean that the decision was theirs, that I had not seen it, or that I had assumed it was already settled. There was no reliable way to tell.
 
-We removed those files and switched off the automatic assignment. Authors now choose whom to ask. The questions are ordinary ones: who knows this part of the application, who understands the tool involved, and who could spot something I would miss?
+For the front-end commitment, reliability meant making the decision available to the people building against it. They needed to know what was settled, what remained open and what a change would mean for their work. Keeping that in scattered conversations made them check with me again, even when they were perfectly capable of deciding for themselves.
 
-I wouldn't take that experience as a reason for every team to delete its ownership files. Ours were choosing reviewers badly. A file can help when it reflects how a team actually works; ours had become a substitute for asking who had useful context.
+I had already suggested that we record decisions where the work lives, and write up decisions made on calls that day. It was a proposal for the team to challenge. The front-end conversation showed why I wanted it, and how much I needed to change my own habits before asking anyone else to change theirs.
 
-## Merging and releasing need different answers
+## Who decides what
 
-The model we're moving towards separates integrating code from releasing it to production. That distinction matters. Saying that engineers can merge their own changes sounds very different if merging also deploys them immediately.
+The new engineer needed to know which decisions he could make without waiting for me.
 
-For an ordinary change, the author would be able to merge after the automated gates pass. Changes involving authentication, secrets, infrastructure, or migrations would require a second engineer before merging. Production releases would still require independent human approval. That was the condition our auditor gave us when we discussed the proposal.
+I heard a line somewhere that has stayed with me:
 
-For example, under this model an engineer could merge a routine interface change into the integration branch after the checks pass. It would still wait for an independent approval before reaching production. An authentication change would need review earlier, before integration, as well as meeting the release requirements.
+> I own the context; you own the execution.
 
-Where merging triggers a production deployment, the independent approval must happen before that merge. There is no useful separation if the tooling does both in one step.
+For me, that starts with making the purpose and constraints available. The person doing the work still needs to question them when something does not add up.
 
-The emergency exception also needs to say which gate can be bypassed and when the retrospective review happens. Reviewing within days was the idea; it needs clear limits before we rely on it. We already know how easily an exception can become the route everyone uses.
+We later wrote the Owner and Sponsor roles into our agreement on how we work. Every goal has two people. An Owner works out how to deliver it and makes the implementation decisions inside what was agreed. A Sponsor explains why it matters, is the voice of the product and the customer, and explicitly approves any change to scope. They have to be different people. The Owner does not wait for me on a library choice or the order of their own work. They do go back to the Sponsor before the goal grows, and the two of them agree that it is ready before it ships.
 
-This is the arrangement I want to get to, and the proof will be a few months of merges under it rather than this description of it.
+We also need to name who has the final say in each area. If your goal requires a decision in someone else's area, it is on you to tell them early and get their approval before that decision is final or the affected work starts. That covers the things I had been carrying as an unwritten list in my head. The person to involve is whoever owns the area, which is sometimes me and often not.
 
-## The part that was mine to change
+This gave me a much clearer answer to the new engineer's question. An agreed goal was his to deliver; he did not need to wait for another planning meeting to take responsibility for it. A scope change belonged with the Sponsor, and a decision affecting another area belonged with that area's owner. We had put the answer somewhere he could find it without needing to catch me on a call.
 
-I still want someone to look carefully at consequential changes. I also want engineers to be able to finish work without finding a founder who can press a button for them.
+## Ownership has two sides
 
-Those aims are compatible, but I had made them look like a choice. The founders held the permissions, so involving a founder became the default answer to every kind of change. Giving the team more responsibility means being specific about where another person's judgement is needed and making that judgement visible.
+Two German terms helped me describe the duties on both sides. *Holschuld* is the duty to fetch: what you need to do your job, you go and get. Clarity, a decision, context, access, an answer. If something essential is missing, ask before building on an assumption. *Bringschuld* is the duty to deliver: what others need from you, you bring without being asked. The product context, a draft, the current state of your goal, a demo, bad news early.
 
-Years ago, in a post about [managing very smart people](/blog/category/thoughts/managing-smart-people), I told managers to get out of their team's way. Reading our own repository rules was an awkward way to discover how much of the queue I had created myself.
+The new engineer's question was a Holschuld: he was fetching clarity about a responsibility he already had. I had also suggested moving ahead with a draft when nobody answered. That needs a boundary: an Owner can proceed with an implementation choice inside the agreed scope, but silence cannot supply a required scope, area or release approval.
+
+The front-end commitment was a Bringschuld I had not met. The decision existed, and I had not brought it to the people building against it in a form they could find. Both duties are mine as much as anyone's. Asking for missing context does not relieve me of making it available.
+
+## Ship, show, ask
+
+We have been working through the same question in code review. The delivery model we are putting into practice uses Ship / Show / Ask to make clear when a change needs someone else before it lands.
+
+**Ship.** An ordinary change inside your agreed goal. The model allows the author to merge after the automated checks pass and the review findings are resolved. The author still needs to understand the change and take responsibility for it.
+
+**Show.** The same kind of change, with a reason to share the result: an implementation approach someone could reuse, or progress on a customer journey we had already agreed. You merge and tell people where to look. Showing is a Bringschuld; it helps others learn from the work and keep their picture current.
+
+**Ask.** A second engineer before merging. This covers authentication, secrets, infrastructure, migrations, large changes, and changes to shared contracts or risks outside your goal. Changing an interface another goal depends on belongs here, even when showing the result afterwards would also be useful.
+
+The release rule is separate: production requires an independent human approval. Where merging deploys to production, that approval must happen before the merge. Our [review and release model](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) lets us keep that requirement while giving the Owner room to merge ordinary changes. We are still putting the checks into the tooling; the written rules are what we are implementing, not a claim that every repository already enforces them.
+
+## Making it real
+
+Milestones and goals live in one project in the code host, each goal with its Owner in the assignee field and its Sponsor named. Keeping those records current gives people somewhere to find the state of work and see who can make the next decision. Our [planning meetings](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year) use that shared picture. People also need to know what to expect from me when they act on it.
+
+I also need to be careful about what happens after a mistake. Before adding another approval step, I need to ask whether the problem needs a lasting check, or better context and a conversation. A new gate creates work every time someone passes through it. I want to understand the risk it addresses and why that ongoing cost is justified. Our release approvals and other required safeguards still apply; trust is not permission to bypass them.
+
+When an engineer uses AI, my confidence in that person's judgement still comes from working with them and seeing how they respond to consequences. A convincing output from an assistant does not carry that history. The engineer still has to [understand and own the change](/blog/category/management/becoming-a-cto-ai-is-a-multiplier-not-a-signature).
+
+## Leaving decisions with their owners
+
+In a retro, the team gave each other credit for owning work end to end. That was already happening before we wrote down the roles. I wanted to build on it and make sure people knew who to turn to when they did need help.
+
+The engineer who questioned the front-end commitment was willing to challenge my account of what I had communicated. I want anyone in the team to be able to do that, regardless of how long we have worked together. How I respond will affect whether they raise the next concern. If I spend the conversation proving how many times I mentioned the decision, I have missed what the engineer was telling me: it still was not clear enough to act on.
+
+The written roles give me something to come back to when I see a reasonable implementation decision I would have made differently. I can ask whether new information changes the scope, the risk, or a commitment we have already made. If it does, I owe the Owner an explanation of what changed and why it matters. Otherwise, the choice stays with them. I still find that hard sometimes, but it is more useful than treating my preference as another approval gate.
+
+When a decision goes badly, I need to ask what the person knew at the time and whether they had the context and authority we said they had. There may be a judgement to improve, or a responsibility they did not meet. There may also be something I failed to provide. We need to be able to examine that together. If ownership lasts only until the first disappointing result, the safer choice next time is to bring every decision back to me.
+
+The same standard applies when I get it wrong. For the front-end communication, repeating my intention would not repair the gap. I owed the team a usable record of the commitment. An apology matters, but they also need to see what I will do differently when the next decision arrives.
+
+## The part that was mine
+
+I still want to [get out of my team's way](/blog/category/thoughts/managing-smart-people). For that to work, I have to keep the context current, make decisions visible, answer questions, and accept sound choices I would not have made myself.
+
+For the front-end commitment, my part is to leave a decision people can find and use. For the new engineer's goal, it is to make his authority clear and leave him room to exercise it. The agreement gives me a way to do both. I am working on the follow-through: bringing the missing context, answering the question, and explaining when something has changed enough to reopen a decision. Those are things I can do when someone needs me, without taking the work back from them.
 
 ## A few useful reads
 
-- Rouan Wilsenach, [Ship / Show / Ask](https://martinfowler.com/articles/ship-show-ask.html). Useful vocabulary for deciding when feedback should block integration. Our production approval requirement adds a separate constraint.
-- Google Engineering Practices, [The Standard of Code Review](https://google.github.io/eng-practices/review/reviewer/standard.html). A useful reference for what a reviewer is actually deciding, especially when approval starts feeling like a formality.
-- Martin Fowler, [Patterns for Managing Source Code Branches](https://martinfowler.com/articles/branching-patterns.html). Helpful for separating the branching choices from the review and release choices that can otherwise get bundled together.
+- Gregor Ojstersek, [How to Build Trust as an Engineering Leader](https://newsletter.eng-leadership.com/p/how-to-build-trust-as-an-engineering). The public introduction makes the case for earning trust before changing how a team works; the rest is subscriber-only.
+- Guillermo A. Fisher, [Trust and engineering excellence](https://leaddev.com/culture/trust-ultimate-driver-engineering-excellence). On clear expectations, admitting uncertainty and responding to feedback.
+- Chris Hill, [The Power of Trust in Engineering Leadership](https://www.linkedin.com/pulse/power-trust-engineering-leadership-chris-hill-ndqnc). On making room for people to challenge decisions, including when they are new to a team.
+- Matt Whetton, [Trust, controls and engineering agents](https://medium.com/@mattwhetton/trust-is-the-most-effective-control-in-engineering-and-it-does-not-transfer-to-agents-54b017c4647d). An account of controls accumulating in an agent project, and a useful prompt to examine their lasting cost.
+- Rouan Wilsenach, [Ship / Show / Ask](https://martinfowler.com/articles/ship-show-ask.html). Written for branching, and the vocabulary we use for when a change needs someone else before it lands. The useful move is the middle lane.
+- Henrik Kniberg, [Spotify engineering culture, part 1](https://blog.crisp.se/2014/03/27/henrikkniberg/spotify-engineering-culture-part-1). The aligned-autonomy quadrant is the picture behind this post: high alignment is what makes high autonomy safe.
+- Netflix, [Culture](https://jobs.netflix.com/culture). “Context, not control” is the shortest statement of why ownership has to run both ways.

@@ -12,7 +12,7 @@
 import { useId, useMemo, useState } from 'react';
 import { Sparkline } from '@gaudi/design-system/charts/Sparkline';
 import Button from '@gaudi/design-system/core/Button';
-import { CodeBlock, CodeBlockContent, CodeBlockCopyButton, CodeBlockHeader, CodeBlockLanguage, CodeBlockTitle, toPlainLines } from '@gaudi/design-system/core/CodeBlock';
+import { CodeBlock, CodeBlockCopyButton, CodeBlockHeader, CodeBlockLanguage, CodeBlockTitle, toPlainLines } from '@gaudi/design-system/core/CodeBlock';
 import Icon from '@gaudi/design-system/core/Icon';
 
 import { configRegionsById, configSource, pluginNotes, regionLineNumbers } from './GaudiBarLayout.config';
@@ -240,7 +240,6 @@ const GaudiBarLayout = ({
             <CodeBlockLanguage>js</CodeBlockLanguage>
             <CodeBlockCopyButton className={ styles.copy } alwaysVisible />
           </CodeBlockHeader>
-          <CodeBlockContent />
         </CodeBlock>
 
         <p className={ styles.pluginLine } aria-live='polite'>

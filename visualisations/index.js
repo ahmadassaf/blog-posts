@@ -39,6 +39,9 @@ const diagram = (load, Fallback = DiagramSkeleton) => {
 
 const AgileCadenceExplorer = diagram(() => import('./AgileCadenceExplorer'));
 const AgileChartsExplorer = diagram(() => import('./AgileChartsExplorer'));
+const ChangeGateDashboard = diagram(() => import('./change-gate/ChangeGateDashboard'));
+const ChangeGateFlow = diagram(() => import('./change-gate/ChangeGateFlow'));
+const ChangeGateReport = diagram(() => import('./change-gate'));
 const DittoStagesExplorer = diagram(() => import('./DittoStagesExplorer'));
 const GaudiBarLayout = diagram(() => import('./GaudiBarLayout'));
 const GenerativeRoutingExplorer = diagram(() => import('./GenerativeRoutingExplorer'));
@@ -50,6 +53,7 @@ const JsonLdGraphExplorer = diagram(() => import('./JsonLdGraphExplorer'));
 const OlapCubeExplorer = diagram(() => import('./OlapCubeExplorer'));
 const SparqlPatternExplorer = diagram(() => import('./SparqlPatternExplorer'));
 const LinkedDataQualityFramework = diagram(() => import('./LinkedDataQualityFramework'));
+const Mermaid = diagram(() => import('@gaudi/design-system/mdx/Mermaid'));
 const PipelineDiagram = diagram(() => import('./PipelineDiagram'));
 const RdfBlankNodeExplorer = diagram(() => import('./RdfBlankNodeExplorer'));
 const RdfCollectionExplorer = diagram(() => import('./RdfCollectionExplorer'));
@@ -61,6 +65,9 @@ const UnifiedProcessorExplorer = diagram(() => import('./UnifiedProcessorExplore
 export const VisualisationComponents = {
   AgileCadenceExplorer,
   AgileChartsExplorer,
+  ChangeGateDashboard,
+  ChangeGateFlow,
+  ChangeGateReport,
   DittoStagesExplorer,
   GaudiBarLayout,
   GenerativeRoutingExplorer,
@@ -70,6 +77,7 @@ export const VisualisationComponents = {
   ImprovementKataExplorer,
   JsonLdGraphExplorer,
   LinkedDataQualityFramework,
+  Mermaid,
   OlapCubeExplorer,
   PipelineDiagram,
   RdfBlankNodeExplorer,

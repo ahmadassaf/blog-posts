@@ -1,0 +1,20 @@
+{
+  "origin": "Screenshots of actual renderComment output, generated locally using entirely synthetic inputs. No production UI was captured.",
+  "source": "change-gate/src/render.ts",
+  "sourceSha256": "9df07719925d7d81b83f6e524bc2cee88e23341d20974d504a493305bb204822",
+  "fixture": "report-fixture.json",
+  "mode": "shadow",
+  "networkCalls": false,
+  "outputs": [
+    {
+      "file": "report-desktop.png",
+      "width": 1880,
+      "height": 1070
+    },
+    {
+      "file": "report-mobile.png",
+      "width": 720,
+      "height": 1188
+    }
+  ]
+}

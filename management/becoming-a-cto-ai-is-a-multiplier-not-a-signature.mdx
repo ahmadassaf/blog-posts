@@ -1,75 +1,74 @@
 ---
 type: 'Post'
 title: 'AI Is a Multiplier, Not a Signature'
-subtitle: 'Evidence, procedures, policies, code, and the review service I switched off for a day'
-summary: 'How a ten-person engineering team uses AI to do the work of a larger one: gathering evidence from the systems that hold it, turning monthly chores into written procedures, reading policies against what we actually built, and building faster. And the line I keep having to redraw between a useful output and a decision someone has to own.'
-tags: ['Leadership', 'AI', 'Engineering Management', 'Productivity', 'Compliance']
-date: '2026-10-16'
+subtitle: 'Building faster with a small team, and getting help with the work around the code'
+summary: 'AI helps our small team build and iterate faster. In one thirty-day stretch, we merged 854 pull requests. That volume made the work around the code just as important: context, testing, review and a clear path to production.'
+tags: ['Leadership', 'AI', 'Engineering Management', 'Productivity', 'Software Engineering']
+date: '2026-10-23'
+updated: '2026-11-08'
 category: 'management'
 featured: false
-draft: true
+draft: false
 tableOfContents: false
 series:
-  order: 5
+  order: 6
   title: 'Becoming a CTO'
 ---
 
-We are about ten engineers, with no compliance function, no product manager, and a CTO who also runs payroll. The way a company this size does the work of a larger one is with tools, and for the last year the most useful tool has been an AI assistant that can read our systems, draft what we need, and run the same procedure the same way every time.
+When I [put this team together](/blog/category/management/from-employee-six-to-a-unicorn), I wanted experienced engineers who could take a problem and run with it. AI was part of that decision. I expected it to multiply what a small team could do.
 
-This post is about where that has worked, and about the one line I keep having to redraw: the difference between an output that is useful and a decision that someone has to own.
+A year in, I can see it in what a senior engineer can build in a week. Exploring an approach, producing something we can try, and working through the changes afterwards all take less time than they did. We can get to a working version while the idea is still taking shape.
 
-## Evidence that already exists
+The [internal dashboard I built](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet) took days. It brought together views of delivery, risk and the people doing the work. I could build a tool around a problem I was trying to solve while still carrying the rest of the job.
 
-Most of the evidence an auditor or a customer asks for already exists somewhere. Who approved a change is in the pull request. When it reached production is in the deployment log. Who has access to what is in the identity provider. The work is in collecting it, linking it, and presenting it so that a person who was not there can follow it.
+The first version mostly helped me. Nobody else opened it. Later, giving it a view of goal status for stand-up gave the team a reason to use it. AI helped me get to a real tool quickly. Finding a useful place for it in the team's day took longer.
 
-That is a good job for an assistant. Ours reads from the systems of record, pulls the records for a given change or period, and drafts the document with a link beside every claim. I read the draft, open a sample of the links, and decide whether it shows what the request asked for.
+## Help with the rest of the job
 
-Two rules sit at the top of every procedure that touches evidence: never fabricate a record, and never backdate one. If a record does not exist, the output says so. A gap in the evidence is information. A document that papers over it is a liability with a nice cover page.
+I also use the assistant for the reading and preparation around a decision. I need to understand what already exists, find the relevant context and work out which question is still unanswered. It can bring those pieces together so I have somewhere to start.
 
-## Procedures instead of memory
+I want links back to the files or records it used. I can then open the part that matters and check it myself. A short explanation or diagram can help me work through an approach too. I can ask the assistant to challenge an assumption or point out a question I have missed, while I am still figuring out what I think.
 
-A surprising amount of running a small company is remembering to do things monthly. Review the DNS records. Log the capacity requests we raised with a cloud provider. Record which policies changed and why. Each one is small. Each one is easy to skip in a busy week, and each one is exactly what someone checking our work will ask about.
+For repeatable work, I have been writing down the instructions: what to look at, what to do with it, and what needs to come back to a person. The assistant can follow those instructions, and I can inspect the result. Someone else can also read the procedure and take over the task. That has been useful in a job that keeps pulling me between engineering, planning and running the company.
 
-I have been writing these down as short procedures the assistant can run: what to look at, what to compare it with, what to record, and what to flag for a person. Writing the procedure turned out to be the valuable part. It forced me to say what the task actually involves, which I had been carrying in my head. The assistant running it is what makes the task happen on the second and tenth month rather than only the first.
+## From the prototype to real use
 
-The procedures are plain text in a repository. Anyone on the team can read what the assistant does, change it, or run it themselves. That matters more to me than the time saved. A chore I did from memory was mine. A written procedure is the company's.
+Our product started with a vibe-coded prototype. Once we had design partners and real data, we could see how much there was still to learn. We [shortened our planning cycles](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year) so we could try things, check the result and adjust sooner.
 
-## Reading policies against reality
+That is where I find the speed most useful. We can get something in front of us and learn from it. Before we rely on it for customers, I still need an engineer to read the implementation and work through what the demo did not exercise: how it handles failures, protects data and fits the rest of the system.
 
-A policy is a set of sentences about how the company works. Most of those sentences describe something that can be checked: a setting, a schedule, a record. In the [compliance post](/blog/category/management/becoming-a-cto-compliance-is-a-mirror) I write about what happened when someone checked them for me. Before that, I had started asking the assistant to do a first pass.
+I don't assume code is poor quality because AI wrote it. It can be useful, well-tested production code. I want to judge the actual change. Does it meet the requirement? Does it belong in this codebase? Can someone else understand it well enough to change it later?
 
-It is good at this. Give it a procedure and access to the configuration the procedure describes, and it will list the sentences it cannot find evidence for. It is also good at reading two policies side by side and pointing out where they disagree with each other, which happens more often than I would like to admit after a year of edits.
+AI can help with that work too: propose tests, explain unfamiliar code, suggest a simpler implementation or work through a failure. The engineer still needs to check the reasoning. If the assistant writes both the implementation and its tests, I want someone to check that they have not simply repeated the same mistaken assumption.
 
-What it cannot do is decide which side to change. When a policy says one thing and the system does another, somebody has to choose between implementing the sentence and rewriting it, and that choice depends on the risk the sentence was there to address. The assistant shortens the search. The decision stays with me.
+That is what I wanted the team's experience for. An engineer who can frame a problem and recognise when an approach needs changing has more room to work with these tools. My part is to explain the outcome and constraints, then answer when they find a gap. If I leave that question waiting, the code can move quickly and the work can still get stuck with me.
 
-## Cheaper to build, not cheaper to decide
+## 854 pull requests in thirty days
 
-The clearest change is in how much a senior engineer can build in a week. I wrote in the [prologue](/blog/category/management/from-employee-six-to-a-unicorn) about hiring experienced people and expecting AI to multiply what they can do. A year in, that has held. Exploring an approach, producing something we can try, and working through the changes afterwards all take less time than they did.
+In one thirty-day stretch, our team of roughly ten engineers merged **854 pull requests** across our repositories. AI had become part of how we built, and that was the volume of changes moving through the team.
 
-The thing it did not change is the cost of a bad decision about what to build. The dashboard nobody opened, from the [team post](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet), took days rather than weeks. That made it easier to build without asking whether anyone needed it. When building gets cheap, deciding what to build is where the engineering judgement goes, and I want the senior people spending their attention there.
+Those were not 854 features or production releases, and the count does not tell me how much of the code was AI-written. They were changes we needed to understand, test and integrate. I had wanted more capacity to build; now I needed the work around each change to keep up.
 
-The test I use before accepting generated code is the one I would use for any pull request: can the person submitting it explain what it does and why, and would they merge it with their name on it? If the answer is no, the speed was not real.
+## Getting the changes through
 
-## The review service I switched off
+One practical change came from an engineer who added a check that fails pull requests over four hundred lines, to push the coding agent towards smaller, stacked changes. It gives the agent a boundary and gives a person a more manageable change to examine.
 
-We built a small service that reviews pull requests with several models, each looking at a different concern: correctness, security, tests, the reach of a change, and whether we could reverse it. When they agreed, the service could approve a standard change.
+We also built a review service using several models to look at correctness, security, tests and the reach of a change. It raises findings for the engineer to investigate and address. That lets us use AI to help work through the increased volume as well as produce it.
 
-The pilot caught things. It withdrew its approval when a reviewer opened a thread, and it held risky changes for a second engineer. I liked what it was doing, which made the next decision uncomfortable.
+As we grow, I want more of that help available to everyone. An agent should be able to find our existing interfaces and patterns, run our tests and build, and work in an environment where it cannot affect production. Shared instructions and clear access limits would save each engineer having to set that up again. I also want to see how much review and rework it takes to get a change finished as we try different models.
 
-Then our auditor's guidance on AI arrived. For our change process, the output was to remain a recommendation rather than an approval. We took the service down that afternoon. The next day we put it back with the approval removed. It still reviews and raises findings. A human merges, and an independent human approves the step where a change reaches production. We kept the part that helped us inspect the work and changed the authority we had given it.
+The person submitting the change still needs to explain what it does and why, and be willing to merge it with their name on it. A model finding can point them to a problem; they have to decide whether the fix actually deals with it.
 
-Putting a person at the end of the process does not settle it, though. Someone clicking through a reassuring model summary is not reviewing anything. Our answer so far is to present the findings for review, require the person merging to resolve each thread, and send large changes directly to a person. I still need the reviewer to understand the change and be willing to reject it. A resolved thread alone does not tell me that happened.
+The next step is getting that work into production. We build for finance, so I need to be able to show how a change got there and who took responsibility for it. We have been [reshaping review and release](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) around independent human approval before production. We are still putting the full process into the tooling.
 
-I've written about [making decisions](/blog/category/thoughts/making-decisions) under uncertainty. This was the first time I had reversed one in public within twenty-four hours, and the team was fine with it.
-
-## Where the line is
-
-For a team this size, the leverage is real and I want all of it. The assistant gathers, drafts, compares, runs the procedure, and finds the thing we missed. Without it, several of the things I describe in this series would simply not get done.
-
-What I'm trying to catch is the moment a useful output starts standing in for work nobody has done. In evidence, that work is checking the records. In a policy review, it is choosing what to change. In code, it is understanding the change well enough to approve it. The tool can produce something that looks finished at every one of those points, and it is my name on the process when it is not.
+The small-change check and the review service give us specific ways to handle the volume now. I want to keep the speed we gained in building, and make it easier for an engineer to carry a change all the way through to something a customer can use.
 
 ## A few useful reads
 
-- Simon Willison, [Not all AI-assisted programming is vibe coding (but vibe coding rocks)](https://simonwillison.net/2025/Mar/19/vibe-coding/). His test of whether you can explain the code is the one I use before accepting something an assistant has produced.
-- Birgitta Böckeler, [The role of developer skills in agentic coding](https://martinfowler.com/articles/exploring-gen-ai/13-role-of-developer-skills.html). Concrete examples of the steering and correction hidden inside a successful session with an agent. Useful when I'm trying to describe what our human review needs to involve.
-- Thoughtworks, [Complacency with AI-generated code](https://www.thoughtworks.com/radar/techniques/complacency-with-ai-generated-code). A useful warning for the moment a tool has worked well enough that I start paying less attention to it.
+- Simon Willison, [Not all AI-assisted programming is vibe coding (but vibe coding rocks)](https://simonwillison.net/2025/Mar/19/vibe-coding/). On the difference between exploring with generated code and taking responsibility for code you understand.
+- Birgitta Böckeler, [The role of developer skills in agentic coding](https://martinfowler.com/articles/exploring-gen-ai/13-role-of-developer-skills.html). Examples of the framing, steering and correction involved in working well with an agent.
+- GitHub, [Does GitHub Copilot improve code quality?](https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/). A vendor-run controlled study finding quality gains on a bounded API task; it does not establish long-term production quality.
+- Stripe, [Minions: one-shot, end-to-end coding agents, part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2). How Stripe combines coding agents with repository context, automated checks and human review.
+- Uber, [Running a Software Factory Efficiently at Uber Scale](https://www.uber.com/us/en/blog/efficient-software-factory/). A firsthand account of operating and evaluating agents across development, review and maintenance.
+- DORA, [Balancing AI tensions: moving from adoption to effective use](https://dora.dev/insights/balancing-ai-tensions/). Research on the benefits engineers report and the verification work that accompanies faster generation.
+- Anthropic, [How AI is transforming work at Anthropic](https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic). An internal study of coding, code understanding and work engineers previously lacked time to attempt; its productivity estimates are self-reported.

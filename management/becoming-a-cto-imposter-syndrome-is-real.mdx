@@ -1,10 +1,11 @@
 ---
 type: 'Post'
 title: 'Imposter Syndrome Is Real'
-subtitle: 'The team kept moving without me, and I decided that meant I was failing'
-summary: 'I brought a team I trusted and they got on with building while I was buried in everything else. Then I noticed people picking up work that should have been mine, and heard the voice that says a real CTO would be holding the whole picture. What that feeling got right, what it got wrong, and the habits that help.'
+subtitle: 'I was busy everywhere except where the team needed me, and I decided that meant I was failing'
+summary: 'When engineers started picking up decisions I had left unsettled, I took it as evidence that I could not do the job. Telling the team, asking for help understanding the system, and handing over work gave me a way through that feeling.'
 tags: ['Leadership', 'Career Development', 'Engineering Management', 'Learning', 'Mental Health']
 date: '2026-09-25'
+updated: '2026-11-08'
 category: 'management'
 featured: false
 draft: false
@@ -18,54 +19,66 @@ I have a PhD in a corner of computer science adjacent to knowledge graphs. I hav
 
 The awkward part is that sometimes the voice is pointing at something real. Reassurance does not tell me what it is. It also does not help me separate a gap I need to close from the much larger story I'm telling myself about that gap.
 
-## The team moved without me
+## I set the direction once
 
-I wrote in the [first post](/blog/category/management/becoming-a-cto-nobody-handed-me-a-manual) about bringing people I already trusted, precisely so they could run with work while I was not looking. That is what happened. While I was setting up the entity, running payroll, talking to auditors and reading vendor terms, they were building. There were weeks when I could not have told you in any detail what was in the last ten pull requests.
+The first thing I did as CTO was set the architecture, and I did most of it by hiring. I wanted a knowledge graph at the centre of the product: every document, entity and number we touched would hang off it, and everything else, the agents, the interfaces, the integrations, would read from and write to that one model. So I brought in people who could build each part of that picture, put them next to each other, and told them where the centre was.
 
-I had wanted exactly that. It still felt wrong. The picture of a CTO I carried in my head knew the codebase, had opinions about every design choice, and could answer any technical question in the room. I had never actually been that person, even in a much larger company. But the standard sat there anyway, and every week I spent on an invoice instead of the architecture was a week I fell further behind it.
+Then I laid the foundations and let people run with the rest. I had hired people I trusted precisely so that I would not have to be in every decision, and the foundations were meant to be the direction: here is the shape, here is the centre, build outwards.
+
+It worked, for a while. The parts got built. Then a design partner would ask for something, a part would turn out harder than it looked, or two people's reasonable choices would meet in the middle. We needed to work out what those changes meant for the rest of the plan. I had set the initial direction and quietly assumed it would keep.
+
+## Present in the wrong layer
+
+We had no front-end engineer when we started, so I took the front end. It was the part customers saw, and in a product that was still finding its shape, the screens were a lot of the shaping. I was in the codebase every week.
+
+Anyone reading the commit log would have said the CTO was deeply involved. I was, in one layer. What I was losing was my understanding of how each person's work connected to the rest, and what we needed to do next.
+
+The rest of my week went to [setting up and running the company](/blog/category/management/becoming-a-cto-nobody-handed-me-a-manual): the entity, the payroll, the auditors and the vendor terms. When those competed with the team for the same hour, the admin usually won. In my head, payroll going out on time, the raises, the perks, the office, and making the money last were what made the company move. I thought looking after those things would leave the team free to deliver. It helped, but they needed more from me.
+
+The team was happy. The retros said so. At my last company, I had also known where each person was stuck and how their piece connected to the next one. Here, I was further from the implementation, while still holding context from conversations the engineers had not been in. I needed their picture of the system; they needed my picture of where we were going. Neither was reaching the other reliably.
 
 ## Then they started doing my job
 
-The uncomfortable part came later, and it was quieter than any incident. I started noticing people taking the initiative on things that were mine. A decision about what to prioritise next. A call on how one part of the system should fit with another. A conversation with a design partner that I should have had first. Nobody was overstepping. They were filling a space I had left empty because I was busy somewhere else.
+One of the engineers wrote to the whole channel that he was worried we would drift if we did not hold ourselves to deadlines and to one thing at a time, and that every stand-up should be “this is what I am working on, and this is when it will be done”. It was a good message. It was also the message I should have written, and he had written it because nobody else had.
 
-Each time I noticed, the voice had the same reading: if you were good enough, there would be no space. Someone else is holding the picture because you are not. The team is working around you.
+Once I saw it, I saw it everywhere. Another engineer proposed how we should ship code to meet our auditors' standard, a question I had not settled. A third, before his first official day, announced a freeze on new front-end features until a refactor was done, which was the right call and one I would normally have made. Nobody was overstepping. They were filling a space I had left empty, and they were doing it well.
 
-I believed that reading for longer than I should have. It was plausible, it matched how tired I was, and it arrived with evidence.
+Each time I noticed, the voice had the same reading: if you were good enough, there would be no space. The team is working around you. I believed that reading for longer than I should have. It was plausible, it matched how tired I was, and it arrived with evidence.
 
 ## What the feeling got right
 
-Trusting a team to run is not the same as leaving it without direction. The people I brought were excellent at taking a problem and moving it forward. They still needed someone to hold the whole: where this was going, what mattered most this quarter, which of two good ideas we were doing first, and how the piece they were building fitted with the piece somebody else was building. Nobody else could hold that, because nobody else was in all the rooms I was in.
+The gap was real. The people I brought were excellent at taking a problem and moving it forward. They still needed clear priorities: what mattered most this quarter, which of two good ideas we were doing first. Without that, they made local decisions. Each was reasonable on its own. Together they did not always add up, and I would find that out late.
 
-When I did not hold it, the team made local decisions. Each was reasonable on its own. Together they did not always add up, and I would discover that late, usually when two reasonable choices met each other in the same codebase. The initiative was not the problem. My absence from the decisions that only I could make was.
-
-So the gap was real. I had been treating trust as if it removed the need for direction. It does not. It changes what direction looks like, from checking the work to saying clearly where the work is going.
+I was split between a layer of the product where I was useful but not essential, company work that needed doing, and the direction I owed the team. The feeling was pointing at an obligation I had not met.
 
 ## What it got wrong
 
-The conclusion. The feeling turned "I have not been doing part of my job" into "I am not able to do my job". Those are different sentences, and only the first one has a fix.
+I had turned “I have not been doing part of my job” into “I am not able to do my job”. I could name the work I had missed and start doing something about it. I had been treating it as a verdict on whether I belonged there at all.
 
-People taking initiative in my space was the team working the way I had hoped it would. It was also the most accurate possible signal of what I owed them. A team that had waited for me would have been worse, and less honest. They were telling me where I was missing by doing the work themselves, which is what I had hired them to do.
+The engineers had done what I had hired them to do: picked up a problem and moved it forward. Their initiative also showed me where I had left something unanswered. I needed to pay attention to what they had picked up, rather than take their ability to do it as evidence against my own.
 
-The feeling was also measuring me against the wrong standard. The person who knows every line of the codebase is not the job. The job is holding the picture that lets ten other people make good decisions without me in the room. I had been failing at that, not because I was unable to do it, but because I had not yet recognised it as the thing to do.
+Knowing every line of the codebase would not have answered the team's question about priorities. I had hired specialists because they knew things I didn't. I still need enough understanding to question an approach, see where it affects someone else's work, and recognise when I need help. Trying to become equally good at all their jobs would leave even less time for mine.
 
 ## What has actually helped
 
-The most useful change was deciding which things only I could hold, writing them down, and saying them out loud on a schedule. Direction. The order of priorities. How the parts fit together. The commitments we had made to people outside the company. Those are mine, and the [working agreement](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet) we wrote later made that explicit.
+I started by telling them. I wrote to the team that I had been further from the implementation than I wanted to be, that I did not have the end-to-end understanding of the system that many of them had, and that I intended to change that. Then I asked each person to write down how their part of the system actually worked. I still needed those explanations whether or not I thought a CTO should already know. That request was the start of the picture coming back. Saying it out loud helped quiet the voice.
 
-When someone picks up something that was mine, I now try to name it rather than let it drift. Either I hand it over properly, in which case it is theirs and that is delegation rather than failure, or I take it back and say why. Silent drift is what turns a healthy team into evidence that I am being replaced.
+When we could hire for the front end, I handed it over. It had become the thing I could keep doing while harder decisions waited. Hiring someone to own it took that recurring work off my plate.
 
-I keep a list of things I got wrong and gaps I found. It is shorter than the voice suggests, and most entries are specific enough to do something about. A missing decision becomes a conversation to have this week. A missing fact becomes a note. Looking at the actual entries is more useful than replaying a general feeling of being behind.
+I put what I owed the team into a [draft on product ownership](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet): context before work starts, and an answer within a working day to a scope question, concern or draft. Those were proposed obligations the team could challenge. Writing them down gave me specific responsibilities to discuss with them; it did not mean we had already agreed them. I also needed to be clear about [which decisions were theirs and when they needed me](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design), so they could act without having to guess.
 
-I also try to separate something I have not done from something I cannot do. Most of what the voice brings me is in the first category.
+I keep a list of things I got wrong and gaps I found. It is shorter than the voice suggests, and most entries are specific enough to do something about. A missing decision becomes a conversation to have this week. A missing fact becomes a note. Looking at the actual entries is more useful than replaying a general feeling of being behind. Writing about them here also makes me explain what I misread and gives someone else a chance to correct me.
 
 Some weeks self-doubt makes me check things twice. Some weeks it just makes me tired. I don't want to make a virtue of that exhaustion, or treat feeling out of my depth as a requirement for growing into the role. I would be glad to do the same work with less of it.
 
-Writing here is part of the same effort, the learning in public I set out when I started this series. Explaining what I misread forces me to work out what I actually misunderstood, and gives someone else a chance to correct the explanation too.
-
-I still feel it some weeks, usually when a decision gets made that I should have made. I want to get better at hearing that as a question about where I was, rather than about whether I should be here.
+What helps is having something specific to work on: a question for an engineer, a decision I've left open, or work I should hand over. I can do something about those. Asking for the system explanations and handing over the front end were real progress, even while I was still doubting myself.
 
 ## A few useful reads
 
 - Charity Majors, [The Engineer/Manager Pendulum](https://charity.wtf/2017/05/11/the-engineer-manager-pendulum/). Useful for thinking about the change in work underneath a change in title, especially when you are still measuring yourself against your previous job.
 - Camille Fournier, [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/). The later chapters describe the part of the job I was not doing: holding direction and the whole picture while the team moves without you.
 - Ruchika Tulshyan and Jodi-Ann Burey, [Stop Telling Women They Have Impostor Syndrome](https://hbr.org/2021/02/stop-telling-women-they-have-impostor-syndrome). A reminder to examine the environment before offering someone confidence advice.
+- Hutton Henry, [Helping the CTO with Imposter Syndrome](https://beyond-ma.com/blog/helping-the-cto-with-imposter-syndrome). On working out what the company needs from its CTO and what support the person in that role needs to grow into it.
+- Andrew Bacon, [CTO lesson learned 7/1000](https://www.linkedin.com/posts/andrew-bacon-30b3a613_cto-lesson-learned-71000-yes-i-am-doing-share-7484484793481654272-0p2T/). His account of learning to ask for help, and how believing you should already know can get in the way of learning.
+- Stefano Mosconi, [CTO imposter syndrome](https://britemind.io/mentoring/imposter-syndrome/). The breadth of the role makes it easy to confuse responsibility for a decision with being the expert in every subject it touches.
+- AmazingCTO, [CTO Imposter Syndrome](https://www.amazingcto.com/imposter-syndrome/). The suggestion to keep concrete achievements and feedback is a useful addition to my list of mistakes.

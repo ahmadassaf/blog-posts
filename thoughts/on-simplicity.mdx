@@ -21,3 +21,5 @@ Every line of code is a liability. It needs to be maintained, understood, and de
 The hard part isn't writing simple code initially. It's having the discipline to refactor complex code into simple code when you discover a better way.
 
 Simplicity is harder than complexity because it demands understanding: I can only delete a branch once I know why it exists and can prove nothing depends on it, and building that certainty is real work. Complexity, by contrast, only requires adding another case. And deletion has no visible artifact. A thousand lines added shows up in the diff, the demo, the standup; a thousand lines removed looks, from the outside, like nothing happened. We reward what we can see, so the incentives quietly favor the wrong thing.
+
+I can make that work visible by explaining why the branch existed, why it is no longer needed, and how I know the remaining code still handles the same cases.

@@ -1,0 +1,100 @@
+---
+type: 'Post'
+title: 'Compliance at AI Speed'
+subtitle: 'Rethinking review, release approval and the promises in our policies'
+summary: 'Our small team merged 854 pull requests in thirty days. We had to rethink approval, separate critical repositories from experiments, and build a change gate. Working through it also exposed the gap between the controls I had written down and what we had actually put in place.'
+tags: ['Leadership', 'Security', 'Compliance', 'AI', 'Engineering Management']
+date: '2026-11-03'
+updated: '2026-11-08'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+series:
+  order: 7
+  title: 'Becoming a CTO'
+---
+
+In one thirty-day stretch, roughly ten of us merged 854 pull requests. [AI was helping us build faster](/blog/category/management/becoming-a-cto-ai-is-a-multiplier-not-a-signature), and I was also trying to get us through SOC 2 and ISO 27001. Our process asked for an independent human approval on every change. I kept coming back to the same question: how do we do that more than eight hundred times a month and still expect people to read carefully?
+
+We build software for finance. I understood why customers needed to trust how we changed it. That was why we chose to pursue both in our first year, while the product and the team were still taking shape.
+
+But parts of the compliance work felt stuck in a slower era of software development. The templates, approval queues and evidence checks we started with had not caught up with a small team using coding agents throughout the day. We could produce changes much faster. We had not gained the same amount of time to review them.
+
+An approval was easy to count. Whether someone had understood the change was much harder to establish. I didn't want us spending more of the day asking for a click that made the record look complete.
+
+## Trying to make review stick
+
+When we started, everyone merged. The rules said every change needed a review, a few of us including me had a bypass, and we used it. For a handful of people building the first version of a product, that felt like the right trade for a while. Checks went green, whoever was nearest merged, and the record of who had looked at what was thin.
+
+Our compliance platform flagged the missing approvals. We had said changes received independent review, and our own records showed otherwise.
+
+The first fix was a rule: the person reviewing someone else's change records their approval before merging it, and if you want to merge your own change you need an independent approval first. We changed no configuration. We agreed to behave differently. It worked for a few months. When I checked again, too many recent pull requests had merged without a recorded review, mine included. I had treated agreement as implementation. The path through the tooling was exactly as it had been.
+
+What the rule did produce was a review channel, and a lot of requests for approval. Some of those approvals were careful. Some were a formality, because the person asking had already tested the change and the person approving trusted them. We had more approvals on record, but that didn't mean every change had received a careful review.
+
+The second fix was automatic reviewer assignment from code-ownership files. Every change would get a person. People were asked about code they had not touched in months, the requests became noise, and approving them became another thing to clear. We removed the files. Authors now choose whom to ask: who knows this part, who understands the tool involved, who would spot what I would miss.
+
+The third attempt came from the team. One of the engineers asked whether we could push directly to the main branch and have a person approve the release, so we could move towards trunk-based development and stop bothering people in the review channel. My first response was to defend the existing review requirement. Then I asked whether we could separate merging from releasing and write down how we'd handle the risks. We took that model to our auditor.
+
+## We had to stop treating every repository the same
+
+The frameworks gave us room to design controls around our risks. I had to use that room. Copying a blanket approval rule into a policy had left us with the same process for work that could affect a customer and work we were still experimenting with.
+
+We separated critical repositories from experimental ones. The critical side covered the repositories that build, configure or deploy the product. Sandboxes, experiments and documentation-only repositories did not need the same production change gate.
+
+That distinction mattered to me. I wanted an engineer to be able to try an idea without putting every iteration through the approval process for customer-facing software. I also needed to know when that experiment became something we depended on. If it starts serving customers or becomes part of the product's delivery path, its scope and controls need to change with it.
+
+I couldn't use “experimental” as a shortcut around customer data or production access. I had to look at what each repository could actually affect. Within the critical ones, we also needed to distinguish routine work from changes to authentication or a data migration.
+
+## The service I had to change
+
+We built [a change gate that reviews pull requests with several models](/blog/category/engineering/building-an-ai-change-gate), each looking at a different concern: correctness, security, tests, the reach of the change, and whether we could reverse it. I wanted it to help an engineer work through a change before asking someone else to look.
+
+During the pilot, the service could approve a standard change after the checks passed and the models agreed. It caught things, withdrew its approval when a reviewer opened a thread, and held risky changes for a second engineer. I liked what it was doing.
+
+Then our auditor's guidance arrived: for our change process, the service could recommend, but it could not approve. We took it down that afternoon and put it back the next day with the approval removed from the pilot. It was the first [decision I had reversed in public](/blog/category/thoughts/making-decisions) within twenty-four hours. The team was fine with it.
+
+That version gave the reviewer findings to investigate. They could fix a suspected problem or explain why it didn't apply. I could keep the useful review work without treating agreement between models as permission to ship.
+
+One of the engineers also added a check that fails pull requests over four hundred lines, to push the coding agent towards small, stacked changes. That gave us a practical way to keep the changes manageable for a person to read.
+
+## Keeping the release decision separate
+
+We kept pull requests as the record of each change. The process we are putting in place lets the author merge an ordinary change within an agreed goal after the automated gates pass and the review findings are addressed. Large changes, changes involving authentication, secrets, infrastructure or migrations, and changes whose risk reaches outside the goal require a second engineer before merging.
+
+Our auditor asked for independent human approval before production. That gives us a separate release decision only where merging and deploying are separate too. Where a merge triggers a production deployment, the approval has to happen before the merge.
+
+I still need that person to understand what they are releasing. Bundling changes together doesn't remove the work of checking them. I want the checks and review findings available to the approver, along with a clear view of what has changed.
+
+## Then I had to check what I had written
+
+Code review wasn't the only place where the policy ran ahead of the implementation. I would take a control, find the policy, read the sentence I had written, and go looking for the thing it described. Sometimes I found a plan written in the present tense.
+
+One procedure said that approvals were dismissed when new commits arrived on a pull request. The setting had not been turned on yet. Once I noticed, it took a minute to fix. Until then, the document had promised a safeguard the repository wasn't providing.
+
+Another control made a system-wide claim. The evidence behind it covered one component and one successful test. I had written what I wanted us to have. Someone reading the policy had no reason to know we weren't there yet.
+
+I put that choice back to the team: implement the control properly or retire the claim and explain how we would address the risk. That work was still unfinished. A fresh screenshot would not have resolved it.
+
+We also removed a sampled post-merge review from a draft procedure because we were not going to carry it out every month. I had become too comfortable adding another review or report to make a document sound thorough. Every one of those sentences creates work someone has to do. For a required control, we still have to implement it or agree an acceptable alternative.
+
+Even when the work was done, I sometimes made it difficult to check. Our corrective-action records sat behind a login the auditor didn't have. We now export them so the person checking our work can read the same records I can.
+
+## Following the work into production
+
+I'm also rebuilding [the dashboard nobody else opened](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet). It now shows goal status for stand-up, which gave the team a reason to use it. I want to build on that by letting us follow a change through its checks, findings, approvals and arrival in production. Some of that exists and some is still being built.
+
+The unfinished work has owners and dates. I'm checking who can merge, which changes require a second engineer, and what actually stops a production release until someone independent approves it. The gate gives us checks and findings to work with; getting the full process enforced consistently is still part of the job.
+
+When I write a control now, I want to be able to open the repository, run the procedure or show the record that backs it up. If I can't, it belongs on the work list. That is a much more useful starting point than another reassuring sentence in a document.
+
+## A few useful reads
+
+- ISO, [ISO/IEC 27001](https://www.iso.org/standard/27001). Its overview explains how the risk-management process can fit the organisation's size and needs.
+- AICPA, [Proposed update to the SOC 2 Trust Services Criteria](https://www.aicpa-cima.com/news/article/aicpa-proposes-update-of-soc-2-r-trust-services-criteria-to-enhance-the-relevance-usability-and-value-of-cpas-reports). A proposed modernization addressing AI and automation; it is not yet an adopted replacement for the current criteria.
+- Steven Shorrock, [The Varieties of Human Work](https://humanisticsystems.com/2016/12/05/the-varieties-of-human-work/). Useful language for the difference between what a procedure says, what we tell someone, and what happens in practice.
+- GitLab, [The importance of a handbook-first approach](https://handbook.gitlab.com/handbook/company/culture/all-remote/handbook-first/). Worth reading when deciding whether documentation is part of how people work or something maintained separately for a review.
+- Google Engineering Practices, [The Standard of Code Review](https://google.github.io/eng-practices/review/reviewer/standard.html). A useful reference for what a reviewer is actually deciding, especially when approval starts feeling like a formality.
+- Martin Fowler, [Patterns for Managing Source Code Branches](https://martinfowler.com/articles/branching-patterns.html). Helpful for separating the branching choices from the review and release choices that can otherwise get bundled together.
+- Phil Venables, [Control Reliability Engineering](https://www.philvenables.com/post/control-reliability-engineering-cre-applying-sre-principles-to-cybersecurity-controls). A practical way to think about checking whether a security control keeps working after its first successful test.

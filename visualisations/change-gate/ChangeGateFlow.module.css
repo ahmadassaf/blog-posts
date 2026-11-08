@@ -1,0 +1,295 @@
+.root {
+  container-type: inline-size;
+  min-width: 0;
+  width: 100%;
+  margin-block: 2.5rem;
+  color: var(--ds-color-text);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.root p,
+.root h3,
+.root dl,
+.root dd,
+.root ol,
+.root li {
+  margin: 0;
+}
+
+.caption {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.caption strong {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.caption > span {
+  color: var(--ds-color-text-muted);
+  font-size: 0.875rem;
+}
+
+.canvas {
+  overflow: hidden;
+  border: 1px solid var(--ds-color-border);
+  border-radius: 12px;
+  background: var(--ds-color-surface);
+}
+
+.rail {
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 1.5rem 1rem 1.15rem;
+  background: var(--ds-color-surface-muted);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-border) transparent;
+  overscroll-behavior-inline: contain;
+}
+
+.root .steps {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-width: 630px;
+  padding: 0;
+  list-style: none;
+}
+
+.stage {
+  position: relative;
+  min-width: 0;
+  padding: 0;
+}
+
+.stage:not(:last-child)::after {
+  position: absolute;
+  z-index: 0;
+  top: 1.2rem;
+  left: calc(50% + 1.35rem);
+  right: calc(-50% + 1.35rem);
+  height: 1px;
+  background: var(--ds-color-border);
+  content: '';
+}
+
+.stage:not(:last-child)::before {
+  position: absolute;
+  z-index: 1;
+  top: 1.05rem;
+  right: -0.1rem;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-top: 1px solid var(--ds-color-text-muted);
+  border-right: 1px solid var(--ds-color-text-muted);
+  transform: rotate(45deg);
+  content: '';
+}
+
+.stageButton {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 100%;
+  justify-items: center;
+  gap: 0.65rem;
+  padding: 0 0.25rem 0.25rem;
+  border: 0;
+  border-radius: 6px;
+  color: var(--ds-color-text-muted);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: center;
+}
+
+.stageButton:focus-visible {
+  outline: 2px solid var(--ds-color-accent);
+  outline-offset: 4px;
+}
+
+.node {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--ds-color-border);
+  border-radius: 50%;
+  background: var(--ds-color-surface);
+  transition: background 150ms ease-out, border-color 150ms ease-out;
+}
+
+.node svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.stageLabel {
+  max-width: 9ch;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.stageButton:hover,
+.stage[data-selected='true'] .stageButton {
+  color: var(--ds-color-text);
+}
+
+.stageButton:hover .node {
+  border-color: var(--ds-color-accent);
+}
+
+.stage[data-selected='true'] .node {
+  border-color: var(--ds-color-accent);
+  background: var(--ds-color-accent);
+  color: var(--ds-color-accent-foreground);
+}
+
+.detail {
+  display: grid;
+  gap: 1.1rem;
+  min-width: 0;
+  padding: 1.5rem;
+  border-top: 1px solid var(--ds-color-border);
+  overflow-wrap: anywhere;
+}
+
+.detailHeading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stepNumber {
+  display: grid;
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid var(--ds-color-border);
+  border-radius: 50%;
+  color: var(--ds-color-text-muted);
+  place-items: center;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.root .detailHeading h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.description {
+  max-width: 72ch;
+}
+
+.handoff {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--ds-color-border);
+}
+
+.handoff dt {
+  margin-bottom: 0.25rem;
+  color: var(--ds-color-text-muted);
+  font-size: 0.75rem;
+}
+
+.handoff dd {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.handoffArrow {
+  width: 1rem;
+  color: var(--ds-color-text-muted);
+}
+
+.example {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.example strong {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ds-color-text-muted);
+}
+
+.boundary {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  color: var(--ds-color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.boundary svg,
+.outside svg {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+}
+
+.modePreview {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background: var(--ds-color-surface-muted);
+  font-size: 0.875rem;
+}
+
+.modeButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.position {
+  color: var(--ds-color-text-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.root .outside {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+  color: var(--ds-color-text-muted);
+  font-size: 0.8125rem;
+}
+
+@container (max-width: 480px) {
+  .rail { padding-inline: 0.75rem; }
+  .detail { padding: 1rem; }
+  .handoff { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .handoffArrow { transform: rotate(90deg); }
+  .navigation { padding-inline: 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node { transition: none; }
+}

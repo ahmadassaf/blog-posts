@@ -10,9 +10,9 @@ category: 'engineering'
 tableOfContents: true
 ---
 
-As a developer and customization enthusiast, I've always been fascinated by the idea of having a sleek, informative system bar on my desktop. That's why I created [gaudiBar](https://github.com/g-udi/gaudiBar.ubersicht.widget), an extensible, adaptive, and responsive system information bar for [Übersicht](http://tracesof.net/uebersicht/). In this post, I'll walk you through my development process and the key features that make gaudiBar stand out.
+I built [gaudiBar](https://github.com/g-udi/gaudiBar.ubersicht.widget) for my own desktop. I wanted a system information bar whose widgets I could rearrange without editing their positioning code each time.
 
-The main decision behind developing gaudiBar was to allow usage of adaptive widgets. Like many developers, I've used various system information tools over the years, and my recurring frustration was their lack of flexibility. If you have been using Übersicht, you will know that to customize the location of any widget, you have to dig into the code and position it, most probably with absolute positioning. For the case of information bars, I did not find that to be a good experience, especially when the information is dynamic, e.g.:
+In [Übersicht](http://tracesof.net/uebersicht/), moving a widget could mean digging into its code and setting its position manually. I found that frustrating for a bar whose content kept changing:
 
 - Displaying Wi-Fi information, where the network SSID can be long (you can work around this with a maximum width and text overflow... but really?)
 - System information, application names, and opened window names of varying lengths
@@ -94,6 +94,6 @@ Two problems came up repeatedly during development. The first was making widgets
 
 ## Conclusion
 
-Developing gaudiBar has been an exciting journey of problem-solving and creativity. It's grown from a personal project into a tool that I hope other developers and customization enthusiasts will find useful. The modular, extensible nature of gaudiBar means it can continue to evolve with new widgets and features.
+I can change the bar's arrangement in `lib/configs.js`, and keep each widget's commands, refresh timing and styling in its own module. Flex layout handles the changing content widths that made the old setup frustrating.
 
 If you're interested in trying gaudiBar or contributing to its development, check out the [GitHub repository](https://github.com/g-udi/gaudiBar.ubersicht.widget). I'm always open to suggestions and contributions to make gaudiBar even better!

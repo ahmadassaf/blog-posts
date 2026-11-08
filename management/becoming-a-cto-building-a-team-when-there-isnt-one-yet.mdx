@@ -1,13 +1,14 @@
 ---
 type: 'Post'
-title: "Building a Team When There Isn't One Yet"
-subtitle: 'Ten engineers, no product manager, and a dashboard only I looked at'
-summary: 'The engineers asked for clearer priorities. I had built a dashboard. How I came to see the difference, and the working agreement we are trying while we cannot yet hire a product manager.'
+title: 'Ten Engineers, No Product Manager'
+subtitle: "What a dashboard couldn't give us, and the work we still owed the team"
+summary: 'The engineers asked for clearer priorities. I had built a dashboard. With a product manager still beyond our budget, I started writing down the work we owed the team and the responsibilities I wanted us to discuss.'
 tags: ['Leadership', 'Engineering Management', 'Teams', 'Product Management', 'Startups']
 date: '2026-10-09'
+updated: '2026-11-08'
 category: 'management'
 featured: false
-draft: true
+draft: false
 tableOfContents: false
 series:
   order: 4
@@ -26,11 +27,11 @@ The real work lived in pull requests. Our project board was not reliably linked 
 
 My dashboard sat on top of that board. It had views for delivery, risk, gates, and people. I liked it. Nobody but me opened it. I was running engineering from a window only I had open, fed by a board only I maintained, and then wondering why the picture was unclear to everyone else.
 
-When I pulled the numbers for the month, most pull requests did not name the issue they closed. A large share of the ones that did were mine. That told me something about how we recorded work. It did not tell me who was contributing most, because most of the work was missing from that particular view.
+When I pulled the numbers for the month, most merged pull requests did not close an issue. A large share of the ones that did were mine. That told me something about how we recorded work. It did not tell me who was contributing most, because most of the work was missing from that particular view.
 
 The dashboard had given me somewhere to arrange the information I wanted. It had not given the team a reason to supply it. Keeping the board current was an extra task, and the benefit mostly came back to me.
 
-There was a more uncomfortable problem underneath that one. Even a perfectly current board would not tell an engineer why a priority had changed, which customer problem mattered most, or who could settle an argument about scope. I was treating visibility as though it would provide direction.
+Even a perfectly current board would not tell an engineer why a priority had changed, which customer problem mattered most, or who could settle an argument about scope. I was treating visibility as though it would provide direction.
 
 ## The work we still owed the team
 
@@ -38,28 +39,58 @@ A product manager could help us understand customer needs, choose what to pursue
 
 We also had engineering habits to improve. Linking a pull request to its issue, testing beyond the edge of a ticket, and flagging a change in scope belonged to the people doing the work. A PM could help make those habits easier. Hiring one would not remove our responsibility for them.
 
-I needed to keep those two conversations separate. The team asking for a PM was not an excuse to avoid updating tickets. My asking for better tickets could not become an excuse to avoid providing product direction.
+AI was already helping us explore approaches and build changes faster. I can use it to draft a ticket or pull updates together too. The team still needed me to explain whose problem we were solving, why it mattered now, and what we were giving up to do it.
 
-We wrote a working agreement with obligations on both sides. Leadership owed context before work started, an answer to a blocking question within one working day, and a scope description short enough to fit in six lines. The length was a constraint on us: if we couldn't say what we were asking for simply, an engineer should not have to discover it halfway through implementation.
+Those answers sometimes require information we haven't got yet. I need to make time to understand the customer's problem and involve engineers in deciding what to do about it.
 
-The team owned the connection between the ticket and the change, checking how that change behaved in the wider application, and saying when the original scope no longer fitted what they were finding. I wanted an engineer to be able to bring that back for a decision rather than quietly absorb more work.
+I started writing down those responsibilities. It helped me separate the hiring question from the work we already owed the team. I could set out what leadership needed to provide and what I was asking engineers to take responsibility for, with both open to challenge. It was a proposal for us to discuss; putting it on paper did not mean we had agreed it or changed the habits.
 
-Writing those expectations down was the easy part. If someone tells me the scope is wrong and I respond as though they are being difficult, the agreement will not survive contact with me. My response matters more than the paragraph.
+The draft put obligations on leadership as well as engineers. Every goal needed to say who it was for, the problem it addressed, and what done would look like. Priorities needed one shared order. If we changed that order, we had to agree what moved out, changed or waited. Adding a request without making that tradeoff would leave the team to absorb it or make the decision themselves.
 
-There is still a hiring question to make concrete. “Not yet” needs a condition we can revisit, and we need to be explicit about who makes each product decision until then. A sentence saying that everyone owns the product cannot settle a disagreement over priorities.
+We also owed the team access to the reasoning: notes from customer conversations, opportunities to join those calls, and decisions recorded where the work was happening. A decision made on a call needed to reach the shared record that day. Otherwise, the person doing the work would still depend on finding someone who remembered the conversation.
+
+The proposed response time was one working day for a scope question, concern or draft. In return, an engineer would bring what they understood, what was missing, and a recommendation. I would need to make time to answer. Asking people to raise uncertainty early made little sense if I then left their questions unanswered.
+
+If someone tells me the scope is wrong and I respond as though they are being difficult, the invitation to challenge it means very little.
+
+## Ownership starts before the code and continues after it
+
+The draft asked every engineer to be able to use and explain the application's main customer journeys. For the part they owned, the understanding needed to go deeper: the user, the problem, the expected behaviour, the tradeoffs, and the evidence that the change worked. That gives an engineer a basis for questioning a requirement or spotting a problem that crosses the edge of their ticket.
+
+Each piece of work still needed one clear owner. Understanding the wider product would help that person recognise dependencies and know whom to involve. It would not give them authority over every part of it. In a separate, later agreement on how we work, we wrote down the [Owner and Sponsor roles](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design): the Owner takes responsibility for delivery, while the Sponsor holds the product context and approves changes to the agreed scope.
+
+The definition of finished work mattered just as much. The draft required the owner to take a change through to preproduction and personally use the affected journey end to end, including its failure cases. A merged pull request was one step in that process. Evidence should fit the change, and known limitations or follow-up work should be visible to the next person. Production release would still have its own approval requirements.
+
+That expectation extends to handoffs. If deployment or verification remains, the shared record should say so and name who takes it next. Otherwise, one person's finished task becomes another person's unexplained gap. I wanted ownership to cover the useful result and the work needed to get there.
 
 ## Giving the board a job people could see
 
-We put the agreement into the meetings we already had. The stand-up runs from the board. The show-and-tell every second Friday demos the whole application. The planning day names area owners. I didn't want another meeting whose purpose was to maintain the machinery of the other meetings.
+The draft tried to give those expectations a place in meetings we already had: coordinate from the shared record, name area owners in planning, and use demos to walk through the whole application. I wanted to make better use of the time we already spent together. We have since [changed the meeting cadence](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year).
 
-The board now has a job in that agreement: it should be where context arrives and where changes in scope get resolved. If keeping an issue current helps the person doing the work get an answer, the maintenance has a purpose they can see. Whether it actually does that is what we need to check.
+The tools also needed distinct jobs. GitHub held delivery work and its status; Notion held the durable product context and decisions; the dashboard brought them together. The proposal asked people to update the source rather than repeat the same update in three places. If the dashboard was misleading, we needed a concrete example to fix. If a step added overhead without helping anyone, we needed to simplify it.
 
-I kept the per-person numbers out of the team document. A ranking would have encouraged a conversation about who looked busy in an incomplete dataset. I wanted us to discuss the missing connection between decisions, issues, and code. I've written about [measuring teams](/blog/category/management/measuring-agile-teams) before; this was an uncomfortable reminder to apply the same care to my own dashboard.
+The board's job in that proposal was to help someone understand the state of work and get a decision. For a blocked item, the draft asked for what was missing, who could help, and the next action. That was a more useful request than asking everyone to keep statuses tidy. It connected the update I wanted to the help the engineer needed.
 
-We set a review date for the agreement a month out. The test is whether people can get the context they need, bring back scope changes, and use the board without relying on me to explain it. A tidier board would be welcome. Those are the changes that would make it useful.
+I kept the per-person numbers out of the team document. [Ranking people by an incomplete dataset](/blog/category/management/measuring-agile-teams) would have encouraged a conversation about who looked busy. I wanted us to discuss the missing connection between decisions, issues, and code.
+
+The draft gave me a concrete conversation to have with the team. We could take a piece of work and ask whether its purpose was clear, who could decide a scope change, and what evidence would show it was finished. The later Owner and Sponsor agreement supplied the decision roles. The broader habits in the draft were still something to work through together.
+
+## Whether we need a dedicated PM
+
+Maybe we won't need a dedicated PM. If the founders can stay close to customers, make the priority calls and give engineers enough context to own delivery, that may be enough for our team. AI can help with drafting and keeping information moving. I want to see whether we can do the product work well this way, without it all quietly landing back on me.
+
+More customer requests than we could triage in a week would be one reason to revisit the hire. I would also worry if we kept choosing from the existing backlog because nobody had time to find out what was missing. Those are gaps I could hire someone to address. Having ten engineers on its own doesn't tell me whether we need that person.
+
+If we hire, I want someone who has time to follow a customer problem properly and can tell us when the work already on our roadmap is the wrong bet. I would want to know what they had learned that changed our priorities. The engineers need to be in those conversations too, helping question the proposed solution and working out what it would take.
+
+Hiring that person would still leave engineers responsible for understanding users, clarifying requirements, checking the experience and communicating progress. That is the team I want a PM to join.
+
+For now, I am starting with the decisions already on my desk: set the priority, explain the customer problem, and answer when the scope no longer fits. The draft puts those obligations beside what I ask of the engineers. It gives them a way to question my part of the work, just as the board gives me a way to ask about theirs.
 
 ## A few useful reads
 
 - Ryan Singer's [Shape Up](https://basecamp.com/shapeup). The chapters on appetite and boundaries are the ones I reread. They are useful when I need to turn a broad request into work a team can make decisions about.
 - Sarah Milstein's [How team agreements promote high performance](https://leaddev.com/culture/how-team-agreements-promote-high-performance). A practical companion to writing an agreement, including a distinction relevant to our situation: good working habits do not make unclear priorities disappear.
 - Marty Cagan's [Product is Hard](https://vimeo.com/333559833). I would pair this with the agreement article when discussing the PM role. It keeps the conversation connected to product value, beyond how neatly the engineering work is tracked.
+- Vin Vashishta's [Do we still need Product Managers and Product Owners?](https://www.linkedin.com/posts/vineetvashishta_do-we-still-need-product-managers-and-product-share-7462492123435589632-1YxR/). On bringing new information and opportunities into a business as AI speeds up delivery.
+- David Pereira's [Are PMs Getting to the End of the Road?](https://davidavpereira.medium.com/are-pms-getting-to-the-end-of-the-road-f2d196eb9155). On the customer understanding and difficult decisions behind useful product work.
