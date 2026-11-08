@@ -1,45 +1,106 @@
 {
   "snapshot": {
-    "repo": { "owner": "example-org", "name": "sample-service" },
+    "repo": {
+      "owner": "example-org",
+      "name": "sample-service"
+    },
     "number": 123,
     "title": "Handle an expired session consistently",
     "body": "## Why\nCloses #120. Show the sign-in screen when a session expires.\n\n## Change class\n- [x] Standard\n- [ ] Normal\n- [ ] Emergency\n\n## Testing\nUnit tests cover expired and valid sessions.\n",
     "draft": false,
     "state": "open",
-    "author": { "login": "sample-engineer", "type": "User" },
+    "author": {
+      "login": "sample-engineer",
+      "type": "User"
+    },
     "headSha": "0123456789abcdef0123456789abcdef01234567",
     "headRef": "fix/120-expired-session",
     "baseRef": "main",
     "htmlUrl": "https://example.invalid/sample-service/pull/123",
-    "additions": 18,
-    "deletions": 6,
-    "files": ["src/auth/session.ts", "tests/session.spec.ts"],
+    "additions": 2,
+    "deletions": 1,
+    "files": [
+      "src/auth/session.ts",
+      "tests/session.spec.ts"
+    ],
     "checks": [
-      { "name": "Security scan", "status": "completed", "conclusion": "success", "appSlug": "sample-scanner", "url": null },
-      { "name": "Tests", "status": "completed", "conclusion": "success", "appSlug": "github-actions", "url": null }
+      {
+        "name": "Security scan",
+        "status": "completed",
+        "conclusion": "success",
+        "appSlug": "sample-scanner",
+        "url": null
+      },
+      {
+        "name": "Tests",
+        "status": "completed",
+        "conclusion": "success",
+        "appSlug": "github-actions",
+        "url": null
+      }
     ],
     "statuses": [],
     "reviews": [],
     "unresolvedThreads": 0,
     "authorIsMember": true,
-    "diff": "diff --git a/src/auth/session.ts b/src/auth/session.ts\n--- a/src/auth/session.ts\n+++ b/src/auth/session.ts\n@@ -1 +1 @@\n-return session;\n+return session.expired ? null : session;\n"
+    "diff": "diff --git a/src/auth/session.ts b/src/auth/session.ts\n--- a/src/auth/session.ts\n+++ b/src/auth/session.ts\n@@ -1 +1 @@\n-return session;\n+return session.expired ? null : session;\ndiff --git a/tests/session.spec.ts b/tests/session.spec.ts\nnew file mode 100644\n--- /dev/null\n+++ b/tests/session.spec.ts\n@@ -0,0 +1 @@\n+test('expired session', () => expect(sessionFor({ expired: true })).toBeNull());\n",
+    "baseSha": "0000000000000000000000000000000000000000"
   },
   "reviewers": [
     {
-      "reviewer": "correctness", "lens": "correctness", "provider": "anthropic", "title": "Correctness", "model": "example-model",
-      "summary": "No substantive finding in this illustrative response.", "suggestedGrade": "low", "findings": [], "categories": [],
-      "usage": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }, "durationMs": 0
+      "reviewer": "correctness",
+      "lens": "correctness",
+      "provider": "anthropic",
+      "title": "Correctness",
+      "model": "example-model",
+      "summary": "No substantive finding.",
+      "suggestedGrade": "low",
+      "findings": [],
+      "categories": [],
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0
+      },
+      "durationMs": 0
     },
     {
-      "reviewer": "security", "lens": "security", "provider": "anthropic", "title": "Security", "model": "example-model",
-      "summary": "No substantive finding in this illustrative response.", "suggestedGrade": "low", "findings": [], "categories": [],
-      "usage": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }, "durationMs": 0
+      "reviewer": "security",
+      "lens": "security",
+      "provider": "anthropic",
+      "title": "Security",
+      "model": "example-model",
+      "summary": "No substantive finding.",
+      "suggestedGrade": "low",
+      "findings": [],
+      "categories": [],
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0
+      },
+      "durationMs": 0
     }
   ],
   "policyOverrides": {
     "normalRepos": [],
-    "normalPaths": ["**/auth/**"],
-    "requiredChecks": [{ "name": "Security scan", "app": "sample-scanner" }]
+    "normalPaths": [
+      "**/auth/**"
+    ],
+    "requiredChecks": [
+      {
+        "name": "Security scan",
+        "app": "sample-scanner"
+      }
+    ],
+    "requiredTestChecks": [
+      {
+        "name": "Tests",
+        "app": "github-actions"
+      }
+    ]
   },
   "evaluatedAt": "2026-01-01T12:00:00.000Z",
   "checkUrl": "https://example.invalid/checks/123",

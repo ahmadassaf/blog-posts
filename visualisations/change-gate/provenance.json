@@ -1,7 +1,7 @@
 {
   "origin": "Screenshots of actual renderComment output, generated locally using entirely synthetic inputs. No production UI was captured.",
   "source": "change-gate/src/render.ts",
-  "sourceSha256": "9df07719925d7d81b83f6e524bc2cee88e23341d20974d504a493305bb204822",
+  "sourceSha256": "78aea1a13ad8473943e78f757b8f870c3d787c5000d8ea78160f8b6073299e13",
   "fixture": "report-fixture.json",
   "mode": "shadow",
   "networkCalls": false,
@@ -9,12 +9,12 @@
     {
       "file": "report-desktop.png",
       "width": 1880,
-      "height": 1070
+      "height": 966
     },
     {
       "file": "report-mobile.png",
       "width": 720,
-      "height": 1188
+      "height": 1204
     }
   ]
 }

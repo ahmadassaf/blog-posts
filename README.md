@@ -22,6 +22,8 @@ Keep useful links to other posts inside natural sentences. Put external reading 
 
 ## Custom MDX components
 
+Do not add decorative labels such as "Synthetic data", "Illustrative", "Demo" or "Interactive illustration" to article visuals. Keep controls and statuses that help readers use them. When example data needs explaining, do it once in the surrounding article rather than repeating badges and disclaimers inside each visual.
+
 Article-specific interactive work lives in [`visualisations/`](./visualisations). The catalogue exports a content-owned `MDXLayoutRenderer` that dynamically loads these components and registers the reusable Gaudi primitives used by the content.
 
 This keeps the responsibilities separate:

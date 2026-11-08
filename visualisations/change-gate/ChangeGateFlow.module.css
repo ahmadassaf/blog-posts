@@ -214,15 +214,7 @@
 }
 
 .example {
-  display: grid;
-  gap: 0.25rem;
   font-size: 0.875rem;
-}
-
-.example strong {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--ds-color-text-muted);
 }
 
 .boundary {

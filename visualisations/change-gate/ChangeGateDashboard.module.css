@@ -10,15 +10,15 @@
 }
 .root * { box-sizing: border-box; }
 .root :is(p, h3, h4, ul, dl, dd) { margin: 0; }
-.root :is(button, select) { font: inherit; }
+.root button { font: inherit; }
 .root button { cursor: pointer; }
-.root button:focus-visible, .root select:focus-visible, .root summary:focus-visible { outline: 2px solid var(--ds-color-accent); outline-offset: 3px; }
+.root button:focus-visible, .root summary:focus-visible { outline: 2px solid var(--ds-color-accent); outline-offset: 3px; }
 .root ::selection { color: var(--ds-color-accent-foreground); background: var(--ds-color-accent); }
 .root svg { flex-shrink: 0; width: 1rem; height: 1rem; }
 .root code { font-family: var(--ds-font-mono, ui-monospace, monospace); font-size: 0.75rem; overflow-wrap: anywhere; }
 .caption { display: grid; gap: 0.35rem; margin-bottom: 1rem; }
 .caption strong { font-size: 1.125rem; line-height: 1.4; }
-.caption > span, .disclosure { color: var(--ds-color-text-muted); font-size: 0.875rem; }
+.caption > span { color: var(--ds-color-text-muted); font-size: 0.875rem; }
 .window { border: 1px solid var(--ds-color-border); border-radius: 12px; background: var(--ds-color-surface); overflow: hidden; }
 .header, .brand, .navigation, .views, .filter, .overviewHeading, .outcomes, .recordTop, .recordTop > span, .recordBottom, .reviewerPreview, .detailHeading, .detailStatus, .footer { display: flex; align-items: center; }
 .header { justify-content: space-between; flex-wrap: wrap; gap: 0.7rem; padding: 1rem 1.25rem; background: var(--ds-color-surface-muted); border-bottom: 1px solid var(--ds-color-border); }
@@ -26,14 +26,14 @@
 .brand > svg { width: 1.25rem; height: 1.25rem; }
 .brand > strong { font-size: 0.9375rem; }
 .brand > span { margin-left: 0.4rem; padding-left: 0.9rem; border-left: 1px solid var(--ds-color-border); color: var(--ds-color-text-muted); }
-.sample { padding: 0.15rem 0.5rem; border: 1px solid var(--ds-color-border); border-radius: 5px; color: var(--ds-color-text-muted); font-size: 0.6875rem; }
 .navigation { justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--ds-color-border); }
 .views { gap: 0.25rem; flex-wrap: wrap; }
 .views button { display: flex; align-items: center; gap: 0.4rem; min-height: 2.25rem; padding: 0.4rem 0.6rem; color: var(--ds-color-text-muted); background: transparent; border: 1px solid transparent; border-radius: 6px; }
 .views button[aria-pressed='true'] { color: var(--ds-color-text); background: var(--ds-color-surface-muted); border-color: var(--ds-color-border); font-weight: 650; }
 .views button:hover, .outcomes button:hover { background: var(--ds-color-surface-muted); }
 .filter { gap: 0.5rem; color: var(--ds-color-text-muted); font-size: 0.75rem; }
-.filter select { max-width: 100%; min-height: 2.25rem; padding: 0.35rem 0.5rem; color: var(--ds-color-text); background: var(--ds-color-surface); border: 1px solid var(--ds-color-border); border-radius: 5px; }
+.modeSelect { width: 10rem; max-width: 100%; }
+.modeTrigger { min-height: 2.75rem; }
 .overview { padding: 1.1rem 1.25rem 1rem; border-bottom: 1px solid var(--ds-color-border); }
 .overviewHeading { justify-content: space-between; gap: 0.5rem 1rem; flex-wrap: wrap; }
 .root h3 { font-size: 0.9375rem; font-weight: 650; line-height: 1.45; }
@@ -108,7 +108,6 @@
 .footer button { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2rem; padding: 0.25rem 0; border: 0; color: var(--ds-color-text-muted); background: transparent; }
 .footer button:hover { color: var(--ds-color-text); }
 .footer svg { width: 0.8rem; height: 0.8rem; }
-.root .disclosure { margin-top: 0.875rem; line-height: 1.65; }
 .empty { display: grid; justify-items: start; gap: 0.6rem; padding: 2rem 1.25rem; }
 .empty > svg { color: var(--ds-color-text-muted); }
 .empty p { color: var(--ds-color-text-muted); }
@@ -133,7 +132,7 @@
   .views button { flex: 1; justify-content: center; padding-inline: 0.3rem; font-size: 0.75rem; }
   .views svg { display: none; }
   .filter { width: 100%; justify-content: space-between; }
-  .filter select { flex: 1; margin-left: 0.4rem; }
+  .modeSelect { flex: 1; margin-left: 0.4rem; }
   .records { display: block; }
   .records > li:nth-child(odd) { border-right: 0; }
   .outcomes { gap: 0.2rem; }

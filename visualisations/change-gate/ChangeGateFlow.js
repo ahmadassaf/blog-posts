@@ -9,35 +9,35 @@ import styles from './ChangeGateFlow.module.css';
 const stages = [
   {
     id: 'webhook',
-    label: 'Verify event',
+    label: 'Accept event',
     icon: 'Webhook',
-    title: 'Start with a trusted delivery',
-    description: 'A pull request, check or review event reaches the App. The service verifies the webhook signature against the original request bytes and checks the repository allowlist.',
+    title: 'Acknowledge only persisted work',
+    description: 'Verify the webhook signature, check the allowlist and commit its receipt and routed jobs to PostgreSQL before returning HTTP 202.',
     input: 'GitHub event + original request bytes',
-    output: 'An allowed event, ready to schedule',
-    guard: 'An empty allowlist evaluates nothing. Events from the gate’s own checks and reviews are ignored.',
-    example: 'A new commit on the example pull request schedules another evaluation.'
+    output: 'Verified receipt + durable jobs',
+    guard: 'The receipt stores routing metadata and a fingerprint, not the raw payload or signature. A failed commit is not an accepted delivery.',
+    example: 'A new commit creates work for this pull request. Ignored events retain a reason without starting a review.'
   },
   {
     id: 'queue',
-    label: 'Queue PR',
+    label: 'Claim work',
     icon: 'List',
-    title: 'Give each pull request its own turn',
-    description: 'The webhook schedules the work without waiting for model calls. Evaluations of the same pull request run in order; other pull requests can progress independently.',
-    input: 'Repository + pull-request number',
-    output: 'One evaluation of this PR at a time',
-    guard: 'This queue lives in one process. A restart loses it, and replicas do not share coordination.',
-    example: 'A check finishing on this PR queues a fresh evaluation of the check state.'
+    title: 'Coordinate workers through the database',
+    description: 'A worker claims a durable job and obtains ownership for the pull request. A lease and session advisory lock coordinate workers across replicas.',
+    input: 'Durable job + pull-request identity',
+    output: 'Recorded attempt + guarded ownership',
+    guard: 'Lost ownership stops new mutations. An already in-flight GitHub request still needs reconciliation. Later deliveries remain separate jobs.',
+    example: 'A pod restart leaves accepted work in PostgreSQL for a worker to recover.'
   },
   {
     id: 'snapshot',
     label: 'Read state',
     icon: 'GitBranch',
     title: 'Read the change and the rules it inherits',
-    description: 'Capture the head commit, diff, checks, reviews and unresolved discussions. Combine organisation defaults with the repository policy read from the base branch.',
-    input: 'PR state + base-branch policy',
+    description: 'Capture the head commit, diff, checks, reviews and unresolved discussions. Read repository policy at the captured base commit and verify reviewer permissions.',
+    input: 'PR state + policy at the base commit',
     output: 'Captured head, review context and policy',
-    guard: 'These are several API reads, not one atomic snapshot. The current service does not recheck the head after a long model run.',
+    guard: 'Decision inputs are fetched again before acting. Changed inputs trigger a retry. These API reads are not an atomic merge lock.',
     example: 'Head 0123456 changes src/auth/session.ts. A proposed policy edit does not judge itself.'
   },
   {
@@ -45,44 +45,44 @@ const stages = [
     label: 'Ask reviewers',
     icon: 'MessageSquare',
     title: 'Ask focused questions about the same diff',
-    description: 'Applicable reviewers inspect correctness, security, tests and other concerns. Each returns structured findings and a suggested risk grade. Cached findings can be reused for the same head.',
-    input: 'Metadata, description, filenames and diff',
-    output: 'Findings + grades + reviewer availability',
-    guard: 'Models do not check out the repository or execute tests. Opting out of external review routes the change to a person.',
-    example: 'Both synthetic reviewers report low risk and no findings. The protected path still matters.'
+    description: 'Applicable reviewers inspect correctness, security, tests and other concerns. Each returns structured findings and a suggested risk grade. Cached findings are reused only while the review inputs still match.',
+    input: 'Metadata, description, filenames and reviewable diff',
+    output: 'Findings + grades + review coverage',
+    guard: 'Models do not execute tests or search the repository. Missing review coverage requires a person. Invalid policy prevents external calls.',
+    example: 'Both reviewers report low risk and no findings. The protected path still matters.'
   },
   {
     id: 'evaluate',
     label: 'Apply policy',
     icon: 'ShieldCheck',
     title: 'Make the decision in ordinary code',
-    description: 'Evaluate checks, required scanners, discussions, human approval and model findings together. The highest risk wins; a model cannot lower a protected-path restriction.',
+    description: 'Evaluate required checks, discussions, human approval and model findings together. A model cannot waive a protected-path rule. A serious finding can require a person even without agreement from another reviewer.',
     input: 'Repository policy + state + findings',
     output: 'Change class, risk, criteria and action',
-    guard: 'High or critical findings at confidence 0.7 or above block by default. A Normal change still needs an independent current-head approval.',
+    guard: 'A high finding blocks when two matching reports each meet the severity and confidence thresholds. One confident critical finding can block. Other serious findings require human review. These are provisional policy rules, not calibrated probabilities.',
     example: 'Authentication path → Normal / high risk. Another engineer must approve this head; the gate withholds its own approval even after that review.'
   },
   {
-    id: 'publish',
-    label: 'Publish result',
-    icon: 'GitPullRequest',
-    title: 'Separate the verdict from its permissions',
-    description: 'Update a GitHub Check and the existing PR comment for the captured head. The mode determines whether the calculated action can also become a review.',
-    input: 'Calculated action + operating mode',
-    output: 'Commit-linked check and review report',
-    guard: 'Neither mode merges or deploys. Repository rules and independent human release approval remain separate controls.',
-    example: 'For this protected-path example, the calculated action is withhold in either mode.'
+    id: 'intent',
+    label: 'Record decision',
+    icon: 'FileText',
+    title: 'Record the decision before acting',
+    description: 'Append the decision, review coverage and input versions to the evidence ledger. Link this evaluation to its delivery, job and worker attempt.',
+    input: 'Evaluation + calculated action',
+    output: 'Decision evidence + action intent',
+    guard: 'An intent is not proof of success. The runtime role cannot rewrite history; retention and backups require separate operator configuration.',
+    example: 'The authentication change records why another engineer must approve this commit.'
   },
   {
-    id: 'evidence',
-    label: 'Record evidence',
-    icon: 'FileText',
-    title: 'Keep the reasons with the result',
-    description: 'Append the commit, mode, criteria, risk reasons, findings, reviewer identities, elapsed time, estimated cost and GitHub result links to the evidence log.',
-    input: 'Evaluation + published result links',
-    output: 'An inspectable JSON Lines record',
-    guard: 'The append happens after GitHub actions. A storage failure can leave an action without its intended evidence record.',
-    example: 'This record counts as one evaluation. Re-evaluating the same PR produces another record.'
+    id: 'publish',
+    label: 'Publish outcome',
+    icon: 'GitPullRequest',
+    title: 'Apply only the authority the mode allows',
+    description: 'Recheck inputs and ownership, publish only the permitted action, then record the observed GitHub result. Link the report and outcome to the same evaluation.',
+    input: 'Persisted intent + operating mode',
+    output: 'Commit-linked report + recorded outcome',
+    guard: 'A timeout can leave an uncertain outcome. Recovery inspects current state; PostgreSQL cannot make a GitHub call exactly once. Native protections still apply.',
+    example: 'This protected-path example withholds bot approval in either mode. A completed shadow evaluation publishes a neutral check.'
   }
 ];
 
@@ -159,7 +159,7 @@ export default function ChangeGateFlow() {
             </div>
           )}
 
-          <p className={styles.example}><strong>Synthetic example</strong><span>{active.example}</span></p>
+          <p className={styles.example}>{active.example}</p>
           <div className={styles.boundary}>
             <Icon name='Info' decorative />
             <p>{active.guard}</p>

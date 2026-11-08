@@ -27,11 +27,14 @@ const { default: gfm } = await import(pathToFileURL(blogRequire.resolve('remark-
 const { default: sharp } = await import(pathToFileURL(blogRequire.resolve('sharp')));
 const { renderComment } = await import(pathToFileURL(path.join(sourceRoot, 'src/render.ts')));
 const { assessRisk } = await import(pathToFileURL(path.join(sourceRoot, 'src/risk.ts')));
+const { planReview } = await import(pathToFileURL(path.join(sourceRoot, 'src/review-plan.ts')));
 const { evaluate } = await import(pathToFileURL(path.join(sourceRoot, 'src/evaluate.ts')));
 const { defaultPolicy } = await import(pathToFileURL(path.join(sourceRoot, 'src/policy.ts')));
 const fixture = JSON.parse(await readFile(path.join(directory, 'report-fixture.json'), 'utf8'));
 const policy = { ...defaultPolicy, ...fixture.policyOverrides };
-const risk = assessRisk({ snap: fixture.snapshot, reviewers: fixture.reviewers, policy });
+const review = planReview(fixture.snapshot.diff, policy, fixture.snapshot.files);
+assert.equal(review.incomplete, false, "Synthetic screenshot fixture must have complete diff coverage.");
+const risk = assessRisk({ snap: fixture.snapshot, reviewers: fixture.reviewers, policy, review });
 const decision = evaluate(fixture.snapshot, policy, { checkName: 'change-gate', risk });
 assert.equal(decision.changeClass, 'normal');
 assert.equal(decision.action, 'withhold');
@@ -64,11 +67,11 @@ const render = node => {
   }
 };
 const body = render(remark().use(gfm).parse(markdown));
-const html = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Illustrative change-gate report</title><style>
+const html = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Change-gate report</title><style>
 *{box-sizing:border-box}body{margin:0;padding:28px;background:#f6f8fa;color:#1f2328;font:18px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-main{border:1px solid #c8cdd3;border-radius:10px;background:white;overflow:hidden}.example{margin:0;padding:14px 22px;background:#f6f8fa;border-bottom:1px solid #d1d9e0;color:#495460;font-size:15px}.report{padding:6px 24px 20px}.report h3{font-size:23px;line-height:1.35;margin:18px 0}.report p{margin:16px 0}.report ul{padding-left:23px;margin:16px 0}.report li p{margin:5px 0}code{font:0.9em/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#eff1f4;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}.link{color:#0969da}summary{cursor:default;font-weight:600}details{margin:22px 0}table{border-collapse:collapse;font-size:15px}td,th{padding:8px;border:1px solid #d1d9e0;text-align:left;vertical-align:top}blockquote{margin:16px 0;color:#495460}
-@media(max-width:600px){body{padding:10px;font-size:17px}.example{padding:12px 15px;font-size:13px}.report{padding:2px 15px 14px}.report h3{font-size:21px}.report p{margin:14px 0}.report ul{padding-left:20px}.report li{overflow-wrap:anywhere}}
-</style><main><p class="example">Illustrative report · synthetic data</p><section class="report">${body}</section></main></html>`;
+main{border:1px solid #c8cdd3;border-radius:10px;background:white;overflow:hidden}.report{padding:6px 24px 20px}.report h3{font-size:23px;line-height:1.35;margin:18px 0}.report p{margin:16px 0}.report ul{padding-left:23px;margin:16px 0}.report li p{margin:5px 0}code{font:0.9em/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#eff1f4;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}.link{color:#0969da}summary{cursor:default;font-weight:600}details{margin:22px 0}table{border-collapse:collapse;font-size:15px}td,th{padding:8px;border:1px solid #d1d9e0;text-align:left;vertical-align:top}blockquote{margin:16px 0;color:#495460}
+@media(max-width:600px){body{padding:10px;font-size:17px}.report{padding:2px 15px 14px}.report h3{font-size:21px}.report p{margin:14px 0}.report ul{padding-left:20px}.report li{overflow-wrap:anywhere}}
+</style><main><section class="report">${body}</section></main></html>`;
 await writeFile('/tmp/change-gate-report.html', html);
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const outputs = [];

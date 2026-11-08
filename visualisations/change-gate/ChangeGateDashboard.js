@@ -2,6 +2,7 @@
 
 import { useId, useState } from 'react';
 import Icon from '@gaudi/design-system/core/Icon';
+import Select from '@gaudi/design-system/core/Select';
 
 import { actionLabel, evaluations, money, outcomes } from './ChangeGateDashboard.data';
 import styles from './ChangeGateDashboard.module.css';
@@ -23,26 +24,33 @@ export default function ChangeGateDashboard() {
     <figure className={styles.root} data-testid='change-gate-dashboard' aria-labelledby={`${uid}-caption`}>
       <figcaption className={styles.caption} id={`${uid}-caption`}>
         <strong>From a decision to its evidence</strong>
-        <span>Select an evaluation to inspect its policy, reviewer results and actual side effects.</span>
+        <span>Select an evaluation to trace its delivery, review inputs, decision and recorded outcome.</span>
       </figcaption>
       <div className={styles.window}>
         <header className={styles.header}>
           <div className={styles.brand}><Icon name='ShieldCheck' decorative /><strong>Change gate</strong><span>Evidence explorer</span></div>
-          <span className={styles.sample}>Synthetic data</span>
         </header>
         <div className={styles.navigation}>
           <div className={styles.views} aria-label='Dashboard view'>
             <button type='button' aria-pressed={view === 'evaluations'} onClick={() => setView('evaluations')}><Icon name='List' decorative />Evaluation log</button>
             <button type='button' aria-pressed={view === 'reviewers'} onClick={() => setView('reviewers')}><Icon name='Users' decorative />Reviewer activity</button>
           </div>
-          <label className={styles.filter} htmlFor={`${uid}-mode`}>
-            Mode
-            <select id={`${uid}-mode`} value={mode} onChange={event => { setMode(event.target.value); setOutcome('all'); }}>
-              <option value='all'>All modes</option>
-              <option value='shadow'>Shadow only</option>
-              <option value='enforce'>Enforce only</option>
-            </select>
-          </label>
+          <div className={styles.filter}>
+            <label htmlFor={`${uid}-mode`}>Mode</label>
+            <Select
+              className={styles.modeSelect}
+              classNames={{ trigger: styles.modeTrigger }}
+              id={`${uid}-mode`}
+              aria-label='Mode'
+              value={mode}
+              onValueChange={value => { if (value) { setMode(value); setOutcome('all'); } }}
+              options={[
+                { value: 'all', label: 'All modes' },
+                { value: 'shadow', label: 'Shadow only' },
+                { value: 'enforce', label: 'Enforce only' }
+              ]}
+            />
+          </div>
         </div>
 
         <section className={styles.overview} aria-label='Calculated outcome distribution'>
@@ -102,13 +110,27 @@ export default function ChangeGateDashboard() {
                 <code>{selected.path}</code>
                 {selected.findings.length ? selected.findings.map(finding => <p key={finding}>{finding}</p>) : <p>No model findings in this evaluation.</p>}
               </details>
+              <details className={styles.evidence} key={`${selected.id}-audit`}>
+                <summary>Delivery and decision trail</summary>
+                <dl className={styles.facts}>
+                  <div><dt>Delivery</dt><dd><code>{selected.audit.delivery}</code></dd></div>
+                  <div><dt>Job / attempt</dt><dd><code>{selected.audit.job} / {selected.audit.attempt}</code></dd></div>
+                  <div><dt>Received / actor</dt><dd>{selected.audit.receivedAt} · {selected.audit.triggerActor}</dd></div>
+                  <div><dt>Base / policy</dt><dd><code>{selected.audit.policy}</code></dd></div>
+                  <div><dt>Review / evaluator</dt><dd><code>{selected.audit.reviewVersion}</code></dd></div>
+                  <div><dt>Input fingerprint</dt><dd><code>{selected.audit.inputDigest}</code></dd></div>
+                  <div><dt>Database principal</dt><dd><code>{selected.audit.principal}</code></dd></div>
+                  <div><dt>Human approval</dt><dd>{selected.audit.humanApproval}</dd></div>
+                  <div><dt>Recorded outcome</dt><dd>{selected.audit.outcome}</dd></div>
+                </dl>
+                <p>These identifiers are illustrative. An input fingerprint identifies the reviewed content; it does not contain that content or prove the model was correct.</p>
+              </details>
               <div className={styles.next}><Icon name='ArrowRight' decorative /><p>{selected.next}</p></div>
             </> : <p className={styles.noSelection}>Choose a matching evaluation to inspect its evidence.</p>}
           </section>
         </div>
         <footer className={styles.footer}><span>{visible.length} {visible.length === 1 ? 'evaluation' : 'evaluations'} · {uniquePrs} unique {uniquePrs === 1 ? 'PR' : 'PRs'} · {money(totalCost)} estimated</span><button type='button' onClick={reset}><Icon name='RotateCcw' decorative />Reset view</button></footer>
       </div>
-      <p className={styles.disclosure}>Illustrative dashboard · synthetic evaluations. A concept for exploring the recorded evidence, not a production dashboard. Counts include repeat evaluations of the same PR; costs and timings are invented examples.</p>
     </figure>
   );
 }

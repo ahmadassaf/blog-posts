@@ -1,8 +1,8 @@
 ---
 type: 'Post'
 title: 'Building a Change Gate for AI-Assisted Development'
-subtitle: 'Inside the policy, model reviews and GitHub workflow we built to keep up with faster delivery'
-summary: 'How our GitHub App turns repository policy, automated checks and focused AI reviews into a decision tied to a commit. A walkthrough of the architecture, synthetic review reports, failure cases, privacy boundaries and the work still needed before broader enforcement.'
+subtitle: 'Connecting model reviews, repository policy and durable evidence to the decisions behind a change'
+summary: 'How a verified GitHub delivery becomes a durable job, a policy-based review and an inspectable decision tied to a commit. Pilot lessons, interactive reports, recovery across workers and the limits of model confidence and automated authority.'
 tags: ['AI', 'Software Engineering', 'Security', 'Developer Tools']
 date: '2026-11-08'
 updated: '2026-11-08'
@@ -16,21 +16,23 @@ In one thirty-day window, our team of about ten engineers merged 854 pull reques
 
 We were using AI to build faster, but the review still depended on someone finding the time to understand each change. I wanted that person to open a pull request with some of the preparation already done: which checks had run, where the risk was, what another reviewer had noticed and which decision still needed a human.
 
-So we built a change gate as a GitHub App. It collects the state of a pull request, runs focused model reviews and applies repository policy in ordinary code. The engineer gets a report alongside the change, with the reasons behind the result.
+So we built a change gate as a GitHub App. It collects the state of a pull request, runs focused model reviews and applies repository policy in ordinary code. Its useful output is a review packet: the checks that actually ran, the findings worth investigating, what the reviewers could not inspect and the decision still owed by a person. That packet also needs a durable history: which event caused the review, which inputs produced the decision and what action actually happened. Whether the preparation saves more effort than its false positives consume is something we still need to measure.
 
 Our first pilot could approve eligible changes. After working through the process with our auditor, we changed the pilot to recommendations for a human reviewer. I wrote about [that change and the wider release process](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) separately. Here I want to show how the service works, including the places where the implementation still needs work.
 
 ## Follow one change through the service
 
-An engineer opens a pull request or pushes another commit. GitHub sends a webhook. Before doing any work, the service verifies the signature against the original request bytes and checks whether the repository is in its allowlist. An empty allowlist means nothing is evaluated; installing the App alone does not enrol every repository.
+An engineer opens a pull request or pushes another commit. GitHub sends a webhook. The service verifies the signature against the original request bytes, checks the repository allowlist and derives the work to run. An empty allowlist means nothing is evaluated; installing the App alone does not enrol every repository.
 
-The webhook schedules an evaluation rather than waiting for model calls to finish. Work on the same pull request is serialised within the process. Different pull requests can progress independently.
+The important boundary is when we acknowledge that delivery. The receipt and any routed jobs must commit to PostgreSQL before the service returns HTTP 202. A database failure cannot become “accepted” work held only in memory. The receipt keeps the delivery identifier, event, sender, routing decision and a payload fingerprint; it does not retain the raw webhook body or signature. A repeated delivery is deduplicated, while a later delivery creates separate work that an earlier run cannot erase.
+
+Workers claim durable jobs and coordinate ownership for the same pull request through PostgreSQL. A lease and a dedicated-session advisory lock let multiple replicas share the queue; the worker checks ownership before GitHub mutations. If ownership is lost, it stops initiating actions. That does not cancel a GitHub request already in flight, so the contract is at-least-once processing with reconciliation, not exactly-once external effects.
 
 <ChangeGateFlow />
 
 The snapshot includes the head commit, changed filenames, diff, check runs, commit statuses, reviews and unresolved discussions. Policy comes from the target branch. The report is attached to the captured head commit, so someone reading it can tell which version it concerns.
 
-A new commit is only one reason to run again. A check can finish, another engineer can approve, or a discussion can reopen. Those events change whether the criteria are satisfied even when the diff stays the same. Events produced by the gate's own checks and reviews are ignored to avoid triggering itself indefinitely.
+A new commit is only one reason to run again. A check can finish, another engineer can approve, or a discussion can reopen. Those events change whether the criteria are satisfied even when the diff stays the same. Automatically produced events from the gate's own checks and reviews are ignored to avoid a loop; an explicit request to rerun a check can still schedule work. Ignored deliveries retain their routing reason.
 
 There is no merge or deployment step in that diagram. The service can publish a review; GitHub's repository rules and the release process still decide what can happen next.
 
@@ -38,7 +40,7 @@ There is no merge or deployment step in that diagram. The service can publish a 
 
 We had already separated critical repositories from experiments. Inside the gate, we needed a policy that could distinguish changes within a repository too.
 
-The implementation calls a routine eligible change **Standard**. A change needing a second engineer is **Normal**. Those names describe a review route, not whether the code is good. There is also an Emergency classification, which never receives an automatic approval. Declaring an emergency in a description does not grant repository permissions.
+The implementation calls a routine eligible change **Standard**. A change needing a second engineer is **Normal**. Those names describe a review route, not whether the code is good. The risk grade also reflects policy restrictions and incomplete evidence; it is not a probability of a defect. The report needs to show those reasons and review coverage alongside the grade. There is also an Emergency classification, which never receives an automatic approval. Declaring an emergency in a description does not grant repository permissions.
 
 Before looking at a model response, the service checks facts we have chosen to treat conservatively. Protected paths include authentication and permissions, secrets, infrastructure, delivery workflows and migrations. We can also mark an entire repository as requiring a second engineer. Bot-authored changes are excluded from the automatic-approval route.
 
@@ -52,17 +54,26 @@ For example, this is an illustrative repository override. The scanner name and A
 # .github/change-gate.yml — illustrative override
 externalReview: true
 requireTemplate: true
-maxReviewLines: 1500
+reviewBudgetTokens: 60000
 blockingSeverity: high
 findingConfidence: 0.7
+corroboration: 2
+gradeQuorum: 2
 requiredChecks:
   - name: "Example Security Scan*"
     app: "example-security-app"
+requiredTestChecks:
+  - name: "Tests"
+    app: "github-actions"
 ```
 
 This example deliberately enables the template check. In the implementation, it is off by default: missing context is reported, but does not itself block the result unless the repository opts in. With it enabled, the pull request must include the expected reason, change class and testing sections.
 
 There is a configuration detail I would not hide from someone adapting this: overrides are shallow. An array replaces its default array; it does not add to it. The example replaces `requiredChecks`, while leaving the default protected paths intact. Adding a short `normalPaths` list would replace the full protected-path list. A policy change deserves the same attention as a change to the evaluator.
+
+The first version also had a quiet failure mode: an invalid policy file fell back to the defaults without saying so. A typo in a repository's override would silently change which rules were in force. The file is now validated strictly, including unknown keys. An invalid policy produces a failing criterion and prevents external model calls. The gate can report the configuration problem, but it cannot treat fallback defaults as permission to send the diff or approve the change.
+
+For the path analysis, I used a separate sample: the 951 pull requests the organisation merged in the thirty days to 8 November. With the protected-path list used for that analysis, 66% would be Standard and 34% Normal before any model was consulted. The patterns that fired most were production overlays, workflow files, package manifests, Terraform and lockfiles. These are historical policy-routing counts, not evidence that the Standard changes were safe. Changes to the protected-path list need a fresh analysis. Whether a dependency bump should keep needing a second engineer is a policy question we still have to settle.
 
 ## Check that the checks actually ran
 
@@ -73,6 +84,8 @@ The evaluator first looks at relevant check runs and commit statuses on the head
 That general check layer accepts completed `success`, `neutral` and `skipped` results. A required security scan has a stricter rule: it must be present and finish with `success`. Skipped means the scan didn't run, not that it found nothing.
 
 The named-check requirement can also specify the GitHub App that must produce it. A workflow with a similar name cannot substitute for that App's result. Neither can a commit status posted under the same label. This is why the policy example includes both `name` and `app`.
+
+Test evidence is configured separately through `requiredTestChecks`. A passing security scanner does not establish that a test suite ran. Leaving the list empty requires a human to verify the change. Once a repository names required test or build checks and their producing Apps, each must succeed: a missing, skipped or neutral result fails the criterion even if a human has approved.
 
 The distinction gives the report something useful to say. “Required scanner missing” is a different problem from “scanner failed”, and both are different from waiting for a test job to finish. Another passing check doesn't compensate for the missing one.
 
@@ -89,7 +102,7 @@ The model-review stage is a set of focused reviewers. They receive the same chan
 | Performance and supportability | Unbounded work, expensive queries and failures an on-call engineer would struggle to diagnose. |
 | File-specific reviews | Migration safety, dependencies, infrastructure, workflows and schema compatibility. |
 
-The file-specific reviewers run only when matching paths change. Correctness and security can also run through a second provider when configured. An optional provider that isn't configured is recorded as skipped; it isn't treated as a failed review.
+The file-specific reviewers run only when matching paths change. Correctness and security can also run through a second provider when configured. An absent second provider is optional only when another configured provider covers that review lens. If an applicable lens has no provider, review coverage is incomplete and a human must decide.
 
 I also need to be clear about what these reviewers can see. The input contains the pull request's metadata, description, filenames and unified diff. The service does not check out the repository, search the whole codebase or execute the tests. A model can trace code present in that context; it cannot verify an integration hidden somewhere else by sounding confident about it.
 
@@ -115,11 +128,21 @@ That is something an engineer can investigate or reject. The confidence value is
 
 ## Turn findings into a decision
 
-The models return findings and suggested risk grades. The evaluator combines those with the hard rules. It preserves the highest risk: a low model grade cannot lower a protected-path restriction, and one high grade is not averaged away by several low ones.
+The models return findings and suggested risk grades. The evaluator combines those with the hard rules. A low model grade cannot lower a protected-path restriction. The rules for the other direction, how much a model's opinion can raise the route, changed after I read the pilot data.
 
-By default, a finding at **high or critical severity with confidence of at least 0.7** is blocking. The confidence threshold filters findings; it does not erase a reviewer's suggested risk grade. That distinction matters when explaining why a change was routed to a person even though no finding crossed the blocking threshold.
+In the first version, the risk grade was the highest grade any reviewer suggested, and anything above low meant a second engineer. With up to fourteen reviewers that is a very low bar. In the stored pilot evaluations, several reviewers repeatedly suggested medium, including on one-line changes. Only two of twelve pull requests ever reached the Standard route. Those records include cached results, so repeated evaluations are not independent model judgments. The model wasn't voting protected paths out of the policy; it was voting almost every change in.
 
-Uncertainty also affects the route. A failed reviewer, unavailable review or truncated diff prevents a clean low-risk result. A large disagreement between providers is recorded for human attention. A reviewer skipped because its files didn't change is different from one that ran and failed.
+Most reviewer grades are now advisory. They appear with the reviewer's reasoning; at least two distinct review lenses grading high is the provisional threshold for requiring a second engineer. The same question on a second provider counts as one lens for this quorum. Provider disagreement can also require human review. Applying these rules in code makes the policy repeatable; it does not make the underlying model judgment certain.
+
+The pilot also showed repeated findings. A 147-line change received 67 findings; an early grouping heuristic reduced them to 27 groups. A planted credential produced 31 findings that became four groups. Those were clusters of model reports, not 27 or four independently confirmed defects. Grouping by a shared line or similar wording was too loose to use for blocking: unrelated objections can point to the same line.
+
+The implementation now groups only matching claims at the same file and line. It preserves each report's own severity and confidence rather than combining a severe but uncertain report with an unrelated confident one. By default, a high-severity finding blocks only when two reviewers each report the matching claim at high or critical severity and confidence of at least 0.7. One critical finding at that confidence can block on its own. A serious finding below the blocking threshold still requires a human decision; lack of corroboration is not permission for automatic approval.
+
+The confidence data made me wary of the original threshold. The median across one provider's findings was 0.55, with 0.7 at the eightieth percentile, while the other provider's findings mostly sat between 0.94 and 0.99. On one real pull request, every blocking finding came from the second provider's reviewers. Those distributions describe how the models score themselves; they do not measure whether the findings are correct. Corroboration is a provisional noise-control rule, not a substitute for calibration. Different lenses from the same provider can agree on the same mistake. The threshold and quorum need an owner, human-labelled examples and a comparison against a simpler reviewer before I would give them more authority.
+
+Uncertainty also affects the route. A failed reviewer, an unavailable review or a partial review prevents a clean low-risk result. A large disagreement between providers is recorded for human attention. A reviewer skipped because its files didn't change is different from one that ran and failed.
+
+An earlier replay using the loose grouping rule reduced 79 blocking reports to 22 groups, and blocking evaluations from 21 to 18. Two one-line changes moved to Standard. That measured the effect of a rule change on stored outputs; it did not establish better defect detection, and those counts are not a result for the stricter implementation described here. One planted case exposed the limit of agreement: seven reviewers treated an intentional removal of validation as a silent regression. The description was the only signal of intent. Distrusting an author's claim is reasonable, but agreement did not settle whether the change was correct. Explaining intent in a thread helps a human reviewer; the model does not currently read those replies.
 
 In simplified form, the final action is calculated like this:
 
@@ -143,13 +166,23 @@ A few synthetic cases make the boundaries easier to see:
 | Routine change by a human member, low risk, all checks satisfied and no open discussions | Standard; eligible for `approve`. |
 | Twelve-line authentication change, all models report low risk | Normal, high risk; needs another engineer on the current commit. |
 | That authentication change receives a valid current-commit approval and all other criteria pass | Criteria satisfied; the bot still withholds its own approval. |
-| Routine file has a high-severity finding at 0.86 confidence | `request_changes`; another approval does not erase the finding. |
+| Routine file has a high-severity finding reported by two reviewers, each at 0.7 or above | `request_changes`; another approval does not erase the finding. |
+| The same high-severity finding reported by one reviewer at 0.86 | Requires a second engineer; the bot cannot approve it automatically. |
+| Three reviewers grade a routine change medium, with no serious finding or missing review coverage | Standard; the grades appear in the report as advisory. |
 | Required scanner is skipped or comes from the wrong App | Required-check criterion fails. |
 | An engineer approved yesterday's commit, then the author pushes a fix | That approval does not satisfy the current-head requirement. |
 
-The gate doesn't decide that a change is safe just because it is small. Its default model-review ceiling is **1,500 additions plus deletions**. Above that, it skips model review and requires human attention. There is a separate prompt-length cap; truncation also prevents a low-risk result. These are limits on what we ask the service to review.
+### What the reviewers are allowed to read
 
-We also have a separate four-hundred-line PR check to encourage manageable changes. I keep those two controls distinct. Neither line count tells me whether a change touches an access boundary or rewrites customer data.
+The first version had a ceiling of 1,500 added plus deleted lines. Above it, the service skipped model review and required a human. I picked the number as a cost guard, without measuring anything, and it had the wrong effects. It counted lockfiles, fixtures and generated code, so a test fixture of 10,802 lines was sent to a person as if it were risky. It sat alongside a separate character cap that did a similar job. And it reused a line count as a proxy for risk, which is the argument [Rootly](https://rootly.com/blog/why-we-got-rid-of-our-small-pr-rule) made against small-PR rules: lines measure neither risk nor the effort of understanding a change.
+
+The data agreed. Across the 951 pull requests merged in that thirty-day window, the median was 144 changed lines, a tenth were above 1,500 and a third above 400. Meanwhile the thing the ceiling was protecting, cost, was small: the 35 fresh reviews in the pilot averaged an estimated \$0.41, the largest \$1.48.
+
+The line ceiling is gone. The replacement is a **diff-context budget per reviewer**: 60,000 estimated tokens by default, using roughly four characters per token. That is a provisional operational limit. It does not cap the whole bill: descriptions, instructions, output tokens, reviewer count and provider caching also affect cost. A model can identify missing context or suggest which question deserves attention; it should not decide its own budget or waive a required review.
+
+Before any model call, the service splits the diff into files and records what can be shown within that budget. Omitted files are named, and reviewers are told not to guess their contents. Excluded content, files that do not fit and unparseable diff content all prevent automatic approval. A file being generated, a snapshot or a fixture is not evidence that its change is harmless. The plan records the omissions so a human can review them. Protected-path classification still sees the changed filenames, including excluded files.
+
+The gate no longer has its own line-count routing rule. One repository keeps a separate check that fails pull requests over four hundred lines, added by an engineer to encourage small, stacked changes. While that check remains required, its failure still prevents approval. It is a working convention that needs its own justification, not evidence that the change is unsafe.
 
 ## Separate the recommendation from the permission
 
@@ -158,13 +191,14 @@ The mode determines which side effects the calculated decision can have:
 | Behaviour | Shadow | Enforce |
 | --- | --- | --- |
 | Publish the report and evidence | Yes | Yes |
-| Completed check conclusion | Neutral | Calculated success or failure |
+| Completed policy evaluation | Neutral check | Calculated success or failure |
+| Evaluation failure with valid ownership | Attempts a neutral error check | Attempts to fail the check and withdraw approval |
 | Issue an eligible Standard approval | No | Yes |
 | Request changes for blocking findings | No | Yes |
 | Dismiss the gate's own outdated or inconsistent reviews | No | Yes |
 | Merge or deploy | No | No |
 
-Shadow mode is the default in the code. It lets us inspect what the service would decide without granting review authority. The earlier enforcement path remains available in the implementation; its presence is not a statement that every repository is running with it enabled.
+Shadow mode is the default in the code. It lets us inspect what the service would decide without granting review authority. The Enforce column describes a capability retained in the implementation. In the pilot described above, we removed approval authority and kept recommendations for a human reviewer.
 
 Switching a service to shadow also does not retroactively remove reviews it issued before the switch. Existing approvals and repository settings need checking as part of a mode change. “Observing only” describes what that mode does now.
 
@@ -174,59 +208,91 @@ Our agreed release process still requires independent human approval before prod
 
 The service updates a GitHub Check and one comment on the pull request. It edits the comment in place as the state changes. The summary shows the change class, risk, commit, open criteria and top findings; the detailed report gives the reasons and reviewer breakdown.
 
-The interactive illustration below recreates the GitHub view using the service's report output and synthetic input. Open **Full report** to inspect each criterion and the reviewer breakdown, or switch to **Check run** to see the commit-bound result. Repository and account names, commit identifiers and review responses are invented; this example is not connected to a live pull request.
+The examples below recreate the GitHub view using synthetic input. Choose a case to compare a change waiting for approval, a Standard change approved by the gate, a protected change approved by a human, and a change with a blocking finding. Open **Full report** to inspect each criterion and the reviewer breakdown, or switch to **Check run** to see the commit-bound result. Repository and account names, commit identifiers and review responses are invented; these examples are not connected to live pull requests.
 
 <ChangeGateReport />
 
-This example needs a second engineer because it touches a protected path. The useful information is the missing requirement and the commit it applies to.
+The default case needs a second engineer because it touches a protected path. In **Human approved**, that requirement is satisfied and the check passes, while the gate still withholds its own approval for a Normal change. In **Changes requested**, a human approval cannot erase the blocking finding. The useful information is the requirement, the evidence and the commit they apply to.
 
-Findings currently appear in the report. We have not built a conversation-aware reviewer that follows every reply, posts each finding inline and verifies that an objection was resolved. Reopening or resolving a discussion triggers an evaluation, but the model input does not contain that discussion. I don't want the interface to imply understanding that the service doesn't have.
+Findings currently appear in the report. A serious finding that does not meet the blocking rule routes the change to a second engineer; a valid current-commit approval can satisfy that requirement. A blocking finding has no dedicated dismissal or appeal mechanism yet, and another approval does not clear it. That is an enforcement limitation, not a reason to ask an author for a cosmetic code change. We need a scoped adjudication record with an actor, reason and evaluation identity before relying on automated objections more broadly.
+
+The reviewer also does not follow replies or verify that an objection was resolved. Reopening or resolving a discussion triggers an evaluation, but discussion text is absent from the model input. The interface should not imply that explaining a false positive in a thread clears the automated objection.
 
 ## Make the result belong to the code that was reviewed
 
-For a Normal change, the human approval has to be from someone other than the author, from a non-bot account and attached to the current head commit. An approval on an older version does not satisfy that criterion.
+For a Normal change, the human approval has to be from someone other than the author, from a non-bot account authorised to review the repository and attached to the current head commit. An approval on an older version does not satisfy that criterion. A later review from the same person can replace their earlier approval. An active request for changes from an authorised reviewer prevents both Standard and Normal changes from passing; another person's approval does not silently cancel that objection.
 
-Model results are cached by repository, pull-request number and head SHA. If CI finishes on the same commit, the service can evaluate the new check state without buying the same model review again. A new commit gets a new cache key and a fresh review.
+Model results are cached by repository, pull-request number, head SHA and a digest of the review context, raw diff, review plan, base commit, resolved policy and reviewer configuration. If CI finishes without changing those inputs, the service can evaluate the new check state without buying the same model review again. Provider errors are not cached as permanent results for that commit.
+
+The pilot also showed how often re-evaluation happens. Twelve pull requests produced 212 evaluations, up to 55 on one of them, because every finishing check and every resolved thread triggered a run. The cache avoided buying the same model review again; GitHub calls and report edits still had a cost. The durable queue now keeps later deliveries as separate jobs, each evaluated against fresh state. Shared review caching can reuse unchanged model inputs without deleting the history of what triggered each evaluation.
 
 There is also caching within a review run. The first reviewer for each provider runs before that provider's remaining reviewers. The shared context is placed first in the prompt so the later calls can benefit from provider prompt caching. The providers themselves can run concurrently. This reduces repeated input work; it does not make the reviewers independent evidence of correctness.
 
-There are two weaknesses in the current version boundary. The cache key does not include edits to the description, policy or model configuration, although those can change the meaning of the review. And the GitHub snapshot comes from several API calls: the service captures the head once and does not refetch it after a long model run. A commit-linked report is inspectable, but it is not proof that every read happened against one atomic state.
+The gate now rereads the decision inputs before acting, including the pull request, checks, reviews, reviewer permissions and policy at the captured base commit. If they changed during the model run, it abandons that result and retries instead of approving from stale evidence. In enforce mode it also withdraws its previous approval when a new evaluation starts. That is deliberately conservative and can create review churn even on the same commit.
 
-Before expanding automatic actions, I would include the other review inputs in cache invalidation and recheck the head immediately before acting. GitHub's own stale-review and required-check rules need to remain in place as well. The service is one participant in that system, not the sole source of truth about whether a merge is allowed.
+These reads still do not form an atomic merge lock. State can change after the final check, and a GitHub outage can prevent an attempted withdrawal. GitHub's own stale-review and required-check protections remain necessary. The service is one participant in that system, not the sole source of truth about whether a merge is allowed.
 
 ## Keep the data boundary explicit
 
 Model review sends the description and diff to the configured external providers. That needs an explicit repository decision. If a repository opts out with `externalReview: false`, the gate skips those calls and routes the change to human review. It can still collect GitHub state and evaluate deterministic criteria.
 
-That flag is not a redaction system. When external review is enabled, the service does not automatically remove credentials, personal data or customer content from the diff before sending it. Repository selection, provider terms, access and what is allowed into source control remain real responsibilities.
+That flag is not a redaction system. When external review is enabled, the service does not automatically remove credentials, personal data or customer content from the diff before sending it. The generated-file exclusion reduces what leaves GitHub, but it exists for cost and signal, not confidentiality. Repository selection, provider terms, access and what is allowed into source control remain real responsibilities.
+
+There is a related honesty problem in the "human author" criterion. It exists to keep bot and agent accounts off the automatic route, and it works for that. But none of the 951 pull requests in the window had a bot author. The AI-assisted code in this organisation arrives under human logins, so the criterion says nothing about how a change was written. Our auditor asked for AI traceability in the change record, so the pull request template now has an **AI assistance** section for the tool, the model and what the author reviewed. The gate reads it, shows it and stores it in the evidence. It never blocks on it, because a mandatory field is how you get a field full of "n/a".
 
 The description and diff are also untrusted model input. A contributor can put instructions in either. Structured output constrains the response shape, and protected paths constrain what the model can influence, but neither proves resistance to prompt injection. I would not treat agreement between reviewers as proof that hostile input couldn't influence them.
 
 ## Record what happened, then measure the right thing
 
-Each evaluation appends an evidence record with the repository and commit, mode, criteria, risk reasons, findings, reviewer and model identities, elapsed time, estimated cost and GitHub result links. When the service issues a review, that action has its own URL in the record.
+When a change causes an incident, I need more than the latest green check. Which revision did the gate inspect? Which policy and reviewer configuration were in force? Which tests actually ran, who approved that revision, and did GitHub accept the action the gate intended? The same questions matter when investigating a false positive, replaying a failed job or explaining a change to an auditor.
+
+Application logs help diagnose a running service. The evidence record has a different job: connect the received event to the work attempted, the inputs used, the decision reached and the outcome observed. A log saying “approval requested” does not prove that GitHub created an approval, and an intent record without an outcome is unfinished work to reconcile. Keeping that distinction makes failures visible instead of turning missing records into apparent success.
+
+PostgreSQL holds the receipt, durable job, attempt history and decision evidence. Mutable job state answers what should run next. Append-only evidence answers what happened and why. Correlation identifiers connect the two, through to the action intent and the GitHub result observed.
+
+| Question | Evidence to retain |
+| --- | --- |
+| What caused this evaluation? | Delivery, event and sender, receipt time, job and attempt identifiers. |
+| Which change and rules were judged? | Head and base commits, policy content and fingerprint, review-input fingerprints and configuration versions. |
+| What supported the decision? | Check identities and results, human-review identity and commit, model findings and omitted review coverage. |
+| What did the gate actually do? | Action intent, operating mode, observed GitHub result and its identifiers, or an unresolved outcome. |
+| Who intervened afterward? | Replay actor and reason, recorded time and database principal, linked to the original work. |
 
 That lets me distinguish a shadow result that *would approve* from an approval actually issued. I can also inspect why a reviewer failed or why a protected path took precedence over the models.
 
-The pilot stores those records in JSON Lines, with authenticated read and summary endpoints. That is useful for inspection. It is not immutable storage, a retention policy or a complete production evidence system. GitHub actions also happen before the local append; a storage failure can leave an action without the intended evidence record. That ordering is something to strengthen before relying more heavily on automated actions.
+Every GitHub mutation goes through the ownership guard and an action-intent record. The outcome is recorded afterward. If the request times out or the outcome cannot be saved, the service cannot assume GitHub rejected the action. It leaves work to reconcile against current checks and reviews. Losing database access or job ownership also prevents new mutations, including attempted compensation; native repository protections remain necessary during that gap.
 
-I am careful with the numbers this produces. The current summaries count **evaluations**, not unique pull requests. One PR can be evaluated repeatedly as checks and discussions change. Dividing favourable evaluations by total evaluations would not tell me what share of PRs the tool handled. Cost is an estimate from token usage and a shared pricing table, not a reconciliation of provider bills.
+Failed jobs retry with a bounded policy, then remain visible for operator handling. A worker in shadow mode cannot retire an unfinished enforce-mode action; a fresh enforcement evaluation must reconcile it. Cancellation also reaches the model requests, so an abandoned attempt stops starting new reviews. An audited replay records an actor and reason and evaluates fresh state instead of repeating an old approval decision. The database principal is captured separately: a typed operator name is not authenticated personal identity if several people share one database account. GitHub does not automatically redeliver failed webhooks, so failed-delivery catch-up is a separate part of recovery from the durable queue.
 
-The dashboard illustration makes those records easier to explore. Filter the synthetic evaluations and select a row to inspect its decision, risk reasons and reviewer evidence. It shows how a dashboard could present the stored data; the current implementation exposes the records and summary endpoints described above.
+The runtime database role can append evidence but cannot update or delete the history tables. Schema changes use a separate migration owner. That is an application boundary, not write-once storage: a database administrator can still change the data. Retention, restricted exports, backups, point-in-time recovery and restore testing need real operator configuration. The repository's deployment manifests describe two replicas using a shared database; they do not provision those operational guarantees or a production database for us.
+
+I am careful with the numbers this produces. The summaries report **evaluations** and **pull requests** separately, because one PR is evaluated repeatedly as checks and discussions change, and dividing favourable evaluations by total evaluations would not tell me what share of PRs the tool handled. Cost is an estimate from token usage and a configured price per provider, not a reconciliation of provider bills; when a provider has no prices configured, the estimate is marked incomplete rather than quietly under-counted.
+
+The full operating cost also includes hosting, PostgreSQL, backups and engineers' time investigating findings. Retries and interrupted requests need to be reconciled against provider bills. I have not measured that total yet; I would track cost per reviewed PR and per finding an engineer accepts, alongside review time and missed defects, before claiming a saving.
+
+### What the pilot produced
+
+The service ran on its own repository first: five real pull requests and seven planted test cases, 212 evaluations, 35 of which bought a fresh model review. The estimated model cost was about \$14 in total, and a fresh review took a median of 78 seconds. Those are historical figures from the earlier prompts and rules, not a benchmark of the current implementation. They come from a small pilot, and I would not extrapolate a saving from them.
+
+What the reviewers found is more useful than how much they cost. On the real change that introduced the required-scanner rule, the reviewers pointed out that a check matching the scanner's name could have been produced by any workflow; the rule was tightened to bind the check to the App that publishes it. On the deployment manifests, five review lenses flagged environment-specific values placed in a shared base, which would have followed us into the next environment. On a planted test case, both providers reported a committed credential at confidence above 0.97. On another, the reviewers were wrong about intent, as described above, and the corroboration rule did not rescue it.
+
+The next measurements I want are per-PR time to useful feedback, findings engineers accepted or rejected, missed known defects, time spent waiting for human decisions and changes that later had to be reverted. I would compare CI alone, one reviewer and the council on held-out examples, then measure the additional value and cost of each lens. Those comparisons would help me judge whether the service improves review. I don't have a measured reduction in incidents or reviewer hours to claim from this implementation.
+
+The dashboard below shows how those records could be explored; the implementation exposes protected evidence, audit and queue views. Filter by mode or outcome, select a row, then expand **Delivery and decision trail** to follow its identifiers and inputs through to the outcome. The records, identities, costs and timings are invented for these examples. Counts include repeat evaluations of the same pull request.
 
 <ChangeGateDashboard />
 
-The next measurements I want are per-PR time to useful feedback, findings engineers accepted or rejected, time spent waiting for human decisions and changes that later had to be reverted. Those would help me judge whether the service improves review. I don't have a measured reduction in incidents or reviewer hours to claim from this implementation.
-
 ## What I would harden before broadening enforcement
 
-We separated the evaluator from the GitHub client so we could test decisions without live repositories or model calls. The tests cover protected paths, stale approvals, missing or impersonated required checks, unresolved discussions, model failures, provider disagreement and shadow mode issuing no approval. They also check that the service ignores its own events.
+We separated the evaluator from the GitHub client so we could test decisions without live repositories or model calls. The tests cover protected paths, stale approvals, missing or impersonated required checks, unresolved discussions, model failures, provider disagreement, the review budget, finding corroboration, invalid policy files and shadow mode issuing no approval. They also check that the service ignores its own events. Changing the routing rules after the pilot meant changing those tests first, which is the point of having them.
+
+The durability tests use real PostgreSQL: concurrent duplicate deliveries, transaction rollback, lock ownership, lease recovery and history protections need the database's actual behaviour. Fake GitHub clients let us exercise uncertain outcomes without issuing real reviews. Those tests complement the pure policy tests; neither replaces an operational restore exercise.
 
 Those tests make the decision rules easier to change with confidence. They do not cover every failure of a running service. Three areas still need work:
 
-- **Recovery and coordination.** The queue and review cache live in one process. A restart loses them; multiple replicas do not share them. An evaluation exception is logged, but does not guarantee a new failed check or withdrawal of an earlier review. I would add durable scheduling, retries and reconciliation rather than describe the whole service as fail-closed.
-- **Policy validation.** Invalid policy shapes fall back to defaults, while malformed YAML can throw. I want an explicit validation failure that tells the engineer what is wrong, rather than silently changing which policy is in effect.
-- **Calibration.** I want to compare findings with what engineers actually did. Changing a model or prompt should be a reviewable change with evidence of its effect, including whether it creates more noise or misses problems we previously caught.
+- **Operational recovery.** Durable intake and shared coordination replace the process-local queue. That still leaves real database availability, backup and restore testing, monitoring, retention and operator handling of exhausted jobs to prove in the deployed environment. A local test cannot establish that a production restore will work.
+- **Authority across failures.** Intent is recorded before an action and compensation requires valid ownership. PostgreSQL and GitHub still do not share an atomic transaction. We need to exercise simultaneous outages and verify recovery while keeping native repository protections in place.
+- **Calibration and adjudication.** The stored findings and advisory grades give us material for human-labelled evaluation. Fewer blocking reports alone would not establish improvement: we need to measure missed defects and review effort too. Blocking findings also need a scoped dismissal process. Changing a model, a prompt or a threshold should be a reviewable change with evidence of its effect.
 
 What helped was separating these questions. We can improve a reviewer's questions without quietly expanding its permissions. We can change repository policy without asking a model to reinterpret it. And we can keep gathering useful findings while the human approval and production controls remain explicit.
 

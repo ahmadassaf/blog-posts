@@ -4,11 +4,20 @@ The article uses three content-owned React components:
 
 - `ChangeGateFlow`: a selectable walkthrough of the evaluation pipeline, with
   inputs, decisions, outputs and a shadow/enforce comparison.
-- `ChangeGateReport`: a GitHub-style pull-request report with a working full-report
-  disclosure and check-run view. Its evidence follows `report-output.md` and
-  `report-fixture.json`; the surrounding interface is an illustrative recreation.
+- `ChangeGateReport`: a GitHub-style pull-request report with four selectable cases,
+  a working full-report disclosure and a check-run view. `ChangeGateReport.data.js`
+  supplies waiting, gate-approved, human-approved and blocking-finding scenarios.
+  The waiting case follows `report-output.md` and `report-fixture.json`; the other
+  cases use additional synthetic inputs. Selecting a case updates every report view.
+  The blocking case supplies two matching high-severity reports at confidence 0.86
+  and 0.78. It requests changes with a medium risk grade; a blocking action and a
+  high risk grade are not interchangeable. An uncorroborated serious finding would
+  still require human review. These examples illustrate policy, not model accuracy.
 - `ChangeGateDashboard`: an explorable dashboard concept over synthetic evaluation
-  records. It is not a screenshot of a shipped dashboard or production metrics.
+  records. Its delivery-and-decision disclosure connects a synthetic delivery, job,
+  attempt, input fingerprint, policy and reviewer versions to the recorded outcome.
+  It is not a screenshot of a shipped dashboard or production metrics. Sample
+  fingerprints and database principals are illustrative, not exported credentials.
 
 All interactions stay in the page. No live repository, model provider or evidence
 endpoint is called. Synthetic identifiers are display values, not external links.
