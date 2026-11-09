@@ -9,68 +9,57 @@ import styles from './ChangeGateFlow.module.css';
 const stages = [
   {
     id: 'webhook',
-    label: 'Accept event',
+    label: 'Start review',
     icon: 'Webhook',
-    title: 'Acknowledge only persisted work',
-    description: 'Verify the webhook signature, check the allowlist and commit its receipt and routed jobs to PostgreSQL before returning HTTP 202.',
-    input: 'GitHub event + original request bytes',
-    output: 'Verified receipt + durable jobs',
-    guard: 'The receipt stores routing metadata and a fingerprint, not the raw payload or signature. A failed commit is not an accepted delivery.',
-    example: 'A new commit creates work for this pull request. Ignored events retain a reason without starting a review.'
-  },
-  {
-    id: 'queue',
-    label: 'Claim work',
-    icon: 'List',
-    title: 'Coordinate workers through the database',
-    description: 'A worker claims a durable job and obtains ownership for the pull request. A lease and session advisory lock coordinate workers across replicas.',
-    input: 'Durable job + pull-request identity',
-    output: 'Recorded attempt + guarded ownership',
-    guard: 'Lost ownership stops new mutations. An already in-flight GitHub request still needs reconciliation. Later deliveries remain separate jobs.',
-    example: 'A pod restart leaves accepted work in PostgreSQL for a worker to recover.'
+    title: 'Notice when the evidence changes',
+    description: 'A new commit, a finished test or a human review can change whether the pull request is ready. The gate reassesses it when that evidence changes.',
+    input: 'An update to a pull request',
+    output: 'A change awaiting review',
+    guard: 'Only enrolled repositories are reviewed. Installing the App alone does not enrol every repository.',
+    example: 'An engineer pushes a fix to session handling. The previous review may no longer apply.'
   },
   {
     id: 'snapshot',
     label: 'Read state',
     icon: 'GitBranch',
     title: 'Read the change and the rules it inherits',
-    description: 'Capture the head commit, diff, checks, reviews and unresolved discussions. Read repository policy at the captured base commit and verify reviewer permissions.',
-    input: 'PR state + policy at the base commit',
-    output: 'Captured head, review context and policy',
-    guard: 'Decision inputs are fetched again before acting. Changed inputs trigger a retry. These API reads are not an atomic merge lock.',
-    example: 'Head 0123456 changes src/auth/session.ts. A proposed policy edit does not judge itself.'
+    description: 'Gather the code change, checks, human reviews and unresolved discussions for this commit, using the policy already on the target branch.',
+    input: 'Current pull request and repository policy',
+    output: 'Evidence tied to a specific commit',
+    guard: 'A pull request cannot change the rules used to judge itself. An approval on an older commit does not satisfy the human-review requirement.',
+    example: 'The fix changes src/auth/session.ts, which the repository protects.'
   },
   {
     id: 'reviews',
     label: 'Ask reviewers',
     icon: 'MessageSquare',
     title: 'Ask focused questions about the same diff',
-    description: 'Applicable reviewers inspect correctness, security, tests and other concerns. Each returns structured findings and a suggested risk grade. Cached findings are reused only while the review inputs still match.',
-    input: 'Metadata, description, filenames and reviewable diff',
-    output: 'Findings + grades + review coverage',
-    guard: 'Models do not execute tests or search the repository. Missing review coverage requires a person. Invalid policy prevents external calls.',
+    description: 'Reviewers look for correctness, security, testing and other problems in the change. Each provides findings and reasoning; the report also shows what they could not inspect.',
+    input: 'The change and its description',
+    output: 'Findings, suggested risk and gaps in coverage',
+    guard: 'The models do not run tests or search the repository. Missing context remains a reason for human review.',
     example: 'Both reviewers report low risk and no findings. The protected path still matters.'
   },
   {
     id: 'evaluate',
     label: 'Apply policy',
     icon: 'ShieldCheck',
-    title: 'Make the decision in ordinary code',
-    description: 'Evaluate required checks, discussions, human approval and model findings together. A model cannot waive a protected-path rule. A serious finding can require a person even without agreement from another reviewer.',
-    input: 'Repository policy + state + findings',
-    output: 'Change class, risk, criteria and action',
-    guard: 'A high finding blocks when two matching reports each meet the severity and confidence thresholds. One confident critical finding can block. Other serious findings require human review. These are provisional policy rules, not calibrated probabilities.',
-    example: 'Authentication path → Normal / high risk. Another engineer must approve this head; the gate withholds its own approval even after that review.'
+    title: 'Apply the rules the team has chosen',
+    description: 'Combine the checks, human reviews and model findings with repository policy. Serious findings can raise the review requirement; a favourable model opinion cannot waive a protected-path rule.',
+    input: 'Policy, current evidence and findings',
+    output: 'A decision with reasons',
+    guard: 'Missing tests, review coverage or a required human approval cannot be replaced by a low model grade.',
+    example: 'The authentication change needs another engineer to approve this commit, even though the models found no problem.'
   },
   {
     id: 'intent',
     label: 'Record decision',
     icon: 'FileText',
     title: 'Record the decision before acting',
-    description: 'Append the decision, review coverage and input versions to the evidence ledger. Link this evaluation to its delivery, job and worker attempt.',
-    input: 'Evaluation + calculated action',
-    output: 'Decision evidence + action intent',
-    guard: 'An intent is not proof of success. The runtime role cannot rewrite history; retention and backups require separate operator configuration.',
+    description: 'Keep the evidence needed to explain this decision later: the commit, policy, check results, human reviews, findings and any gaps in coverage.',
+    input: 'The decision and its supporting evidence',
+    output: 'A lasting record of what was decided and why',
+    guard: 'An intended action is not proof that it happened. The record must also show the outcome.',
     example: 'The authentication change records why another engineer must approve this commit.'
   },
   {
@@ -78,10 +67,10 @@ const stages = [
     label: 'Publish outcome',
     icon: 'GitPullRequest',
     title: 'Apply only the authority the mode allows',
-    description: 'Recheck inputs and ownership, publish only the permitted action, then record the observed GitHub result. Link the report and outcome to the same evaluation.',
-    input: 'Persisted intent + operating mode',
-    output: 'Commit-linked report + recorded outcome',
-    guard: 'A timeout can leave an uncertain outcome. Recovery inspects current state; PostgreSQL cannot make a GitHub call exactly once. Native protections still apply.',
+    description: 'Confirm the evidence is still current, publish the report and take only the actions allowed by the operating mode. Record what GitHub actually accepted.',
+    input: 'Recorded decision and operating mode',
+    output: 'Report and confirmed outcome for this commit',
+    guard: 'An unconfirmed action stays unresolved until recovery establishes what happened. GitHub’s own merge protections remain necessary.',
     example: 'This protected-path example withholds bot approval in either mode. A completed shadow evaluation publishes a neutral check.'
   }
 ];
@@ -107,8 +96,8 @@ export default function ChangeGateFlow() {
   return (
     <figure className={styles.root} data-testid='change-gate-flow' aria-labelledby={`${uid}-title`}>
       <figcaption className={styles.caption}>
-        <strong id={`${uid}-title`}>From GitHub event to an inspectable decision</strong>
-        <span>Select a stage to see what enters, what leaves and where the boundary sits.</span>
+        <strong id={`${uid}-title`}>From a change to a review decision</strong>
+        <span>Follow a session-handling change through the review and the decision it produces.</span>
       </figcaption>
 
       <div className={styles.canvas}>

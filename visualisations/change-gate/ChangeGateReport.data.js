@@ -1,7 +1,7 @@
 import fixture from './report-fixture.json';
 
 // Synthetic alternatives illustrate the policy described in the article. Only
-// the waiting case reproduces the original report fixture unchanged.
+// the waiting case uses the original report fixture.
 const sharedCriteria = [
   { title: 'Open and ready for review', evidence: 'The pull request is open and is not a draft.', status: 'passed' },
   { title: 'Human organisation member', evidence: 'sample-engineer is a human member of example-org.', status: 'passed' },
@@ -64,11 +64,11 @@ export const reportCases = [
     description: 'Another engineer must approve the current head commit.',
     decision: 'Would withhold approval.',
     decisionDetail: 'Shadow mode publishes a report; it issues no review action.',
-    openRequirement: 'Current-head human approval',
+    openRequirement: 'Human approval on this commit',
     criteria: [
       ...authCriteria,
       authReview,
-      { title: 'Current-head human approval', evidence: 'Another engineer must approve commit 0123456. No approving review is present.', status: 'missing' }
+      { title: 'Human approval on this commit', evidence: 'Another engineer must approve commit 0123456. No approving review is present.', status: 'missing' }
     ]
   },
   {
@@ -102,7 +102,7 @@ export const reportCases = [
     criteria: [
       ...sharedCriteria,
       { title: 'Independent review and risk grade', evidence: '2 of 2 reviewers completed. Both suggested low risk; no findings or protected paths.', status: 'passed' },
-      { title: 'Current-head human approval', evidence: 'Not required by the gate for this eligible Standard change. The separate human release approval is still required.', status: 'not-required' }
+      { title: 'Human approval on this commit', evidence: 'Not required by the gate for this eligible Standard change. The separate human release approval is still required.', status: 'not-required' }
     ]
   },
   {
@@ -123,7 +123,7 @@ export const reportCases = [
     criteria: [
       ...authCriteria,
       authReview,
-      { title: 'Current-head human approval', evidence: 'sample-reviewer is not the author and approved the current commit 0123456 after the last push.', status: 'passed' }
+      { title: 'Human approval on this commit', evidence: 'sample-reviewer is not the author and approved the current commit 0123456 after the last push.', status: 'passed' }
     ]
   },
   {
@@ -146,7 +146,7 @@ export const reportCases = [
     conclusion: 'failure',
     tone: 'danger',
     headline: 'Blocking security finding',
-    description: 'The record lookup omits the tenant constraint. Two reviewers return a matching high-severity claim at the same file and line, each above the 0.7 confidence threshold.',
+    description: 'The lookup could return another tenant’s records. Two reviewers identified the missing tenant constraint, so the gate requests changes.',
     decision: 'Changes requested.',
     decisionDetail: 'The gate requests changes in enforce mode. An existing human approval does not erase a corroborated blocking finding.',
     policyText: 'Security and correctness return a matching high-severity claim on src/records/find-record.ts:42, at 0.86 and 0.78 confidence. Both reports meet the blocking threshold. The resulting risk grade is medium and the gate requests changes. One high-severity report alone would still require a human decision.',
@@ -159,7 +159,7 @@ export const reportCases = [
     criteria: [
       ...sharedCriteria,
       { title: 'Independent review and risk grade', evidence: '2 of 2 reviewers completed. One matching finding group has two high-severity reports, each above the 0.7 confidence threshold: blocking.', status: 'failed' },
-      { title: 'Current-head human approval', evidence: 'sample-reviewer approved current commit c7f091a. That approval cannot override the blocking security finding.', status: 'passed' }
+      { title: 'Human approval on this commit', evidence: 'sample-reviewer approved current commit c7f091a. That approval cannot override the blocking security finding.', status: 'passed' }
     ]
   }
 ];

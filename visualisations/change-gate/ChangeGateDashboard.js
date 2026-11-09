@@ -24,7 +24,7 @@ export default function ChangeGateDashboard() {
     <figure className={styles.root} data-testid='change-gate-dashboard' aria-labelledby={`${uid}-caption`}>
       <figcaption className={styles.caption} id={`${uid}-caption`}>
         <strong>From a decision to its evidence</strong>
-        <span>Select an evaluation to trace its delivery, review inputs, decision and recorded outcome.</span>
+        <span>Select a review to see why the gate reached its decision and what happened next.</span>
       </figcaption>
       <div className={styles.window}>
         <header className={styles.header}>
@@ -53,8 +53,8 @@ export default function ChangeGateDashboard() {
           </div>
         </div>
 
-        <section className={styles.overview} aria-label='Calculated outcome distribution'>
-          <div className={styles.overviewHeading}><h3>Calculated outcomes</h3><span>{inMode.length} evaluations · 1 Jan 2026</span></div>
+        <section className={styles.overview} aria-label='Review decision distribution'>
+          <div className={styles.overviewHeading}><h3>Review decisions</h3><span>{inMode.length} evaluations · 1 Jan 2026</span></div>
           <div className={styles.distribution} aria-hidden='true'>
             {outcomes.map(item => <span key={item.id} data-outcome={item.id} style={{ flex: inMode.filter(record => record.action === item.id).length }} />)}
           </div>
@@ -62,7 +62,7 @@ export default function ChangeGateDashboard() {
             <button type='button' aria-pressed={outcome === 'all'} onClick={() => setOutcome('all')}>All <b>{inMode.length}</b></button>
             {outcomes.map(item => <button key={item.id} type='button' data-outcome={item.id} aria-pressed={outcome === item.id} onClick={() => setOutcome(item.id)}><Icon name={item.icon} decorative />{item.label}<b>{inMode.filter(record => record.action === item.id).length}</b></button>)}
           </div>
-          <p>These are calculated decisions. Only an enforce-mode record can contain an issued review.</p>
+          <p>Shadow mode records a recommendation. Enforce mode can also issue a review.</p>
         </section>
 
         <div className={styles.workspace}>
@@ -99,7 +99,7 @@ export default function ChangeGateDashboard() {
               </dl>
               {view === 'evaluations' ? <div className={styles.criteria}>
                 <h4>Policy criteria <span>{selected.criteria.filter(item => item.pass).length}/{selected.criteria.length} satisfied</span></h4>
-                <ul>{selected.criteria.map(item => <li key={item.label} data-pass={item.pass}><Icon name={item.pass ? 'CircleCheck' : 'Clock'} decorative /><span>{item.label}{item.label === 'Current-head human approval' && selected.changeClass === 'Standard' ? ' · not required' : ''}</span><span className={styles.srOnly}>{item.pass ? 'Satisfied' : 'Not satisfied'}</span></li>)}</ul>
+                <ul>{selected.criteria.map(item => <li key={item.label} data-pass={item.pass}><Icon name={item.pass ? 'CircleCheck' : 'Clock'} decorative /><span>{item.label}{item.label === 'Human approval on this commit' && selected.changeClass === 'Standard' ? ' · not required' : ''}</span><span className={styles.srOnly}>{item.pass ? 'Satisfied' : 'Not satisfied'}</span></li>)}</ul>
               </div> : <div className={styles.reviewers}>
                 <h4>Reviewer breakdown</h4>
                 {selected.reviewers.map(reviewer => <div className={styles.reviewer} key={reviewer.name}><div><strong>{reviewer.name}</strong><span>{selected.cached ? 'Cached' : reviewer.state}</span></div><p>{reviewer.grade} suggested risk · {reviewer.findings} findings</p><code>{reviewer.model}</code></div>)}

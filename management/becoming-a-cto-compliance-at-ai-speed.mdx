@@ -53,7 +53,7 @@ We built [a change gate that reviews pull requests with several models](/blog/ca
 
 During the pilot, the service could approve a standard change after the checks passed and the models agreed. It caught things, withdrew its approval when a reviewer opened a thread, and held risky changes for a second engineer. I liked what it was doing.
 
-Then our auditor's guidance arrived: for our change process, the service could recommend, but it could not approve. We took it down that afternoon and put it back the next day with the approval removed from the pilot. It was the first [decision I had reversed in public](/blog/category/thoughts/making-decisions) within twenty-four hours. The team was fine with it.
+Then our auditor's guidance arrived: for our change process, the service could recommend, but it could not approve. I had to [reverse that decision](/blog/category/thoughts/making-decisions). We took it down that afternoon and put it back the next day with the approval removed from the pilot.
 
 That version gave the reviewer findings to investigate. They could fix a suspected problem or explain why it didn't apply. I could keep the useful review work without treating agreement between models as permission to ship.
 
@@ -83,7 +83,7 @@ Even when the work was done, I sometimes made it difficult to check. Our correct
 
 ## Following the work into production
 
-I'm also rebuilding [the dashboard nobody else opened](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet). It now shows goal status for stand-up, which gave the team a reason to use it. I want to build on that by letting us follow a change through its checks, findings, approvals and arrival in production. Some of that exists and some is still being built.
+I'm also extending [our delivery dashboard](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet) so we can follow a change through its checks, findings, approvals and arrival in production. Some of that exists and some is still being built.
 
 The unfinished work has owners and dates. I'm checking who can merge, which changes require a second engineer, and what actually stops a production release until someone independent approves it. The gate gives us checks and findings to work with; getting the full process enforced consistently is still part of the job.
 

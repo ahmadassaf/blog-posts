@@ -27,9 +27,9 @@ I had [brought people I already trusted](/blog/category/management/becoming-a-ct
 
 When I said I trusted the team, I meant I believed they could work things out, make sound choices and tell me when they needed help. I had spent much less time asking what they needed to believe about me. Would I stand behind a decision I had given them the authority to make? Would I explain a changed priority? Could they tell me my plan was wrong without the conversation becoming about their attitude?
 
-Some of us had years of working together to draw on. That history could help, but it did not explain who could decide what in this company. Someone joining the team should not have to infer their authority from how familiar they are with me. My title tells them who is responsible. They still need to see how I carry that responsibility.
+Some of us had years of working together to draw on. That history could help, but it did not explain who could decide what in this company. Someone joining the team should not have to infer their authority from how familiar they are with me.
 
-Much of that is ordinary follow-through. If I promise an answer, I need to return with it, or say why I cannot yet give one and when I will come back. If someone raises a concern, they should be able to find out what happened to it, including when I decide not to act on it. A clear refusal leaves someone able to plan. An unanswered concern leaves them guessing whether I heard it at all.
+If I promise an answer, I need to return with it, or say why I cannot yet give one and when I will come back. The same applies when I decide not to act on a concern. An unanswered question leaves someone guessing whether I heard it at all.
 
 ## A decision needs to look decided
 
@@ -37,7 +37,7 @@ At my last company, much of the structure already existed: levels, review proces
 
 People filled the gaps by watching me. Sometimes I was involved in a decision; sometimes I was buried in payroll. My absence could mean that the decision was theirs, that I had not seen it, or that I had assumed it was already settled. There was no reliable way to tell.
 
-For the front-end commitment, reliability meant making the decision available to the people building against it. They needed to know what was settled, what remained open and what a change would mean for their work. Keeping that in scattered conversations made them check with me again, even when they were perfectly capable of deciding for themselves.
+For the front-end commitment, the team needed to know what was settled, what remained open and what a change would mean for their work. Keeping that in scattered conversations made them check with me again, even when they were perfectly capable of deciding for themselves.
 
 I had already suggested that we record decisions where the work lives, and write up decisions made on calls that day. It was a proposal for the team to challenge. The front-end conversation showed why I wanted it, and how much I needed to change my own habits before asking anyone else to change theirs.
 
@@ -65,43 +65,21 @@ The new engineer's question was a Holschuld: he was fetching clarity about a res
 
 The front-end commitment was a Bringschuld I had not met. The decision existed, and I had not brought it to the people building against it in a form they could find. Both duties are mine as much as anyone's. Asking for missing context does not relieve me of making it available.
 
-## Ship, show, ask
-
-We have been working through the same question in code review. The delivery model we are putting into practice uses Ship / Show / Ask to make clear when a change needs someone else before it lands.
-
-**Ship.** An ordinary change inside your agreed goal. The model allows the author to merge after the automated checks pass and the review findings are resolved. The author still needs to understand the change and take responsibility for it.
-
-**Show.** The same kind of change, with a reason to share the result: an implementation approach someone could reuse, or progress on a customer journey we had already agreed. You merge and tell people where to look. Showing is a Bringschuld; it helps others learn from the work and keep their picture current.
-
-**Ask.** A second engineer before merging. This covers authentication, secrets, infrastructure, migrations, large changes, and changes to shared contracts or risks outside your goal. Changing an interface another goal depends on belongs here, even when showing the result afterwards would also be useful.
-
-The release rule is separate: production requires an independent human approval. Where merging deploys to production, that approval must happen before the merge. Our [review and release model](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) lets us keep that requirement while giving the Owner room to merge ordinary changes. We are still putting the checks into the tooling; the written rules are what we are implementing, not a claim that every repository already enforces them.
-
-## Making it real
-
-Milestones and goals live in one project in the code host, each goal with its Owner in the assignee field and its Sponsor named. Keeping those records current gives people somewhere to find the state of work and see who can make the next decision. Our [planning meetings](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year) use that shared picture. People also need to know what to expect from me when they act on it.
-
-I also need to be careful about what happens after a mistake. Before adding another approval step, I need to ask whether the problem needs a lasting check, or better context and a conversation. A new gate creates work every time someone passes through it. I want to understand the risk it addresses and why that ongoing cost is justified. Our release approvals and other required safeguards still apply; trust is not permission to bypass them.
-
-When an engineer uses AI, my confidence in that person's judgement still comes from working with them and seeing how they respond to consequences. A convincing output from an assistant does not carry that history. The engineer still has to [understand and own the change](/blog/category/management/becoming-a-cto-ai-is-a-multiplier-not-a-signature).
+Code review raised a related question about when an engineer needs someone else involved. We are putting a [review and release model](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) into practice that keeps independent human approval before production, including before merging when a merge deploys. We are still putting the checks into the tooling. Trust in an engineer's judgement does not remove those requirements, or transfer to the output of an AI assistant; the engineer still has to [understand and own the change](/blog/category/management/becoming-a-cto-ai-is-a-multiplier-not-a-signature).
 
 ## Leaving decisions with their owners
 
-In a retro, the team gave each other credit for owning work end to end. That was already happening before we wrote down the roles. I wanted to build on it and make sure people knew who to turn to when they did need help.
-
-The engineer who questioned the front-end commitment was willing to challenge my account of what I had communicated. I want anyone in the team to be able to do that, regardless of how long we have worked together. How I respond will affect whether they raise the next concern. If I spend the conversation proving how many times I mentioned the decision, I have missed what the engineer was telling me: it still was not clear enough to act on.
+The engineer who questioned the front-end commitment was willing to challenge my account of what I had communicated. If I spend that conversation proving how many times I mentioned the decision, I have missed what he was telling me: it still was not clear enough to act on. How I respond will affect whether he raises the next concern.
 
 The written roles give me something to come back to when I see a reasonable implementation decision I would have made differently. I can ask whether new information changes the scope, the risk, or a commitment we have already made. If it does, I owe the Owner an explanation of what changed and why it matters. Otherwise, the choice stays with them. I still find that hard sometimes, but it is more useful than treating my preference as another approval gate.
 
-When a decision goes badly, I need to ask what the person knew at the time and whether they had the context and authority we said they had. There may be a judgement to improve, or a responsibility they did not meet. There may also be something I failed to provide. We need to be able to examine that together. If ownership lasts only until the first disappointing result, the safer choice next time is to bring every decision back to me.
-
-The same standard applies when I get it wrong. For the front-end communication, repeating my intention would not repair the gap. I owed the team a usable record of the commitment. An apology matters, but they also need to see what I will do differently when the next decision arrives.
+When a decision goes badly, I need to ask what the person knew at the time and whether they had the context and authority we said they had. There may be a judgement to improve, or something I failed to provide. If ownership lasts only until the first disappointing result, the safer choice next time is to bring every decision back to me.
 
 ## The part that was mine
 
 I still want to [get out of my team's way](/blog/category/thoughts/managing-smart-people). For that to work, I have to keep the context current, make decisions visible, answer questions, and accept sound choices I would not have made myself.
 
-For the front-end commitment, my part is to leave a decision people can find and use. For the new engineer's goal, it is to make his authority clear and leave him room to exercise it. The agreement gives me a way to do both. I am working on the follow-through: bringing the missing context, answering the question, and explaining when something has changed enough to reopen a decision. Those are things I can do when someone needs me, without taking the work back from them.
+The agreement gave me an answer to the new engineer's question: he could take responsibility for an agreed goal without waiting for another meeting. For the front-end commitment, my part is to leave a decision the team can find and use. Saying that I trust them means following through on my part, then leaving them room to do theirs.
 
 ## A few useful reads
 

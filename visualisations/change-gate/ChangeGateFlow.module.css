@@ -53,8 +53,8 @@
 
 .root .steps {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  min-width: 630px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  min-width: 540px;
   padding: 0;
   list-style: none;
 }

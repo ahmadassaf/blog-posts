@@ -8,7 +8,7 @@ const basicCriteria = [
   ['Required scanner identity + result', true],
   ['Review discussions resolved', true],
   ['Independent review and risk grade', true],
-  ['Current-head human approval', true],
+  ['Human approval on this commit', true],
   ['Required tests from the configured App', true]
 ];
 
@@ -33,7 +33,7 @@ const records = [
   },
   {
     id: 'eval-004', pr: 126, title: 'Find records by identifier', head: 'c7f091a', time: '11:53', mode: 'shadow', action: 'request_changes', risk: 'Medium', changeClass: 'Normal', seconds: 21.6, cost: 0.041,
-    reason: 'Two reviewers return the same high-severity claim at the same file and line, at confidence 0.86 and 0.78. Both original reports meet the blocking rule. Human approval would not erase the finding.',
+    reason: 'The lookup could return another tenant’s records. Two reviewers identified the missing tenant constraint. The gate recommends changes; a human approval would not erase this finding.',
     next: 'Investigate the missing tenant constraint before proceeding.', path: 'src/records/find-record.ts', criteria: criteria([6, 7]), reviewers: reviewers(true),
     findings: ['High · matching reports at 0.86 and 0.78 confidence: lookup filters by record ID but omits tenant ID at line 42.'],
     trigger: 'New commit', check: 'Neutral', issued: 'None — shadow mode', cached: false

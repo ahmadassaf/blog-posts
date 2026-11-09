@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'AI Is a Multiplier, Not a Signature'
 subtitle: 'Building faster with a small team, and getting help with the work around the code'
-summary: 'AI helps our small team build and iterate faster. In one thirty-day stretch, we merged 854 pull requests. That volume made the work around the code just as important: context, testing, review and a clear path to production.'
+summary: 'AI gives our small team more room to build and experiment, and helps me with the unfamiliar work around the code. Getting that help means providing context, checking the result and keeping the decisions that still need an engineer.'
 tags: ['Leadership', 'AI', 'Engineering Management', 'Productivity', 'Software Engineering']
 date: '2026-10-23'
 updated: '2026-11-08'
@@ -21,19 +21,17 @@ A year in, I can see it in what a senior engineer can build in a week. Exploring
 
 The [internal dashboard I built](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet) took days. It brought together views of delivery, risk and the people doing the work. I could build a tool around a problem I was trying to solve while still carrying the rest of the job.
 
-The first version mostly helped me. Nobody else opened it. Later, giving it a view of goal status for stand-up gave the team a reason to use it. AI helped me get to a real tool quickly. Finding a useful place for it in the team's day took longer.
-
 ## Help with the rest of the job
 
-I also use the assistant for the reading and preparation around a decision. I need to understand what already exists, find the relevant context and work out which question is still unanswered. It can bring those pieces together so I have somewhere to start.
+The job also keeps pulling me into subjects I don't know well. Before making a decision, I need to understand what already exists, where the relevant information is and which question is still unanswered. I use the assistant to bring that context together, and ask for links back to the files or records it used.
 
-I want links back to the files or records it used. I can then open the part that matters and check it myself. A short explanation or diagram can help me work through an approach too. I can ask the assistant to challenge an assumption or point out a question I have missed, while I am still figuring out what I think.
+That gives me a way into the work. I can open the source behind a claim, ask for an explanation of the part I don't understand, and work through an approach with a diagram. I can also ask it to challenge an assumption while I am still figuring out what I think. I need to inspect the answer closely enough to decide what to do with it.
 
-For repeatable work, I have been writing down the instructions: what to look at, what to do with it, and what needs to come back to a person. The assistant can follow those instructions, and I can inspect the result. Someone else can also read the procedure and take over the task. That has been useful in a job that keeps pulling me between engineering, planning and running the company.
+When the work repeats, I have been writing down the instructions: what to look at, what to do with it, and which decisions need to come back to me. The assistant can follow that procedure and I can inspect the result. The instructions also make the task easier to hand over to someone else. That has been useful when my week moves between engineering, planning and running the company.
 
 ## From the prototype to real use
 
-Our product started with a vibe-coded prototype. Once we had design partners and real data, we could see how much there was still to learn. We [shortened our planning cycles](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year) so we could try things, check the result and adjust sooner.
+Our product started with a vibe-coded prototype. Once we had design partners and real data, we could see how much there was still to learn. We had to [make room to try things and adjust sooner](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year).
 
 That is where I find the speed most useful. We can get something in front of us and learn from it. Before we rely on it for customers, I still need an engineer to read the implementation and work through what the demo did not exercise: how it handles failures, protects data and fits the rest of the system.
 
@@ -41,7 +39,13 @@ I don't assume code is poor quality because AI wrote it. It can be useful, well-
 
 AI can help with that work too: propose tests, explain unfamiliar code, suggest a simpler implementation or work through a failure. The engineer still needs to check the reasoning. If the assistant writes both the implementation and its tests, I want someone to check that they have not simply repeated the same mistaken assumption.
 
-That is what I wanted the team's experience for. An engineer who can frame a problem and recognise when an approach needs changing has more room to work with these tools. My part is to explain the outcome and constraints, then answer when they find a gap. If I leave that question waiting, the code can move quickly and the work can still get stuck with me.
+That is what I wanted the team's experience for. An engineer who can frame a problem and recognise when an approach needs changing has more room to work with these tools. I still owe them the outcome and constraints. Faster implementation doesn't help much when a question about what to build is waiting on me.
+
+## Making the help available across the team
+
+Writing down instructions for my own assistant has also made me think about what we should share. As the team grows, I want an agent to be able to find our existing interfaces and patterns, run the tests and build, and work in an environment where it cannot affect production. Each engineer should not have to assemble that context and those access limits again.
+
+There is more to learn here than how quickly a model writes code. I want to understand how much review and rework it takes to finish a change as we try different models.
 
 ## 854 pull requests in thirty days
 
@@ -49,19 +53,11 @@ In one thirty-day stretch, our team of roughly ten engineers merged **854 pull r
 
 Those were not 854 features or production releases, and the count does not tell me how much of the code was AI-written. They were changes we needed to understand, test and integrate. I had wanted more capacity to build; now I needed the work around each change to keep up.
 
-## Getting the changes through
+An engineer added a check that fails pull requests over four hundred lines, encouraging the coding agent to make smaller, stacked changes. We also built a model-assisted review service to raise findings for the engineer to investigate. Those are two ways we have started using tooling to help with the volume as well as produce it.
 
-One practical change came from an engineer who added a check that fails pull requests over four hundred lines, to push the coding agent towards smaller, stacked changes. It gives the agent a boundary and gives a person a more manageable change to examine.
+Getting those changes into production brought questions of its own. We build for finance, so I need to be able to show how a change got there and who took responsibility for it. We have been [reshaping review and release](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) around independent human approval before production. We are still putting the full process into the tooling.
 
-We also built a review service using several models to look at correctness, security, tests and the reach of a change. It raises findings for the engineer to investigate and address. That lets us use AI to help work through the increased volume as well as produce it.
-
-As we grow, I want more of that help available to everyone. An agent should be able to find our existing interfaces and patterns, run our tests and build, and work in an environment where it cannot affect production. Shared instructions and clear access limits would save each engineer having to set that up again. I also want to see how much review and rework it takes to get a change finished as we try different models.
-
-The person submitting the change still needs to explain what it does and why, and be willing to merge it with their name on it. A model finding can point them to a problem; they have to decide whether the fix actually deals with it.
-
-The next step is getting that work into production. We build for finance, so I need to be able to show how a change got there and who took responsibility for it. We have been [reshaping review and release](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) around independent human approval before production. We are still putting the full process into the tooling.
-
-The small-change check and the review service give us specific ways to handle the volume now. I want to keep the speed we gained in building, and make it easier for an engineer to carry a change all the way through to something a customer can use.
+AI has given me room to build tools I wanted and help with work I was learning as I went. I want to keep that room. The part I cannot hand to the assistant is deciding whether its result does the job: whether the explanation holds up against its sources, the code meets the requirement, or a fix actually addresses the problem it found. That is the work I am putting my name to.
 
 ## A few useful reads
 
