@@ -10,7 +10,7 @@ category: 'engineering'
 tableOfContents: true
 ---
 
-Blogging has come a long way from simple text-based posts. In today’s dynamic web environment, readers expect more than just words: they seek engaging, interactive, and visually rich content. I faced this challenge directly when building this blog, wanting posts that are easy to write and maintain while still offering interactivity and customization. My answer was the [unified](https://github.com/unifiedjs/unified) ecosystem, along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com). In fact, the post you are reading right now is rendered by the very pipeline this article describes: this blog runs its own remark plugins (one that turns external links into preview cards, another that normalizes the legacy `lang:filename` code-fence syntax so the design system's code plugin can render the file name as the block title) alongside a rehype plugin that transforms internal post links into interactive preview cards.
+When building this blog, I wanted posts that are easy to write and maintain while still offering interactivity and customization. My answer was the [unified](https://github.com/unifiedjs/unified) ecosystem, along with tools like [Remark](https://github.com/remarkjs/remark), [Rehype](https://github.com/rehypejs/rehype), and [MDX](https://mdxjs.com). In fact, the post you are reading right now is rendered by the very pipeline this article describes: this blog runs its own remark plugins (one that turns external links into preview cards, another that normalizes the legacy `lang:filename` code-fence syntax so the design system's code plugin can render the file name as the block title) alongside a rehype plugin that transforms internal post links into interactive preview cards.
 
 Markdown has many different flavors and different people have different requirements for features they expect from it. [unified](https://github.com/unifiedjs/unified) provides a powerful and flexible framework for parsing, transforming, and rendering content in various formats, including Markdown, HTML, and JSX. It takes a string and turns it into structured data (syntax tree) that other plugins can work with. Plugins can do anything, from spellcheck to linting or transforming from one format to another (e.g. Markdown → HTML). Unified on its own doesn’t do much. It acts as a unifying package for all the other plugins out there.
 
@@ -18,7 +18,7 @@ By leveraging these tools, I get interactive and engaging blog posts that combin
 
 ## MDX: Markdown Meets JSX
 
-[MDX](https://mdxjs.com) takes blogging to a new level by combining Markdown with JSX, allowing you to embed React components directly within your content. This enables interactive and dynamic elements, such as charts, forms, and widgets, to coexist with Markdown’s simplicity.
+[MDX](https://mdxjs.com) combines Markdown with JSX, allowing you to embed React components directly within your content. This enables interactive and dynamic elements, such as charts, forms, and widgets, to coexist with Markdown’s simplicity.
 
 For instance, an MDX file might look like this:
 
@@ -133,7 +133,7 @@ Each of the Markdown elements (headings, paragraphs, etc.) is mapped to a specif
 
 While Remark excels at handling Markdown, Rehype is the go-to tool for working with HTML. Like Remark, Rehype parses content into an abstract syntax tree, known as HAST (Hypertext Abstract Syntax Tree). This tree is ideal for making HTML-specific transformations, such as adding classes, optimizing images, or embedding scripts.
 
-Rehype becomes particularly useful when converting Markdown to HTML. Using the `remark-rehype` plugin, you can transform an MDAST into a HAST, enabling a seamless transition from Markdown to HTML. From there, Rehype plugins can be used to enhance the HTML output, ensuring that your blog post is optimized for performance and accessibility.
+Rehype becomes particularly useful when converting Markdown to HTML. Using the `remark-rehype` plugin, you can transform an MDAST into a HAST, enabling a seamless transition from Markdown to HTML. From there, Rehype plugins can be used to enhance the HTML output for performance and accessibility.
 
 <Callout type="info">Any package that starts with `rehype-*` is operating on the HTML syntax tree (HAST).</Callout>
 

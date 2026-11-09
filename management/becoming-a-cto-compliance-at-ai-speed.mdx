@@ -29,7 +29,7 @@ When we started, everyone merged. The rules said every change needed a review, a
 
 Our compliance platform flagged the missing approvals. We had said changes received independent review, and our own records showed otherwise.
 
-The first fix was a rule: the person reviewing someone else's change records their approval before merging it, and if you want to merge your own change you need an independent approval first. We changed no configuration. We agreed to behave differently. It worked for a few months. When I checked again, too many recent pull requests had merged without a recorded review, mine included. I had treated agreement as implementation. The path through the tooling was exactly as it had been.
+The first fix was a rule: the person reviewing someone else's change records their approval before merging it, and if you want to merge your own change you need an independent approval first. We changed no configuration. We agreed to behave differently. It worked for a few months. When I checked again, too many recent pull requests had merged without a recorded review, mine included. I had treated agreement as implementation.
 
 What the rule did produce was a review channel, and a lot of requests for approval. Some of those approvals were careful. Some were a formality, because the person asking had already tested the change and the person approving trusted them. We had more approvals on record, but that didn't mean every change had received a careful review.
 
@@ -43,7 +43,7 @@ The frameworks gave us room to design controls around our risks. I had to use th
 
 We separated critical repositories from experimental ones. The critical side covered the repositories that build, configure or deploy the product. Sandboxes, experiments and documentation-only repositories did not need the same production change gate.
 
-That distinction mattered to me. I wanted an engineer to be able to try an idea without putting every iteration through the approval process for customer-facing software. I also needed to know when that experiment became something we depended on. If it starts serving customers or becomes part of the product's delivery path, its scope and controls need to change with it.
+I wanted an engineer to be able to try an idea without putting every iteration through the approval process for customer-facing software. I also needed to know when that experiment became something we depended on. If it starts serving customers or becomes part of the product's delivery path, its scope and controls need to change with it.
 
 I couldn't use “experimental” as a shortcut around customer data or production access. I had to look at what each repository could actually affect. Within the critical ones, we also needed to distinguish routine work from changes to authentication or a data migration.
 
@@ -71,7 +71,7 @@ I still need that person to understand what they are releasing. Bundling changes
 
 Code review wasn't the only place where the policy ran ahead of the implementation. I would take a control, find the policy, read the sentence I had written, and go looking for the thing it described. Sometimes I found a plan written in the present tense.
 
-One procedure said that approvals were dismissed when new commits arrived on a pull request. The setting had not been turned on yet. Once I noticed, it took a minute to fix. Until then, the document had promised a safeguard the repository wasn't providing.
+One procedure said that approvals were dismissed when new commits arrived on a pull request. The setting had not been turned on yet. Once I noticed, it took a minute to fix.
 
 Another control made a system-wide claim. The evidence behind it covered one component and one successful test. I had written what I wanted us to have. Someone reading the policy had no reason to know we weren't there yet.
 
@@ -87,7 +87,7 @@ I'm also extending [our delivery dashboard](/blog/category/management/becoming-a
 
 The unfinished work has owners and dates. I'm checking who can merge, which changes require a second engineer, and what actually stops a production release until someone independent approves it. The gate gives us checks and findings to work with; getting the full process enforced consistently is still part of the job.
 
-When I write a control now, I want to be able to open the repository, run the procedure or show the record that backs it up. If I can't, it belongs on the work list. That is a much more useful starting point than another reassuring sentence in a document.
+When I write a control now, I want to be able to open the repository, run the procedure or show the record that backs it up. If I can't, it belongs on the work list.
 
 ## A few useful reads
 

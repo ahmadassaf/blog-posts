@@ -9,7 +9,7 @@ date: '2023-09-05'
 category: 'engineering'
 ---
 
-Metadata (the author, publication date, categories, and tags behind a post) is what lets search engines rank your content sensibly and generate rich snippets in results pages, and lets digital assistants and social platforms categorize what you write. While microdata embedded in HTML markup is one way to provide it, the most effective machine-readable format is [JSON-LD](https://json-ld.org/), a standard for linked data that enables a [semantic web](/blog/category/data/introduction-to-semantic-web).
+Metadata (the author, publication date, categories, and tags behind a post) is what lets search engines rank your content sensibly and generate rich snippets in results pages, and lets digital assistants and social platforms categorize what you write. While microdata embedded in HTML markup is one way to provide it, another machine-readable format is [JSON-LD](https://json-ld.org/), a standard for linked data that enables a [semantic web](/blog/category/data/introduction-to-semantic-web).
 
 JSON-LD is not woven into the page's visible HTML. It ships as a raw data block alongside it, which means crawlers can extract and interpret it without you touching the layout. In this post, I'll cover just enough of the concepts to be useful and then walk through how this blog implements it in Next.js.
 
@@ -152,5 +152,5 @@ Run these once after wiring things up and again whenever the generator changes; 
 
 Structured data is one of the cheapest SEO and interoperability wins available to a Next.js blog: a handful of constant objects, one generator function, and two script tags. The layering matters more than the volume, so keep identity facts in one module, derive the Schema.org entities from it, and generate per-article descriptions from the frontmatter you already maintain.
 
-The complete, working setup, from the metadata module to the generator and the injection points, is in the [blog's public repository](https://github.com/ahmadassaf/blog). Lift it, adapt the vocabulary to your content types, and let the machines finally understand what you write.
+The complete, working setup, from the metadata module to the generator and the injection points, is in the [blog's public repository](https://github.com/ahmadassaf/blog). Lift it and adapt the vocabulary to your content types.
 

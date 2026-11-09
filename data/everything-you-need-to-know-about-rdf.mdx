@@ -14,9 +14,7 @@ series:
   title: "A Semantic Web series"
 ---
 
-In today's data-driven world, efficiently managing and representing complex information is crucial. The [Resource Description Framework (RDF)](https://www.w3.org/TR/rdf11-primer) is a powerful tool designed to meet this need. [RDF](https://www.w3.org/RDF/) is a framework for describing and interchanging metadata and knowledge on the web. It enables the structured representation of information, facilitating better data interoperability and integration across diverse systems.
-
-Whether you're a web developer, data scientist, or just someone curious about how data can be organized and understood by machines, this comprehensive guide will walk you through everything you need to know about RDF. From its foundational concepts and components to practical examples and applications, we will explore how RDF works, why it matters, and how you can leverage it to enhance your data projects. Get ready to dive into the world of RDF and discover how it can transform the way you handle information.
+The [Resource Description Framework (RDF)](https://www.w3.org/TR/rdf11-primer) is a tool for representing complex information. [RDF](https://www.w3.org/RDF/) is a framework for describing and interchanging metadata and knowledge on the web. It enables the structured representation of information, facilitating better data interoperability and integration across diverse systems.
 
 ## Natural Language vs. Machine-Readable Data
 
@@ -110,7 +108,7 @@ Throughout this post I keep the informal, familiar word "URI" for these identifi
 
 ### Literals
 
-Strings that describe data values that do not have a separate existence. In RDF 1.1 every literal has a datatype, and there are three ways to write one: a bare string such as `"Semantics"` is an `xsd:string`; a string with a language tag such as `"Semantics"@en` has the datatype `rdf:langString`; and any other value is written with an explicit datatype URI, in which case it carries no language tag. Datatypes are mostly taken from XML Schema. Whenever we are using URIs to describe things in RDF we try as much as we can to reuse existing namespaces and for literals we use the XML Schema datatypes defined in [http://www.w3.org/2001/XMLSchema#](http://www.w3.org/2001/XMLSchema#). So for example if I want to spell out that a literal is a [String](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") I use the following syntax:
+Strings that describe data values that do not have a separate existence. In RDF 1.1 every literal has a datatype, and there are three ways to write one: a bare string such as `"Semantics"` is an `xsd:string`; a string with a language tag such as `"Semantics"@en` has the datatype `rdf:langString`; and any other value is written with an explicit datatype URI, in which case it carries no language tag. Datatypes are mostly taken from XML Schema. Whenever we are using URIs to describe things in RDF we try as much as we can to reuse existing namespaces and for literals we use the XML Schema datatypes defined in [the XML Schema datatype namespace](http://www.w3.org/2001/XMLSchema#). So for example if I want to spell out that a literal is a [String](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") I use the following syntax:
 
 ```turtle
 "Semantics"^^<http://www.w3.org/2001/XMLSchema#string>
