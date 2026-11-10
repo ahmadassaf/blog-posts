@@ -1,0 +1,200 @@
+---
+type: 'Post'
+title: 'The Engineering Foundations I Want in Place Early'
+subtitle: 'What I look for when starting again, and what we did about each point at Mav9'
+summary: 'Starting again at Mav9 meant deciding how we wanted to build and run software together. For each foundation, from service ownership and configuration to testing and releases, I describe what I look for and what we built.'
+tags: ['Engineering Management', 'DevOps', 'Software Architecture', 'Testing', 'AI']
+date: '2026-11-10'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+---
+
+Most of the first engineers at Mav9 had been on teams with me before, so I already knew how they worked. We had spent years building inside a company with hundreds of people, an existing product, and other teams to turn to. Starting again meant deciding how much of that support we needed to build for ourselves, while design partners were already waiting for something they could use.
+
+My background is research and AI, and operating production systems was new to me. Taking on that responsibility made the gaps in my own experience quite concrete, and it is one reason I want everyone building a service to understand what running it involves. I wrote about that first year in [Nobody Handed Me a Manual](/blog/category/management/becoming-a-cto-nobody-handed-me-a-manual).
+
+I want us to ship quickly, and I am willing to spend some of that early time on work a customer will never see: a common way to configure a service, the ability to release a feature without turning it on for everyone, and tests that let someone change code they did not write. Agreeing on these early saves us from having to bring several services into line later.
+
+The test I apply throughout is whether another engineer can use what we have built without needing the person who set it up. Some parts of our setup make that easier already; others are still work I want to do.
+
+## Owning a service includes running it
+
+I think of DevOps as a culture everyone building the product participates in. If I own a service, adding its metrics and alerts is part of my work. So is knowing what to do when one of those alerts fires.
+
+That still leaves plenty for an infrastructure or platform owner to do. Someone needs to choose and maintain the observability stack, build the deployment templates, and establish the service blueprint. Those shared components need a clear owner. Asking every engineer to assemble a monitoring stack would waste time and make the system harder to operate.
+
+The owner of a service knows what failure means for its users. An import process can be running while no imports are completing. Its owner needs to decide how to detect that and when to alert, and to leave enough information for the next person to investigate. The platform owner makes this easier to configure; the service owner brings the knowledge of what needs watching.
+
+This is also why I care about runbooks. Someone other than the original author should be able to find the right dashboard and follow the recovery procedure. If replaying a job might duplicate customer data, put that warning beside the command. Explain when to stop and who to call.
+
+The useful check is to have another engineer try the instructions. A document can look complete until someone follows it without the author's local setup or memory of the last incident. Pairing on recovery also spreads operational knowledge beyond the few people who already have it.
+
+As CTO, I owe people the access and the time to do this. A named owner needs cover, and on-call needs to be sustainable where the product requires it. Making that support available is part of my responsibility. I wrote more about it in [Trust Is a System You Design](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design).
+
+### How we did it at Mav9
+
+For our Node and TypeScript services, the blueprint is a [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template with switches for Kafka, GraphQL and S3. We have similar templates for TypeScript libraries and Terraform repositories. Cookiecutter is not tied to a language, so the same approach can cover our Python services too. A service generated from the Node template starts with a Dockerfile, Kubernetes manifests, readiness and liveness probes, and structured logging through [pino](https://getpino.io). It has [OpenTelemetry](https://opentelemetry.io) instrumentation, a Prometheus metrics endpoint and the monitor that scrapes it. It also has two tests that fail if the health or metrics endpoints stop answering.
+
+Templates for every repository type and CI for the template repository itself are two things I would include earlier next time.
+
+The shared side belongs to the platform. We run the [Prometheus Operator](https://prometheus-operator.dev) and the [Grafana Operator](https://grafana.github.io/grafana-operator/), [Tempo](https://grafana.com/oss/tempo/) for traces and [Fluent Bit](https://fluentbit.io) for logs, all deployed from Git by [Argo CD](https://argo-cd.readthedocs.io). Metrics and dashboards sit on Amazon's managed Prometheus and [Managed Grafana](https://aws.amazon.com/grafana/). Alert rules are files in a repository, so adding one for my own service is a pull request. [incident.io](https://incident.io) handles incidents, and [UptimeRobot](https://uptimerobot.com) checks our endpoints from outside.
+
+It has not stayed one stack. We later added [Sentry](https://github.com/getsentry/sentry) for errors, [PostHog](https://github.com/PostHog/posthog) for product analytics and [Langfuse](https://github.com/langfuse/langfuse) for LLM traces, and bringing them together is still an open conversation.
+
+Runbooks sit in the same repository as our architecture decision records, and a change to one is reviewed like a change to code.
+
+## Configuration we can reproduce
+
+The time to agree where configuration lives and how it changes is before there are several environments and services. It is very easy to make a service work with a local file or a setting in a cloud console. Whether the setup is understood only shows when the service is handed to someone else.
+
+My starting point is a schema and validation before deployment or startup, with the required values documented. A missing database address should produce a useful error. A missing access-control setting should never quietly grant access. Security and data-retention defaults deserve an explicit decision.
+
+Environment differences should be visible too. We should be able to explain why one environment uses a different value from another, and know which configuration accompanied a release. Infrastructure definitions and non-secret settings can go through version control and review. Secret values need controlled storage and rotation, with references in the ordinary configuration.
+
+The aim is to promote the same built artefact through the environments and supply the appropriate configuration. Frontends that embed public settings at build time need an explicit arrangement for that; secret values must stay out of the client bundle.
+
+I would put recreating a non-production environment into the handover. It gives us something concrete to fix when the documented setup and the running system have drifted apart.
+
+### How we did it at Mav9
+
+Each service keeps its Kubernetes manifests next to its code, with [Kustomize](https://kustomize.io) overlays for what differs between environments. The infrastructure underneath is AWS, with Kubernetes on [EKS](https://aws.amazon.com/eks/), defined in [Terraform](https://developer.hashicorp.com/terraform).
+
+Secrets are kept out of the manifests. The [External Secrets Operator](https://external-secrets.io) delivers each one to the service from a managed secret store, so the manifest only holds a reference. [Reflector](https://github.com/emberstack/kubernetes-reflector) shares common configuration across namespaces and [Reloader](https://github.com/stakater/Reloader) restarts a workload when its configuration changes.
+
+For local work we have one repository whose `./dev` command starts the stack under [Tilt](https://tilt.dev), with tool versions pinned through [mise](https://mise.jdx.dev). That is the closest thing we have to recreating an environment on handover.
+
+The part we have not finished is validation. Our template still reads environment variables directly and falls back to defaults, so each service has to add its own startup check.
+
+## Some frontend work gets much harder to add later
+
+Internationalisation belongs in the first version, even if we launch in one language. Extracting strings from a few screens is manageable. Retrofitting it after text, dates and number formatting have spread across the application means revisiting decisions everywhere.
+
+For me, i18n starts with externalised messages and consistent formatting. It includes plurals, and avoiding sentences built by joining fragments that will not translate in the same order. Pseudolocalisation can expose missing strings and layout problems before we pay for translations. None of this requires translating the entire product immediately.
+
+Feature flags belong in that early setup too. An engineer should be able to deploy a change, expose it to a smaller group, and disable it if it causes trouble. We need a common way to evaluate flags, with deliberate fallbacks, and control over who can change production behaviour. Each flag needs an owner and a record of changes. Temporary rollout flags also need a removal plan; otherwise we keep paying to understand and test branches we no longer need.
+
+Permissions are another decision I want to make early, so screens can share the same checks. Whether we use roles, access-control lists or something more detailed, the frontend needs one way to ask what a user may do. That gives us one place to update the rules as the product grows.
+
+The server must enforce access on every protected operation. A hidden button or a client-side flag does not stop someone calling an API. Rollout and access are different decisions, even when both depend on the customer's account, and I want that distinction clear in the code from the beginning.
+
+### How we did it at Mav9
+
+We included [i18next](https://www.i18next.com) early in the first frontend, with English and German message files, before we needed to support a second language.
+
+We have not introduced feature flags yet. I want the flexibility they offer, and I also want to account for the extra combinations of behaviour they create.
+
+When we do add them, I would start from the open-source options. [Unleash](https://github.com/Unleash/unleash), [GrowthBook](https://github.com/growthbook/growthbook) and [Flagsmith](https://github.com/Flagsmith/flagsmith) can all be self-hosted, and [PostHog](https://github.com/PostHog/posthog), which we already use for analytics, has flags built in. [LaunchDarkly](https://launchdarkly.com) is the hosted product most teams compare against. Whichever we pick, I would put it behind [OpenFeature](https://openfeature.dev) so that our code does not depend on the vendor.
+
+Our confidentiality requirements depend on attributes such as clearance levels, teams and groups, so the model we are building is attribute-based. I want every screen to use one shared permission check, and customers to manage their own access-control lists.
+
+Among the tools I would look at, [OpenFGA](https://openfga.dev) and [SpiceDB](https://github.com/authzed/spicedb) follow Google's Zanzibar model of relationship-based access, [Cerbos](https://github.com/cerbos/cerbos) keeps policies outside the application code, and [CASL](https://casl.js.org) handles permission checks in the frontend.
+
+## The confidence to change things
+
+Tests are one of the early investments I am happy to make. The cost is visible immediately: someone has to set up the framework, write fixtures, and work out what behaviour to assert. The benefit becomes clearer when another engineer needs to change that code without reconstructing every assumption behind it.
+
+Martin Fowler captures the expectation I want in a team:
+
+> No programming episode is complete without working code and the tests to keep it working.
+
+I am less concerned about everyone following strict test-driven development for every task. Fowler makes the same distinction in *Self Testing Code*: tests written after implementation can still give you self-testing code. I care that we agree on the expected behaviour and leave useful checks behind. For a bug fix, I want to see the regression test fail against the old code for the right reason, then pass with the fix.
+
+That does not require testing everything in the same way. Business rules often suit fast unit tests. Service boundaries and database behaviour need integration or contract tests. A smaller set of end-to-end checks can cover the customer journeys we depend on. Coverage helps us find code we never exercise; it cannot tell us whether an assertion is right.
+
+AI-assisted development makes me more concerned about that last part. I am happy for AI to help write tests, but I want the engineer to understand where the expected answers came from. The implementation cannot be the only source of its own expected behaviour.
+
+The loop I worry about is easy to describe. An agent writes a test, writes code to satisfy it, and then changes the assertion when the result does not match. Sometimes the test was wrong. Sometimes the code was wrong. A passing result at the end does not tell us which one we corrected.
+
+There is a second problem even when the agent never changes a test: it can put the same mistaken assumption into both the test and the implementation. Generating one after the other does not give us two independent checks. Research on generated tests has found this kind of shared error, as well as workflows that discarded tests precisely because they exposed bugs. Evaluation researchers have also documented agents modifying the checks themselves.
+
+My response is to keep the expected behaviour under review. An agreed example or an independently checked calculation can justify an assertion. A changed expected value, a skipped case or an altered test runner needs an explanation. For critical behaviour, acceptance checks need separate review and the CI configuration needs protection, because instructions to an agent do not enforce that boundary.
+
+I still want the help with finding cases and writing test code. My confidence in the resulting suite depends on understanding what it checks. The same concern runs through the [change gate I've been building](/blog/category/engineering/building-an-ai-change-gate): we need to know which checks ran, what they establish, and who can change them. [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed) covers the approval side of the same problem.
+
+### How we did it at Mav9
+
+In our API service the integration tests start their dependencies in containers with [Testcontainers](https://testcontainers.com): Kafka, Elasticsearch and an AWS emulator. The frontends use [Vitest](https://vitest.dev), with [Mock Service Worker](https://mswjs.io) standing in for the API.
+
+The service template also regenerates the GraphQL schema on every pull request and commits the result. A change to a service's contract shows up in the diff, where a reviewer can see it.
+
+We do not have contract tests between services yet. They would give us more confidence when changing an interface or removing old code that another service may still rely on.
+
+## My preference for microservices
+
+I like microservices when a service has a clear owner who can release and operate it independently. I also have to account for the extra deployments and network failures, and for the work of understanding a request that crosses several services.
+
+A small team still discovering the product's boundaries may have more freedom with a modular monolith, or a few larger services. I want to understand where independent deployment will help us before introducing a new boundary.
+
+I do want common security mechanisms early. An API gateway can handle incoming routing, authentication checks and rate limits. A shared identity provider and reviewed policies give service owners something consistent to use.
+
+That leaves the service responsible for access to its own data and operations. Knowing who a caller is does not establish whether they may read this customer's order, and internal calls need checks too. It is the same rule as the hidden button in the frontend: the gateway cannot stand in for the service's own authorisation.
+
+I think about DevSecOps in much the same way as DevOps. Someone owns the shared security tools and standards, and the people building services act on the findings. Dependency maintenance, secret handling and considering how a feature could be abused belong in the normal development process. People also need a clear route to specialist help when the decision is beyond their experience.
+
+### How we did it at Mav9
+
+We chose separate services, each in its own repository. The repository choice is separate from the service architecture; microservices can also live in a monorepo. We keep the decisions in plain Markdown records, 38 so far. One example is sharing a database server within each environment, with a schema per service and access provisioned through Terraform. Separate database servers would have added cost before we needed to scale them independently.
+
+For the shared mechanisms, [Kong](https://github.com/Kong/kong) is the gateway, [Kyverno](https://kyverno.io) checks workloads against cluster policy, and [Trivy](https://trivy.dev) scans the images running in the cluster. [Auth0](https://auth0.com) is our identity provider, [Aikido](https://www.aikido.dev) scans code and dependencies, and [Cloudflare](https://www.cloudflare.com) sits in front of our domains.
+
+## Make releasing part of the work
+
+Shipping quickly depends on investing in the release process while the product is still small enough to understand, and keeping it usable as the team grows.
+
+CI needs to give useful feedback quickly enough that people act on it. Integrating work frequently helps keep the changes small enough to review and check. A slow or flaky check needs an owner and time to repair it, so people can rely on the feedback when they release.
+
+The release path should take a versioned artefact through a repeatable deployment, with the target configuration validated. The service owner should be able to use it without asking another team to perform routine steps. After deployment, they should be able to see what is running and check its behaviour in production.
+
+How much of the release decision to automate should follow from the consequences of a failure. Some changes need additional review. For routine releases, I want engineers to have a clear path they can use themselves.
+
+Recovery needs the same attention. Rolling back application code does not necessarily undo a database migration or an external side effect. We need to know when rollback is safe and when only a forward fix will do. Old and new versions also have to coexist during a change.
+
+These are the questions I think a team should be able to answer about its own release path:
+
+- After a version is released, does it reach each environment automatically, or does a person promote it?
+- Who decides that a release goes out: the service owner alone, or with a review?
+- How do you roll back in practice: revert the commit, redeploy the previous version, or fix forward?
+- When did you last roll something back, and how long did it take?
+
+The exercise I'd start with is small: take one customer journey all the way through, including a failure and recovery, and have another engineer repeat it. Where they need help tells us what to work on next.
+
+### How we did it at Mav9
+
+The service template sets up [semantic-release](https://semantic-release.gitbook.io) on [GitHub Actions](https://github.com/features/actions): merging to main produces a version and a changelog from the commit messages. The release builds the image, registers the service's GraphQL schema and writes the new image tag into the service's manifests. Argo CD picks that commit up and syncs on its own, so a deployment to our pre-production environment needs no manual step. Merging the pull request is the release decision.
+
+A rollback is a new deployment of an earlier version, through the same path or by syncing an earlier revision in Argo CD when speed matters. Earlier in the work, I found rollback harder than I wanted it to be. That experience is why I want recovery rehearsed alongside deployment.
+
+A small service computes DORA metrics from GitHub deployments and our incident.io records. In one 30-day snapshot it recorded 586 deployments across 22 repositories. Deployment frequency is the only figure I would quote so far. To make the failure and recovery figures useful, we still need to connect most of the incident records to the relevant releases.
+
+## What I would carry into the next setup
+
+The templates and the shared platform did the most for us: each new service starts with the operational basics already in place. Next time I would add startup configuration validation to that starting point, so it comes with every service.
+
+## Our stack in one table
+
+| Foundation | What we have | Tools |
+| --- | --- | --- |
+| Service blueprint | Templates for services, libraries and Terraform repositories, with probes, logging, telemetry and health tests built in | [Cookiecutter](https://github.com/cookiecutter/cookiecutter), [OpenTelemetry](https://opentelemetry.io), [pino](https://getpino.io) |
+| Observability | A platform-owned stack with alert rules in Git, plus error tracking, product analytics and LLM traces | [Prometheus Operator](https://prometheus-operator.dev), [Grafana Operator](https://grafana.github.io/grafana-operator/), [Tempo](https://grafana.com/oss/tempo/), [Fluent Bit](https://fluentbit.io), [Sentry](https://github.com/getsentry/sentry), [PostHog](https://github.com/PostHog/posthog), [Langfuse](https://github.com/langfuse/langfuse), [Amazon Managed Grafana](https://aws.amazon.com/grafana/), [incident.io](https://incident.io), [UptimeRobot](https://uptimerobot.com) |
+| Configuration | Per-environment overlays and secrets by reference | [Kustomize](https://kustomize.io), [Terraform](https://developer.hashicorp.com/terraform), [External Secrets Operator](https://external-secrets.io), [Reflector](https://github.com/emberstack/kubernetes-reflector), [Reloader](https://github.com/stakater/Reloader), [AWS](https://aws.amazon.com) with [EKS](https://aws.amazon.com/eks/), [1Password](https://1password.com), [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) |
+| Local environment | One `./dev` command | [Tilt](https://tilt.dev), [mise](https://mise.jdx.dev) |
+| Internationalisation | English and German message files in the first frontend | [i18next](https://www.i18next.com) |
+| Tests | Integration tests against real dependencies, mocked APIs in the frontends, schema changes visible in review | [Testcontainers](https://testcontainers.com), [Vitest](https://vitest.dev), [Mock Service Worker](https://mswjs.io) |
+| Gateway and security | A gateway, cluster policy and image scanning | [Kong](https://github.com/Kong/kong), [Kyverno](https://kyverno.io), [Trivy](https://trivy.dev), [Auth0](https://auth0.com), [Aikido](https://www.aikido.dev), [Cloudflare](https://www.cloudflare.com) |
+| Releases | Versions from commits, deployment from Git, our own DORA metrics | [semantic-release](https://semantic-release.gitbook.io), [Argo CD](https://argo-cd.readthedocs.io), [GitHub Actions](https://github.com/features/actions) |
+| Boundaries | Separate services and repositories, with 38 decision records | Markdown |
+
+## Further reading
+
+- Google's [SRE Workbook chapter on monitoring](https://sre.google/workbook/monitoring/) describes a central monitoring framework with teams configuring their own services. It is useful for separating shared infrastructure from service-specific responsibility.
+- [DORA on deployment automation](https://dora.dev/capabilities/deployment-automation/) covers versioned configuration, promoting artefacts and using a repeatable deployment process across environments.
+- Microsoft's [software internationalisation guidance](https://learn.microsoft.com/en-us/globalization/methodology/software-internationalization) explains why to design for i18n even when the first release supports one language.
+- [Unleash's feature-flag security guidance](https://www.getunleash.io/blog/feature-flag-security-best-practices) explains why client-side flags cannot enforce access to an API.
+- Martin Fowler's [Self Testing Code](https://martinfowler.com/bliki/SelfTestingCode.html) is the source of the quotation above. It connects testing to confidence in changing code and distinguishes that discipline from strict TDD.
+- Konstantinou, Tambon and Papadakis's [2026 preprint on coding before testing](https://arxiv.org/abs/2607.05139) found roughly 14% fault detection for tests generated after faulty code, against 25% for independently generated tests. The experiment selected faulty implementations; these are benchmark results, not production detection rates.
+- Mathews and Nagappan's [2024 study of test-generator design choices](https://arxiv.org/abs/2412.14137) found that the evaluated versions of CoverAgent and CoverUp discarded bug-revealing tests. Those tests failed against buggy code and passed against a correct reference.
+- [METR's report on reward hacking](https://metr.org/blog/2025-06-05-recent-reward-hacking/) documents agents changing tests or scoring code in software-development and AI-research evaluations. One o3 attempt replaced an evaluator so that it reported every submission as successful. [Meta's TestGen-LLM paper](https://arxiv.org/abs/2402.09171) provides a useful counterpart: generated additions to human-written tests, filtered and reviewed by engineers.
+- Fowler's [Monolith First](https://martinfowler.com/bliki/MonolithFirst.html) challenges my preference for services, especially while boundaries are still uncertain. Microsoft's [CI/CD guidance for microservices](https://learn.microsoft.com/en-us/azure/architecture/microservices/ci-cd) discusses monorepo and multirepo choices within that architecture.
+- The [OWASP Microservices Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Microservices_Security_Cheat_Sheet.html) explains how gateway controls and service-level authorisation complement each other.
