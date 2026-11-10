@@ -8,28 +8,42 @@ tags: ['Technical Debt', 'Software Engineering', 'Product Management', 'Decision
 draft: false
 ---
 
-Technical debt has a bad reputation. But like financial debt, it's a tool. Used wisely, it lets you move faster when speed matters.
+Technical debt can be a reasonable price for finding out whether something is worth building. Spending months on a design for a product nobody wants is expensive too. A shortcut can let a team test the idea sooner, provided it understands what the shortcut leaves behind.
 
-Martin Fowler's [technical debt quadrant](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html) makes the useful cut: debt is deliberate or inadvertent, and prudent or reckless. The problem was never the deliberate, prudent kind ("we ship now and accept the cleanup cost"). The problem is the reckless kind, and the inadvertent kind is the one you don't see coming: debt you took on without noticing.
+Martin Fowler's [technical debt quadrant](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html) separates deliberate from inadvertent debt, and prudent from reckless debt. That leaves room for a considered choice: "we ship now and accept the cleanup cost". It also leaves room for debt discovered through learning. A team can do careful work and later understand the problem well enough to see a better design. Discovering that gap does not mean the original team was careless.
 
-## When to Take On Debt
+## What the shortcut buys
 
-Ship the MVP fast to validate an idea. If it works, you can refactor. If it doesn't, you saved time by not over-engineering.
+The benefit needs to be specific. Shipping an MVP can answer whether anyone wants a feature. A conference demo or a contract renewal can give a deadline consequences beyond an arbitrary date on a roadmap. Those are reasons to consider a shortcut, though the deadline alone cannot tell us which shortcuts are acceptable.
 
-Hit a deadline that actually matters. Real deadlines, like a conference demo or a contract renewal, can justify shortcuts.
+Consider a prototype that supports one known input format. Building a general importer before anyone uses the product might be wasted effort. Supporting that format explicitly, with a clear rejection for anything else, keeps the limitation visible. Letting unsupported input pass through and produce plausible results would create a different problem. Both versions are quick to build; only one makes the boundary clear to its users.
 
-Learn by doing. Sometimes you need to build the wrong thing first to understand what the right thing should be.
+The deferred work should be something we can describe. Perhaps the importer needs a second format once another customer arrives. Perhaps the temporary implementation will become too slow as usage grows. Naming the limitation gives us a reason to return to it. A vague promise to improve the architecture later gives the next deadline plenty of room to win again.
 
-## When Not to Take On Debt
+## Where vibe coding fits
 
-The test is the cost of reversal, and in a few places that cost is brutal:
+Our product started with a [vibe-coded prototype](/blog/category/management/becoming-a-cto-ai-is-a-multiplier-not-a-signature). We could get something working while the idea was still taking shape. Once we had design partners and real data, we could see how much there was still to learn beyond what the demo showed.
 
-- **Core infrastructure.** Everything else is built on top of it, so a shortcut here gets baked into every service that depends on it. Reversing it means migrating all of them at once.
-- **Security.** You don't get to refactor after a breach. The downside is not rework; it's incident response, disclosure, and lost trust that no sprint pays back.
-- **Data integrity.** Bad code can be replaced; data corrupted or lost by bad code often cannot. Once wrong values have propagated into reports, decisions, and downstream systems, there is no clean rollback.
+I use vibe coding here in the sense [Simon Willison describes](https://simonwillison.net/2025/Mar/19/vibe-coding/): building with AI without reviewing the code it produces. Reviewing, testing and understanding generated code is part of AI-assisted development too. I don't count code as debt simply because a model wrote it.
 
-## The Key
+An isolated prototype using synthetic data can be a sensible place to explore that way. It can answer whether a workflow is useful before the team commits to its implementation. The code may be disposable, and throwing it away can be an acceptable cost of finding out what to build. That bargain changes once someone expects to depend on it.
 
-Be intentional. Write it down. Put it in the backlog. Make the tradeoff explicit.
+The difficult case is a prototype that keeps growing through prompts while nobody develops an understanding of the implementation. Before anyone can simplify it, they have to work out what the code does and which behavior needs to survive. A successful demo gives little help estimating that work. We may have deferred enough understanding that we cannot yet describe the debt we have taken on.
 
-The worst technical debt is the kind you didn't know you were taking on.
+Before relying on that code for customers, I want an engineer to read it and check the behavior the demo didn't exercise. AI can help explain the implementation and propose tests, but the expected results need checking against the requirements. A generated test can repeat the same wrong assumption as the generated code. Some parts may be sound enough to keep; others may be easier to replace once we understand the requirement.
+
+## How expensive is the way back?
+
+The cost of reversal is the part that makes me cautious. A shortcut in core infrastructure can spread into the services that depend on it. Replacing the original code may then require changes across those services, migration work, and a period of supporting both approaches. The longer the assumption remains available for other teams to build on, the more difficult it can become to remove.
+
+Security and data integrity need particular care because replacing code cannot reverse every consequence of running it. A refactor cannot undo a disclosure of private information. Recovering the correct data may be impossible if it was never retained, and correcting a value does not automatically correct decisions already made from it. Describing those risks as debt can make them sound more repayable than they are.
+
+Keeping a shortcut contained helps. If the temporary code sits behind a small interface, fewer callers need to know how it works. If its limitations are explicit, the next person is less likely to depend on behavior we intend to remove. That containment takes some effort now, and belongs in the cost of choosing the shortcut.
+
+## Give the cleanup a reason to happen
+
+Writing debt down is useful, but a backlog entry by itself does not reserve any time. The note needs enough context to survive the people who made the decision: what was deferred, why that was acceptable, and what would make us reconsider. Someone also needs to own that review.
+
+The trigger might be a new customer requirement, repeated changes to the same awkward code, or a limitation approaching its expected capacity. This gives the team a concrete argument for scheduling the work alongside features. It also leaves room to decide that a rarely used part of the system can stay as it is. Fowler makes that point too: paying down prudent debt may not be worthwhile when its continuing cost is small.
+
+Debt we did not know we were taking on is especially difficult because no one has allowed for its cost. Once we notice it, the useful next step is to describe how it affects the work ahead. That gives the team something it can plan around, including an explicit decision to leave it alone for now.

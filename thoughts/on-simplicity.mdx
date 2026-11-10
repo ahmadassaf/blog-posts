@@ -10,16 +10,30 @@ draft: false
 
 The best code I've written is often the code I've deleted.
 
-There's a particular satisfaction in refactoring a complex solution into something elegant and simple. Not simplistic, simple. The difference matters. Simplistic code ignores essential complexity: it handles the happy path and pretends the edge cases, failure modes, and awkward requirements do not exist, so the complexity leaks out to whoever uses it. Simple code absorbs that complexity: it faces the same messy problem but finds the design that makes the mess tractable. Simplistic is what you get by stopping early; simple is what you get by pushing through.
+There's a particular satisfaction in refactoring a complex solution into something easier to understand. The awkward requirements still have to be met. A short function that handles only the happy path has left its callers to deal with the failures. Removing that code hasn't removed the work; it has moved it somewhere less obvious.
 
-Saint-Exupéry's line about perfection being achieved when there is nothing left to take away gets quoted often, and it earns the overuse: subtraction, not addition, is the test.
+Simple code makes those requirements manageable. A caller should be able to use a function without reconstructing all the decisions inside it, while the person maintaining the function should be able to see what it promises. That can take more code than the first attempt. An explicit check and a useful error can save the next person from having to guess what went wrong.
 
-Every line of code is a liability. It needs to be maintained, understood, and debugged. The fewer lines that achieve the same goal, the better.
+> It seems that perfection is attained not when there is nothing more to add, but when there is nothing more to remove.
+>
+> Antoine de Saint-Exupéry, [*Terre des hommes* (1939), chapter III](https://en.wikiquote.org/wiki/Antoine_de_Saint-Exup%C3%A9ry#Terre_des_Hommes_(1939)), translated from French.
 
-## The Challenge
+Every line of code is a liability. It needs to be maintained, understood, and debugged. But counting lines alone is a poor way to decide what to remove. Compressing a readable sequence into one clever expression can make the diff smaller while making every later change harder. The useful reduction is in what someone has to understand to change the behavior safely.
 
-The hard part isn't writing simple code initially. It's having the discipline to refactor complex code into simple code when you discover a better way.
+## What can actually go away
 
-Simplicity is harder than complexity because it demands understanding: I can only delete a branch once I know why it exists and can prove nothing depends on it, and building that certainty is real work. Complexity, by contrast, only requires adding another case. Deletion is harder to show to people outside the work. A thousand lines added shows up in the diff, the demo, the standup; a thousand lines removed looks, from the outside, like nothing happened. We reward what we can see, so the incentives quietly favor the wrong thing.
+Consider a feature that has both an old implementation and a replacement, with a flag deciding which one runs. While the rollout is in progress, both paths have a purpose. After the old behavior is no longer needed, keeping the flag means keeping a choice the system should no longer have to make. Removing it can also remove tests and configuration that existed only to support that choice.
 
-I can make that work visible by explaining why the branch existed, why it is no longer needed, and how I know the remaining code still handles the same cases.
+The hard part is knowing the rollout is finished. An apparently unused branch may still handle an older client or an unusual customer configuration. I can only delete it once I know why it exists and have evidence that nothing still depends on it. Understanding that history, checking the callers, and testing the remaining behavior are part of the refactor.
+
+Abstractions deserve the same attention. Two pieces of code can look similar while changing for different reasons. Combining them may save lines today, then require flags and exceptions as their requirements diverge. Keeping a little duplication can be easier to understand than maintaining one function that has to know which of several jobs it is doing.
+
+That doesn't mean leaving every repeated block alone. When the repetition expresses the same rule, changing it in several places creates its own risk. The question is whether the pieces share a reason to change. Their appearance in the editor tells me less than the requirements behind them.
+
+## Making the work visible
+
+Finding the simpler design takes time. Adding another special case may be easier to justify when a deadline is close, especially if the existing structure already makes room for it. Returning later means understanding why each case was added before deciding which ones can disappear.
+
+Deletion can also be harder to show to people outside the work. A thousand lines added shows up in the diff, the demo, the standup; a thousand lines removed can look like nothing happened. The visible behavior may be exactly the same, which was the intention.
+
+I can make that work visible by explaining why the branch existed, why it is no longer needed, and how I know the remaining code still handles the same cases. A review can then assess what the system no longer needs to support and whether the evidence is enough to remove it.

@@ -8,22 +8,32 @@ tags: ['Leadership', 'Decision-Making', 'Management']
 draft: false
 ---
 
-Jeff Bezos, in his 2015 letter to Amazon shareholders, split decisions into two types. Type 1 decisions are one-way doors: irreversible, so you should be careful and deliberate. Type 2 decisions are two-way doors: reversible, so you should move fast and correct course if you are wrong.
+Jeff Bezos, in his [2015 letter to Amazon shareholders](https://ir.aboutamazon.com/files/doc_financials/annual/2015-Letter-to-Shareholders.PDF), split decisions into two types. Type 1 decisions are one-way doors: irreversible, or nearly so, and worth careful deliberation. Type 2 decisions are two-way doors: reversible, so you can move faster and correct course if you are wrong. His concern was that growing organizations apply the slower process to both.
 
-Most decisions are Type 2. But we treat them all like Type 1.
+That distinction is useful because the discussion around a decision can become much larger than its consequences. Choosing how to run a team meeting can attract the same rounds of consultation as committing to a major change in the product. Everyone gets a chance to contribute, but the team spends the interval waiting.
 
-## The Cost of Slow Decisions
+## What waiting costs
 
-Slow decisions have a hidden cost: they block everything downstream. Your team waits. Momentum dies. The market moves.
+Delay is easy to justify when the cost of being wrong is visible and the cost of waiting is scattered. An engineer moves to another task. Someone prepares a second version of a proposal. A dependent team makes an assumption because it cannot wait any longer. None of these looks like the decision failing, but each uses time that the decision was supposed to help allocate.
 
-A good decision made quickly usually beats a perfect decision made slowly, because you get to learn faster.
+More discussion is worthwhile when it can change the choice. If a missing fact would rule out an option, finding it is useful work. When the remaining disagreement is about what might happen, another meeting may just give everyone another chance to state the same prediction. A small trial can provide evidence the discussion cannot.
 
-## One Question
+For example, a team considering a different review process could try it on one project before changing how everyone works. The trial needs an end point and a way to notice whether it helped. Without those, a temporary decision can become permanent simply because nobody returns to it.
 
-I do not have a framework for this, just one question: what is the worst that happens if I am wrong?
+## What would reversal involve?
 
-If the answer is "we can undo it" or "we learn something valuable", decide now. If the answer is genuinely catastrophic, that is a one-way door: slow down and gather more data.
+I start with one question: what is the worst that happens if I am wrong? It helps me separate discomfort about making a choice from damage the choice could cause.
 
-Speed matters. But so does knowing which type of decision you are making.
+But the answer needs some detail. "we can undo it" should mean someone knows how. Changing a setting back may take seconds; unpicking the work people have done under that setting can take much longer. A decision can be technically reversible while leaving other people with commitments they cannot easily reverse.
 
-The same reversibility lens applies to code, which is why I think [technical debt is not always bad](/blog/category/thoughts/technical-debt): a shortcut you can undo is a Type 2 decision wearing an engineering costume.
+Likewise, "we learn something valuable" needs a limit on what we are prepared to spend to learn it. Who carries the cost if the experiment fails? Can we contain that cost? If we cannot answer, calling the choice a two-way door does not make it one.
+
+Some decisions deserve a slower pace. If reversal would leave lasting damage, or depends on cooperation we cannot count on, more consultation is justified. The point of the distinction is to reserve that attention for the decisions that need it. It gives the team room to act on the smaller ones.
+
+## Leave a way to reconsider
+
+A quick decision still needs an owner. The people doing the work should know what has been decided, which uncertainty remains, and when to raise it again. A short note can preserve that context without making every choice a formal exercise.
+
+It also helps to name what would change the decision. If the trial creates more rework than it saves, revisit it. If a dependency turns out to be harder to remove than expected, reduce the commitment before it grows. Otherwise, people may keep defending the original choice because changing it feels like admitting they should have waited.
+
+The same reversibility lens applies to code, which is why I think [technical debt is not always bad](/blog/category/thoughts/technical-debt). A shortcut is easier to accept when the team understands the cleanup and can recognize when it is due.
