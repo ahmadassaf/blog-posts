@@ -10,6 +10,8 @@
 
 import { useId, useState } from 'react';
 
+import { graphSelectionProps } from '../graphSelectionProps';
+
 import styles from './RdfCollectionExplorer.module.css';
 
 const members = [ 'A', 'B', 'C' ];
@@ -34,23 +36,11 @@ const RdfCollectionExplorer = ({
   const terminal = activeStep === members.length;
   const activeMember = members[activeStep];
 
-  const selectStep = (step, label) => {
-    return {
-      'aria-label': label,
-      'aria-pressed': activeStep === step,
-      'data-active': activeStep === step,
-      'onClick': () => setActiveStep(step),
-      'onFocus': () => setActiveStep(step),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setActiveStep(step);
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
-    };
-  };
+  const selectStep = (step, label) => graphSelectionProps({
+    label,
+    'onSelect': () => setActiveStep(step),
+    'selected': activeStep === step
+  });
 
   return (
     <figure className={ `${styles.root} ${className}`.trim() }>

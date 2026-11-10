@@ -10,6 +10,8 @@
 
 import { useId, useState } from 'react';
 
+import { graphSelectionProps } from '../graphSelectionProps';
+
 import styles from './RdfBlankNodeExplorer.module.css';
 
 const branches = [
@@ -44,23 +46,11 @@ const RdfBlankNodeExplorer = ({
   const [ activeBranchId, setActiveBranchId ] = useState('blog-a');
   const activeBranch = branches.find((branch) => branch.id === activeBranchId);
 
-  const selectBranch = (branchId) => {
-    return {
-      'aria-label': `Trace the blank node for ${branches.find((branch) => branch.id === branchId).name}`,
-      'aria-pressed': activeBranchId === branchId,
-      'data-active': activeBranchId === branchId,
-      'onClick': () => setActiveBranchId(branchId),
-      'onFocus': () => setActiveBranchId(branchId),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setActiveBranchId(branchId);
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
-    };
-  };
+  const selectBranch = (branchId) => graphSelectionProps({
+    'label': `Trace the blank node for ${branches.find((branch) => branch.id === branchId).name}`,
+    'onSelect': () => setActiveBranchId(branchId),
+    'selected': activeBranchId === branchId
+  });
 
   return (
     <figure className={ `${styles.root} ${className}`.trim() }>

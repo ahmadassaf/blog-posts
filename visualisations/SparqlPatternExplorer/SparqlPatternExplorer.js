@@ -10,6 +10,8 @@
 
 import { useState } from 'react';
 
+import { graphSelectionProps } from '../graphSelectionProps';
+
 import styles from './SparqlPatternExplorer.module.css';
 
 const triples = [
@@ -130,20 +132,13 @@ const SparqlPatternExplorer = ({
     const triple = triples.find((row) => row.id === tripleId);
 
     return {
-      'aria-label': `Read the triple ${triple.subject} ${triple.predicate} ${triple.object}`,
-      'aria-pressed': selectedTripleId === tripleId,
+      ...graphSelectionProps({
+        'label': `Read the triple ${triple.subject} ${triple.predicate} ${triple.object}`,
+        'onSelect': () => setSelectedTripleId(tripleId),
+        'selected': selectedTripleId === tripleId
+      }),
       'data-active': activePattern.matches.includes(tripleId),
-      'data-selected': selectedTripleId === tripleId,
-      'onClick': () => setSelectedTripleId(tripleId),
-      'onFocus': () => setSelectedTripleId(tripleId),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setSelectedTripleId(tripleId);
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
+      'data-selected': selectedTripleId === tripleId
     };
   };
 

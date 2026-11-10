@@ -10,6 +10,8 @@
 
 import { useState } from 'react';
 
+import { graphSelectionProps } from '../graphSelectionProps';
+
 import styles from './JsonLdGraphExplorer.module.css';
 
 const entities = [
@@ -119,23 +121,11 @@ const JsonLdGraphExplorer = ({
   const [ activeEntityId, setActiveEntityId ] = useState('person');
   const activeEntity = entities.find((entity) => entity.id === activeEntityId) || entities[0];
 
-  const selectEntity = (entityId) => {
-    return {
-      'aria-label': `Read about the ${entities.find((entity) => entity.id === entityId).name} entity`,
-      'aria-pressed': activeEntityId === entityId,
-      'data-active': activeEntityId === entityId,
-      'onClick': () => setActiveEntityId(entityId),
-      'onFocus': () => setActiveEntityId(entityId),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setActiveEntityId(entityId);
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
-    };
-  };
+  const selectEntity = (entityId) => graphSelectionProps({
+    'label': `Read about the ${entities.find((entity) => entity.id === entityId).name} entity`,
+    'onSelect': () => setActiveEntityId(entityId),
+    'selected': activeEntityId === entityId
+  });
 
   return (
     <figure className={ `${styles.root} ${className}`.trim() }>

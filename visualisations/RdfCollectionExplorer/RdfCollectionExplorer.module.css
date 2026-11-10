@@ -140,8 +140,7 @@
 .restLabel,
 .firstLabel,
 .nilLabel,
-.readoutIndex,
-.readoutMeta {
+.readoutIndex {
   font-family: var(--ds-font-mono);
 }
 

@@ -12,17 +12,6 @@
   color: var(--ds-color-accent-foreground);
 }
 
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 .caption {
   display: grid;
   gap: 0.375rem;

@@ -10,6 +10,8 @@
 
 import { useId, useState } from 'react';
 
+import { graphSelectionProps } from '../graphSelectionProps';
+
 import styles from './RdfTripleExplorer.module.css';
 
 const tripleParts = {
@@ -45,23 +47,11 @@ const RdfTripleExplorer = ({
   const [ activePartId, setActivePartId ] = useState('predicate');
   const activePart = tripleParts[activePartId];
 
-  const interactionProps = (partId) => {
-    return {
-      'aria-label': `Inspect ${partId}: ${tripleParts[partId].label}`,
-      'aria-pressed': activePartId === partId,
-      'data-active': activePartId === partId,
-      'onClick': () => setActivePartId(partId),
-      'onFocus': () => setActivePartId(partId),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setActivePartId(partId);
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
-    };
-  };
+  const interactionProps = (partId) => graphSelectionProps({
+    'label': `Inspect ${partId}: ${tripleParts[partId].label}`,
+    'onSelect': () => setActivePartId(partId),
+    'selected': activePartId === partId
+  });
 
   return (
     <figure className={ `${styles.root} ${className}`.trim() }>

@@ -10,6 +10,8 @@
 
 import { useState } from 'react';
 
+import { graphSelectionProps } from '../graphSelectionProps';
+
 import styles from './RdfVsPropertyGraphExplorer.module.css';
 
 const models = {
@@ -47,29 +49,13 @@ const RdfVsPropertyGraphExplorer = ({
   const activeModel = models[activeModelId];
   const activeElement = activeModel.elements.find((element) => element.id === activeElementIds[activeModelId]);
 
-  const selectElement = (elementId) => {
-    return {
-      'aria-label': `Read about ${activeModel.elements.find((element) => element.id === elementId).name}`,
-      'aria-pressed': activeElementIds[activeModelId] === elementId,
-      'data-active': activeElementIds[activeModelId] === elementId,
-      'onClick': () => setActiveElementIds((current) => {
-        return { ...current, [activeModelId]: elementId };
-      }),
-      'onFocus': () => setActiveElementIds((current) => {
-        return { ...current, [activeModelId]: elementId };
-      }),
-      'onKeyDown': (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          setActiveElementIds((current) => {
-            return { ...current, [activeModelId]: elementId };
-          });
-        }
-      },
-      'role': 'button',
-      'tabIndex': 0
-    };
-  };
+  const selectElement = (elementId) => graphSelectionProps({
+    'label': `Read about ${activeModel.elements.find((element) => element.id === elementId).name}`,
+    'onSelect': () => setActiveElementIds((current) => {
+      return { ...current, [activeModelId]: elementId };
+    }),
+    'selected': activeElementIds[activeModelId] === elementId
+  });
 
   return (
     <figure className={ `${styles.root} ${className}`.trim() }>

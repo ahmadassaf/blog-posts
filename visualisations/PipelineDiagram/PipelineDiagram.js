@@ -176,9 +176,9 @@ const PipelineDiagram = ({
             aria-label='Deployment flow'
             style={{ '--progress': progress, '--step-count': flowSteps.length }}
           >
-            <span className={ styles.track } aria-hidden='true'>
+            <li className={ styles.track } role='presentation' aria-hidden='true'>
               <span className={ styles.trackFill } />
-            </span>
+            </li>
 
             {flowSteps.map((step, index) => {
               const state = getStepState(index, activeStepIndex);
