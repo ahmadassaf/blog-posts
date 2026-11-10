@@ -16,7 +16,7 @@ My interest in generative UI goes back to my time working in business intelligen
 
 I later found myself loving Notion and becoming attached to the systems I built in it. Only after using it did I start to understand why: its blocks let me arrange a workspace around how I worked. The result felt like something I had made myself.
 
-Generative AI gave more people another way to start building: describe an idea in a conversation, see something take shape, and refine it. That could mean creating an entire app. What interests me here is what happens inside a product someone already uses: generating a view for their question, then bringing in the next useful tool as the question develops. I'd like people to keep their decisions, notes, and evidence as they go. That's the version of generative UI I want to explore: not a new app for every question, but a product that can assemble a view, bring in the next tool, and leave what I've already done intact.
+Generative AI gave more people another way to start building: describe an idea in a conversation, see something take shape, and refine it. That could mean creating an entire app. What interests me here is what happens inside a product someone already uses: generating a view for their question, then bringing in the next useful tool as the question develops. I'd like people to keep their decisions, notes, and evidence as they go.
 
 ## Self-service leaves more work than we admit
 
@@ -106,7 +106,7 @@ There is already research on generating interaction paths. *Generative Interface
 
 Google Research's *Self-Evolving Systems* report explores interfaces that generate features from requests and inferred needs. In a 72-participant comparison of a banking prototype, the adaptive version received higher usability scores. That is another reason to experiment, while leaving long-term familiarity, reliability, and adoption open. [@Arora:Google:26]
 
-For our own product, I'd start with the modest version: suggest a next step, explain what makes it relevant, and let the person choose another direction. As the investigation develops, completed work should remain available. Missing evidence should produce an honest stopping point.
+For our own product, I'd start with the modest version: suggest a next step, explain what makes it relevant, and let the person choose another direction. As the investigation develops, completed work should remain available. When evidence is missing, the system should say so and stop.
 
 ## When is generation worth it?
 
@@ -130,7 +130,7 @@ There are working projects to explore different parts of this. These are startin
 | Explore the analysis experience itself | [Data Formulator](https://github.com/microsoft/data-formulator) makes the research direction available as software. [Hex](https://hex.tech/) offers conversational analysis and interactive data apps over governed data. |
 | Build a separate app through conversation | [Lovable](https://docs.lovable.dev/features/generate-files) can turn uploaded data and analysis into app features such as dashboards. |
 
-For a prototype, I'd expose a few well-understood views and operations first. The useful test is whether someone can refine a result, inspect its evidence, and continue to a related task while keeping their work. A convincing first screen is only the beginning.
+For a prototype, I'd expose a few well-understood views and operations first. The useful test is whether someone can refine a result, inspect its evidence, and continue to a related task while keeping their work.
 
 ## What I'd want underneath it
 
@@ -149,5 +149,3 @@ To test whether this helps, I'd compare the same tasks in a well-designed dashbo
 ## Where this leaves me
 
 I want to be able to start with an incomplete question, get a useful view, follow an unexpected finding, and return later to work I still understand. Generative UI could help assemble the view; generative routing could help bring in the next tool. Both need to preserve the decisions and evidence that make the work mine.
-
-That's what I want to find out as we build: whether conversation can make a tool easier to shape, and whether that tool helps someone keep going when their question changes.

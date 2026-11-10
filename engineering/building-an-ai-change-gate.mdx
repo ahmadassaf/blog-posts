@@ -44,7 +44,7 @@ Repository policy can adapt the organisation defaults, but the gate uses the pol
 
 For a broader view, I analysed a separate sample of 951 pull requests the organisation merged in the thirty days to 8 November. With the protected-path list used for that analysis, 66% would have been Standard and 34% Normal before any model was consulted. Infrastructure, workflows and dependency files accounted for many of the restrictions. That shows the reach of the policy, not the safety of the changes. Whether a dependency bump should always need a second engineer remains a team decision we need to justify.
 
-The policy also has to say what counts as evidence. In the pilot, reviewers spotted a flaw in our required-scanner rule: any workflow could have used the scanner's name. We changed the rule to require a successful result from the expected GitHub App. A familiar label was not enough.
+The policy also has to say what counts as evidence. In the pilot, reviewers spotted a flaw in our required-scanner rule: any workflow could have used the scanner's name. We changed the rule to require a successful result from the expected GitHub App.
 
 Tests need the same care. A passing security scan does not establish that a test suite ran. Each repository names the test or build checks it relies on for automatic approval; without that policy, a human has to verify the change. Once a check is required, another green check or a human approval cannot excuse its absence or failure.
 
