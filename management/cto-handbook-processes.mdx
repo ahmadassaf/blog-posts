@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Processes'
 subtitle: 'The routines behind planning, shipping, releasing, hiring and compliance'
-summary: 'The sixth chapter of the Startup Handbook: how we plan a project and shape a goal, how a change gets reviewed and released, how we hire, and how I now write a control, with the Mav9 version of each.'
+summary: 'The sixth chapter of the Startup Handbook: how I approach planning, review, release, hiring and controls in a startup, and what I would adapt as more teams take responsibility for the work.'
 tags: ['Engineering Management', 'Planning', 'Compliance', 'Hiring', 'DevOps']
 date: '2026-11-11'
 updated: '2026-11-11'
@@ -19,7 +19,7 @@ series:
 
 A process is worth writing down when the same work comes round again and people would otherwise have to work out the steps each time. This chapter has the ones we repeat most.
 
-I brought experience from a company that had grown to hundreds of people. At Mav9, I had to decide which parts were useful for a team still getting its first product into customers' hands. I also had to notice when our own rules existed only because we had agreed them in a meeting. Planning and code review both exposed that gap: the written process sounded reasonable, while the work followed a different path.
+I brought experience from a company that had grown to hundreds of people. Starting again, I had to decide which parts were useful for a team still getting its first product into customers' hands. I also had to notice when our own rules existed only because we had agreed them in a meeting. Planning and code review both exposed that gap: the written process sounded reasonable, while the work followed a different path.
 
 ## Planning
 
@@ -31,7 +31,7 @@ Our first plan started from a prototype. We divided it into modules and personas
 
 Then, approaching launch, we tried to settle three months in detail again. The founders' version of the goals was too far from the engineering work; the engineers' version became too technical. By the third pass, I was trying to recover a clear account of what would be different for the customer. We had made the plan a document to pass between groups that needed to work through the same questions together.
 
-### How we do it at Mav9
+### How I do it now
 
 1. **Project.** We work in projects of two to three months. The founders frame the outcome, success measures, dates and constraints.
 2. **Monthly Planning.** On the first Monday of the month, everyone meets for ninety minutes. Before the meeting the project should already hold most milestones, each with a Lead, and goals with a Sponsor. A self-explaining title is enough. We do not shape goals before or during this meeting.
@@ -57,7 +57,7 @@ Review has to be something a person can do with care at the volume the team prod
 
 Not every repository carries the same risk. Treating an experiment like customer-facing software slows the experiment and teaches people that the process is a formality.
 
-### How we do it at Mav9
+### How I do it now
 
 This is the model we are putting in place. Some of it is enforced in tooling and some is still being built.
 
@@ -84,7 +84,7 @@ I now want to trace a change through the actual path: who can merge it, which fi
 
 The release path should take a versioned artefact through a repeatable deployment, and the service owner should be able to use it without asking another team for routine steps. Recovery needs the same attention as deployment. Rolling back code does not undo a database migration.
 
-### How we do it at Mav9
+### How I do it now
 
 Merging to main produces a version and a changelog from the commit messages. The release builds the image and writes the new tag into the service's manifests, and the deployment to pre-production follows from Git without a manual step. A rollback is a new deployment of an earlier version through the same path.
 
@@ -106,7 +106,7 @@ I started this team with people I already knew. That gave me confidence in how t
 
 I am choosing a more experienced core team this time and accepting the higher initial salary cost. My bet is that people who can judge what matters, use AI well and own the result will help us reach something valuable sooner. I still need to assess that judgement. Familiarity and confidence with tools do not establish it on their own.
 
-### How we do it at Mav9
+### How I do it now
 
 Our handbook says hiring is a team sport: everyone helps source, refer and interview. The hiring manager owns the process and keeps it moving. For engineering roles that is usually me.
 
@@ -145,7 +145,7 @@ For engineering, the first-week path I want through the product, tools and a sma
 
 Write a control only when you can show it. Every sentence in a policy creates work someone has to do, and a plan written in the present tense misleads whoever reads it.
 
-### How we do it at Mav9
+### How I do it now
 
 We build for finance and pursued SOC 2 and ISO 27001 in our first year. Three rules came out of it.
 
@@ -166,6 +166,10 @@ Setting up the UK entity brought payroll, VAT returns, a pension provider, healt
 For a recurring task, I want a record of when it comes due, where the inputs come from, who can prepare or authorise it, and where completion is recorded. I already write instructions for tasks an assistant or colleague can run. The next useful check is whether they can follow those instructions with the access and context available to them.
 
 Some decisions need specialist advice; writing a procedure does not make me qualified to make them. I want the handover to identify who to ask and which decisions remain with the responsible founder or specialist. I still need to document the actual recurring calendar and handovers. The story of how these jobs arrived is in [Nobody Handed Me a Manual](/blog/category/management/becoming-a-cto-nobody-handed-me-a-manual).
+
+## As the company grows
+
+In a startup, founders can shape goals and settle scope questions directly with the people doing the work. As responsibility spreads across teams, I would make those decision boundaries and dependencies explicit before adding more planning meetings. A team should know what it can decide, who supplies the customer context and which changes need another team's agreement. I would check the review and release path with each team too, so the written controls still describe how its work reaches customers.
 
 ## Still to write
 

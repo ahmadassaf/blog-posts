@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Infrastructure'
 subtitle: 'What the team runs on apart from the code'
-summary: 'The fourth chapter of the Startup Handbook: where knowledge lives, how goals are tracked, who is responsible for what, removing single points of failure, and the few numbers we look at, with how each works at Mav9.'
+summary: 'The fourth chapter of the Startup Handbook: where knowledge lives, how goals are tracked, who is responsible for what, removing single points of failure, and the few numbers I look at in a startup and would adapt as it grows.'
 tags: ['Engineering Management', 'Documentation', 'Planning', 'DevOps', 'Metrics']
 date: '2026-11-11'
 updated: '2026-11-11'
@@ -21,7 +21,7 @@ This chapter is about organisational infrastructure: the shared records and tool
 
 At my first startup, a lot of context travelled across a small office. We knew why something had been built because we had been there when the decision was made. As the company grew from six people to more than four hundred, that stopped being a reasonable expectation of a new colleague. I came to care much more about what they could understand without finding one of the early employees. [Building that documentation habit earlier](/blog/category/management/from-employee-six-to-a-unicorn#lesson-5-build-the-documentation-habit-early) is one of the things I wanted to do differently this time.
 
-At Mav9, I also had to learn that putting information somewhere was only the beginning. I could build a dashboard, write a plan and still leave the team unsure what to do next. The infrastructure has to help with a decision people actually need to make.
+Starting again with a small team, I also had to learn that putting information somewhere was only the beginning. I could build a dashboard, write a plan and still leave the team unsure what to do next. The infrastructure has to help with a decision people actually need to make.
 
 ## Where knowledge lives
 
@@ -29,7 +29,7 @@ Each kind of record should have one home, and it should be the place where the p
 
 The test I use for any document is whether someone other than the author can act on it. That applies to a runbook, a decision record and a goal description alike.
 
-### How we do it at Mav9
+### How I do it now
 
 - **GitHub** holds delivery work and its status: projects, milestones, goals and the pull requests.
 - **Notion** holds durable product context, decisions, our handbook and the pages for each meeting.
@@ -52,7 +52,7 @@ For a decision that changes another person's work, I would leave the decision, i
 
 A tracking tool helps when it sits close to the work and someone keeps it current. Even a perfectly current board will not tell an engineer why a priority changed or who can settle an argument about scope. I treated visibility as though it would provide direction, and built a dashboard nobody but me opened. That story is in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
 
-### How we do it at Mav9
+### How I do it now
 
 We work in projects of two to three months. A project holds milestones, and a milestone holds goals.
 
@@ -81,7 +81,7 @@ I would start with the next conversation the team needs to have: which goal need
 
 Every area needs one person with the final say, and everyone else needs to know who that is. Without it, decisions drift towards whoever is most available or most senior, which in a small company is usually a founder.
 
-### How we do it at Mav9
+### How I do it now
 
 Inside a goal, the roles are written down: Milestone Lead, Sponsor, Owner and Supporters. A Supporter owns their agreed contribution, gets the context they need and brings progress to the Owner without waiting to be asked.
 
@@ -95,7 +95,7 @@ As CTO, I need to resist turning my technical preferences into another hidden re
 
 If only one person can do something, the company stops when they are away. The fix is usually a written procedure that someone else has followed at least once.
 
-### How we do it at Mav9
+### How I do it now
 
 - A new service starts from a template with logging, health checks and telemetry already in place, so operating it does not depend on who created it.
 - Runbooks live next to the decision records. The check I want is that another engineer has tried the instructions without the author's local setup or memory of the last incident.
@@ -128,7 +128,7 @@ We have a local development entry point and written management guidance. I still
 
 A metric is an observation. It has several possible explanations, and the useful step is deciding what to inspect next. I keep per-person numbers out of team documents, because ranking people by an incomplete dataset starts a conversation about who looks busy. More in [Measuring Agile Teams Without Weaponizing the Numbers](/blog/category/management/measuring-agile-teams).
 
-### How we do it at Mav9
+### How I do it now
 
 A small service computes DORA metrics from GitHub deployments and our incident records. In one thirty-day snapshot it recorded 586 deployments across 22 repositories. Deployment frequency is the only figure I would quote so far. The failure and recovery figures need most incident records connected to the releases they relate to, and we have not done that yet.
 
@@ -139,6 +139,10 @@ When I pulled a month of data, most merged pull requests did not close an issue.
 Before adding a number to a regular review, I want to know which decision it might change and whether the underlying records can support that decision. With our deployment data, the next useful work is connecting incidents to releases. A more elaborate chart would still be reporting the same incomplete history.
 
 The same discipline applies to product analytics. Installing the tool does not choose which customer behaviour matters or explain why it changed. That question sits with the people setting the product direction, including me, and remains unfinished in our setup.
+
+## As the company grows
+
+In a startup, the person who remembers a decision may still be in every meeting. As more people join, I would make ownership, decision boundaries and access instructions explicit enough for a new colleague to use without that person. The first check would be whether someone can find the current answer and act on it. More documentation is useful only if it reduces the context people have to reconstruct privately.
 
 ## Still to write
 
