@@ -19,11 +19,17 @@ series:
 
 A process is worth writing down when the same work comes round again and people would otherwise have to work out the steps each time. This chapter has the ones we repeat most.
 
+I brought experience from a company that had grown to hundreds of people. At Mav9, I had to decide which parts were useful for a team still getting its first product into customers' hands. I also had to notice when our own rules existed only because we had agreed them in a meeting. Planning and code review both exposed that gap: the written process sounded reasonable, while the work followed a different path.
+
 ## Planning
 
 Agree the direction for the next stage, then shape only the next few goals in detail. A plan written for three months in advance stops being true well before the three months are up, and the time spent perfecting it is time not spent learning from real data.
 
 I would also put the person with the customer context and the engineer who will deliver in the same conversation from the start. We spent too long passing versions of a plan between them.
+
+Our first plan started from a prototype. We divided it into modules and personas and tried to describe the whole product. Once we got real data from design partners, that tidy picture stopped being enough. We shortened the planning cycle so we could check what we were learning sooner.
+
+Then, approaching launch, we tried to settle three months in detail again. The founders' version of the goals was too far from the engineering work; the engineers' version became too technical. By the third pass, I was trying to recover a clear account of what would be different for the customer. We had made the plan a document to pass between groups that needed to work through the same questions together.
 
 ### How we do it at Mav9
 
@@ -34,6 +40,16 @@ I would also put the person with the customer context and the engineer who will 
 5. **Delivery.** Once the plan is approved and dependencies are agreed, the goal can start when its Owner has capacity. Nobody waits for the next planning meeting.
 
 The template I use to start shaping a goal is in the [Appendices](/blog/category/management/cto-handbook-appendices). How we got here is in [We Kept Trying to Plan Everything](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year).
+
+### Keeping a goal useful after planning
+
+For work this early, I would start by checking a real result within two weeks, sooner where the question can be answered sooner. A longer goal can still produce something we can examine: real data through the proposed path, a customer's response or a working part of the journey. The check should help us decide whether to continue, change the approach or stop.
+
+I have also asked for implementation issues to connect back to the goals they support. Otherwise a milestone can contain plenty of activity without explaining how that activity contributes to the outcome. A useful review follows the link both ways: from a goal to the work needed to deliver it, and from a piece of work back to the reason it deserves time. I still need to check that those links stay complete as the work changes.
+
+When new information changes scope, the Owner takes it back to the Sponsor for explicit agreement. When a priority changes, leadership needs to say which other work moves or waits. The board should then reflect that decision. I cannot keep asking for a new priority while expecting the old plan to remain a reliable promise.
+
+The [Management Playbook's goal-setting guide](https://app.notion.com/p/25bccf5cc90f81a99971ef12dfce4583) also covers a different kind of goal: an individual's development. It asks the employee and manager to agree useful, achievable goals, define the evidence they will discuss, and follow up as circumstances change. I would keep that conversation distinct from the delivery board. Someone's development should connect to the work, but it needs attention beyond whether a feature shipped. The practical review guidance is in [Playbooks](/blog/category/management/cto-handbook-playbooks).
 
 ## Shipping a change
 
@@ -56,6 +72,14 @@ This is the model we are putting in place. Some of it is enforced in tooling and
 
 For when a change needs someone else at all, we use the vocabulary of [Ship / Show / Ask](https://martinfowler.com/articles/ship-show-ask.html). The history of how we arrived here is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed), and the gate has its own post: [Building a Change Gate for AI-Assisted Development](/blog/category/engineering/building-an-ai-change-gate).
 
+### Why I distinguish the rule from its enforcement
+
+An early fix was simply to agree that the person reviewing a change would record their approval. We changed no configuration. It worked for a while, then I checked and found merged pull requests without recorded reviews, including mine. Agreement had not made the practice dependable.
+
+The change gate taught me a second lesson. During the pilot it could approve an ordinary change after its checks passed. Our auditor's guidance for our process was that the service could recommend but could not approve. We took it down and brought it back with that approval removed. The review findings were still useful; the decision to let software approve had needed changing.
+
+I now want to trace a change through the actual path: who can merge it, which findings need an answer, what reaches pre-production and what stops it reaching production before the required independent approval. These are our chosen controls, shaped with our auditor, and I am still checking their enforcement.
+
 ## Releasing
 
 The release path should take a versioned artefact through a repeatable deployment, and the service owner should be able to use it without asking another team for routine steps. Recovery needs the same attention as deployment. Rolling back code does not undo a database migration.
@@ -66,9 +90,21 @@ Merging to main produces a version and a changelog from the commit messages. The
 
 I found rollback harder than I wanted it to be, which is why I want recovery rehearsed. The four questions I ask about any release path are in the [Appendices](/blog/category/management/cto-handbook-appendices), and the tooling is in [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
 
+### Rehearsing a failure before depending on the procedure
+
+The exercise I would start with is one customer journey through deployment, a controlled failure and recovery in a suitable non-production environment. Have another engineer repeat it. The places where they need help tell us which access, explanations or tools are missing.
+
+I would want them to identify what is running, find the relevant logs and metrics, and explain whether returning to the earlier version is safe. A deployment that changed data or triggered an external action may need a different recovery plan. The procedure should say when to stop and ask for help, as well as which command to run.
+
+For now, this is the rehearsal I want us to run. We use incident tooling and have runbooks in the repository. I still need to document how an incident moves from the first alert through recovery and follow-up, including who makes the decisions along the way.
+
 ## Hiring
 
 A hiring process should be short, tell the candidate what each stage is for, and collect enough structured evidence to make a fair decision. Long take-home exercises and trivia add noise.
+
+I started this team with people I already knew. That gave me confidence in how they would work while I was occupied elsewhere. It also left a question I had to answer honestly: were the strengths I valued inside a much larger company the ones we needed at this stage?
+
+I am choosing a more experienced core team this time and accepting the higher initial salary cost. My bet is that people who can judge what matters, use AI well and own the result will help us reach something valuable sooner. I still need to assess that judgement. Familiarity and confidence with tools do not establish it on their own.
 
 ### How we do it at Mav9
 
@@ -97,6 +133,14 @@ Interviewers use a shared question bank, where each question lists what good loo
 
 What happens after the offer is in [Playbooks](/blog/category/management/cto-handbook-playbooks), under the first ninety days.
 
+### The handover from hiring to joining
+
+The role we described during interviews needs to become work the person can actually do. I would use the [manager's first-90-days guide](https://app.notion.com/p/25bccf5cc90f81548cb4d2e697128be8) to prepare clear expectations before the start, share them in the first week and review them with the new colleague as they learn the job. The guide calls for weekly 1:1s during this period and progress checks at the end of the first two months.
+
+The manager owes them the resources, introductions and feedback needed to meet those expectations. If we discover that the role differs from the one we hired for, I want that discussed while there is time to adjust. Waiting for a final review would waste the period in which we were supposed to help them settle in.
+
+For engineering, the first-week path I want through the product, tools and a small real change is described in [Infrastructure](/blog/category/management/cto-handbook-infrastructure#getting-a-new-colleague-started). It still needs a maintained checklist and someone responsible for keeping it current.
+
 ## Compliance
 
 Write a control only when you can show it. Every sentence in a policy creates work someone has to do, and a plan written in the present tense misleads whoever reads it.
@@ -111,14 +155,27 @@ We build for finance and pursued SOC 2 and ISO 27001 in our first year. Three ru
 
 We also removed a sampled post-merge review from a draft procedure, because we were not going to carry it out every month.
 
+One of the mismatches was particularly simple: a procedure said new commits dismissed earlier approvals, but the setting was not enabled. Another was harder: a broad claim was supported by evidence from only one component and one successful test. Both looked plausible on paper. Finding the actual setting or following the scope of the evidence told me what work remained.
+
+I had already seen at my first startup how much work customers could need before buying an AI product. They wanted the capabilities and still had questions about bias, audits and how to assess the product responsibly. We spent time on questionnaires and independent bias audits while their buying process took its course. That experience makes me want the evidence available early, in a form the customer can understand. It also reminds me that finishing engineering work does not finish the customer's decision. I wrote about that in [Allow time for customers to get comfortable buying](/blog/category/management/from-employee-six-to-a-unicorn#lesson-7-allow-time-for-customers-to-get-comfortable-buying).
+
+## Recurring work outside engineering
+
+Setting up the UK entity brought payroll, VAT returns, a pension provider, health insurance and an office onto my desk. I had not done those jobs in my earlier engineering role. The work needed doing, and I was the founder in the UK. That explains how it became mine; it does not tell me how it should be owned indefinitely.
+
+For a recurring task, I want a record of when it comes due, where the inputs come from, who can prepare or authorise it, and where completion is recorded. I already write instructions for tasks an assistant or colleague can run. The next useful check is whether they can follow those instructions with the access and context available to them.
+
+Some decisions need specialist advice; writing a procedure does not make me qualified to make them. I want the handover to identify who to ask and which decisions remain with the responsible founder or specialist. I still need to document the actual recurring calendar and handovers. The story of how these jobs arrived is in [Nobody Handed Me a Manual](/blog/category/management/becoming-a-cto-nobody-handed-me-a-manual).
+
 ## Still to write
 
 - Incidents and post-mortems.
 - Support and escalation for customers.
-- Onboarding a new engineer, beyond the ninety-day plan.
+- The maintained onboarding checklist and evidence from using it with new engineers.
 - Vendors: choosing them and reviewing their terms.
-- Running the company: payroll, VAT and the rest of what landed on me as the UK founder.
+- The recurring UK administration calendar, access arrangements and completed handovers.
 
 ## Changelog
 
+- 11 November 2026: expanded the planning and review history, added proposed recovery and onboarding routines, and connected hiring, customer evidence and recurring company administration to my experience across both startups.
 - 11 November 2026: first version.

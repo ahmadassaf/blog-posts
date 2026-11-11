@@ -19,6 +19,10 @@ series:
 
 This chapter is about organisational infrastructure: the shared records and tools that let people find a decision, see the plan and know whom to ask. The technical kind, such as service templates, configuration, observability and release tooling, has its own post: [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
 
+At my first startup, a lot of context travelled across a small office. We knew why something had been built because we had been there when the decision was made. As the company grew from six people to more than four hundred, that stopped being a reasonable expectation of a new colleague. I came to care much more about what they could understand without finding one of the early employees. [Building that documentation habit earlier](/blog/category/management/from-employee-six-to-a-unicorn#lesson-5-build-the-documentation-habit-early) is one of the things I wanted to do differently this time.
+
+At Mav9, I also had to learn that putting information somewhere was only the beginning. I could build a dashboard, write a plan and still leave the team unsure what to do next. The infrastructure has to help with a decision people actually need to make.
+
 ## Where knowledge lives
 
 Each kind of record should have one home, and it should be the place where the people who maintain it already work. Two copies of the same information drift apart, and nobody trusts either.
@@ -33,6 +37,16 @@ The test I use for any document is whether someone other than the author can act
 - **A dashboard** I built brings the first two together for stand-up.
 
 We arrived at the GitHub and Notion split after keeping plans in Notion while the engineering work happened in GitHub. We were maintaining a picture of the work in one place and doing it in another. The engineers already spent their day in GitHub, so the delivery plan moved there and product documentation stayed where it was.
+
+### What belongs in a useful document
+
+We also made a different documentation mistake. Starting from our prototype, we used AI to help describe the product in detail. The documents grew until they were difficult to read. Writing more had become easy while the product itself still had unanswered questions.
+
+I now want the main decision near the top, followed by the reasoning someone needs to question or change it. The author has to distinguish what we have agreed from what we are assuming. If a customer requirement is still unclear, a polished explanation cannot turn it into a decision.
+
+Before sharing a document, I should be able to explain every recommendation in it, including the parts AI helped produce. Then I need to read it as the next person: can they tell what to do, what remains open and where to ask? Editing out repetition is part of the work. So is leaving the technical detail that prevents someone from making a dangerous assumption.
+
+For a decision that changes another person's work, I would leave the decision, its reason, who made it and the affected work together. When it changes, I would mark the old answer as superseded and point to the new one. A second explanation in a chat should link back to that record. Otherwise we recreate the same uncertainty in two places.
 
 ## Goal tracking
 
@@ -59,6 +73,10 @@ Dependencies between goals are recorded as “blocked by” relationships in Git
 
 The limit of three goals in progress is a ceiling. I would not treat it as a target.
 
+The board also needs a use that is worth keeping it current for. Mine became useful when we brought goal status into stand-up. Before then, the real work moved through pull requests while the board gradually drifted away from it. Adding more dashboard views did not repair that relationship.
+
+I would start with the next conversation the team needs to have: which goal needs a decision, what is blocked, and what changed since we last looked? Keep those answers in the source record and use them in that conversation. If somebody has to reconstruct the answer privately before every meeting, the shared record still is not doing its job.
+
 ## Who is responsible for what
 
 Every area needs one person with the final say, and everyone else needs to know who that is. Without it, decisions drift towards whoever is most available or most senior, which in a small company is usually a founder.
@@ -68,6 +86,10 @@ Every area needs one person with the final say, and everyone else needs to know 
 Inside a goal, the roles are written down: Milestone Lead, Sponsor, Owner and Supporters. A Supporter owns their agreed contribution, gets the context they need and brings progress to the Owner without waiting to be asked.
 
 Across areas, our agreement says that everyone knows who has the final say in each one, and that an Owner whose goal touches another area tells that person early. At our size that mostly works. The list itself used to be something I carried in my head, and I have not yet published it as a table of areas and names. That is a gap; it is in the list at the end of this chapter.
+
+The boundary matters as much as the name. An Owner can choose an implementation within the agreed scope. A change in scope needs the Sponsor's explicit approval. A decision affecting another area needs that area's owner involved early and their approval before the decision is final or the affected work starts. An unanswered message does not supply either approval.
+
+As CTO, I need to resist turning my technical preferences into another hidden requirement. An engineer can make a reasonable choice within those boundaries that differs from mine. If new information means I need the choice revisited, I owe them the information and an explanation. The [two conversations that exposed this problem](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design) were about authority and missing context, despite starting with people I already trusted.
 
 ## No single point of failure
 
@@ -82,6 +104,26 @@ If only one person can do something, the company stops when they are away. The f
 
 The front end used to depend on me alone, until we hired someone to own it. The UK company administration described in [The Beginning](/blog/category/management/cto-handbook-the-beginning) still sits with me.
 
+### A handover needs a second person who can use it
+
+I keep a list of work I should hand over and a log of work that came back to me. The second list is particularly useful. It makes me ask whether I transferred the access, context and authority along with the task, and whether the other person had time to take it on. [Handing over the front end](/blog/category/management/becoming-a-cto-the-cto-who-does-too-much) gave me room for other decisions; the responsibilities that keep returning need the same examination.
+
+The [succession guidance in the Management Playbook](https://app.notion.com/p/25bccf5cc90f815aa181e6546bbff315) starts with critical roles, the knowledge they hold and the development needed for someone else to take them on. I would apply that idea to a small company without importing the larger People-team process described in the document.
+
+For each responsibility that cannot wait for its owner to return, I would identify a second person, establish the access they need, and have them perform it with the owner available to help. The remaining questions become improvements to the handover. Reading a runbook is useful preparation; following it exposes the steps the author forgot they knew.
+
+That exercise belongs across the company. A service recovery procedure and a recurring administrative task need different expertise, but either can depend on one person's memory. I can reduce that dependency only if I make room for the second person to learn. Writing instructions while keeping every execution for myself would leave most of the risk in place.
+
+## Getting a new colleague started
+
+The [manager's first-90-days guide](https://app.notion.com/p/25bccf5cc90f81548cb4d2e697128be8) asks the manager to prepare goals before the start, share the plan in the first week, explain whom to meet and which resources to use, and keep supporting the person through regular check-ins. Those are useful requirements for the onboarding I want. A handbook link alone does not meet them.
+
+For an engineer, I would make the first week include using this infrastructure on a small piece of real work. They should be able to run the product, understand a customer journey, find its current goal and ask the Owner or Sponsor a question. They need to see where a decision belongs and follow a change through the relevant checks with someone who knows the release path.
+
+This would also test my setup. A missing permission, an outdated instruction or an unexplained acronym is something for us to fix. I would ask the new colleague to record where they got stuck and have the person responsible for that area resolve it. Being new gives them a useful view of assumptions the rest of us have stopped noticing.
+
+We have a local development entry point and written management guidance. I still need to turn the first-week path into one maintained checklist, with an owner for each access request and a clear distinction between permissions needed immediately and those granted later.
+
 ## The numbers we look at
 
 A metric is an observation. It has several possible explanations, and the useful step is deciding what to inspect next. I keep per-person numbers out of team documents, because ranking people by an incomplete dataset starts a conversation about who looks busy. More in [Measuring Agile Teams Without Weaponizing the Numbers](/blog/category/management/measuring-agile-teams).
@@ -94,13 +136,18 @@ In another thirty-day stretch we merged 854 pull requests. That number told me o
 
 When I pulled a month of data, most merged pull requests did not close an issue. That showed me how we recorded work, and nothing about who was contributing.
 
+Before adding a number to a regular review, I want to know which decision it might change and whether the underlying records can support that decision. With our deployment data, the next useful work is connecting incidents to releases. A more elaborate chart would still be reporting the same incomplete history.
+
+The same discipline applies to product analytics. Installing the tool does not choose which customer behaviour matters or explain why it changed. That question sits with the people setting the product direction, including me, and remains unfinished in our setup.
+
 ## Still to write
 
 - A published list of areas and who has the final say in each.
-- Onboarding: what a new engineer needs in the first week to use all of the above.
+- A maintained first-week onboarding checklist, with tested instructions and named owners for access requests.
 - Product metrics. We have analytics in place, and I do not yet have a set of numbers I would run the company on.
 - Access: who can reach what, and how that is reviewed.
 
 ## Changelog
 
+- 11 November 2026: added the documentation lessons from both startups, the limits of a dashboard, decision boundaries, practical handovers and a proposed first-week onboarding path informed by the Management Playbook.
 - 11 November 2026: first version.

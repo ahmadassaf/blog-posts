@@ -2,7 +2,7 @@
 type: 'Post'
 title: 'Appendices'
 subtitle: 'Templates, checklists and the reading behind the handbook'
-summary: 'The last chapter of the Startup Handbook: the goal template, the questions I ask about a release path, the division of product responsibilities without a product manager, and the reading I keep going back to, grouped by chapter.'
+summary: 'Templates for goals, onboarding, one-to-ones, feedback and handovers, with meeting agendas, release questions, responsibility definitions and the reading behind the Startup Handbook.'
 tags: ['Engineering Management', 'Leadership', 'Planning', 'Reading', 'Templates']
 date: '2026-11-11'
 updated: '2026-11-11'
@@ -17,7 +17,7 @@ series:
 
 *This is a living chapter of [The Startup Handbook](/blog/category/management/cto-handbook). I edit it as our practice changes; the changelog is at the bottom.*
 
-These are the parts of the handbook meant to be copied. Each one links back to the chapter it came from.
+These are the parts of the handbook meant to be copied. Each one links back to the chapter it came from. The onboarding, one-to-one and handover templates are adaptations I would start with; the filled-in examples describe possible work, not a particular employee's history.
 
 ## Appendix A: A template for shaping a goal
 
@@ -28,6 +28,7 @@ From [Processes](/blog/category/management/cto-handbook-processes). I fill this 
 - **Evidence:** What would show us that it works, and which assumptions need checking?
 - **Owner and Sponsor:** Who owns delivery, and who supplies the context and agrees scope?
 - **Boundaries:** What is included, excluded or dependent on other work?
+- **Work linked to the goal:** Every implementation issue in the milestone must link to a goal, directly or through a subgoal. Move work that does not contribute to a goal out of the milestone.
 - **Next check:** When will we look at the result and decide what happens next?
 
 ## Appendix B: The roles on a goal
@@ -125,12 +126,112 @@ Grouped by the chapter each one informed.
 - Phil Venables, [Control Reliability Engineering](https://www.philvenables.com/post/control-reliability-engineering-cre-applying-sre-principles-to-cybersecurity-controls). Checking whether a control keeps working after its first successful test.
 - GitLab, [The importance of a handbook-first approach](https://handbook.gitlab.com/handbook/company/culture/all-remote/handbook-first/). Whether documentation is part of how people work or maintained separately for a review.
 
+## Appendix G: A ninety-day plan for an engineer
+
+Adapted from the [first ninety days playbook](/blog/category/management/cto-handbook-playbooks#the-first-ninety-days). Prepare the draft at least seven days before the person starts, then review it together in their first week. Choose work that fits the role and the product's current stage.
+
+Record the person's role, manager, start date and review dates. For each goal, write the outcome, what would demonstrate progress and the support the manager will provide. Link the people and resources they will need.
+
+| Checkpoint | Suggested focus | Evidence to discuss |
+| --- | --- | --- |
+| First week | Use a customer journey, meet the people responsible for it and set up the tools needed to contribute. | The person can explain the journey, find its owner and identify what they still need to learn. |
+| Day 30 | Deliver an agreed, bounded change with support. | Walk through the change, its review and checks; discuss where the person needed context or help. |
+| Day 60 | Take more responsibility for a small piece of work. | Review how they clarified the outcome, raised a blocker and worked with the people affected. |
+| Day 90 | Review the agreed goals and choose the next development focus. | Compare the evidence with the original expectations, including the support that was promised and provided. |
+
+These are suggested goals to discuss, not a timetable every engineer must meet. Hold weekly one-to-ones and keep the monthly check-in notes in the shared plan. If a goal changes, record why and agree what replaces it.
+
+## Appendix H: A one-to-one that is not another stand-up
+
+From [Playbooks](/blog/category/management/cto-handbook-playbooks#one-to-ones). Keep one shared note over time. The report brings the topics they need help with; both people can add to it. Link to a delivery update when it supplies context, so the meeting can spend its time on the question behind it.
+
+```text
+Date:
+What would make this conversation useful today?
+Something I am pleased with, and why:
+A decision, concern or obstacle I want to discuss:
+Feedback I would like, or feedback I want to give:
+A capability I want to develop:
+
+Agreed next step:
+What I will do:
+What my manager will do:
+Support or context needed:
+When we will return to this:
+```
+
+At the next meeting, start with anything still owed from the previous one. At least once a month, make room for the person's longer-term direction. They may want to deepen their current work rather than move into a larger role.
+
+When a development topic needs more than a conversation, I would add a small experiment: the current difficulty, what the person will try, what they expect to learn and when we will look at the result together. That is the approach I describe in [Rethinking Performance Management](/blog/category/management/performance-management-evolution).
+
+## Appendix I: A feedback and development note
+
+From [Giving feedback](/blog/category/management/cto-handbook-playbooks#giving-feedback). Write this as a working note for a conversation. Complete the other person's account with them; do not fill it with guesses about their motives.
+
+```text
+The expectation we had agreed:
+The situation and date:
+What I observed:
+The effect on the work or other people:
+Their account and any context I was missing:
+What should continue or change:
+Support, authority or information I need to provide:
+The next experiment or action:
+How and when we will review it:
+```
+
+For a later performance review, gather examples across the period rather than copying only the latest note. Include work the manager did not directly see, with the contributor's account and specific feedback from people involved. Keep a development conversation's purpose clear, and state explicitly when a conversation concerns a formal performance decision.
+
+## Appendix J: A handover that can be checked
+
+From [Individual Habits](/blog/category/management/cto-handbook-individual-habits) and [Infrastructure](/blog/category/management/cto-handbook-infrastructure). I keep a list of work I should hand over and a log of work that came back to me. This is the record I would use to understand why an item keeps returning.
+
+- What is the responsibility, and why did it become mine?
+- Who will own it, and what decisions can they make?
+- What context, access and working instructions do they need?
+- Which decisions still need someone else, and who is that person?
+- What will we do together once before they take it on?
+- What would show that they can carry it without me?
+- When will we review the arrangement, and where will we record anything that comes back?
+
+The front end is my completed Mav9 example: I built it until we could hire someone to own it. Other handovers are still in progress. The check should show whether the next person can actually do the work, including knowing when to ask for help.
+
+## Appendix K: Meeting agendas
+
+These condense the cadence in [Collaboration](/blog/category/management/cto-handbook-collaboration#meetings). Every meeting needs a named owner, preparation and somewhere to record decisions. If an item needs a separate discussion, record who will arrange it and when.
+
+### Stand-up
+
+Monday, Wednesday and Friday, 25 minutes. Before the meeting, Owners update expected dates and everyone prepares a one-minute update tied to the goals they own or support.
+
+1. What moved since the last stand-up?
+2. What should move before the next one?
+3. What help or decision is needed, and from whom?
+
+Use about fifteen minutes for updates and the remaining ten for questions. Move detailed problem-solving to a follow-up with the people involved. Leave the source issue or goal updated, so somebody who missed the call can follow the decision.
+
+### All hands
+
+Thursday, 60 minutes. The documented agenda gives ten minutes to company news, fifteen to demos of shipped goals and fifteen to milestone updates. Leave room for questions, then use the final five minutes of the working agenda to give unresolved items an owner and a date. Our meeting also includes a round of GeoGuessr.
+
+The preparation differs by role: founders bring customer and company changes; Owners bring outcomes to demonstrate and people to recognise; Milestone Leads bring progress, expected dates, risks and decisions needed.
+
+### Monthly Planning
+
+First Monday of the month, 90 minutes. I would prepare the current priorities, capacity, customer context and decisions needed, then use this sequence:
+
+1. Review what changed in the product or company that affects priorities.
+2. Agree which goals need attention next and what will wait.
+3. Name the Sponsor and Owner who will shape each selected goal.
+4. Record dependencies and unresolved decisions with a responsible person.
+
+The output is a selection of goals to shape. Detailed planning follows between the Sponsor and Owner, and work starts when the Owner has capacity.
+
 ## Still to write
 
 - A sample list of areas and who has the final say in each.
-- A ninety-day plan template for a new engineer.
-- The agenda pages for stand-up, All hands and Monthly Planning, in a form someone can copy.
 
 ## Changelog
 
+- 11 November 2026: added reusable onboarding, one-to-one, feedback and handover templates, meeting agendas and the issue-to-goal traceability check.
 - 11 November 2026: first version.
