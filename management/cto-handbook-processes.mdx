@@ -1,0 +1,124 @@
+---
+type: 'Post'
+title: 'Processes'
+subtitle: 'The routines behind planning, shipping, releasing, hiring and compliance'
+summary: 'The sixth chapter of the Startup Handbook: how we plan a project and shape a goal, how a change gets reviewed and released, how we hire, and how I now write a control, with the Mav9 version of each.'
+tags: ['Engineering Management', 'Planning', 'Compliance', 'Hiring', 'DevOps']
+date: '2026-11-11'
+updated: '2026-11-11'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+series:
+  order: 6
+  title: 'The Startup Handbook'
+---
+
+*This is a living chapter of [The Startup Handbook](/blog/category/management/cto-handbook). I edit it as our practice changes; the changelog is at the bottom.*
+
+A process is worth writing down when the same work comes round again and people would otherwise have to work out the steps each time. This chapter has the ones we repeat most.
+
+## Planning
+
+Agree the direction for the next stage, then shape only the next few goals in detail. A plan written for three months in advance stops being true well before the three months are up, and the time spent perfecting it is time not spent learning from real data.
+
+I would also put the person with the customer context and the engineer who will deliver in the same conversation from the start. We spent too long passing versions of a plan between them.
+
+### How we do it at Mav9
+
+1. **Project.** We work in projects of two to three months. The founders frame the outcome, success measures, dates and constraints.
+2. **Monthly Planning.** On the first Monday of the month, everyone meets for ninety minutes. Before the meeting the project should already hold most milestones, each with a Lead, and goals with a Sponsor. A self-explaining title is enough. We do not shape goals before or during this meeting.
+3. **In the meeting.** We look back at what shipped and what slipped. For each milestone, people introduce the goals they added, in about thirty seconds each, and the team decides whether to keep, combine, defer or delete them. Then we pick the two or three highest-priority milestones and, for each, the goals to move from Planned into Shaping. Every team member should leave owning or supporting at least one active goal.
+4. **Shaping.** Straight afterwards, each Owner and Sponsor set up a meeting to shape their goal: requirements, boundaries, approach and how to recognise the result. The Owner keeps the original questions and their answers in the goal.
+5. **Delivery.** Once the plan is approved and dependencies are agreed, the goal can start when its Owner has capacity. Nobody waits for the next planning meeting.
+
+The template I use to start shaping a goal is in the [Appendices](/blog/category/management/cto-handbook-appendices). How we got here is in [We Kept Trying to Plan Everything](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year).
+
+## Shipping a change
+
+Review has to be something a person can do with care at the volume the team produces. An approval is easy to count. Whether someone understood the change is much harder to establish, and a process that only produces clicks makes the record look complete without making the software safer.
+
+Not every repository carries the same risk. Treating an experiment like customer-facing software slows the experiment and teaches people that the process is a formality.
+
+### How we do it at Mav9
+
+This is the model we are putting in place. Some of it is enforced in tooling and some is still being built.
+
+- **Critical and experimental repositories are separate.** Critical means the repositories that build, configure or deploy the product. Sandboxes, experiments and documentation-only repositories do not go through the production change gate. If an experiment starts serving customers, its controls change with it.
+- **Pull requests are the record of each change.**
+- **Small changes.** One of the engineers added a check that fails pull requests over four hundred lines, which pushes a coding agent towards small, stacked changes a person can read.
+- **Automated review.** A change gate reviews each pull request with several models, each looking at one concern: correctness, security, tests, the reach of the change and whether it can be reversed. It produces findings for the engineer to fix or explain. It recommends and does not approve.
+- **Ordinary changes.** The author can merge an ordinary change within an agreed goal once the automated gates pass and the findings are addressed.
+- **Riskier changes.** Large changes, and changes involving authentication, secrets, infrastructure or migrations, need a second engineer before merging. So does a change whose risk reaches outside the goal.
+- **Choosing a reviewer.** Authors choose whom to ask: whoever knows that part of the system or would spot what the author would miss. We tried automatic assignment from code-ownership files, and it sent people requests about code they had not touched in months, so we removed it.
+- **Before production.** An independent person approves before a change reaches production. Where a merge triggers a production deployment, that approval happens before the merge.
+
+For when a change needs someone else at all, we use the vocabulary of [Ship / Show / Ask](https://martinfowler.com/articles/ship-show-ask.html). The history of how we arrived here is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed), and the gate has its own post: [Building a Change Gate for AI-Assisted Development](/blog/category/engineering/building-an-ai-change-gate).
+
+## Releasing
+
+The release path should take a versioned artefact through a repeatable deployment, and the service owner should be able to use it without asking another team for routine steps. Recovery needs the same attention as deployment. Rolling back code does not undo a database migration.
+
+### How we do it at Mav9
+
+Merging to main produces a version and a changelog from the commit messages. The release builds the image and writes the new tag into the service's manifests, and the deployment to pre-production follows from Git without a manual step. A rollback is a new deployment of an earlier version through the same path.
+
+I found rollback harder than I wanted it to be, which is why I want recovery rehearsed. The four questions I ask about any release path are in the [Appendices](/blog/category/management/cto-handbook-appendices), and the tooling is in [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
+
+## Hiring
+
+A hiring process should be short, tell the candidate what each stage is for, and collect enough structured evidence to make a fair decision. Long take-home exercises and trivia add noise.
+
+### How we do it at Mav9
+
+Our handbook says hiring is a team sport: everyone helps source, refer and interview. The hiring manager owns the process and keeps it moving. For engineering roles that is usually me.
+
+Technical roles go through four stages, usually within about two weeks.
+
+| Stage | Who | Format | What we look at |
+| --- | --- | --- | --- |
+| Intro | Hiring manager | 30 minutes, video | Background, motivation and role fit, plus the candidate's questions |
+| Technical | Senior engineers | 30 to 45 minutes, video | General technical knowledge, ways of working, and a chance to meet the team |
+| System design | Senior engineers | 60 to 90 minutes | How the candidate thinks about designing systems and tradeoffs. A discussion, with no live coding |
+| Founder chat | Founders | 30 minutes | Values, vision and mutual fit |
+
+The system design stage uses scenarios from our real platform. We ask candidates to state assumptions, propose options and choose between them.
+
+What we look for at every stage:
+
+- Clarity of thinking: explaining tradeoffs and assumptions, beyond the outcome.
+- Ownership, and the ability to work without heavy process.
+- Low-ego collaboration.
+- Practical AI fluency: using AI to amplify engineering judgement, and being able to say how they use it responsibly.
+- Comfort with ambiguity and shifting priorities.
+
+Interviewers use a shared question bank, where each question lists what good looks like and what to watch out for. Feedback is written the same day where possible, and it has to be specific: what was said or done and what it signals. The panel decides together. If an interviewer is unsure, we ask them to say what additional signal would change their mind.
+
+What happens after the offer is in [Playbooks](/blog/category/management/cto-handbook-playbooks), under the first ninety days.
+
+## Compliance
+
+Write a control only when you can show it. Every sentence in a policy creates work someone has to do, and a plan written in the present tense misleads whoever reads it.
+
+### How we do it at Mav9
+
+We build for finance and pursued SOC 2 and ISO 27001 in our first year. Three rules came out of it.
+
+- When I write a control, I want to be able to open the repository, run the procedure or show the record that backs it up. If I cannot, it goes on the work list.
+- If a control claims more than the evidence covers, we either implement it properly or retire the claim and explain how we address the risk.
+- Evidence has to be readable by the person checking it. Our corrective-action records sat behind a login the auditor did not have, so we now export them.
+
+We also removed a sampled post-merge review from a draft procedure, because we were not going to carry it out every month.
+
+## Still to write
+
+- Incidents and post-mortems.
+- Support and escalation for customers.
+- Onboarding a new engineer, beyond the ninety-day plan.
+- Vendors: choosing them and reviewing their terms.
+- Running the company: payroll, VAT and the rest of what landed on me as the UK founder.
+
+## Changelog
+
+- 11 November 2026: first version.

@@ -1,0 +1,106 @@
+---
+type: 'Post'
+title: 'Infrastructure'
+subtitle: 'What the team runs on apart from the code'
+summary: 'The fourth chapter of the Startup Handbook: where knowledge lives, how goals are tracked, who is responsible for what, removing single points of failure, and the few numbers we look at, with how each works at Mav9.'
+tags: ['Engineering Management', 'Documentation', 'Planning', 'DevOps', 'Metrics']
+date: '2026-11-11'
+updated: '2026-11-11'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+series:
+  order: 4
+  title: 'The Startup Handbook'
+---
+
+*This is a living chapter of [The Startup Handbook](/blog/category/management/cto-handbook). I edit it as our practice changes; the changelog is at the bottom.*
+
+This chapter is about organisational infrastructure: the shared records and tools that let people find a decision, see the plan and know whom to ask. The technical kind, such as service templates, configuration, observability and release tooling, has its own post: [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
+
+## Where knowledge lives
+
+Each kind of record should have one home, and it should be the place where the people who maintain it already work. Two copies of the same information drift apart, and nobody trusts either.
+
+The test I use for any document is whether someone other than the author can act on it. That applies to a runbook, a decision record and a goal description alike.
+
+### How we do it at Mav9
+
+- **GitHub** holds delivery work and its status: projects, milestones, goals and the pull requests.
+- **Notion** holds durable product context, decisions, our handbook and the pages for each meeting.
+- **The repository** holds architecture decision records and runbooks, as plain Markdown. A change to one is reviewed like a change to code.
+- **A dashboard** I built brings the first two together for stand-up.
+
+We arrived at the GitHub and Notion split after keeping plans in Notion while the engineering work happened in GitHub. We were maintaining a picture of the work in one place and doing it in another. The engineers already spent their day in GitHub, so the delivery plan moved there and product documentation stayed where it was.
+
+## Goal tracking
+
+A tracking tool helps when it sits close to the work and someone keeps it current. Even a perfectly current board will not tell an engineer why a priority changed or who can settle an argument about scope. I treated visibility as though it would provide direction, and built a dashboard nobody but me opened. That story is in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
+
+### How we do it at Mav9
+
+We work in projects of two to three months. A project holds milestones, and a milestone holds goals.
+
+- A **milestone** is an outcome that needs several goals to support it. It has one Milestone Lead and a due date, and it closes when its outcome is delivered and its goals are done. A project can have more than fifteen. That is intended, so there are small wins to mark along the way.
+- A **goal** is one shared description of one tangible outcome, its requirements and what done looks like. It belongs to exactly one milestone and has one Sponsor and one Owner, who are different people. The title should make the outcome clear to someone without prior context.
+
+We do not track daily work on the board. Goals move through five statuses:
+
+| Status | What it means |
+| --- | --- |
+| Planned | A proposal. A clear title and a milestone are enough. Listing it does not commit us to delivering it. |
+| Shaping | The Owner and Sponsor work through the questions and agree the plan: requirements, boundaries, approach and how to recognise the result. |
+| Backlog | The written plan is approved and dependencies are agreed with the people involved. Whoever owns the goal starts when they have capacity, without waiting for a meeting. |
+| In Progress | The Owner is delivering the agreed outcome. Each Owner has at most three goals in progress. |
+| Done | The agreed outcome has shipped and is live and usable. |
+
+Dependencies between goals are recorded as “blocked by” relationships in GitHub. Being blocked does not change a goal's status; other obstacles are raised in stand-up. If a goal turns out not to be ready, it goes back to Shaping.
+
+The limit of three goals in progress is a ceiling. I would not treat it as a target.
+
+## Who is responsible for what
+
+Every area needs one person with the final say, and everyone else needs to know who that is. Without it, decisions drift towards whoever is most available or most senior, which in a small company is usually a founder.
+
+### How we do it at Mav9
+
+Inside a goal, the roles are written down: Milestone Lead, Sponsor, Owner and Supporters. A Supporter owns their agreed contribution, gets the context they need and brings progress to the Owner without waiting to be asked.
+
+Across areas, our agreement says that everyone knows who has the final say in each one, and that an Owner whose goal touches another area tells that person early. At our size that mostly works. The list itself used to be something I carried in my head, and I have not yet published it as a table of areas and names. That is a gap; it is in the list at the end of this chapter.
+
+## No single point of failure
+
+If only one person can do something, the company stops when they are away. The fix is usually a written procedure that someone else has followed at least once.
+
+### How we do it at Mav9
+
+- A new service starts from a template with logging, health checks and telemetry already in place, so operating it does not depend on who created it.
+- Runbooks live next to the decision records. The check I want is that another engineer has tried the instructions without the author's local setup or memory of the last incident.
+- An Owner arranges any handover needed to keep a goal moving while they are away.
+- For my own recurring tasks, I write the instructions down so an assistant or a colleague can run them.
+
+The front end used to depend on me alone, until we hired someone to own it. The UK company administration described in [The Beginning](/blog/category/management/cto-handbook-the-beginning) still sits with me.
+
+## The numbers we look at
+
+A metric is an observation. It has several possible explanations, and the useful step is deciding what to inspect next. I keep per-person numbers out of team documents, because ranking people by an incomplete dataset starts a conversation about who looks busy. More in [Measuring Agile Teams Without Weaponizing the Numbers](/blog/category/management/measuring-agile-teams).
+
+### How we do it at Mav9
+
+A small service computes DORA metrics from GitHub deployments and our incident records. In one thirty-day snapshot it recorded 586 deployments across 22 repositories. Deployment frequency is the only figure I would quote so far. The failure and recovery figures need most incident records connected to the releases they relate to, and we have not done that yet.
+
+In another thirty-day stretch we merged 854 pull requests. That number told me our review process was under strain. It did not tell me how many features we shipped or how much of the code AI wrote.
+
+When I pulled a month of data, most merged pull requests did not close an issue. That showed me how we recorded work, and nothing about who was contributing.
+
+## Still to write
+
+- A published list of areas and who has the final say in each.
+- Onboarding: what a new engineer needs in the first week to use all of the above.
+- Product metrics. We have analytics in place, and I do not yet have a set of numbers I would run the company on.
+- Access: who can reach what, and how that is reviewed.
+
+## Changelog
+
+- 11 November 2026: first version.

@@ -1,0 +1,131 @@
+---
+type: 'Post'
+title: 'Group Habits'
+subtitle: 'How we decide things, keep agreements and stay honest with each other'
+summary: 'The third chapter of the Startup Handbook: making decisions look decided, who has the final say, writing over talking, the two sides of ownership, agreements that hold, transparency, disagreement and the values we wrote down at Mav9.'
+tags: ['Leadership', 'Decision-Making', 'Teams', 'Engineering Management', 'Culture']
+date: '2026-11-11'
+updated: '2026-11-11'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+series:
+  order: 3
+  title: 'The Startup Handbook'
+---
+
+*This is a living chapter of [The Startup Handbook](/blog/category/management/cto-handbook). I edit it as our practice changes; the changelog is at the bottom.*
+
+Individual habits are about how one person works. This chapter is about what a group has to agree on so that people can act without checking with each other first.
+
+## Decision-making
+
+### A decision needs to look decided
+
+People cannot act on a decision they cannot find. If it lives in scattered conversations, capable people will check with you again, and your absence becomes ambiguous: it might mean the decision is theirs, that you have not seen it, or that you think it is already settled.
+
+For any decision other people build against, they need to know what is settled, what is still open and what a change would mean for their work.
+
+**How we do it at Mav9.** I proposed that we record decisions where the work lives, and write up decisions made on a call that day. I proposed it before I was doing it reliably myself. An engineer told me our commitment to the new front end had never been formally communicated, when I felt I had said it in every call for a month. It was not yet clear enough to act on. The story is in [Trust Is a System You Design](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design).
+
+### Who decides what
+
+A line I heard somewhere has stayed with me:
+
+> I own the context; you own the execution.
+
+Whoever sets the direction makes the purpose and constraints available. The person doing the work decides how, and questions the context when it does not add up.
+
+**How we do it at Mav9.** Every goal has two people, and they have to be different people.
+
+- The **Owner** works out how to deliver the goal and makes the implementation decisions inside what was agreed. They do not wait for me on a library choice or the order of their own work.
+- The **Sponsor** explains why the goal matters, is the voice of the product and the customer, and explicitly approves any change to scope.
+
+Beyond a single goal, everyone knows who has the final say in each area. If your goal needs a decision in someone else's area, it is on you to tell them early and get their approval before the decision is final or the affected work starts. The person to involve is whoever owns the area, which is sometimes me and often not.
+
+When I see a reasonable implementation decision I would have made differently, I ask whether new information changes the scope, the risk or a commitment we have already made. If it does, I owe the Owner an explanation. Otherwise the choice stays with them.
+
+### Reversible and irreversible decisions
+
+Most decisions can be undone, and those should be made quickly by the person closest to the work. I wrote about this in [Making Better Decisions Faster](/blog/category/thoughts/making-decisions).
+
+**How we did it at Mav9.** During its pilot, our change gate could approve a standard change after the checks passed. When our auditor's guidance said it could recommend but not approve, we took it down that afternoon and put it back the next day with the approval removed.
+
+### Writing and talking
+
+Written context reaches people who were not in the room and can be read at a different time. Our values say we prefer written notes to extended meetings, and that agendas and decisions from a meeting are stored with the minutes.
+
+Writing can go wrong too. We used AI to help document a product we were still working out, and the documents grew until they were hard to read. The test we use now is that someone has to understand the document, be able to edit it, and leave the next person able to use it.
+
+## Ownership has two sides
+
+Two German words describe the duties on each side, and English has no equivalent for either.
+
+- ***Holschuld***, the duty to fetch. What you need to do your job, you go and get: clarity, a decision, context, access, an answer. If something essential is missing, ask before building on an assumption.
+- ***Bringschuld***, the duty to deliver. What others need from you, you bring without being asked: a draft, the current state of your goal, a demo, bad news early.
+
+An owner who only fetches becomes a bottleneck for everyone around them. An owner who only delivers builds the wrong thing.
+
+**How we do it at Mav9.** Both words are in our written agreement on how we work, and both apply to me as much as anyone. The front-end commitment was a *Bringschuld* I had not met. Silence has a limit as well: an Owner can proceed with an implementation choice inside the agreed scope, but silence cannot supply a scope, area or release approval.
+
+## Agreements that hold
+
+Agreeing to behave differently does not change what happens unless something backs the agreement up. Ours lasted until people were busy.
+
+**How we did it at Mav9.** We agreed that every change would have a recorded independent review before merging. We changed no configuration. It worked for a few months, and when I checked again too many pull requests had merged without one, mine included. I had treated agreement as implementation.
+
+For any agreement that matters, I now want to decide how we would know it is being kept, and put that check in the tooling where we can. The review story is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed).
+
+## Transparency
+
+Share context by default so people can make good decisions without waiting for permission. Keep confidentiality where it is needed, and avoid “need to know” as a reflex.
+
+**How we do it at Mav9.**
+
+- The one thing in our way of working that is not negotiable is that goals and milestones are always up to date.
+- Slack channels are public unless the subject is confidential or sensitive.
+- Praise publicly, criticise privately.
+- The same rules apply to everyone, whatever their role or seniority. I used the merge bypass too, so that one is a note to myself.
+
+## Disagreement
+
+When we disagree, we make it about the work and the facts. Our values put it as dissent early and alignment after a decision, and suggest asking “what evidence would change your mind?”
+
+The part that is mine is how I respond when someone challenges me. If I spend the conversation proving I was right, I have missed what they were telling me, and they will think twice before raising the next concern.
+
+When a decision goes badly, I ask what the person knew at the time and whether they had the context and authority we said they had. If ownership lasts only until the first disappointing result, the safe choice next time is to bring every decision back to me.
+
+## Close to the customer
+
+Engineers make better decisions when they know whose problem they are solving. That knowledge should not be held by one person and passed on in tickets.
+
+**How we do it at Mav9.** Much of this is still a draft I put to the team. Leadership explains who each goal is for, what problem it addresses and what finished work looks like. Customer notes are shared, and engineers join those conversations. Every engineer should be able to use and explain the application's main customer journeys, and the Owner uses the affected journey end to end, including its failure cases, before calling a change done. Details in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
+
+## Culture and values
+
+I find values useful when they say what each side owes the other. Ours are written with three parts each: what the employee is responsible for, what the company is responsible for, and how we do it in practice.
+
+**The Mav9 values.**
+
+1. We are all team leads. The person closest to the work drives it.
+2. We support growth and diversity.
+3. We are mindful, which includes a sustainable pace and few, timeboxed meetings.
+4. We are long-term, end-user focused thinkers committed to the truth.
+5. We make an impact with curiosity and courage.
+6. We value openness and transparency.
+7. We communicate accurately.
+8. We pursue excellence and think big.
+9. We are humbly creative.
+
+Our working agreement leans most on the first, the sixth and the seventh: ownership by the person closest to the work, shared context, and communication someone can act on without guessing.
+
+## Still to write
+
+- Stopping the loudest voice in the room from deciding, especially when it is mine.
+- A fuller account of conflict between two people, as opposed to disagreement about a decision.
+- Celebration and fun. Our milestones are deliberately small so there are wins to mark during a project, and I have not yet written about how well that works.
+
+## Changelog
+
+- 11 November 2026: first version.

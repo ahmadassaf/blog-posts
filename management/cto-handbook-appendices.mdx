@@ -1,0 +1,136 @@
+---
+type: 'Post'
+title: 'Appendices'
+subtitle: 'Templates, checklists and the reading behind the handbook'
+summary: 'The last chapter of the Startup Handbook: the goal template, the questions I ask about a release path, the division of product responsibilities without a product manager, and the reading I keep going back to, grouped by chapter.'
+tags: ['Engineering Management', 'Leadership', 'Planning', 'Reading', 'Templates']
+date: '2026-11-11'
+updated: '2026-11-11'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+series:
+  order: 8
+  title: 'The Startup Handbook'
+---
+
+*This is a living chapter of [The Startup Handbook](/blog/category/management/cto-handbook). I edit it as our practice changes; the changelog is at the bottom.*
+
+These are the parts of the handbook meant to be copied. Each one links back to the chapter it came from.
+
+## Appendix A: A template for shaping a goal
+
+From [Processes](/blog/category/management/cto-handbook-processes). I fill this in with the person doing the work, and add detail only where a real question needs it.
+
+- **Outcome:** Who should be able to do what?
+- **Why now:** Why does this deserve attention ahead of the other goals?
+- **Evidence:** What would show us that it works, and which assumptions need checking?
+- **Owner and Sponsor:** Who owns delivery, and who supplies the context and agrees scope?
+- **Boundaries:** What is included, excluded or dependent on other work?
+- **Next check:** When will we look at the result and decide what happens next?
+
+## Appendix B: The roles on a goal
+
+From [Group Habits](/blog/category/management/cto-handbook-group-habits) and [Infrastructure](/blog/category/management/cto-handbook-infrastructure).
+
+| Role | How many | What they owe |
+| --- | --- | --- |
+| Milestone Lead | One per milestone | Keeps the milestone outcome clear and on track, makes sure its goals cover it, keeps dependencies current, and updates everyone weekly. |
+| Sponsor | One per goal | Explains why the goal matters, brings the customer and product view, approves scope changes, and accepts and tests the result before it ships. |
+| Owner | One per goal, a different person from the Sponsor | Shapes the goal with the Sponsor, keeps its description current, makes implementation decisions, coordinates Supporters, and reports progress. |
+| Supporter | As needed | Owns an agreed contribution, fetches the context they need, and brings progress and obstacles to the Owner. |
+
+## Appendix C: Product responsibilities without a product manager
+
+From [Collaboration](/blog/category/management/cto-handbook-collaboration). This is the division I drafted for the team to discuss.
+
+**Leadership owes the team:**
+
+- Who each goal is for, what problem it addresses and what finished work looks like.
+- One shared order of priorities. When it changes, agreement on what moves out, changes or waits.
+- Shared customer notes, and engineers in those conversations.
+- Decisions recorded where the work is happening.
+- An answer within one working day to a scope question, concern or draft.
+
+**Engineers owe the team:**
+
+- Questions about the scope before building.
+- The code connected to the work it belongs to.
+- Enough understanding of the main customer journeys to use and explain them.
+- The change taken through to pre-production and the affected journey used end to end, including its failure cases.
+- For a blocked item: what is missing, who could help, and the next action.
+
+## Appendix D: Questions about a release path
+
+From [Processes](/blog/category/management/cto-handbook-processes). A team should be able to answer these about its own service.
+
+- After a version is released, does it reach each environment automatically, or does a person promote it?
+- Who decides that a release goes out: the service owner alone, or with a review?
+- How do you roll back in practice: revert the commit, redeploy the previous version, or fix forward?
+- When did you last roll something back, and how long did it take?
+
+The exercise I would start with: take one customer journey all the way through, including a failure and recovery, and have another engineer repeat it.
+
+## Appendix E: The technical founder
+
+The book this handbook borrows its shape from has an appendix on the challenge of the technical founder. Mine is the series that came before this handbook.
+
+1. [Nobody Handed Me a Manual](/blog/category/management/becoming-a-cto-nobody-handed-me-a-manual)
+2. [Imposter Syndrome Is Real](/blog/category/management/becoming-a-cto-imposter-syndrome-is-real)
+3. [Trust Is a System You Design](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design)
+4. [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet)
+5. [We Kept Trying to Plan Everything](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year)
+6. [AI Is a Multiplier, Not a Signature](/blog/category/management/becoming-a-cto-ai-is-a-multiplier-not-a-signature)
+7. [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed)
+8. [My First Year as CTO](/blog/category/management/becoming-a-cto-the-cto-who-does-too-much)
+
+## Appendix F: Reading
+
+Grouped by the chapter each one informed.
+
+### The role
+
+- Camille Fournier, [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/). The later chapters describe holding direction and the whole picture while the team moves without you.
+- Charity Majors, [The Engineer/Manager Pendulum](https://charity.wtf/2017/05/11/the-engineer-manager-pendulum/). On the change in work underneath a change in title.
+- Will Larson, [Work on what matters](https://staffeng.com/guides/work-on-what-matters/). For deciding where technical involvement helps most.
+- Lara Hogan, [When to delegate, when to say no](https://larahogan.me/blog/when-to-delegate-when-to-say-no/). The exercise I used to sort my commitments.
+
+### Trust, ownership and decisions
+
+- Netflix, [Culture](https://jobs.netflix.com/culture). “Context, not control” is the shortest statement of why ownership has to run both ways.
+- Henrik Kniberg, [Spotify engineering culture, part 1](https://blog.crisp.se/2014/03/27/henrikkniberg/spotify-engineering-culture-part-1). High alignment is what makes high autonomy safe.
+- Rouan Wilsenach, [Ship / Show / Ask](https://martinfowler.com/articles/ship-show-ask.html). Our vocabulary for when a change needs someone else before it lands.
+- Sarah Milstein, [How team agreements promote high performance](https://leaddev.com/culture/how-team-agreements-promote-high-performance). A practical companion to writing a working agreement.
+
+### Planning and product
+
+- Ryan Singer, [Shape Up](https://basecamp.com/shapeup). The chapters on appetite and boundaries are the ones I reread.
+- Martin Fowler, [The New Methodology](https://martinfowler.com/articles/newMethodology.html). Adaptive against predictive planning.
+- Henrik Kniberg, [Making sense of MVP](https://blog.crisp.se/2016/01/25/henrikkniberg/making-sense-of-mvp). The skateboard-to-car picture, with the reasoning underneath it.
+- Marty Cagan, [Product is Hard](https://vimeo.com/333559833). Keeps the PM conversation connected to product value.
+
+### Building with AI
+
+- Simon Willison, [Not all AI-assisted programming is vibe coding (but vibe coding rocks)](https://simonwillison.net/2025/Mar/19/vibe-coding/). On taking responsibility for code you understand.
+- Birgitta Böckeler, [The role of developer skills in agentic coding](https://martinfowler.com/articles/exploring-gen-ai/13-role-of-developer-skills.html). The framing, steering and correction involved in working with an agent.
+- Addy Osmani, [The 70% problem](https://addyo.substack.com/p/the-70-problem-hard-truths-about). Where AI-assisted building saves time and where it does not.
+- DORA, [Balancing AI tensions: moving from adoption to effective use](https://dora.dev/insights/balancing-ai-tensions/). On the verification work that comes with faster generation.
+
+### Review, release and compliance
+
+- Google Engineering Practices, [The Standard of Code Review](https://google.github.io/eng-practices/review/reviewer/standard.html). What a reviewer is actually deciding.
+- Martin Fowler, [Patterns for Managing Source Code Branches](https://martinfowler.com/articles/branching-patterns.html). Separates branching choices from review and release choices.
+- Steven Shorrock, [The Varieties of Human Work](https://humanisticsystems.com/2016/12/05/the-varieties-of-human-work/). Language for the difference between what a procedure says and what happens.
+- Phil Venables, [Control Reliability Engineering](https://www.philvenables.com/post/control-reliability-engineering-cre-applying-sre-principles-to-cybersecurity-controls). Checking whether a control keeps working after its first successful test.
+- GitLab, [The importance of a handbook-first approach](https://handbook.gitlab.com/handbook/company/culture/all-remote/handbook-first/). Whether documentation is part of how people work or maintained separately for a review.
+
+## Still to write
+
+- A sample list of areas and who has the final say in each.
+- A ninety-day plan template for a new engineer.
+- The agenda pages for stand-up, All hands and Monthly Planning, in a form someone can copy.
+
+## Changelog
+
+- 11 November 2026: first version.
