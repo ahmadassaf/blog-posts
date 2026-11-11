@@ -1,10 +1,10 @@
 ---
 type: 'Post'
-title: 'Building and Shipping'
+title: 'Delivery'
 subtitle: 'Turning priorities into goals, tracking the work and releasing changes safely'
 summary: 'How I connect customer context to planning, track delivery, review changes and release software, including the gaps between our written rules and what actually happens.'
 tags: ['Engineering Management', 'Planning', 'DevOps', 'Product Management']
-date: '2026-11-11'
+date: '2026-11-10'
 updated: '2026-11-11'
 category: 'management'
 featured: false
@@ -39,7 +39,7 @@ Then, approaching launch, we tried to settle three months in detail again. The f
 4. **Shaping.** Straight afterwards, each Owner and Sponsor set up a meeting to shape their goal: requirements, boundaries, approach and how to recognise the result. The Owner keeps the original questions and their answers in the goal.
 5. **Delivery.** Once the plan is approved and dependencies are agreed, the goal can start when its Owner has capacity. Nobody waits for the next planning meeting.
 
-The template I use to start shaping a goal is in [Templates and Checklists](/blog/category/management/cto-handbook-appendices). How we got here is in [We Kept Trying to Plan Everything](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year).
+The template I use to start shaping a goal is in [Appendices](/blog/category/management/cto-handbook-appendices). How we got here is in [We Kept Trying to Plan Everything](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year).
 
 ### Keeping a goal useful after planning
 
@@ -49,7 +49,7 @@ I have also asked for implementation issues to connect back to the goals they su
 
 When new information changes scope, the Owner takes it back to the Sponsor for explicit agreement. When a priority changes, leadership needs to say which other work moves or waits. The board should then reflect that decision. I cannot keep asking for a new priority while expecting the old plan to remain a reliable promise.
 
-The [Management Playbook's goal-setting guide](https://app.notion.com/p/25bccf5cc90f81a99971ef12dfce4583) also covers a different kind of goal: an individual's development. It asks the employee and manager to agree useful, achievable goals, define the evidence they will discuss, and follow up as circumstances change. I would keep that conversation distinct from the delivery board. Someone's development should connect to the work, but it needs attention beyond whether a feature shipped. The practical review guidance is in [Building the Team](/blog/category/management/cto-handbook-playbooks).
+The [Management Playbook's goal-setting guide](https://app.notion.com/p/25bccf5cc90f81a99971ef12dfce4583) also covers a different kind of goal: an individual's development. It asks the employee and manager to agree useful, achievable goals, define the evidence they will discuss, and follow up as circumstances change. I would keep that conversation distinct from the delivery board. Someone's development should connect to the work, but it needs attention beyond whether a feature shipped. The practical review guidance is in [People](/blog/category/management/cto-handbook-playbooks).
 
 ## Goal tracking
 
@@ -119,7 +119,7 @@ The release path should take a versioned artefact through a repeatable deploymen
 
 Merging to main produces a version and a changelog from the commit messages. The release builds the image and writes the new tag into the service's manifests, and the deployment to pre-production follows from Git without a manual step. A rollback is a new deployment of an earlier version through the same path.
 
-I found rollback harder than I wanted it to be, which is why I want recovery rehearsed. The four questions I ask about any release path are in [Templates and Checklists](/blog/category/management/cto-handbook-appendices), and the tooling is in [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
+I found rollback harder than I wanted it to be, which is why I want recovery rehearsed. The four questions I ask about any release path are in [Appendices](/blog/category/management/cto-handbook-appendices), and the tooling is in [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
 
 ### Rehearsing a failure before depending on the procedure
 
