@@ -17,7 +17,7 @@ series:
 
 I want to be able to explain why we are building something, what we expect to change for the customer and how we'll know it has worked. The work starts there, before we write a plan or open a pull request.
 
-I brought experience from a company that had grown to hundreds of people. Starting again, I had to decide which parts were useful for a team still getting its first product into customers' hands. I also had to notice when our own rules existed only because we had agreed them in a meeting. Planning and code review both exposed that gap: the written process sounded reasonable, while the work followed a different path.
+In planning and code review, our written process sounded reasonable while the work followed a different path. Some rules existed only because we had agreed them in a meeting.
 
 ## Planning
 
@@ -53,7 +53,7 @@ An individual's development needs goals too. The employee and manager should agr
 
 ## Goal tracking
 
-Once a goal is under way, its record needs to stay close to the work, and someone needs to keep it current. Even a perfectly current board will not tell an engineer why a priority changed or who can settle an argument about scope. I treated visibility as though it would provide direction, and built a dashboard nobody but me opened. That story is in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
+Once a goal is under way, its record needs to stay close to the work, and someone needs to keep it current. Even a perfectly current board will not tell an engineer why a priority changed or who can settle an argument about scope. I treated visibility as though it would provide direction, and built a dashboard nobody but me opened. By October, I was frustrated that the team was not using it or keeping the GitHub board current. That story is in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
 
 ### How I do it now
 
@@ -107,9 +107,9 @@ For when a change needs someone else at all, we use the vocabulary of [Ship / Sh
 
 ### Why I distinguish the rule from its enforcement
 
-An early fix was simply to agree that the person reviewing a change would record their approval. We changed no configuration. It worked for a while, then I checked and found merged pull requests without recorded reviews, including mine. Agreement had not made the practice dependable.
+An early fix was simply to agree that the person reviewing a change would record their approval. We changed no configuration. It worked for a few months, then I checked and found merged pull requests without recorded reviews, including mine. Agreement had not made the practice dependable.
 
-The change gate taught me a second lesson. During the pilot it could approve an ordinary change after its checks passed. Our auditor's guidance for our process was that the service could recommend but could not approve. We took it down and brought it back with that approval removed. The review findings were still useful; the decision to let software approve had needed changing.
+The change gate taught me a second lesson. During the pilot it could approve an ordinary change after its checks passed. Our auditor's guidance for our process was that the service could recommend but could not approve. We took it down that afternoon and brought it back the next day with that approval removed. The review findings were still useful; the decision to let software approve had needed changing.
 
 I now want to trace a change through the actual path: who can merge it, which findings need an answer, what reaches pre-production and what stops it reaching production before the required independent approval. These are our chosen controls, shaped with our auditor, and I am still checking their enforcement.
 

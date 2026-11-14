@@ -19,11 +19,7 @@ People need to know what they can decide, what they owe each other and when to i
 
 ## As the company grows
 
-When I joined my first startup, a small group shared an office and much of the context travelled through everyday conversation. We were excited about the problem and trying to find customers. It was easy to rely on what we knew together without writing much of it down.
-
-As the company grew, the arrangement changed. Some early colleagues left. New managers arrived with experience from larger companies, and more coordination was needed. I also saw processes carried over from previous jobs without enough thought about whether they suited ours. Work that had once moved through a conversation acquired more steps. New employees learned how their manager expected them to work, which could be quite different from the habits the founders remembered.
-
-The early culture had depended on people who were no longer all there. Replacing their responsibilities did not automatically preserve their influence. I wrote about that change in [Ten Years in Startups](/blog/category/management/from-employee-six-to-a-unicorn). It is why I care about how a prospective manager works with people, alongside whether they have managed a company at the size we hope to reach.
+At [my first startup](/blog/category/management/from-employee-six-to-a-unicorn), new managers shaped how their teams worked each day. I saw processes carried over from previous jobs without enough thought about whether they suited ours. [People](/blog/category/management/cto-handbook-playbooks#culture-and-keeping-people) covers what changed as early colleagues left and experienced leaders joined.
 
 For a CTO, this reaches into ordinary engineering work. A new person learns how much disagreement is welcome by watching a review. They learn what ownership means when a decision goes badly, and whether an incident leads to useful questions or a search for someone to blame. I would look at those situations when asking whether we are keeping the culture we say we want. A description of our early days gives a new manager very little help with the decision in front of them.
 
@@ -41,7 +37,7 @@ Engineers make better decisions when they know whose problem they are solving. T
 
 **What I am trying now.** Much of this is still a draft I put to the team. Leadership explains who each goal is for, what problem it addresses and what finished work looks like. Customer notes are shared, and engineers join those conversations. Every engineer should be able to use and explain the application's main customer journeys, and the Owner, the person responsible for delivery, uses the affected journey end to end, including its failure cases, before calling a change done. Details in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
 
-During [our attempt to plan three months to launch](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year#three-trying-to-plan-three-months-to-launch), the goals moved from a founder-written version to an overly technical engineering version before I worked through a third version around outcomes. The person supplying customer context and the engineer delivering the goal now shape it together. That approach is still new; I want to see how well it holds up.
+The [planning change](/blog/category/management/becoming-a-cto-four-planning-processes-in-a-year#three-trying-to-plan-three-months-to-launch) puts the person supplying customer context and the engineer delivering the goal in the same conversation. That approach is still new; [Delivery](/blog/category/management/cto-handbook-processes#planning) covers how we are putting it into practice.
 
 ## Decision-making
 
@@ -80,13 +76,13 @@ When I see a reasonable implementation decision I would have made differently, I
 
 Most decisions can be undone, and those should be made quickly by the person closest to the work. I wrote about this in [Making Better Decisions Faster](/blog/category/thoughts/making-decisions). A choice can be reversible and still need someone else's approval.
 
-**How I approached it at a startup.** During its pilot, our change gate could approve a standard change after the checks passed. When our auditor's guidance said it could recommend but not approve, we took it down that afternoon and put it back the next day with the approval removed.
+**How I approached it at a startup.** We removed the approval ability from our change-gate pilot after the auditor's review. [Delivery](/blog/category/management/cto-handbook-processes#why-i-distinguish-the-rule-from-its-enforcement) covers that correction and the controls we still need to enforce.
 
 ### Writing and talking
 
 Written context reaches people who were not in the room and can be read at a different time. Our values say we prefer written notes to extended meetings, and that agendas and decisions from a meeting are stored with the minutes.
 
-Writing can go wrong too. We used AI to help document a product we were still working out, and the documents grew until they were hard to read. The test we use now is that someone has to understand the document, be able to edit it, and leave the next person able to use it.
+For AI-assisted writing, our test is that someone has to understand the document, be able to edit it, and leave the next person able to use it. [Operations](/blog/category/management/cto-handbook-infrastructure#what-belongs-in-a-useful-document) covers how I check that before sharing one.
 
 The first startup had taught me to build that writing habit while the company was small. When everyone shares the same room, it is easy to underestimate how much understanding comes from overhearing a conversation. A later hire or someone working at another time will not have that history. I want a decision record to give them enough of the reason to question it intelligently when the circumstances change. Copying the final instruction without the reason leaves them dependent on someone who remembers.
 
@@ -112,9 +108,7 @@ Share context by default so people can make good decisions without waiting for p
 - Praise publicly, criticise privately.
 - The same rules apply to everyone, whatever their role or seniority. I used the merge bypass too, so that one is a note to myself.
 
-We also built a shared dashboard to bring work from GitHub and Notion into one view, so people could keep working where the information already lived. In October, I was frustrated that the team was not using it or keeping the GitHub board current. Putting the information on another screen had not made updating it a habit. Before adding another view, I need to know who is responsible for the source information and whether maintaining it is part of finishing the work. The tooling belongs in [Delivery](/blog/category/management/cto-handbook-processes#goal-tracking); the obligation to keep it useful belongs here.
-
-Later, [the dashboard became useful when it showed goal status during stand-up](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet#giving-the-board-a-job-people-could-see). It had a place in a conversation we were already having. Choosing the priorities still belonged to us.
+The [dashboard became useful in stand-up](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet#giving-the-board-a-job-people-could-see) once it supported an existing conversation. [Delivery](/blog/category/management/cto-handbook-processes#goal-tracking) covers the tooling; here I need a named person responsible for the source information and a clear expectation of when it is updated. Choosing priorities still belongs to us.
 
 ## Disagreement
 
@@ -134,9 +128,7 @@ I want to make this routine. Afterwards, I would look at whether I understood th
 
 ## Agreements that hold
 
-After a decision, we still need to make the agreed change happen. Our review agreement held for a while, then fell away when people were busy.
-
-**How I approached it at a startup.** We agreed that every change would have a recorded independent review before merging. We changed no configuration. It worked for a few months, and when I checked again too many pull requests had merged without one, mine included. I had treated agreement as implementation.
+After a decision, we still need to make the agreed change happen. [The review agreement we failed to keep](/blog/category/management/cto-handbook-processes#why-i-distinguish-the-rule-from-its-enforcement) showed me why agreeing to a change was only the start.
 
 For any agreement that matters, I now want to decide how we would know it is being kept, and put that check in the tooling where we can. The review story is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed).
 
@@ -162,7 +154,7 @@ I find values useful when they say what each side owes the other. Ours are writt
 
 Our working agreement leans most on the first, the sixth and the seventh: ownership by the person closest to the work, shared context, and communication someone can act on without guessing.
 
-Nine is still a substantial list. Writing it down gives us something to examine; it does not demonstrate that we live it. The missed review agreements and the initially unused dashboard are places where our behaviour fell short of what we wanted. I would use those examples to decide which working habit needs to change, and whether the wording helps anyone make that change. Adding another value would not have solved either problem.
+Nine is still a substantial list. Writing it down gives us something to examine; it does not demonstrate that we live it.
 
 ## Still to write
 

@@ -84,6 +84,8 @@ Where merging deploys to production, the independent human approval must happen 
 
 We have written this down as a release process. The document is still a proposal, with open items to close before I would call it in force. The principles that come from our approved policies already apply: someone other than the author approves each change and each production deployment, nothing reaches production without passing tests and security scans, Git is the record, and a failed release is reverted before it is fixed.
 
+[Delivery](/blog/category/management/cto-handbook-processes#shipping-a-change) describes the review model we are putting in place. The documented release path here still calls for separate approval of the pull request and the production deployment. The [emergency-change exception](#hotfixes-rollback-and-emergency-changes) is set out separately.
+
 **The path from merge to production:**
 
 1. **Pull request.** Automated checks, AI review findings, and approval by an engineer other than the author. Commit titles follow a convention that decides the version number.
