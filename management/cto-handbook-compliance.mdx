@@ -1,0 +1,208 @@
+---
+type: 'HandbookChapter'
+title: 'Compliance'
+subtitle: 'Getting compliant: the policies, procedures, records and workspace behind SOC 2 and ISO 27001'
+summary: 'A checklist for getting a small company compliant, taken from what we put in place for SOC 2 and ISO 27001: the policies to have, the procedures and recurring processes behind them, the registers that hold the evidence, and how our Notion workspace is organised.'
+tags: ['Compliance', 'Security', 'Engineering Management', 'Documentation', 'Checklists']
+date: '2026-11-11'
+updated: '2026-11-11'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+series:
+  order: 8
+  title: 'The Startup Handbook'
+---
+
+We build software for finance, and customers need to trust how we change and run it. We pursued SOC 2 and ISO 27001 in our first year, while the product and the team were still taking shape. I had never been the name on a security policy before.
+
+The story of what that was like is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed), and the rules I took from it are in [Operations](/blog/category/management/cto-handbook-infrastructure#compliance). The checklists describe what we put in place for a company of about ten engineers. Your auditor and your risks should decide what you need.
+
+## What you are building
+
+Both frameworks ask for the same three layers.
+
+- **Policies** say what the company commits to.
+- **Procedures** say how a commitment is carried out, step by step.
+- **Records** show that it happened.
+
+Most of the work is in the third layer. Writing a policy is the quick part. The record that proves it has to be produced every month or every quarter, by a person, for as long as the policy stands. That is why I now ask of every sentence in a policy who will do the work it creates.
+
+Our code-review rule showed me how those layers could come apart. We agreed that every change would have a recorded independent review before merging, but changed no configuration. It worked for a few months. When I checked again, too many pull requests had merged without a recorded review, including mine. The agreement was still there; the records showed that we were not keeping it.
+
+## Checklist: policies
+
+### Security policies
+
+We have thirty approved policies in one register. Each has an owner, an approver, a version and an annual review date, and each is mapped to the ISO 27001 and SOC 2 requirements it answers.
+
+Several of them replaced groups of single-topic policies. Backups, passwords, logging, patching, clear desks and the like each used to have a policy of their own, and we consolidated those into the larger ones below.
+
+**The management system itself**
+
+- Information Security Management System policy
+- Scope of the management system
+- Information security objectives
+- Roles, responsibilities and authorities
+- Information security roles and responsibilities
+- Statement of Applicability
+- Relevant laws, regulations and contractual requirements
+- Information security communication plan
+
+**Risk**
+
+- Risk management policy
+- Risk assessment and risk treatment process
+
+**How the system is kept honest**
+
+- Control of documented information
+- Internal audits
+- Management review
+- Corrective action and continual improvement
+- Planning changes to the management system
+
+**Day-to-day security**
+
+- Acceptable use
+- Access control
+- Asset management
+- Data management
+- Cryptography
+- Physical security
+- Operations security
+- Secure development
+- Third-party management
+
+**When things go wrong**
+
+- Incident response plan
+- Collection and handling of incident evidence
+- Business continuity and disaster recovery plan
+
+**Privacy**
+
+- GDPR compliance policy
+- GDPR incident response plan
+- Pseudonymisation procedure
+
+### People policies
+
+These live in a second register, in the company handbook. There are twenty-four.
+
+- **Conduct:** code of conduct and ethics, anti-corruption and bribery, anti-harassment and anti-bullying, whistleblowing, disciplinary and capability, grievance.
+- **Fair treatment:** equal opportunities, diversity and inclusion.
+- **Security and privacy for staff:** human resource security, employee privacy notice.
+- **AI:** an AI policy, and a guideline for AI-assisted documentation.
+- **Ways of working:** flexible working, working from home, communication and social media, employee-initiated relocation.
+- **Leave:** sickness absence, compassionate leave, parental policies.
+- **Money:** purchasing, responsible purchasing, travel and expenses.
+- **Workplace:** health and safety, hazardous waste.
+
+### How a policy changes
+
+A policy needs a rule for its own changes, or every typo becomes a re-approval.
+
+- The wiki is the canonical copy. The compliance platform holds dated PDF snapshots.
+- Versions are MAJOR.MINOR, with one changelog row per version.
+- A **minor** change is editorial: a typo, a link, a clarification. It needs no re-approval.
+- A **major** change adds a requirement, changes an approval step or changes scope. Leadership approves it, and staff accept the new version.
+- Every policy is reviewed at least once a year, and staff re-accept the set annually. New joiners accept all of them during onboarding.
+
+## Checklist: procedures
+
+Policies live in the wiki. Procedures that engineers follow live in the engineering repository as controlled documents, each with a short code, a version and an owner. A change goes through a pull request.
+
+- **Access review.** The schedule, a checklist per system, a role-based access matrix and the remediation steps.
+- **Code change and review.** What counts as a review, who may merge and how exceptions are recorded. A comment or a bot's approval does not count.
+- **Onboarding and offboarding checklist.** Summarised in [Production](/blog/category/management/cto-handbook-production#checklists).
+- **Risk register method.** Likelihood, impact, the severity matrix and how a risk is accepted or escalated.
+- **Vulnerability management.** Where findings come from and the time allowed to fix each severity.
+- **Business continuity plan.** Services grouped into tiers by how quickly each must be recovered, with the recovery strategy for each.
+- **Vendor risk assessment.**
+- **Penetration testing.**
+- **Security awareness training.**
+- **Encryption standards.**
+
+I also need to check the settings behind a procedure. One said that new commits dismissed earlier pull-request approvals, but the setting had not been enabled. Once I found it, the fix took a minute. Another control made a system-wide claim on the strength of one component and one successful test. That needed more work: implement the control properly or retire the claim and explain how we would address the risk.
+
+The [review and release model](/blog/category/management/becoming-a-cto-compliance-at-ai-speed#keeping-the-release-decision-separate) we are putting in place requires independent human approval before production. Where merging triggers a production deployment, that approval has to happen before the merge. The change gate produces findings and recommendations; it cannot supply that approval. Getting the full process enforced consistently in the tooling is still work in progress.
+
+The release, incident and support procedures are in [Production](/blog/category/management/cto-handbook-production).
+
+## Checklist: recurring processes
+
+These are the processes that generate the records. Each one needs an owner and a date in the calendar.
+
+| Process | How often | What it produces |
+| --- | --- | --- |
+| Access review | Quarterly, and after a leaver, a role change or an access incident | A log entry per review: systems and people reviewed, findings, actions and evidence |
+| Access requests | As they arise | A request with a justification, approved by the system owner. Nobody approves their own |
+| Onboarding and offboarding | Per person | A completed checklist |
+| Internal audit | At least quarterly | An audit report with findings classed as major, minor, observation or opportunity for improvement |
+| Management review | At least annually | Minutes against a standing agenda |
+| Corrective actions | As findings arise | A log entry with root cause, action, owner, due date and a later check that it worked |
+| Risk review | Periodically; our method says quarterly | An updated risk register |
+| Policy review | Annually | A reviewed and re-approved policy, and staff acceptance |
+| Incident response exercise | At least annually | Scenario, attendance, an after-action report and leadership sign-off |
+| Vendor review | When a vendor is added, and periodically | A security assessment recorded against the vendor |
+| Security awareness training | Within fourteen days of joining | Completion records |
+| Customer data requests | As they arise | Acknowledged within five business days and fulfilled within thirty calendar days |
+
+The access review has six steps: export who has access, review each person, document the result, carry out the changes, get approval and file the evidence. For each person the reviewer asks four questions. Is the access still needed? Is it at the right level? Is it the least they need? Is multi-factor authentication on? Reviewers never review their own access.
+
+Internal audits follow six phases: planning, document review, evidence collection, analysis, reporting and follow-up on corrective actions. The auditor has to be independent of the work being audited.
+
+The management review has eight standing items: actions from the previous review, changes in context, the needs of interested parties, performance trends, feedback, the status of risk assessment and treatment, opportunities for improvement and changes to the management system.
+
+The person checking those records needs to be able to read them. Our corrective-action records once sat behind a login the auditor did not have. We now export them. Keeping evidence in the workspace is useful for the team; making it available for a review is part of finishing the work too.
+
+## Our Notion setup
+
+Almost all of this lives in Notion. The engineering repository holds the procedures and runbooks engineers follow, and the compliance platform holds snapshots and automated tests. Notion is where people read a policy, submit a request and find a record.
+
+The workspace has a handful of areas.
+
+**The handbook.** A wiki where each page has an owner, a version and a verification date. It holds the people policies and their changelog, a people directory, how we work and our rituals, communication guidance, the management playbook, recruitment and a page of answers to common security questionnaire questions.
+
+**Systems and tools.** One database for every tool and vendor, inside the handbook. Each row records the category, owner, whether it is hosted or self-hosted, cost and seats. It also records whether the vendor handles personal data, in what role, where the data sits and when we last assessed it. Saved views turn the same database into the data processor register and the sub-processor list, so there is one list to maintain.
+
+**The security management system.** Inside the engineering wiki. Its home page starts with links to the request forms, then the registers:
+
+- *Security policies* and their *change log*.
+- *Access requests and reviews*: a request log with a form, and a review log.
+- *Incident tests and reports*: an exercise log and an incident log.
+- *Audits*: a tracker for the audit cycle, the internal audit records and the management review log.
+- *Continuous improvement*: the nonconformity and corrective action log.
+- *Evidence*, a visitor log and a change request log.
+
+**The admin hub.** The company's operational registers: an employee directory with each person's contract and equipment, competence and performance evaluations, terminations with the offboarding checklist as a template, purchase requests, capacity requests for infrastructure, data subject requests, supplier risk assessments, an exceptions register and a gifts and hospitality register.
+
+**The document hub.** Proposals, strategy and planning documents, each with a category. A proposal stays there until it is approved and moves to its permanent home.
+
+**Product and meetings.** Product context and decisions, the page for each recurring meeting, and minutes.
+
+A few conventions make it hold together:
+
+- **Every register is a database.** A view can answer an auditor's question, and a form can feed it.
+- **Requests come in through forms.** Access, capacity, purchases and supplier assessments each have one, which gives every request the same fields and a timestamp.
+- **Policies have the same properties everywhere:** status, version, owner, approver, effective date, last reviewed and next review, with a relation to the change log.
+- **The change log is a separate database** related to the policies. A daily job adds a row when a policy's version changes.
+- **Records link to their evidence.** A review or exercise is not complete until the evidence is attached.
+
+## Templates
+
+If you are starting this work and want any of it as a template, [get in touch](/about). I am happy to share the structure of the policy register, the request forms, the review and audit logs, the onboarding and offboarding checklist and the release plan, with our own content removed.
+
+## As the company grows
+
+At our size the founders are the leadership team that approves a major policy change. As the company grows, I would give each policy an owner in the team that does the work it describes. I would also expect the registers to need named owners, and the access review to be split by system so that no one person reviews everything.
+
+## Still to write
+
+- The order I would do this in if I started again, and what I would leave until a customer asks.
+- Working with an auditor: what to agree before the audit window opens.
+- What the automated tests in a compliance platform cover, and what they do not.
+- Customer security questionnaires and how the handbook's answers page is maintained.
+- The cost, in money and in weeks.

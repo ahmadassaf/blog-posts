@@ -1,0 +1,211 @@
+---
+type: 'HandbookChapter'
+title: 'Production'
+subtitle: 'Runbooks, checklists, releases, incidents and support once customers depend on the product'
+summary: 'What I want written down before customers depend on a product: runbooks someone else can follow, the checklists we use, how a change reaches production and comes back out, how an incident is run, and how a customer problem is triaged and escalated.'
+tags: ['Engineering Management', 'DevOps', 'Incident Response', 'Operations', 'Checklists']
+date: '2026-11-11'
+updated: '2026-11-11'
+category: 'management'
+featured: false
+draft: false
+tableOfContents: false
+series:
+  order: 5
+  title: 'The Startup Handbook'
+---
+
+The work in [Delivery](/blog/category/management/cto-handbook-processes) continues after a release. Customers now depend on what we built, and we need to be able to operate it, change it safely and recover when something goes wrong.
+
+I came to this from research and machine learning, and running production was new to me. Most of what follows I had to learn in the last year. Some of the procedures below are in use, some are requirements in an approved policy, and others are proposals we are still putting into force.
+
+## Runbooks
+
+A runbook is for the person who did not write it, at a moment when the author is not available. I want it to say when to use it, what to check before starting, the steps in order, how to know it worked and what to do if it did not.
+
+Reading a runbook is preparation. The steps an author forgot they knew only show up when someone else follows it.
+
+### How I do it now
+
+Runbooks are Markdown files in the engineering repository, next to the architecture decision records. A change to one goes through a pull request like code. We have only a few so far: running database migrations for a service, restoring data in our graph database, and loading a new customer's data.
+
+They share the same headings:
+
+- **When to use.** A one-paragraph summary, so someone can tell quickly whether this is the right document.
+- **Prerequisites.** Access, tools and anything to have open before starting.
+- **Safety checks.** What must be true before the first step, and what would make you stop.
+- **Procedure.** Numbered steps.
+- **Success criteria.** How to tell it worked.
+- **Rollback.** What to do if it fails part-way.
+
+For planned maintenance we keep a dated log in the same repository with its own headings: summary, pre-checks and scope, a timeline of events, incidents and anomalies, outstanding follow-ups and sign-off.
+
+The rehearsal I describe in [Delivery](/blog/category/management/cto-handbook-processes#releasing), where a second engineer repeats a recovery, is the check I want us to run for each runbook.
+
+## Checklists
+
+A checklist suits work that is rare, has many steps and is costly to get wrong. Joining and leaving the company are the clearest cases: the steps span many systems, and a missed one is either a bad first week or an account that stays open.
+
+### How I do it now
+
+**Onboarding and offboarding.** One controlled document holds both lists. Its latest revision is awaiting approval.
+
+Onboarding runs in four stages:
+
+1. *Before the start date.* Contract and confidentiality agreement signed, background check, role and access level agreed, access requests approved by someone other than the requester, laptop enrolled with disk encryption and a screen lock.
+2. *Day one, access.* Multi-factor authentication first, then the password manager, wiki, source control and cloud sign-on, then tools by role.
+3. *Day one, people.* Policies read and accepted, how to report an incident explained, a buddy named. Security awareness training within fourteen days.
+4. *Week one.* A short verification that everything above happened.
+
+Offboarding is ordered by time since the person left:
+
+| Within | What is done |
+| --- | --- |
+| 1 hour | Identity, chat, password manager, wiki, source control and cloud access removed. Laptop locked. |
+| 4 hours | Third-party tools, personal API keys, customer-facing access and the on-call rota. Shared secrets rotated. |
+| 24 hours | Equipment returned and wiped, physical access removed, ownership of their work transferred. |
+| 48 hours | A sweep for remaining access, a review of audit logs and my sign-off. |
+
+**A bug that is ready for engineering.** From our draft support process. A report needs six things before an engineer picks it up: the customer and environment, what the user was trying to do, the affected records, timestamped evidence, steps to reproduce with expected and actual results, and what we already checked.
+
+**Done, for a customer issue.** Also from the draft. The fix is merged after review by someone other than the author, deployed and checked in the environment the customer uses, a test or alert would catch it happening again, the customer has been told and the records are closed. For the two highest severities, the root cause analysis and its follow-ups are complete too.
+
+The quarterly access review has a checklist of its own; it is in [Compliance](/blog/category/management/cto-handbook-compliance).
+
+## The release process
+
+I want releases to be small and frequent, and the path to production to be the same every time. When something fails, the first move should be to go back to the last good version and investigate afterwards.
+
+One of the engineers asked whether we could push straight to main and have someone approve the release. My first response was to defend the existing review requirement. We then worked through how merging and releasing could be separated and took the proposal to our auditor. I wrote about that discussion in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed).
+
+Where merging deploys to production, the independent human approval must happen before the merge. Moving that approval to a separate release step only works where the two actions are separate. The approver still needs to see every change being promoted.
+
+### How I do it now
+
+We have written this down as a release process. The document is still a proposal, with open items to close before I would call it in force. The principles that come from our approved policies already apply: someone other than the author approves each change and each production deployment, nothing reaches production without passing tests and security scans, Git is the record, and a failed release is reverted before it is fixed.
+
+**The path from merge to production:**
+
+1. **Pull request.** Automated checks, AI review findings, and approval by an engineer other than the author. Commit titles follow a convention that decides the version number.
+2. **Release.** The version is tagged and release notes are generated.
+3. **Build.** One shared workflow builds the image and tags it with the version.
+4. **Pre-production.** The new version is committed to the pre-production configuration and deployed from Git.
+5. **Production approval.** The same run waits for an engineer other than the author. They check pre-production, and what else their approval would promote.
+6. **Production.** The version is committed to the production configuration and deployed from Git.
+7. **Watch.** The author watches alerts and dashboards for thirty minutes and reverts if needed.
+
+We release only from the main branch.
+
+**Change types.** Most changes are standard. The others need more.
+
+| Type | What it covers | What it needs |
+| --- | --- | --- |
+| Standard | No downtime and no material effect on customers | The two approvals above |
+| Significant | A new production service, changes to network, access, encryption or authentication, database or cluster upgrades, migrations that transform customer data, a new sub-processor | A written release plan and formal authorisation before the standard approvals |
+| Planned maintenance | Work that needs downtime | As significant, plus a rehearsal outside production and advance notice to customers |
+| Material change | Changing or removing something customers rely on | Thirty days' written notice |
+| Hotfix or emergency | See the next section | |
+
+A release plan has eight headings: purpose, what changes, impact, deployment plan, tests, rollback, communication and who authorised it.
+
+**Database migrations.** Rolling back the application does not undo a migration. We write migrations in two steps, expanding first and removing later, so the old and new versions can run side by side. Dropping a column or transforming customer data counts as a significant change and needs a snapshot first.
+
+**Deploying and launching are separate.** A customer sees a feature when it is switched on for them. We do not have a feature-flag service yet, so we separate the two per customer, through what each one is entitled to and through invitation-only betas.
+
+## Hotfixes, rollback and emergency changes
+
+When a release fails or an urgent fix is needed, people are under pressure and can skip steps. I want the procedure to be short enough to follow in those moments.
+
+### How I do it now
+
+This is part of the same proposal.
+
+**Roll back first.**
+
+1. Find the last good version.
+2. Check that its image still exists.
+3. Revert in Git, through an approved pull request.
+4. Leave the deployment tool's own rollback button alone. The tool reconciles back to what Git says.
+5. Check the database. A migration may mean fixing forward or restoring a snapshot.
+6. Record what was done in the incident.
+
+**Hotfix.** Open the incident first. Fix on a branch from main, with a test that would have caught the problem. The pull request links the incident and is approved by someone else. Check it in pre-production, check what else would ship with it, then approve production and watch.
+
+**Emergency change.** If the normal approvals cannot happen in time, an administrator can merge or approve past the gate. The incident records why. An approved policy requires that someone other than the author reviews the change and records their approval within three days.
+
+**Vulnerabilities.** Our policy sets remediation times by severity: fifteen days for critical, thirty for high, sixty for medium and ninety for low. One that is being actively exploited is treated as an incident of the highest severity.
+
+Afterwards we raise an issue for the test or check that was missing. If the rollback itself was hard, that gets an issue too.
+
+## Incident response
+
+A rollback or hotfix is one part of dealing with an incident. The response also includes investigating what happened, keeping customers informed and following through on the work needed to prevent a repeat.
+
+An incident needs one person leading it, one place where it is discussed and a record that is written as it happens.
+
+### How I do it now
+
+Our incident response plan is an approved policy, reviewed and tested at least once a year. It covers security incidents and service incidents that affect customers.
+
+**Severity.** There are four levels, and the same four appear in our customer agreements.
+
+| Severity | What it means | First response | Updates to the customer |
+| --- | --- | --- | --- |
+| 1 | The platform or a core function is unavailable generally, or a data breach is in progress | 1 hour, at any time | Every 4 hours in support hours, every 8 outside |
+| 2 | A core function is severely impaired, or unavailable to some users | 4 support hours | Daily |
+| 3 | A non-core function is impaired, a workaround exists, or one user is affected | 1 business day | |
+| 4 | Cosmetic problem, question or feature request | 2 business days | |
+
+I set the severity. When unsure, we rate higher.
+
+**Phases.** Report, triage and analysis, investigation, containment, recovery, then hardening and better detection.
+
+**Roles.** I am the incident manager by default and can hand the lead to an engineer. The CEO and COO decide whether something is a notifiable breach, and the CEO approves any external breach notice in writing.
+
+**Cadence.** Each incident gets a dedicated channel. The response team meets hourly for a severity 1 and daily for a severity 2. The meeting has a fixed agenda: update the record, review what the investigation has found, agree emergency mitigations, assess whether anyone must be notified, plan longer-term fixes and write up the root cause.
+
+**The record.** Who reported it and when, severity and status, the lead and roles, affected teams and areas, a timeline, updates sent and follow-ups with owners.
+
+**Afterwards.** Every confirmed severity 1 or 2 gets a root cause analysis. The post-mortem covers the cause, the impact, how we confirmed recovery and what we are changing. For a severity 1, affected customers receive a report within ten business days. The incident closes when the post-mortem and its follow-ups are done.
+
+**Exercises.** We run tabletop exercises and log each one: scenario, participants, findings, actions and leadership sign-off.
+
+Reporting has to be easy. Anyone can raise a concern through a mailbox, a chat channel or directly with a founder, and the plan asks them to act as a good witness: say what they saw and when.
+
+## Support and escalation
+
+The customer conversation continues while engineers investigate and after they restore the service. A fix can be ready while the customer is still waiting to hear what happened or whether they can use the product again.
+
+A customer problem should have one record that everyone works from, and the customer should hear from us before they have to chase.
+
+### How I do it now
+
+This is the second proposal. The response times in the table above are already commitments. The rest is how we intend to meet them.
+
+- **One record per problem.** An incident record, a linked engineering issue and the customer conversation in one support inbox. Nothing lives only in chat.
+- **Triage within a day.** Within an hour for the two highest severities.
+- **Every reply has three parts.** A workaround if there is one, what we know and are checking, and the date of the next update.
+- **Every open issue has a next-update date.**
+- **Deferred means accepted but unplanned,** and we tell the customer so.
+
+**Escalation.** Someone escalates when the situation has changed since triage, when a renewal or deal depends on it, or when we missed an update or a fix date. They write the impact on the issue using five prompts:
+
+1. What changed?
+2. Who is affected?
+3. What can they not do, and by when do they need it?
+4. What is the commercial context?
+5. What are you asking for?
+
+I answer within one business day with one of three decisions: raise the severity, move it into current work, or not now, with a reason and a date to look again.
+
+## As the company grows
+
+With ten engineers, I can set every severity and lead most incidents. The first things I would hand over are the incident lead and the authority to approve significant changes, each to people who have done it alongside me. A support rota comes next, so that triage does not depend on who notices a message. I would also expect to need a feature-flag service once per-customer switches stop being enough.
+
+## Still to write
+
+- Which parts of the release and support proposals are in force, as the open items close.
+- On-call: the rota, what it asks of people and how they are compensated.
+- What we learned from the post-mortems we have written.
+- Rehearsal results for each runbook.
+- Capacity and cost: how we request and approve more infrastructure.

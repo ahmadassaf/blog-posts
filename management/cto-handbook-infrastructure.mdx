@@ -11,11 +11,11 @@ featured: false
 draft: false
 tableOfContents: false
 series:
-  order: 6
+  order: 7
   title: 'The Startup Handbook'
 ---
 
-Keeping the company running has brought me work well beyond engineering: shared records, handovers, controls, payroll and other recurring administration. This chapter brings that work together, including the gaps I still need to close. Technical infrastructure, such as service templates, configuration, observability and release tooling, has its own post: [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
+Keeping the company running has brought me work well beyond engineering: shared records, handovers, controls, payroll and other recurring administration. I knew I was signing up for that breadth and was happy to take it on. I am still working out how to make the recurring work dependable and easier to hand over. Technical infrastructure, such as service templates, configuration, observability and release tooling, has its own post: [The Engineering Foundations I Want in Place Early](/blog/category/management/setting-the-engineering-foundations).
 
 At my first startup, a lot of context travelled across a small office. We knew why something had been built because we had been there when the decision was made. As the company grew from six people to more than four hundred, that stopped being a reasonable expectation of a new colleague. I came to care much more about what they could understand without finding one of the early employees. [Building that documentation habit earlier](/blog/category/management/from-employee-six-to-a-unicorn#lesson-5-build-the-documentation-habit-early) is one of the things I wanted to do differently this time.
 
@@ -34,6 +34,8 @@ The test I use for any document is whether someone other than the author can act
 - **The repository** holds architecture decision records and runbooks, as plain Markdown. A change to one is reviewed like a change to code.
 - **A dashboard** I built brings the first two together for stand-up.
 
+How the Notion workspace itself is laid out, area by area, is in [Compliance](/blog/category/management/cto-handbook-compliance#our-notion-setup).
+
 We arrived at the GitHub and Notion split after keeping plans in Notion while the engineering work happened in GitHub. We were maintaining a picture of the work in one place and doing it in another. The engineers already spent their day in GitHub, so the delivery plan moved there and product documentation stayed where it was.
 
 ### What belongs in a useful document
@@ -43,6 +45,8 @@ We also made a different documentation mistake. Starting from our prototype, we 
 I now want the main decision near the top, followed by the reasoning someone needs to question or change it. The author has to distinguish what we have agreed from what we are assuming. If a customer requirement is still unclear, a polished explanation cannot turn it into a decision.
 
 Before sharing a document, I should be able to explain every recommendation in it, including the parts AI helped produce. Then I need to read it as the next person: can they tell what to do, what remains open and where to ask? Editing out repetition is part of the work. So is leaving the technical detail that prevents someone from making a dangerous assumption.
+
+An engineer once told me our commitment to the new front end had never been formally communicated. I felt I had said it in every call for a month. The team still could not find a settled decision to build against. That conversation is in [Trust Is a System You Design](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design#a-decision-needs-to-look-decided).
 
 For a decision that changes another person's work, I would leave the decision, its reason, who made it and the affected work together. When it changes, I would mark the old answer as superseded and point to the new one. A second explanation in a chat should link back to that record. Otherwise we recreate the same uncertainty in two places.
 
@@ -63,6 +67,8 @@ The front end used to depend on me alone, until we hired someone to own it. The 
 
 I keep a list of work I should hand over and a log of work that came back to me. The second list is particularly useful. It makes me ask whether I transferred the access, context and authority along with the task, and whether the other person had time to take it on. [Handing over the front end](/blog/category/management/becoming-a-cto-the-cto-who-does-too-much) gave me room for other decisions; the responsibilities that keep returning need the same examination.
 
+The [product work](/blog/category/management/becoming-a-cto-the-cto-who-does-too-much#some-work-was-mine-until-we-could-hand-it-over) needed a different response from the front end. We still had no product manager, so understanding customers and choosing priorities remained with the founders. I had to make those responsibilities clearer within the team we had.
+
 Start with the critical roles, the knowledge they hold and what someone else would need to learn to take them on. In a small company, I would work through those responsibilities directly with the people involved.
 
 For each responsibility that cannot wait for its owner to return, I would identify a second person, establish the access they need, and have them perform it with the owner available to help. The remaining questions become improvements to the handover. Reading a runbook is useful preparation; following it exposes the steps the author forgot they knew.
@@ -71,7 +77,7 @@ That exercise belongs across the company. A service recovery procedure and a rec
 
 ## The numbers we look at
 
-A metric is an observation. It has several possible explanations, and the useful step is deciding what to inspect next. I keep per-person numbers out of team documents, because ranking people by an incomplete dataset starts a conversation about who looks busy. More in [Measuring Agile Teams Without Weaponizing the Numbers](/blog/category/management/measuring-agile-teams).
+The records we keep also shape what we can measure. A metric is an observation. It has several possible explanations, and the useful step is deciding what to inspect next. I keep per-person numbers out of team documents, because ranking people by an incomplete dataset starts a conversation about who looks busy. More in [Measuring Agile Teams Without Weaponizing the Numbers](/blog/category/management/measuring-agile-teams).
 
 ### How I do it now
 
@@ -103,9 +109,13 @@ One of the mismatches was particularly simple: a procedure said new commits dism
 
 I had already seen at my first startup how much work customers could need before buying an AI product. They wanted the capabilities and still had questions about bias, audits and how to assess the product responsibly. We spent time on questionnaires and independent bias audits while their buying process took its course. That experience makes me want the evidence available early, in a form the customer can understand. It also reminds me that finishing engineering work does not finish the customer's decision. I wrote about that in [Allow time for customers to get comfortable buying](/blog/category/management/from-employee-six-to-a-unicorn#lesson-7-allow-time-for-customers-to-get-comfortable-buying).
 
+The inventory of what we ended up with is in [Compliance](/blog/category/management/cto-handbook-compliance): the policies, the procedures, the recurring processes and the registers that hold the evidence, laid out as checklists.
+
 ## Recurring work outside engineering
 
 Setting up the UK entity brought payroll, VAT returns, a pension provider, health insurance and an office onto my desk. I had not done those jobs in my earlier engineering role. The work needed doing, and I was the founder in the UK. That explains how it became mine; it does not tell me how it should be owned indefinitely.
+
+In one fortnight, that work included an intercompany invoice, payroll, a VAT return, a forecast of how long our cloud credits would last and a vendor's data-processing terms.
 
 For a recurring task, I want a record of when it comes due, where the inputs come from, who can prepare or authorise it, and where completion is recorded. I already write instructions for tasks an assistant or colleague can run. The next useful check is whether they can follow those instructions with the access and context available to them.
 

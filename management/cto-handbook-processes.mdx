@@ -15,7 +15,7 @@ series:
   title: 'The Startup Handbook'
 ---
 
-This chapter follows the work from deciding what a customer needs through planning, tracking, review and release. I want to be able to explain why we are building something and check how it reaches the people who will use it.
+I want to be able to explain why we are building something, what we expect to change for the customer and how we'll know it has worked. The work starts there, before we write a plan or open a pull request.
 
 I brought experience from a company that had grown to hundreds of people. Starting again, I had to decide which parts were useful for a team still getting its first product into customers' hands. I also had to notice when our own rules existed only because we had agreed them in a meeting. Planning and code review both exposed that gap: the written process sounded reasonable, while the work followed a different path.
 
@@ -28,6 +28,8 @@ I would also put the person with the customer context and the engineer who will 
 Our first plan started from a prototype. We divided it into modules and personas and tried to describe the whole product. Once we got real data from design partners, that tidy picture stopped being enough. We shortened the planning cycle so we could check what we were learning sooner.
 
 Then, approaching launch, we tried to settle three months in detail again. The founders' version of the goals was too far from the engineering work; the engineers' version became too technical. By the third pass, I was trying to recover a clear account of what would be different for the customer. We had made the plan a document to pass between groups that needed to work through the same questions together.
+
+In the retrospective, someone wrote, “I find planning confusing”. It received more votes than any other suggestion for improvement. Our latest process separates choosing the next goals from shaping them, so the planning meeting no longer has to produce a detailed month of work. These rules are still new.
 
 ### How I do it now
 
@@ -51,7 +53,7 @@ An individual's development needs goals too. The employee and manager should agr
 
 ## Goal tracking
 
-A tracking tool helps when it sits close to the work and someone keeps it current. Even a perfectly current board will not tell an engineer why a priority changed or who can settle an argument about scope. I treated visibility as though it would provide direction, and built a dashboard nobody but me opened. That story is in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
+Once a goal is under way, its record needs to stay close to the work, and someone needs to keep it current. Even a perfectly current board will not tell an engineer why a priority changed or who can settle an argument about scope. I treated visibility as though it would provide direction, and built a dashboard nobody but me opened. That story is in [Ten Engineers, No Product Manager](/blog/category/management/becoming-a-cto-building-a-team-when-there-isnt-one-yet).
 
 ### How I do it now
 
@@ -82,6 +84,8 @@ I would start with the next conversation the team needs to have: which goal need
 
 ## Shipping a change
 
+In one thirty-day stretch, roughly ten of us merged 854 pull requests. With AI helping us build faster, the volume of changes had grown much faster than the time available to review them.
+
 Review has to be something a person can do with care at the volume the team produces. An approval is easy to count. Whether someone understood the change is much harder to establish, and a process that only produces clicks makes the record look complete without making the software safer.
 
 Not every repository carries the same risk. Treating an experiment like customer-facing software slows the experiment and teaches people that the process is a formality.
@@ -111,7 +115,7 @@ I now want to trace a change through the actual path: who can merge it, which fi
 
 ## Releasing
 
-The release path should take a versioned artefact through a repeatable deployment, and the service owner should be able to use it without asking another team for routine steps. Recovery needs the same attention as deployment. Rolling back code does not undo a database migration.
+After review, I want a versioned artefact to move through a repeatable deployment path that the service owner can use without asking another team for routine steps. Recovery needs the same attention as deployment. Rolling back code does not undo a database migration.
 
 ### How I do it now
 
@@ -125,7 +129,7 @@ The exercise I would start with is one customer journey through deployment, a co
 
 I would want them to identify what is running, find the relevant logs and metrics, and explain whether returning to the earlier version is safe. A deployment that changed data or triggered an external action may need a different recovery plan. The procedure should say when to stop and ask for help, as well as which command to run.
 
-For now, this is the rehearsal I want us to run. We use incident tooling and have runbooks in the repository. I still need to document how an incident moves from the first alert through recovery and follow-up, including who makes the decisions along the way.
+For now, this is the rehearsal I want us to run. We use incident tooling and have runbooks in the repository. How a change reaches production, how it comes back out and how an incident moves from the first report through recovery and follow-up are in [Production](/blog/category/management/cto-handbook-production).
 
 ## As the company grows
 
@@ -133,5 +137,4 @@ In a startup, founders can shape goals and settle scope questions directly with 
 
 ## Still to write
 
-- Incidents and post-mortems.
-- Support and escalation for customers.
+- How well the newest planning rules hold up after a few months of use.
