@@ -5,7 +5,7 @@ subtitle: 'Getting compliant: the policies, procedures, records and workspace be
 summary: 'A checklist for getting a small company compliant, taken from what we put in place for SOC 2 and ISO 27001: the policies to have, the procedures and recurring processes behind them, the registers that hold the evidence, and how our Notion workspace is organised.'
 tags: ['Compliance', 'Security', 'Engineering Management', 'Documentation', 'Checklists']
 date: '2026-11-11'
-updated: '2026-11-11'
+updated: '2026-11-16'
 category: 'management'
 featured: false
 draft: false
@@ -17,7 +17,7 @@ series:
 
 We build software for finance, and customers need to trust how we change and run it. We pursued [SOC 2](https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022) and [ISO/IEC 27001](https://www.iso.org/standard/27001) in our first year, while the product and the team were still taking shape. I had never been the name on a security policy before.
 
-The story of what that was like is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed), and the rules I took from it are in [Operations](/blog/category/management/cto-handbook-infrastructure#compliance). The checklists describe what we put in place for a company of about ten engineers. Your auditor and your risks should decide what you need.
+The story of what that was like is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed), and the rules I took from it are in [Operations](/blog/category/management/cto-handbook-infrastructure#compliance). The checklists cover our policies, procedures and records for a company of about ten engineers, including work still being put in place. Your auditor and your risks should decide what you need.
 
 ## What you are building
 
@@ -30,6 +30,17 @@ We organised our work for both frameworks into three layers.
 Most of the work is in the third layer. Writing a policy is the quick part. The record that proves it has to be produced every month or every quarter, by a person, for as long as the policy stands. That is why I now ask of every sentence in a policy who will do the work it creates.
 
 Our early review agreement required independent approval to be recorded before merging. The [missing reviews described in Delivery](/blog/category/management/cto-handbook-processes#why-i-distinguish-the-rule-from-its-enforcement) showed the gap between that agreement and what we did.
+
+### A proposed starting order
+
+For a team starting this work, I would use this order:
+
+1. Agree the scope, customer obligations and risks the management system needs to cover.
+2. Give each policy an owner and agree requirements the team can carry out. Put missing controls on the work list.
+3. Connect each requirement to a procedure and a place to keep its evidence. Mark what is approved, what is in use and what is still proposed.
+4. Schedule the recurring work, carry out the procedures and collect the records. Use an independent audit to find gaps, then track corrective actions through to a check that they worked.
+
+This is a suggested sequence, not an account of the order we followed.
 
 ## Checklist: policies
 
@@ -114,9 +125,11 @@ A policy needs a rule for its own changes, or every typo becomes a re-approval.
 
 Policies live in the wiki. Procedures that engineers follow live in the engineering repository as controlled documents, each with a short code, a version and an owner. A change goes through a pull request.
 
+**Approval and rollout status.** The code-review requirements are approved, with enforcement still rolling out. The latest onboarding and offboarding revision is awaiting approval. Approval and rollout status for the other procedures in this inventory still need confirming.
+
 - **Access review.** The schedule, a checklist per system, a role-based access matrix and the remediation steps.
-- **Code change and review.** What counts as a review, who may merge and how exceptions are recorded. A comment or a bot's approval does not count.
-- **Onboarding and offboarding checklist.** Summarised in [Production](/blog/category/management/cto-handbook-production#checklists).
+- **Code change and review (enforcement rolling out).** What counts as a review, who may merge and how exceptions are recorded. A comment or a bot's approval does not count.
+- **Onboarding and offboarding checklist (revision awaiting approval).** Summarised in [Production](/blog/category/management/cto-handbook-production#checklists).
 - **Risk register method.** Likelihood, impact, the severity matrix and how a risk is accepted or escalated.
 - **Vulnerability management.** Where findings come from and the time allowed to fix each severity.
 - **Business continuity plan.** Services grouped into tiers by how quickly each must be recovered, with the recovery strategy for each.
@@ -133,13 +146,13 @@ The release, incident and support procedures are in [Production](/blog/category/
 
 ## Checklist: recurring processes
 
-These are the processes that generate the records. Each one needs an owner and a date in the calendar.
+**Documented schedule; completion to confirm.** These are the processes and schedules we have written down. The table records expected work; the latest completed cycle for each process still needs confirming. Each one needs an owner, a date in the calendar and a record of what happened.
 
 | Process | How often | What it produces |
 | --- | --- | --- |
 | Access review | Quarterly, and after a leaver, a role change or an access incident | A log entry per review: systems and people reviewed, findings, actions and evidence |
 | Access requests | As they arise | A request with a justification, approved by the system owner. Nobody approves their own |
-| Onboarding and offboarding | Per person | A completed checklist |
+| Onboarding and offboarding | Per person | A completed checklist; the latest revision is awaiting approval |
 | Internal audit | At least quarterly | An audit report with findings classed as major, minor, observation or opportunity for improvement |
 | Management review | At least annually | Minutes against a standing agenda |
 | Corrective actions | As findings arise | A log entry with root cause, action, owner, due date and a later check that it worked |
@@ -148,7 +161,9 @@ These are the processes that generate the records. Each one needs an owner and a
 | Incident response exercise | At least annually | Scenario, attendance, an after-action report and leadership sign-off |
 | Vendor review | When a vendor is added, and periodically | A security assessment recorded against the vendor |
 | Security awareness training | Within fourteen days of joining | Completion records |
-| Customer data requests | As they arise | Acknowledged within five business days and fulfilled within thirty calendar days |
+| Customer data requests (scope to confirm) | As they arise | A request and response record; the applicable deadlines need confirming as described below |
+
+**Data requests: scope to confirm.** The five-business-day acknowledgement and thirty-calendar-day fulfilment targets need checking against the request type and any contract. A customer's request for an export is different from a person's subject access request. For UK GDPR subject access, the normal response deadline is one calendar month, with the rules for calculating it and any permitted extension set out in [the ICO's guidance](https://ico.org.uk/for-the-public/time-limits-for-responding-to-data-protection-rights-requests/). A fixed thirty days can exceed that deadline. The request record should identify which obligation applies.
 
 The access review has six steps: export who has access, review each person, document the result, carry out the changes, get approval and file the evidence. For each person the reviewer asks four questions. Is the access still needed? Is it at the right level? Is it the least they need? Is multi-factor authentication on? Reviewers never review their own access.
 
@@ -211,7 +226,7 @@ At our size the founders are the leadership team that approves a major policy ch
 
 ## Still to write
 
-- The order I would do this in if I started again, and what I would leave until a customer asks.
+- What I would leave until a customer asks, beyond the proposed starting sequence above.
 - Working with an auditor: what to agree before the audit window opens.
 - What the automated tests in a compliance platform cover, and what they do not.
 - Customer security questionnaires and how the handbook's answers page is maintained.

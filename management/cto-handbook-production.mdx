@@ -5,7 +5,7 @@ subtitle: 'Runbooks, checklists, releases, incidents and support once customers 
 summary: 'What I want written down before customers depend on a product: runbooks someone else can follow, the checklists we use, how a change reaches production and comes back out, how an incident is run, and how a customer problem is triaged and escalated.'
 tags: ['Engineering Management', 'DevOps', 'Incident Response', 'Operations', 'Checklists']
 date: '2026-11-11'
-updated: '2026-11-11'
+updated: '2026-11-16'
 category: 'management'
 featured: false
 draft: false
@@ -76,7 +76,7 @@ The quarterly access review has a checklist of its own; it is in [Compliance](/b
 
 ## The release process
 
-I want releases to be small and frequent, and the path to production to be the same every time. When something fails, the first move should be to go back to the last good version and investigate afterwards.
+I want releases to be small and frequent, and the path to production to be the same every time. When something fails, I want us to restore service quickly. Returning to the last good version depends on checking that it can still run safely with the current data and any effects of the failed release.
 
 One of the engineers asked whether we could push straight to main and have someone approve the release. My first response was to defend the existing review requirement. We then worked through how merging and releasing could be separated and took the proposal to our auditor. I wrote about that discussion in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed).
 
@@ -92,6 +92,8 @@ We release only from the main branch.
 
 Our approved policies already require the following: someone other than the author approves each change and each production deployment, nothing reaches production without passing tests and security scans, Git is the record, and a failed release is reverted before it is fixed.
 
+**Policy detail to confirm.** How that rollback-first requirement handles a migration or external side effect that makes rollback unsafe still needs confirming. Do not revert into an incompatible state; the proposed recovery steps below start with that check.
+
 ### Proposed release procedure
 
 We have written down the procedure below, with open items to close before it is in force. It calls for separate approval of the pull request and the production deployment. [Delivery](/blog/category/management/cto-handbook-processes#shipping-a-change) describes the review model we are putting in place. The [emergency-change exception](#hotfixes-rollback-and-emergency-changes) is set out separately.
@@ -104,7 +106,7 @@ We have written down the procedure below, with open items to close before it is 
 4. **Pre-production.** The new version is committed to the pre-production configuration and deployed from Git.
 5. **Production approval.** The same run waits for an engineer other than the author. They check pre-production, and what else their approval would promote.
 6. **Production.** The version is committed to the production configuration and deployed from Git.
-7. **Watch.** The author watches alerts and dashboards for thirty minutes and reverts if needed.
+7. **Watch.** The author watches alerts and dashboards for thirty minutes and follows the recovery steps below if needed.
 
 **Change types.** Most changes are standard. The others need more.
 
@@ -126,14 +128,16 @@ When a release fails or an urgent fix is needed, people are under pressure and c
 
 ### Proposed rollback and hotfix steps
 
-**Roll back first.**
+These steps propose a recovery path through Git. The alternative of syncing an earlier revision directly in Argo CD, mentioned in [the engineering foundations](/blog/category/management/setting-the-engineering-foundations#make-releasing-part-of-the-work), still needs its prerequisites and current use confirmed.
+
+**Check before rolling back.**
 
 1. Find the last good version.
 2. Check that its image still exists.
-3. Revert in Git, through an approved pull request.
-4. Leave the deployment tool's own rollback button alone. The tool reconciles back to what Git says.
-5. Check the database. A migration may mean fixing forward or restoring a snapshot.
-6. Record what was done in the incident.
+3. Check whether that version is compatible with the current database and schema, and whether the failed release triggered external actions. If rollback is unsafe, choose a forward fix or a restoration plan before changing the deployment. Restoring a snapshot needs its own assessment of data written since it was taken.
+4. If rollback is safe, revert in Git through an approved pull request.
+5. Under this proposal, leave the deployment tool's own rollback button alone. The tool reconciles back to what Git says.
+6. Check recovery and record what was done in the incident.
 
 **Hotfix.** Open the incident first. Fix on a branch from main, with a test that would have caught the problem. The pull request links the incident and is approved by someone else. Check it in pre-production, check what else would ship with it, then approve production and watch.
 
@@ -206,7 +210,7 @@ This is how we intend to meet those commitments.
 4. What is the commercial context?
 5. What are you asking for?
 
-Under the proposal, I would answer within one business day with one of three decisions: raise the severity, move it into current work, or not now, with a reason and a date to look again.
+Under the proposal, I would answer a routine escalation within one business day with one of three decisions: raise the severity, move it into current work, or not now, with a reason and a date to look again. A worsening active incident goes straight to the incident lead for reassessment and follows the response time for its severity. It does not wait for the business-day decision; severity 1 already requires a response within one hour, at any time.
 
 ## As the company grows
 

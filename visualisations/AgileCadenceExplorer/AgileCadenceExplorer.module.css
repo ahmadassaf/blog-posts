@@ -18,7 +18,8 @@
 .caption { display: grid; max-width: 72ch; gap: 0.5rem; }
 .title { font-size: 1rem; font-weight: 750; line-height: 1.35; text-wrap: balance; }
 .description { color: var(--ds-color-text-muted); font-size: 0.8125rem; line-height: 1.55; }
-.toolbar { display: flex; margin-block: 0.75rem; align-items: center; gap: 1rem; justify-content: space-between; }
+.toolbar { display: flex; margin-block: 0.75rem; align-items: center; flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
+.root button { max-width: 100%; white-space: normal; }
 .boardFrame:focus-visible, .card:focus-visible {
   outline: 2px solid var(--ds-color-accent-dark);
   outline-offset: 4px;

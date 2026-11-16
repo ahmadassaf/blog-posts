@@ -5,7 +5,7 @@ subtitle: 'Shared knowledge, handovers, compliance and the recurring work beyond
 summary: 'How I approach shared knowledge, handovers, metrics, customer evidence and compliance, alongside the recurring company administration that became part of my work as CTO.'
 tags: ['Engineering Management', 'Documentation', 'Compliance', 'Operations', 'Metrics']
 date: '2026-11-10'
-updated: '2026-11-11'
+updated: '2026-11-16'
 category: 'management'
 featured: false
 draft: false
@@ -67,7 +67,7 @@ Without a product manager, [product responsibilities](/blog/category/management/
 
 Start with the critical roles, the knowledge they hold and what someone else would need to learn to take them on. In a small company, I would work through those responsibilities directly with the people involved.
 
-For each responsibility that cannot wait for its owner to return, I would identify a second person, establish the access they need, and have them perform it with the owner available to help. The remaining questions become improvements to the handover. Reading a runbook is useful preparation; following it exposes the steps the author forgot they knew.
+For each responsibility that cannot wait for its owner to return, I would identify a second person, establish the access they need, and have them perform it with the owner available to help. The remaining questions become improvements to the handover. The [runbook checks in Production](/blog/category/management/cto-handbook-production#runbooks) apply to the technical procedures.
 
 That exercise belongs across the company. A service recovery procedure and a recurring administrative task need different expertise, but either can depend on one person's memory. I can reduce that dependency only if I make room for the second person to learn. Writing instructions while keeping every execution for myself would leave most of the risk in place.
 
@@ -77,7 +77,7 @@ The records we keep also shape what we can measure. A metric is an observation. 
 
 ### How I do it now
 
-A small service computes [DORA metrics](https://dora.dev/guides/dora-metrics/) from GitHub deployments and our incident records. In one thirty-day snapshot it recorded 586 deployments across 22 repositories. Deployment frequency is the only figure I would quote so far. The failure and recovery figures need most incident records connected to the releases they relate to, and we have not done that yet.
+A small service computes [DORA metrics](https://dora.dev/guides/dora-metrics/) from GitHub deployments and our incident records. In one thirty-day snapshot it recorded 586 deployments across 22 repositories. The exact dates, environments included and treatment of repeat deployments still need confirming. Until then, I would treat this as an activity count rather than a measure of production deployment frequency. The failure and recovery figures need most incident records connected to the releases they relate to, and we have not done that yet.
 
 In another thirty-day stretch we merged 854 pull requests. That number told me our review process was under strain. It did not tell me how many features we shipped or how much of the code AI wrote.
 

@@ -5,6 +5,7 @@ subtitle: 'What I look for when starting again, and what we did about each point
 summary: 'Starting again at Mav9 meant deciding how we wanted to build and run software together. For each foundation, from service ownership and configuration to testing and releases, I describe what I look for and what we built.'
 tags: ['Engineering Management', 'DevOps', 'Software Architecture', 'Testing', 'AI']
 date: '2026-11-10'
+updated: '2026-11-16'
 category: 'management'
 featured: false
 draft: false
@@ -29,7 +30,7 @@ The owner of a service knows what failure means for its users. An import process
 
 This is also why I care about runbooks. Someone other than the original author should be able to find the right dashboard and follow the recovery procedure. If replaying a job might duplicate customer data, put that warning beside the command. Explain when to stop and who to call.
 
-The useful check is to have another engineer try the instructions. A document can look complete until someone follows it without the author's local setup or memory of the last incident. Pairing on recovery also spreads operational knowledge beyond the few people who already have it.
+The useful check is to have another engineer try the instructions; the [runbook checklist in Production](/blog/category/management/cto-handbook-production#runbooks) sets out what they should be able to follow. Pairing on recovery also spreads operational knowledge beyond the few people who already have it.
 
 As CTO, I owe people the access and the time to do this. A named owner needs cover, and on-call needs to be sustainable where the product requires it. Making that support available is part of my responsibility. I wrote more about it in [Trust Is a System You Design](/blog/category/management/becoming-a-cto-trust-is-a-system-you-design).
 
@@ -164,9 +165,11 @@ The exercise I'd start with is small: take one customer journey all the way thro
 
 The service template sets up [semantic-release](https://semantic-release.gitbook.io) on [GitHub Actions](https://github.com/features/actions): merging to main produces a version and a changelog from the commit messages. The release builds the image, registers the service's GraphQL schema and writes the new image tag into the service's manifests. Argo CD picks that commit up and syncs on its own, so a deployment to our pre-production environment needs no manual step. Merging the pull request is the release decision.
 
-A rollback is a new deployment of an earlier version, through the same path or by syncing an earlier revision in Argo CD when speed matters. Earlier in the work, I found rollback harder than I wanted it to be. That experience is why I want recovery rehearsed alongside deployment.
+A rollback is a new deployment of an earlier version through the same path. The alternative of syncing an earlier revision directly in Argo CD still needs its prerequisites and current use confirmed, including how automatic sync is handled. [Argo CD does not allow rollback with automatic sync enabled](https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/#automated-sync-semantics). The [proposed recovery steps in Production](/blog/category/management/cto-handbook-production#proposed-rollback-and-hotfix-steps) use Git and start by checking whether rollback is safe.
 
-A small service computes DORA metrics from GitHub deployments and our incident.io records. In one 30-day snapshot it recorded 586 deployments across 22 repositories. Deployment frequency is the only figure I would quote so far. To make the failure and recovery figures useful, we still need to connect most of the incident records to the relevant releases.
+Earlier in the work, I found rollback harder than I wanted it to be. That experience is why I want recovery rehearsed alongside deployment.
+
+A small service computes DORA metrics from GitHub deployments and our incident.io records. In one 30-day snapshot it recorded 586 deployments across 22 repositories. The exact dates, environments included and treatment of repeat deployments still need confirming. Until then, I would treat this as an activity count rather than a measure of production deployment frequency. To make the failure and recovery figures useful, we still need to connect most of the incident records to the relevant releases.
 
 ## What I would carry into the next setup
 
