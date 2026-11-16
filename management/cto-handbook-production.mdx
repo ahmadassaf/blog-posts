@@ -17,7 +17,7 @@ series:
 
 The work in [Delivery](/blog/category/management/cto-handbook-processes) continues after a release. Customers now depend on what we built, and we need to be able to operate it, change it safely and recover when something goes wrong.
 
-I came to this from research and machine learning, and running production was new to me. Most of what follows I had to learn in the last year. Some of the procedures below are in use, some are requirements in an approved policy, and others are proposals we are still putting into force.
+I came to this from research and machine learning, and running production was new to me. Most of what follows I had to learn in the last year. Some of the procedures below are in use, some are requirements in an approved policy, and others are proposals with work still open.
 
 ## Runbooks
 
@@ -46,9 +46,9 @@ The rehearsal I describe in [Delivery](/blog/category/management/cto-handbook-pr
 
 A checklist suits work that is rare, has many steps and is costly to get wrong. Joining and leaving the company are the clearest cases: the steps span many systems, and a missed one is either a bad first week or an account that stays open.
 
-### How I do it now
+### Onboarding and offboarding checklists (revision awaiting approval)
 
-**Onboarding and offboarding.** One controlled document holds both lists. Its latest revision is awaiting approval.
+One controlled document holds both lists. The steps below are from the latest revision, which is awaiting approval.
 
 Onboarding runs in four stages:
 
@@ -66,9 +66,11 @@ Offboarding is ordered by time since the person left:
 | 24 hours | Equipment returned and wiped, physical access removed, ownership of their work transferred. |
 | 48 hours | A sweep for remaining access, a review of audit logs and my sign-off. |
 
-**A bug that is ready for engineering.** From our draft support process. A report needs six things before an engineer picks it up: the customer and environment, what the user was trying to do, the affected records, timestamped evidence, steps to reproduce with expected and actual results, and what we already checked.
+### Draft support checklists
 
-**Done, for a customer issue.** Also from the draft. The fix is merged after review by someone other than the author, deployed and checked in the environment the customer uses, a test or alert would catch it happening again, the customer has been told and the records are closed. For the two highest severities, the root cause analysis and its follow-ups are complete too.
+**A bug that is ready for engineering.** A report needs six things before an engineer picks it up: the customer and environment, what the user was trying to do, the affected records, timestamped evidence, steps to reproduce with expected and actual results, and what we already checked.
+
+**Done, for a customer issue.** The fix is merged after review by someone other than the author, deployed and checked in the environment the customer uses, a test or alert would catch it happening again, the customer has been told and the records are closed. For the two highest severities, the root cause analysis and its follow-ups are complete too.
 
 The quarterly access review has a checklist of its own; it is in [Compliance](/blog/category/management/cto-handbook-compliance).
 
@@ -80,11 +82,19 @@ One of the engineers asked whether we could push straight to main and have someo
 
 Where merging deploys to production, the independent human approval must happen before the merge. Moving that approval to a separate release step only works where the two actions are separate. The approver still needs to see every change being promoted.
 
-### How I do it now
+### Release practices in use
 
-We have written this down as a release process. The document is still a proposal, with open items to close before I would call it in force. The principles that come from our approved policies already apply: someone other than the author approves each change and each production deployment, nothing reaches production without passing tests and security scans, Git is the record, and a failed release is reverted before it is fixed.
+We release only from the main branch.
 
-[Delivery](/blog/category/management/cto-handbook-processes#shipping-a-change) describes the review model we are putting in place. The documented release path here still calls for separate approval of the pull request and the production deployment. The [emergency-change exception](#hotfixes-rollback-and-emergency-changes) is set out separately.
+**Deploying and launching are separate.** A customer sees a feature when it is switched on for them. We do not have a feature-flag service yet, so we separate the two per customer, through what each one is entitled to and through invitation-only betas.
+
+### Release requirements in force
+
+Our approved policies already require the following: someone other than the author approves each change and each production deployment, nothing reaches production without passing tests and security scans, Git is the record, and a failed release is reverted before it is fixed.
+
+### Proposed release procedure
+
+We have written down the procedure below, with open items to close before it is in force. It calls for separate approval of the pull request and the production deployment. [Delivery](/blog/category/management/cto-handbook-processes#shipping-a-change) describes the review model we are putting in place. The [emergency-change exception](#hotfixes-rollback-and-emergency-changes) is set out separately.
 
 **The path from merge to production:**
 
@@ -95,8 +105,6 @@ We have written this down as a release process. The document is still a proposal
 5. **Production approval.** The same run waits for an engineer other than the author. They check pre-production, and what else their approval would promote.
 6. **Production.** The version is committed to the production configuration and deployed from Git.
 7. **Watch.** The author watches alerts and dashboards for thirty minutes and reverts if needed.
-
-We release only from the main branch.
 
 **Change types.** Most changes are standard. The others need more.
 
@@ -112,15 +120,11 @@ A release plan has eight headings: purpose, what changes, impact, deployment pla
 
 **Database migrations.** Rolling back the application does not undo a migration. We write migrations in two steps, expanding first and removing later, so the old and new versions can run side by side. Dropping a column or transforming customer data counts as a significant change and needs a snapshot first.
 
-**Deploying and launching are separate.** A customer sees a feature when it is switched on for them. We do not have a feature-flag service yet, so we separate the two per customer, through what each one is entitled to and through invitation-only betas.
-
 ## Hotfixes, rollback and emergency changes
 
 When a release fails or an urgent fix is needed, people are under pressure and can skip steps. I want the procedure to be short enough to follow in those moments.
 
-### How I do it now
-
-This is part of the same proposal.
+### Proposed rollback and hotfix steps
 
 **Roll back first.**
 
@@ -133,11 +137,13 @@ This is part of the same proposal.
 
 **Hotfix.** Open the incident first. Fix on a branch from main, with a test that would have caught the problem. The pull request links the incident and is approved by someone else. Check it in pre-production, check what else would ship with it, then approve production and watch.
 
-**Emergency change.** If the normal approvals cannot happen in time, an administrator can merge or approve past the gate. The incident records why. An approved policy requires that someone other than the author reviews the change and records their approval within three days.
+### Emergency changes under approved policy
+
+If the normal approvals cannot happen in time, an administrator can merge or approve past the gate. The incident records why. Someone other than the author must review the change and record their approval within three days.
 
 **Vulnerabilities.** Our policy sets remediation times by severity: fifteen days for critical, thirty for high, sixty for medium and ninety for low. One that is being actively exploited is treated as an incident of the highest severity.
 
-Afterwards we raise an issue for the test or check that was missing. If the rollback itself was hard, that gets an issue too.
+**Proposed follow-up.** Raise an issue for the test or check that was missing. If the rollback itself was hard, that gets an issue too.
 
 ## Incident response
 
@@ -145,7 +151,7 @@ A rollback or hotfix is one part of dealing with an incident. The response also 
 
 An incident needs one person leading it, one place where it is discussed and a record that is written as it happens.
 
-### How I do it now
+### Incident response under approved policy
 
 Our incident response plan is an approved policy, reviewed and tested at least once a year. It covers security incidents and service incidents that affect customers.
 
@@ -180,9 +186,11 @@ The customer conversation continues while engineers investigate and after they r
 
 A customer problem should have one record that everyone works from, and the customer should hear from us before they have to chase.
 
-### How I do it now
+The response times in the table above are already commitments.
 
-This is the second proposal. The response times in the table above are already commitments. The rest is how we intend to meet them.
+### Proposed support procedure
+
+This is how we intend to meet those commitments.
 
 - **One record per problem.** An incident record, a linked engineering issue and the customer conversation in one support inbox. Nothing lives only in chat.
 - **Triage within a day.** Within an hour for the two highest severities.
@@ -198,7 +206,7 @@ This is the second proposal. The response times in the table above are already c
 4. What is the commercial context?
 5. What are you asking for?
 
-I answer within one business day with one of three decisions: raise the severity, move it into current work, or not now, with a reason and a date to look again.
+Under the proposal, I would answer within one business day with one of three decisions: raise the severity, move it into current work, or not now, with a reason and a date to look again.
 
 ## As the company grows
 

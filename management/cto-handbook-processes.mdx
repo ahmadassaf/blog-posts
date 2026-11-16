@@ -90,18 +90,26 @@ Review has to be something a person can do with care at the volume the team prod
 
 Not every repository carries the same risk. Treating an experiment like customer-facing software slows the experiment and teaches people that the process is a formality.
 
-### How I do it now
+<span id="change-review-as-we-roll-it-out" />
 
-This is the model we are putting in place. Some of it is enforced in tooling and some is still being built.
+### In use
 
-- **Critical and experimental repositories are separate.** Critical means the repositories that build, configure or deploy the product. Sandboxes, experiments and documentation-only repositories do not go through the production change gate. If an experiment starts serving customers, its controls change with it.
 - **Pull requests are the record of each change.**
 - **Small changes.** One of the engineers added a check that fails pull requests over four hundred lines, which pushes a coding agent towards small, stacked changes a person can read.
-- **Automated review.** A change gate reviews each pull request with several models, each looking at one concern: correctness, security, tests, the reach of the change and whether it can be reversed. It produces findings for the engineer to fix or explain. It recommends and does not approve.
-- **Ordinary changes.** The author can merge an ordinary change within an agreed goal once the automated gates pass and the findings are addressed.
-- **Riskier changes.** Large changes, and changes involving authentication, secrets, infrastructure or migrations, need a second engineer before merging. So does a change whose risk reaches outside the goal.
+- **Automated review.** The change gate uses several models to check correctness, security, tests, the reach of the change and whether it can be reversed. It produces findings for the engineer to fix or explain. Approval is left to a person.
 - **Choosing a reviewer.** Authors choose whom to ask: whoever knows that part of the system or would spot what the author would miss. We tried automatic assignment from code-ownership files, and it sent people requests about code they had not touched in months, so we removed it.
-- **Before production.** An independent person approves before a change reaches production. Where a merge triggers a production deployment, that approval happens before the merge.
+
+### Required by policy
+
+Someone other than the author must approve the change before it reaches production. If merging triggers a production deployment, that approval must happen before the merge.
+
+### Still rolling out
+
+These rules describe the model we are putting in place. I am still checking where each rule is enforced in tooling.
+
+- **Which repositories go through the gate.** Critical repositories build, configure or deploy the product. The model puts them through the production change gate and keeps sandboxes, experiments and documentation-only repositories outside it. An experiment that starts serving customers needs production controls.
+- **Ordinary changes.** The model lets the author merge an ordinary change within an agreed goal once the automated gates pass and the findings are addressed. The independent approval before production still applies.
+- **Riskier changes.** The model calls for a second engineer before merging large changes or changes involving authentication, secrets, infrastructure or migrations. The same applies when the risk reaches outside the goal.
 
 For when a change needs someone else at all, we use the vocabulary of [Ship / Show / Ask](https://martinfowler.com/articles/ship-show-ask.html). The history of how we arrived here is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed), and the gate has its own post: [Building a Change Gate for AI-Assisted Development](/blog/category/engineering/building-an-ai-change-gate).
 
@@ -133,7 +141,7 @@ For now, this is the rehearsal I want us to run. We use incident tooling and hav
 
 ## As the company grows
 
-In a startup, founders can shape goals and settle scope questions directly with the people doing the work. As responsibility spreads across teams, I would make those decision boundaries and dependencies explicit before adding more planning meetings. A team should know what it can decide, who supplies the customer context and which changes need another team's agreement. I would check the review and release path with each team too, so the written controls still describe how its work reaches customers.
+Once several teams are shipping, I would trace a change from each team to production. I want to see who brings the customer context, which scope changes need another team's agreement and where the required review happens. That is what I would check before adding another planning meeting.
 
 ## Still to write
 

@@ -15,13 +15,13 @@ series:
   title: 'The Startup Handbook'
 ---
 
-We build software for finance, and customers need to trust how we change and run it. We pursued SOC 2 and ISO 27001 in our first year, while the product and the team were still taking shape. I had never been the name on a security policy before.
+We build software for finance, and customers need to trust how we change and run it. We pursued [SOC 2](https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022) and [ISO/IEC 27001](https://www.iso.org/standard/27001) in our first year, while the product and the team were still taking shape. I had never been the name on a security policy before.
 
 The story of what that was like is in [Compliance at AI Speed](/blog/category/management/becoming-a-cto-compliance-at-ai-speed), and the rules I took from it are in [Operations](/blog/category/management/cto-handbook-infrastructure#compliance). The checklists describe what we put in place for a company of about ten engineers. Your auditor and your risks should decide what you need.
 
 ## What you are building
 
-Both frameworks ask for the same three layers.
+We organised our work for both frameworks into three layers.
 
 - **Policies** say what the company commits to.
 - **Procedures** say how a commitment is carried out, step by step.
@@ -191,9 +191,19 @@ A few conventions make it hold together:
 - **The change log is a separate database** related to the policies. A daily job adds a row when a policy's version changes.
 - **Records link to their evidence.** A review or exercise is not complete until the evidence is attached.
 
+### How I would make this easier to use
+
+A person who needs a bigger database should be able to start with “request a capacity change”. I would put that route on the team’s handbook home and link it to the existing form. The request needs the current and proposed configuration, a reason for the change and the metrics behind it. The person approving it should be able to find those details in the same record where the engineer later writes down what changed, how they checked it and whether they had to roll it back.
+
+An internal audit starts with a date, a scope and someone who can review the work independently. I would keep the evidence and findings with the audit report, then link each corrective action to the finding that prompted it. An owner and a due date tell me who is doing the work. A later check tells me whether it worked. That gives management something concrete to review when an action is still open.
+
+I would put recurring reviews and exercises on one calendar, with an owner and a link to the record each one should produce. Capacity requests and onboarding start when there is a change to make or someone is joining. On the same handbook home, I would give people a clear place to find out how to book holiday, which public holiday calendar applies to them and whom to ask about a contract. Signed contracts and individual records belong in their restricted home.
+
 ## Templates
 
-If you are starting this work and want any of it as a template, [get in touch](/about). I am happy to share the structure of the policy register, the request forms, the review and audit logs, the onboarding and offboarding checklist and the release plan, with our own content removed.
+If you are setting this up, I’m happy to share templates for the policy register, request forms, review and audit logs, onboarding and offboarding checklist, and release plan, with our own content removed.
+
+**[Get in touch](/about)**
 
 ## As the company grows
 
