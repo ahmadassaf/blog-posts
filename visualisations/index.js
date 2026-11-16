@@ -58,6 +58,7 @@ const PipelineDiagram = diagram(() => import('./PipelineDiagram'));
 const RdfBlankNodeExplorer = diagram(() => import('./RdfBlankNodeExplorer'));
 const RdfCollectionExplorer = diagram(() => import('./RdfCollectionExplorer'));
 const RdfContainerExplorer = diagram(() => import('./RdfContainerExplorer'));
+const RdfEngineFigure = diagram(() => import('./RdfEngineFigure'));
 const RdfTripleExplorer = diagram(() => import('./RdfTripleExplorer'));
 const RdfVsPropertyGraphExplorer = diagram(() => import('./RdfVsPropertyGraphExplorer'));
 const UnifiedProcessorExplorer = diagram(() => import('./UnifiedProcessorExplorer'));
@@ -83,6 +84,7 @@ export const VisualisationComponents = {
   RdfBlankNodeExplorer,
   RdfCollectionExplorer,
   RdfContainerExplorer,
+  RdfEngineFigure,
   RdfTripleExplorer,
   RdfVsPropertyGraphExplorer,
   SparqlPatternExplorer,

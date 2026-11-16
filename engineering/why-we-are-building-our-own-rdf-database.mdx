@@ -1,0 +1,228 @@
+---
+type: 'Post'
+title: 'Why We Are Building Our Own RDF Database'
+subtitle: 'The standards aged well, the engines did not, and agents ask for things neither was designed for'
+summary: 'Building a database is usually the wrong call. Here is why we are doing it anyway, what the engine looks like from a distance, how we test it against the W3C suites and against other stores, and where it is still behind.'
+tags: ['Knowledge Graphs', 'Semantic Web', 'Linked Data', 'AI', 'Databases']
+date: '2026-11-15'
+category: 'engineering'
+featured: false
+draft: false
+tableOfContents: false
+---
+
+Building your own database is usually the wrong call. Databases take years to get right, their failures are the expensive kind, and there is nearly always an existing engine that is good enough. I would still give that advice to most teams.
+
+At Mav9 we are building one anyway. This post explains why and shows where the engine stands today, including the numbers that are unflattering.
+
+## Why RDF at all
+
+From the start I wanted [a knowledge graph at the centre of the product](/blog/category/management/becoming-a-cto-imposter-syndrome-is-real), with agents, interfaces and integrations all reading from and writing to the same model. RDF is the data model I chose for it.
+
+The fair objection is that a property graph database would do the same job. Property graphs are more widely used, easier to pick up and often faster at walking a graph. Almost anything RDF does can be reproduced on one. What differs is how much of it the model gives you and how much becomes a convention your team writes and maintains. I compared the two models at length in [an earlier post](/blog/category/data/intro-knowledge-graphs). Four differences decided it for us.
+
+**Identity is global.** In a property graph a node's identity is an internal id, assigned by one database and meaningless outside it. In RDF every thing is named by an IRI, and two graphs combine by putting their statements together. A knowledge graph is usually assembled from many sources that describe the same things. With global names, loading a second source about a company adds facts to the node that is already there. On a property graph that is a matching step we would write and own for every source.
+
+**The schema lives in the graph, in a shared language.** Classes, properties and constraints are statements like any other, written in vocabularies such as RDFS, OWL and SHACL that tools and language models already know. Property graph schemas exist, but each vendor has its own and it sits beside the data. An agent that can query the data can query its description the same way.
+
+**Every fact has a fourth part.** An RDF statement carries the name of the graph it belongs to. That is a standard place to record which source or dataset a fact came from, and the property graph model has no counterpart at the level of a single statement. Everything we do with provenance and permissions starts from the idea that a fact has an address of its own.
+
+**The standards have teeth.** SPARQL has a W3C specification, a public conformance suite and many independent implementations, and data moves between them in standard formats. Property graphs got their ISO standard, [GQL](https://www.iso.org/standard/76120.html), in 2024, and adoption is still early. This is what made building our own engine thinkable at all. Existing tools work against it on the first day, and our data can leave it for another engine on the last.
+
+Property graphs are better at one thing we care about, which is attaching data to a relationship. RDF was awkward at that for years, and the RDF 1.2 work is only now addressing it. It is the reason per-fact metadata is something we had to design, as I describe below. RDF is also more verbose and harder to learn, which is why our developers see GraphQL and not triples.
+
+These ideas were designed for the web twenty years ago. They happen to suit language models well.
+
+## The standards held up, the engines stood still
+
+[SPARQL 1.1](https://www.w3.org/TR/sparql11-query/) became a W3C recommendation in 2013 and it is still what everyone implements. I count that as a strength. A query written ten years ago still runs, and a dataset exported from one store still loads into another.
+
+The engines have not kept pace. Most of the triple stores that teams run in production were designed in the 2000s around one large server with its own disks, sized for the busiest hour and left running. They assume a handful of big datasets, queries written by specialists, and an operator who knows which settings to tune.
+
+The rest of the database world spent those years changing shape. Relational and analytical systems learnt to keep data in object storage, to separate storage from compute, to start in seconds, to cost nothing while idle and to serve thousands of small, isolated tenants cheaply. Postgres alone has been through several generations of this. Very little of it reached RDF.
+
+There is good new work. [Oxigraph](https://github.com/oxigraph/oxigraph) and [QLever](https://github.com/ad-freiburg/qlever) are serious modern engines, and we have learnt a lot from both. Each was built for a different job from ours, though. What we could not find was an operational RDF database for a multi-tenant product, one that behaves like the cloud databases our engineers already take for granted.
+
+We started on an established triple store, and it answered queries correctly. The gap was in everything around the query: what it costs to keep running, how customers are kept apart, and how much of the access control and history ends up as application code sitting on top of the database.
+
+## What agents ask of a database
+
+A database behind an ordinary application sees a small set of query shapes. Engineers wrote them, someone reviewed them, and they change when the code changes. A database behind an agent sees something else, and this is where the older engines fall furthest short.
+
+**Agents arrive knowing nothing.** Before an agent can ask a useful question it has to find out what data exists and how it is connected. If the schema is data, it can ask the database directly. This is the old RDF idea that has aged best.
+
+**Nobody reviews their queries.** An agent writes many small, exploratory queries and some of them are terrible. The database has to protect itself with limits and deadlines, and it has to refuse in a way the agent can read and act on.
+
+**They act on someone's behalf.** The permissions of the person an agent works for have to hold for each individual fact, inside the database. Filtering results in the application stops working once the caller composes its own queries.
+
+**Their answers get questioned.** When an agent states a number, the next question is where it came from. The source of a fact, when it arrived and who or what wrote it need to be stored with the fact and returned with it.
+
+**They need to see the past.** To check an answer an agent gave last month, you need the data as it was known last month.
+
+**They write.** An agent's change should be something you can stage, inspect and undo before it becomes the truth everyone else reads.
+
+**They mix ways of searching.** One question can need structure, text and similarity at once. Spread across three systems, that means three copies of the data and three permission models to keep in step.
+
+**They come in bursts.** An agent is silent for hours and then sends a hundred queries in a minute, across many small datasets. Cost has to follow use.
+
+None of these is exotic taken alone. We wanted all of them in one engine, on RDF, enforced by the database instead of by convention in the code around it. We could not buy that, so we are building it.
+
+## The design
+
+The aim is a system of record for facts that are contested, access-controlled and time-dependent. For any fact, the database should be able to say whether it can be trusted, who is allowed to see it, and what was known on a given date. The engine has to be fast, but those three answers are what it is for.
+
+Some of what follows runs today, and some exists as a working prototype that is still being brought into the shipping engine. In the first diagram, the core engine is what runs today and the add-ons are the prototype parts.
+
+<RdfEngineFigure figure="architecture" />
+
+### Object storage first
+
+The database is written in Rust and keeps its data in object storage. Underneath sits [SlateDB](https://slatedb.io), a log-structured key-value store that writes to a bucket where older engines write to a local disk. The server's own disk is a cache. A server can be thrown away and replaced without moving any data, and an idle dataset costs what its bytes cost to store.
+
+Object storage is slow by nature, so reads go through three tiers: memory, the local disk, then the bucket. Any number of read servers can work from the same bucket, each with its own cache and with no replication protocol between them. One server at a time holds the writer role.
+
+Each repository lives under its own storage prefix, so one repository's data never shares an index with another's. A repository has one writer at a time. Every write ends by publishing an immutable snapshot, and every read is pinned to one. A long query keeps a consistent view while writes continue, and that same mechanism is what reading the past and staging a change will be built on.
+
+### Why Rust
+
+Part of the choice was made by what we wanted to build on. SlateDB is a Rust library that runs inside our own process, so the storage engine is a function call away and adds no service for us to operate. [Oxigraph](https://github.com/oxigraph/oxigraph) publishes its RDF parsers and its SPARQL parser and evaluator as separate Rust crates. Those gave us a standards-compliant front end from the start, and the evaluator later became the oracle we test against.
+
+The language matters for a database in two ways. It has no garbage collector, so memory use and pauses are ours to control. And the compiler rejects whole classes of memory and concurrency mistakes before a single test runs. That second point carries more weight when AI writes much of the code, because the compiler is one more check that nobody can talk their way past.
+
+### One engine under every interface
+
+We began with two query paths, each with its own way of reading the indexes and neither with any statistics about the data. The design replaces them with one: every interface compiles its request into the same kind of plan, a planner that knows the shape of the data picks the order of work, and one executor streams the result in batches, checking its budget before it reads instead of after. A whole GraphQL selection becomes a single plan, so the familiar problem of one query per field per parent cannot occur. SPARQL runs on this engine today. GraphQL still has its own executor and has yet to move across.
+
+<RdfEngineFigure figure="engines" />
+
+Inside, every IRI and literal is swapped for a compact identifier, and each fact is stored in several orderings, so a lookup by subject, by predicate or by object becomes a short range read. The query engine works on identifiers for as long as it can and turns them back into text at the end, in batches.
+
+There are two ways in. Applications and agents use a GraphQL API that the database generates from the knowledge model, so a change to the model changes the API with it. Tools and client libraries use SPARQL 1.1 over an API compatible with [RDF4J](https://rdf4j.org), which means existing RDF software connects without knowing anything changed underneath. Queries run inside a budget of keys read, rows returned and time, and get a specific refusal when they go over.
+
+### Metadata belongs to the fact
+
+Each stored fact carries two small references: where it came from and who may see it.
+
+<RdfEngineFigure figure="fact" />
+
+Provenance records are shared. Thousands of facts extracted from one document point at one record holding the source document, the pipeline run, a confidence, a licence and the period the fact is valid for. Explaining a fact is one lookup.
+
+Visibility follows the cell-level model that [Apache Accumulo](https://accumulo.apache.org) introduced. A label is a small boolean expression over tokens. A request resolves to a set of tokens once, and the scan drops whatever the caller may not see before any other part of the query runs. There is one enforcement point. It sits underneath every interface, so none of them has a route around it.
+
+Two more things follow from the same design. Time has two axes: the validity period is time in the world, and snapshots are time in the database. "What did we know on 31 March about the position on 31 December" is one pinned snapshot plus one filter. And disagreement becomes data. When two sources give different values for the same thing, we hold two facts with two sources and apply a trust policy when reading, where a simpler store keeps whichever import ran last.
+
+The hard part we know about is aggregates. A count or a sum can reveal that a hidden fact exists even when the fact itself is filtered out, so totals need a policy of their own.
+
+### Search as more indexes
+
+Full-text search and vector similarity are further index families, written before a snapshot is published. They are always consistent with the facts and sit under the same visibility rule, so there is no second system to keep in step.
+
+### What an agent sees
+
+We took a lot from [RushDB](https://github.com/rush-db/rushdb) here. It is a database designed around agents: push JSON at it, and it describes what it holds, speaks [MCP](https://modelcontextprotocol.io), and searches by keyword and by similarity with nothing to set up.
+
+RushDB gets much of that ease by not asking for a schema. We work on a governed model, so we want the same experience from the opposite direction. The self-description is generated from the model. The MCP server sits on the same engine, so an agent cannot retrieve what its user cannot see. Search is an argument on a GraphQL field.
+
+The model also changes how an agent should query. Asking a language model to write SPARQL against a large graph fails on grounding: it has to guess identifiers. The GraphQL schema generated from our model is small, closed and typed, so a generated query can be validated before it runs and returned with the answer for audit. With provenance on every fact, the answer can cite its sources, limited to the ones the caller is allowed to see.
+
+## How we test it
+
+A new database has no track record, so the tests have to stand in for one.
+
+The first line is the [W3C test suite](https://github.com/w3c/rdf-tests), which exists so that implementers cannot mark their own homework. Our own query engine passes 175 of the 176 approved SPARQL 1.1 query tests that apply to us, all 242 approved SPARQL 1.0 tests and all 93 approved update tests. The one we fail is a federated query to a remote endpoint, which we have not built.
+
+The second is an oracle. We began with Oxigraph's SPARQL evaluator running over our storage, then replaced it construct by construct with an engine that understands our indexes. Having both meant every query could be run through each and the answers compared. Where they disagree, the standard decides. In a few places that meant fixing our engine, and in a few it meant keeping an answer the older evaluator gets wrong. On our coverage benchmark the native engine came out between 2.25 and 2.67 times faster by geometric mean.
+
+The third is our own software. The client libraries we wrote against the previous store bring 2,173 tests of their own. All but one pass unchanged against the new one.
+
+## How it compares
+
+For comparison with other engines we use [trainmarks](https://github.com/DataTreehouse/trainmarks), an open benchmark kit with six SPARQL workloads and adapters for most stores. Everything below ran on one 32-core arm64 cloud machine at 10 million triples with each engine's default settings. Times are in seconds and lower is better.
+
+| Engine | Storage | Load | Count | Group | Join | Optional | Construct | Update |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| **Ours** | object storage | 76 | 0.001 | 1.9 | 0.95 | 2.4 | 2.3 | 1.0 |
+| RDF4J | memory | 29 | 1.66 | 1.39 | 0.33 | 1.90 | 0.51 | 0.04 |
+| Jena | memory | 30 | 3.40 | 6.57 | 0.65 | 6.54 | 0.75 | 0.06 |
+| Oxigraph | memory | 28 | 2.49 | 4.48 | 0.98 | 3.66 | 1.66 | 0.08 |
+| Oxigraph | disk | 152 | 3.53 | 10.88 | 2.41 | 9.13 | 5.42 | 0.22 |
+| Virtuoso | disk | 30 | 0.10 | 0.07 | 0.58 | 4.58 | 6.10 | n/a |
+| [GraphDB](https://graphdb.ontotext.com) | disk | 108 | 3.18 | 9.60 | 1.50 | 10.55 | 8.70 | 0.44 |
+| [Neo4j](https://neo4j.com) (Cypher) | disk | 106 | 0.005 | 2.32 | 0.61 | 0.02 | n/a | n/a |
+
+We are not the fastest engine in this table. The in-memory stores win most columns, as they should: nothing they do touches storage, and nothing they hold survives a restart. Virtuoso's aggregation is in a class of its own. Ours is the only row that writes to an object store.
+
+Against Oxigraph on disk and GraphDB, all five read workloads are faster and the import takes between half and two thirds of the time. Against Virtuoso we are ahead on the count, the optional join and the construct, and behind on grouping, the plain join and the import. The count is answered from statistics the database already keeps, which is why it takes a millisecond. Peak memory for the whole run is about 4.4 GB.
+
+Updates are where we are clearly behind. Changing twenty thousand statements takes a second, against a few hundredths in memory and a few tenths on disk. A durable write to object storage has a floor that a local disk does not, and we have not finished working down to it.
+
+Six synthetic workloads only say so much. On a 24 million statement dataset shaped like our real data, sitting in real cloud object storage, bounded lookups answer in about 7 milliseconds once the cache is warm. The first touch after a restart is a different matter, and can take from a tenth of a second to several seconds while blocks are fetched. That is the tax for the storage model, and reducing it is ongoing work.
+
+Our applications read through GraphQL, and no public benchmark speaks it, so there we measure against ourselves. The suite is 38 queries taken from our application, run against a 7.2 million statement dataset in real object storage, and a release has to return byte-identical answers to the one before it. The largest single gain so far came from statistics again: counting a type with 1.07 million members went from 2.1 seconds to half a millisecond.
+
+## What the numbers looked like before
+
+The table above flatters the present. The same benchmark on an earlier release looked like this:
+
+| | Count | Group | Join | Optional | Construct | Update | Peak memory |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Earlier release | 19.5 | over 600 | 14.5 | over 600 | 117.7 | 188.5 | 10.9 GB |
+| Now | 0.001 | 1.9 | 0.95 | 2.4 | 2.3 | 1.0 | 4.4 GB |
+
+Two of six queries hit the ten-minute timeout. Most of the distance from there to here was covered without new architecture, by finding where the time went.
+
+## We would not have done this without AI
+
+We would never have started this without AI. A database engine is years of work for a specialist team, and we are a small company with a product to ship. AI agents wrote much of this engine and ran most of the measurements in this post, directed by engineers who decide what gets built and what gets merged.
+
+What makes that workable is that a database is unusually easy to check. The W3C suite passes or fails, and the second evaluator returns the same rows or it does not. The client libraries' tests are green or red, and the benchmark prints a number. An agent can be given a narrow goal, such as making one query faster without changing any answer, and its work can be judged by something other than its own account of it.
+
+AI moves the bottleneck from writing code to reviewing it, which I wrote about in [a separate post](/blog/category/engineering/building-an-ai-change-gate). At one point eighteen automated review comments had been merged past without anyone reading them. We went back through all of them, and twelve needed a fix.
+
+It is also confidently wrong at times. An early comparison credited the new engine with finishing a sort that the old one could not. It finished because it was missing a limit the old engine enforced, and the claim had to be withdrawn.
+
+## What was hard
+
+Real data is skewed in ways a synthetic benchmark does not show. In one dataset a single type had so many members that one index entry outgrew its size limit and the import failed.
+
+Object storage sets floors that code cannot remove. A durable write used to wait on a 100 millisecond flush timer three times per update, so every write cost a third of a second before any of our logic ran. Cold reads have a floor of the same kind.
+
+Memory was harder than expected. Importing ten million statements peaked at 9.4 GB and the process held on to most of it afterwards. The memory was free; the allocator had not handed it back. Changing the allocator brought the peak to 4.3 GB and returned the memory once the import finished.
+
+Under load, about one first write in a thousand could publish a snapshot that was missing that write. A test that passes once says nothing about a bug like that, so any test involving timing or concurrency now has to pass several hundred runs under load.
+
+Turning identifiers back into text is expensive, and it is easy to do it too early. Our first benchmark of the native engine came out slower than the evaluator it replaced, at 0.76 times its speed, because results were decoded one term at a time. Decoding in batches took it to 1.8 times, and later work to the figures above.
+
+Some of the largest gains came from small mistakes. For a while any query containing the word "service" was sent to the slower fallback engine. Counts answered from statistics only worked after a restart.
+
+## What helps
+
+Have something to compare against: the second evaluator and the standard test suite are what caught our wrong answers.
+
+Profile before you build. We designed a separate numeric index to speed up sums, built it, and then measured a warm sum going from 137 to 244 milliseconds. A cache beside the one we already had did better, and the index was dropped.
+
+Measure where the system will run. One round of changes showed clear gains at a million triples on a laptop and none at ten million on the benchmark machine. Since then nothing counts until it is measured on that machine.
+
+Make the engine explain itself. Once the query plan reported the time spent in each step, the slow step was visible without guessing.
+
+Leave to the storage library what it already does. Compaction and garbage collection stay with SlateDB, and we only configure them.
+
+Change one thing at a time and measure after each. Some changes that looked certain made things slower, importing without a write-ahead log among them.
+
+## What is not there yet
+
+Several of the things agents need are still ahead of us.
+
+The shipping engine has the storage model, the snapshots, the SPARQL engine and both APIs. An earlier prototype went further: metadata on every fact, label filtering, queries across both time axes, full-text and vector indexes and an MCP server all ran in it.
+
+Bringing that across has not been a merge. The prototype's storage layout worked, but it took three and a half times the space, and its importer could not load our largest datasets. We moved its query engine onto the layout we already ran in production, which is the engine measured above, and we are redesigning how the per-fact metadata is stored before it ships.
+
+Updates and cold reads belong on this list too. They are the price of object storage, and each has room to improve.
+
+## What we kept and what it costs
+
+We kept the standards, and they are also our way out: the data is plain RDF, so if this turns out to be a mistake we can load it into someone else's engine.
+
+The cost is a large share of a small team's attention. A bug in a database is also worse than a bug in a feature, because everything above it inherits the error. That AI wrote much of the code does not change who answers for it when a fact comes back wrong.
+
+I will write about how it holds up once it has more mileage.
