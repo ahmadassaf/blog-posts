@@ -1,0 +1,461 @@
+---
+type: 'Post'
+title: 'Modeling and Reasoning with RDF'
+summary: 'Model a blog’s ownership and history in RDF, test what RDFS and OWL infer, and validate the records with SHACL.'
+tags: ['Knowledge Graphs', 'RDF', 'RDFS', 'OWL', 'SHACL']
+date: '2026-11-16'
+updatedAt: '2026-11-18'
+category: 'data'
+featured: false
+tableOfContents: false
+series:
+  order: 4
+  title: "A Semantic Web series"
+---
+
+Data modeling means deciding how to represent the information an application needs. We choose which things get their own identity, how they relate to one another, and which details to record about each. Those choices determine which questions the application can answer.
+
+In a knowledge graph we describe things and their relationships using RDF, the Resource Description Framework. An RDF triple identifies the thing we're describing (the subject), names a relationship or attribute (the predicate), and gives the related resource or value (the object). An *asserted* triple records a fact we supplied. A reasoner can derive other triples from those facts and the definitions of our terms.
+
+A model also needs to survive corrections. Renaming a website and replacing its owner change different facts. An appointment can end while the person and the website both keep their identities. If a source withdraws a statement, some conclusions may have another basis and still hold.
+
+## Start with the questions
+
+For our example, Ahmad owns a blog and also administers it, meaning he is responsible for running it. We want an application that records the blog's ownership and who administered it over time. Ahmad might leave the administrator role and later return while continuing to own the blog. The appointments, dates, and reports below are hypothetical.
+
+<div className="modeling-guide-table">
+
+| Question | Information we need to preserve |
+| --- | --- |
+| Which blog does Ahmad own? | The blog's identity and its owner |
+| Who administered it on a given date? | Each appointment, its administrator, and its dates |
+| Did Ahmad serve more than one term? | Separate appointments, even when the person and blog are the same |
+| Who reported an appointment's start date? | The report, its source, and the value it reported |
+
+</div>
+
+These are **competency questions**. They tell us which answers to try on a few records before we settle on a model.
+
+Ahmad can own the blog while someone else administers it. If we use the ownership relationship, which we'll call `aa:owner`, to look up the administrator, the application will return Ahmad even on a day when someone else was running the blog.
+
+For the date lookup, we'll answer from the appointment records we've accepted. A report might give us a reason to correct one of those records. Until we review it, the lookup should still use the accepted dates to find the administrator.
+
+## Keep identity stable when descriptions change
+
+If several records describe the same person or blog, we need a name we can use across those records. An RDF **IRI** (Internationalized Resource Identifier) gives a resource a globally scoped name. We'll use `http://assaf.website/blog` for the blog and `http://assaf.website/triples#ahmadassaf` for Ahmad. RDF calls a value written directly in a fact a *literal*. A display name is a text literal.
+
+The following facts are written in Turtle, a text notation for RDF. The `@prefix` declarations let us write shorter names. Here `:ahmadassaf` expands to Ahmad's full IRI, and `aa:owner` names a relationship in our example vocabulary. The `foaf:` vocabulary supplies terms for people and their names. A *type* is a category a resource belongs to. Turtle uses `a` to give a resource a type, so `:ahmadassaf a foaf:Person` says that Ahmad is a person.
+
+Save the following graph as `blog.ttl`. We'll use it unchanged for the history, reasoning and validation examples.
+
+```turtle
+@prefix :     <http://assaf.website/triples#> .
+@prefix aa:   <http://assaf.website/Personal#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+:ahmadassaf a foaf:Person ;
+    foaf:name "Ahmad Assaf" .
+
+<http://assaf.website/blog> a aa:Blog ;
+    aa:hasName "Ahmad Assaf's Blog" ;
+    aa:owner :ahmadassaf .
+```
+
+Suppose we rename the blog to "Ahmad's Notes". We change its `aa:hasName` value and keep `<http://assaf.website/blog>` as its identifier. The appointments and ownership links still refer to the same blog. In this small model, `aa:hasName` holds the current display name. Keeping a history of names would be another requirement.
+
+The same issue comes up when we import a person. If two records say "Ahmad Assaf", we have a name to investigate. We still need evidence that both records describe the same person before we merge them.
+
+## Give each appointment its own identity
+
+An appointment represents one period during which one person administers one blog. Suppose Ahmad's first term began on 1 September 2020 and ended on 1 March 2022. He then returned on 1 June 2023 for a second term ending on 1 January 2025. These are two appointments involving the same person and blog.
+
+Save the two appointment records as `appointments.ttl`. A date followed by `^^xsd:date` is a typed literal. It records a calendar day.
+
+```turtle
+@prefix :    <http://assaf.website/triples#> .
+@prefix aa:  <http://assaf.website/Personal#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:appointment1 a aa:AdminAppointment ;
+    aa:forBlog <http://assaf.website/blog> ;
+    aa:administrator :ahmadassaf ;
+    aa:startDate "2020-09-01"^^xsd:date ;
+    aa:endDate "2022-03-01"^^xsd:date .
+
+:appointment2 a aa:AdminAppointment ;
+    aa:forBlog <http://assaf.website/blog> ;
+    aa:administrator :ahmadassaf ;
+    aa:startDate "2023-06-01"^^xsd:date ;
+    aa:endDate "2025-01-01"^^xsd:date .
+```
+
+<BlogModelingDiagram />
+
+Ahmad and the blog keep their identifiers. If a correction comes in for his second term, we can address it to `:appointment2`.
+
+Putting two start dates and two end dates directly on the blog would lose the pairing between them. Putting them on Ahmad would also lose which blog each term concerns. The appointment keeps those facts together. Giving a relationship with several participants or attributes its own resource is an [n-ary relation pattern](/blog/category/data/everything-you-need-to-know-about-rdf#n-ary-relations).
+
+Should a search for 1 March 2022 still return Ahmad's first appointment? We include the start date and exclude the end date, so the last day of that term was 28 February 2022. Both the query and the date checks have to use this convention.
+
+Our records have day precision. We store dates as timezone-free `YYYY-MM-DD` values. If one administrator hands over to another during the day, we'll need more precise times and an agreed timezone policy. Adding midnight to a date would manufacture precision the source never supplied.
+
+## Ask the historical question
+
+SPARQL is the query language for RDF. In the following query, `WHERE` matches appointments with both interval boundaries and `SELECT` names the values we want back. Variables start with `?`. Both comparisons in the filter use the same day, 1 September 2023. Run this query against the combined contents of `blog.ttl` and `appointments.ttl`. The [SPARQL guide](/blog/category/data/sparql-a-comprehensive-guide) explains how the matches produce result rows.
+
+```sparql
+PREFIX aa: <http://assaf.website/Personal#>
+
+SELECT ?appointment ?administrator
+WHERE {
+  ?appointment a aa:AdminAppointment ;
+      aa:forBlog <http://assaf.website/blog> ;
+      aa:administrator ?administrator ;
+      aa:startDate ?start ;
+      aa:endDate ?end .
+
+  FILTER (
+    STR(?start) <= "2023-09-01" &&
+    "2023-09-01" < STR(?end)
+  )
+}
+```
+
+The answer is `:appointment2`, with `:ahmadassaf` as its administrator. Change the date to `2021-06-01` and we get `:appointment1`.
+
+In our fixed-width, timezone-free format, the date strings sort in calendar order. SPARQL 1.1 defines ordering comparisons for `xsd:dateTime`, while support for ordering `xsd:date` values varies by implementation. If we admit timezone suffixes or other lexical forms, we'll need to change the comparison. [SPARQL operator mapping](https://www.w3.org/TR/sparql11-query/#OperatorMapping)
+
+If the second appointment's end date is missing, that appointment drops out of the result. The pattern requires both boundaries. Nothing in the remaining record tells us whether Ahmad stepped down or is still administering the blog. We can accept a partial record and still limit this particular query to intervals whose bounds we know.
+
+The gap between the terms has a similar consequence. No match for `2022-06-01` means that no recorded interval with both boundaries covers that day. If the catalog must guarantee who was responsible every day, it needs evidence that the appointment history is complete.
+
+## Keep a report separate from the appointment
+
+Suppose a source sends us a report about the start of Ahmad's first term. Provenance records who supplied information and how it was produced. In `claims.ttl`, we give this report its own IRI, `:claim1`. PROV-O, the provenance ontology, lets us identify its source as an agent and say when the report itself was created.
+
+```turtle
+@prefix :     <http://assaf.website/triples#> .
+@prefix aa:   <http://assaf.website/Personal#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<http://assaf.website/85740> a prov:Agent .
+
+:claim1 a aa:AppointmentStartClaim, prov:Entity ;
+    aa:aboutAppointment :appointment1 ;
+    aa:reportedStartDate "2020-09-01"^^xsd:date ;
+    prov:wasAttributedTo <http://assaf.website/85740> ;
+    prov:generatedAtTime "2020-09-03T10:00:00Z"^^xsd:dateTime .
+```
+
+The date on `:appointment1` is the date the application has accepted. The value on `:claim1` is what source `<http://assaf.website/85740>` reported. Its September 3 timestamp belongs to the report, while September 1 is the start date it describes. Keep the report graph separate when querying accepted history. If a second source disagrees, we can compare their reports before changing the appointment. Two reports about one term still describe one appointment. [W3C PROV-O](https://www.w3.org/TR/prov-o/#cross-reference-starting-point-terms)
+
+## Define the vocabulary for ownership
+
+An *ontology* contains formal statements, or *axioms*, about a domain. Our ownership vocabulary needs to support two requests. A website listing should include blogs. A person's profile should show the blogs they own, even though our catalog records ownership in the direction from blog to person.
+
+Dublin Core's `dcterms:creator` identifies whoever made a resource. Could we reuse it for the owner? If Ahmad transferred his blog, its owner would change while its creator would stay the same. Equating the properties would let a reasoner identify the new owner as a creator. We can reuse `foaf:Person` for Ahmad and keep `aa:owner` for the relationship from a blog to its current owner. [Dublin Core definition of creator](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/creator/)
+
+RDF Schema (RDFS) describes classes of resources and the properties connecting them. OWL, the Web Ontology Language, can express logical relationships such as two properties being inverses. Save the definitions below as `ontology.ttl`. A class is a category of resources. `foaf:Person`, for example, is a class, while Ahmad is an individual. An object property such as `aa:owner` relates one resource to another.
+
+```turtle
+@prefix aa:     <http://assaf.website/Personal#> .
+@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+
+aa:primaryOwner a owl:ObjectProperty ;
+    rdfs:subPropertyOf aa:owner .
+
+aa:owner a owl:ObjectProperty ;
+    rdfs:label "current owner"@en ;
+    rdfs:comment "Relates a personal blog to a person who currently owns it."@en ;
+    rdfs:domain aa:Blog ;
+    rdfs:range foaf:Person .
+
+aa:ownsBlog a owl:ObjectProperty ;
+    owl:inverseOf aa:owner .
+
+aa:Blog a owl:Class ;
+    rdfs:subClassOf schema:WebSite ;
+    owl:disjointWith foaf:Person .
+
+foaf:Person a owl:Class .
+schema:WebSite a owl:Class .
+```
+
+The label gives readers a short name for `aa:owner`. The comment explains which way the link points and what ownership means here. To use a published term, we only need its IRI. In Turtle, the `foaf:` prefix lets us abbreviate `http://xmlns.com/foaf/0.1/Person` as `foaf:Person` without loading any FOAF definitions. An OWL ontology can use `owl:imports` when it needs another ontology's axioms for reasoning. Our example loads the definitions in `ontology.ttl` directly. [OWL 2 ontology imports](https://www.w3.org/TR/owl2-syntax/#Imports)
+
+A resource typed `aa:Blog` is a member of that class. The `rdfs:subClassOf` axiom says that every such resource is also a `schema:WebSite`. The direction matters. Learning that another resource is a website would not tell us it is a blog.
+
+A subproperty works similarly for pairs of resources. The more specific `aa:primaryOwner` implies `aa:owner` for the same blog and person. Our original graph supplies ordinary ownership. It says nothing about whether Ahmad is the *primary* owner. Later we'll add a record that does make that distinction.
+
+The *domain* of `aa:owner` classifies the subject as an `aa:Blog`. Its *range* classifies the object as a `foaf:Person`. The catalog already asserts both types. If we had imported the ownership triple alone, these declarations would still support those classifications. The inverse axiom gives a profile page the ownership link in the other direction, from Ahmad through `aa:ownsBlog` to the blog. [W3C RDF Schema](https://www.w3.org/TR/rdf-schema/) · [OWL 2 Primer](https://www.w3.org/TR/owl2-primer/)
+
+That range assumes we're cataloging personal blogs owned by people. If we later receive a blog owned by an organization, the current rule would classify the organization as a person. Before accepting that record, we'd need to decide whether the catalog includes organizational owners and revisit the range if it does.
+
+Suppose an import accidentally reverses `aa:owner`. Domain and range would now classify Ahmad as a blog and the blog as a person. RDFS has no grounds for rejecting those inferred types. Our OWL ontology declares blogs and people *disjoint*, meaning an individual cannot belong to both classes. Alongside our original records, the reversed link therefore creates an inconsistency. If an import simply named the wrong person, all the axioms could still hold. We'd need to check the evidence to discover that error.
+
+## Run one query on three views
+
+The ontology defines what can follow from the facts. A reasoner supplies an algorithm for finding those conclusions. Forward chaining starts with the available triples, applies rules, then uses the triples it just derived in further rule applications. When another pass adds nothing, the graph contains the *closure* for that rule set.
+
+We'll compare the asserted data with an RDFS closure and an OWL 2 RL closure. RL is an OWL *profile*, a restricted part of the language suitable for rule-based reasoning. Its rules cover our property hierarchy, types and inverse. A complete reasoner for the broader OWL 2 DL description-logic language supports constructs outside that profile. Selecting RL gives us specific inference behavior we can document and test. [W3C OWL 2 profiles](https://www.w3.org/TR/owl2-profiles/)
+
+Place the three files `blog.ttl`, `appointments.ttl`, and `ontology.ttl` in one directory. The Python snippets below run in order from that directory. The examples use RDFLib 7.6.0, OWL-RL 7.6.2 and pySHACL 0.40.2. To install those versions, run `python -m pip install rdflib==7.6.0 owlrl==7.6.2 pyshacl==0.40.2`. Load the two accepted-data files into one graph and keep the definitions in another. The report in `claims.ttl` stays outside the accepted-data graph.
+
+```python
+from pathlib import Path
+from rdflib import Graph, Namespace, URIRef
+from rdflib.namespace import RDF, SH
+from owlrl import DeductiveClosure, OWLRL_Semantics, RDFS_Semantics
+
+AA = Namespace("http://assaf.website/Personal#")
+EX = Namespace("http://assaf.website/triples#")
+blog = URIRef("http://assaf.website/blog")
+website = URIRef("https://schema.org/WebSite")
+
+accepted = Graph().parse("blog.ttl", format="turtle")
+accepted.parse("appointments.ttl", format="turtle")
+ontology = Graph().parse("ontology.ttl", format="turtle")
+
+def view(records, rules=None):
+    result = records + ontology
+    if rules is not None:
+        DeductiveClosure(rules).expand(result)
+    return result
+```
+
+Each call to `view` starts with a fresh graph. Computing the OWL view therefore can't alter the assertions or accidentally add OWL's inverse to our RDFS-only experiment. Save this SPARQL query as `answers.rq`. Each branch binds a short label if its triple pattern matches, and `UNION` combines the matches from both branches.
+
+```sparql
+PREFIX :      <http://assaf.website/triples#>
+PREFIX aa:    <http://assaf.website/Personal#>
+PREFIX schema: <https://schema.org/>
+
+SELECT ?test WHERE {
+  {
+    <http://assaf.website/blog> a schema:WebSite .
+    BIND("website" AS ?test)
+  }
+  UNION
+  {
+    :ahmadassaf aa:ownsBlog <http://assaf.website/blog> .
+    BIND("inverse" AS ?test)
+  }
+}
+```
+
+```python
+query = Path("answers.rq").read_text()
+for label, rules in [("Explicit", None), ("RDFS", RDFS_Semantics), ("OWL RL", OWLRL_Semantics)]:
+    found = {str(row.test) for row in view(accepted, rules).query(query)}
+    print(label, "website" in found, "inverse" in found)
+```
+
+<div className="model-comparison-table">
+
+| View | Website? | Inverse link? |
+| --- | --- | --- |
+| Explicit | False | False |
+| RDFS | True | False |
+| OWL RL | True | True |
+
+</div>
+
+RDFS can reach the website classification by following our property and class definitions. Its rules give `owl:inverseOf` no special meaning. The OWL RL view adds the inverse link, which the same query can now match. None of the three query runs changes the source record. Keeping that record apart lets us tell someone who asks for evidence exactly what we received.
+
+Computing and storing consequences ahead of time is *materialization*. Another service could work backwards from a query for `aa:ownsBlog`, looking up the ordinary ownership assertion in the opposite direction. That is one form of query-time reasoning. A service's *entailment regime* specifies the semantics it uses when matching query patterns. Two services can accept the same SPARQL query and return different rows if their regimes or input graphs differ. [W3C SPARQL entailment regimes](https://www.w3.org/TR/sparql11-entailment/)
+
+### Do two identifiers mean two people?
+
+Suppose a partner calls Ahmad `<http://example.org/Assaf>` and our catalog calls him `:ahmadassaf`. Under OWL's open-world assumption the records can leave facts unknown. OWL also makes no general *unique-name assumption*. Two different IRIs can denote one individual or two. Matching display names are a reason to investigate. If we verify that both identifiers denote Ahmad, we can assert `owl:sameAs` between them. If we have evidence they denote different individuals, `owl:differentFrom` can express that instead.
+
+An axiom can have consequences for identity too. Our ontology currently permits several primary owners. Declaring `aa:primaryOwner` a functional property would limit a blog to at most one distinct primary owner. Two primary-owner IRIs recorded for the same blog would then have to denote the same individual. Declaring those individuals different as well would make the model inconsistent. The functional axiom would allow a blog with no primary owner.
+
+The two IRIs remain distinct RDF terms in the graph. A SPARQL `COUNT(DISTINCT ?owner)` can count both if both appear in the results. Counting verified people requires a policy for reconciling their identifiers. A shape that counts submitted values can also see two IRIs even when OWL says they denote one individual. [W3C OWL 2 Primer](https://www.w3.org/TR/owl2-primer/#Equality_and_Inequality_of_Individuals)
+
+## Test the records we actually received
+
+SHACL, the Shapes Constraint Language, checks a supplied RDF graph against *shapes*. A shape selects the resources to inspect and specifies conditions for them. For this catalog I want one string display name for a blog and one start date, administrator and blog for each appointment. I would accept a missing end date. It records what we know about the start even though the historical query needs both boundaries.
+
+Save these shapes as `shapes.ttl`. A *focus node* is a resource the validator checks. `sh:targetClass` selects members of a class. `sh:class` requires the focus node or property value to belong to a class. The minimum and maximum counts say how many values we require for a property.
+
+```turtle
+@prefix aa:   <http://assaf.website/Personal#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+aa:BlogShape a sh:NodeShape ;
+    sh:targetClass aa:Blog ;
+    sh:class aa:Blog ;
+    sh:property [
+        sh:path aa:hasName ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:string
+    ] .
+
+aa:AppointmentShape a sh:NodeShape ;
+    sh:targetClass aa:AdminAppointment ;
+    sh:class aa:AdminAppointment ;
+    sh:property [
+        sh:path aa:forBlog ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ; sh:class aa:Blog
+    ] ;
+    sh:property [
+        sh:path aa:administrator ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:nodeKind sh:IRI
+    ] ;
+    sh:property [
+        sh:path aa:startDate ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:date ;
+        sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    ] ;
+    sh:property [
+        sh:path aa:endDate ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:date ;
+        sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    ] .
+```
+
+Target selection is part of the import contract. If we selected appointments only by class, dropping the type from an incoming record could hide it from the appointment shape altogether. The importer already knows which records it requested. For this submission we add those IRIs as `sh:targetNode` targets, independently of the types in the data. A missing type can now fail the class check. In a larger batch the target list should come from the submission manifest or import mapping.
+
+The accepted graph should pass. In a copy, remove the start date from Ahmad's second appointment and inspect the result returned by the validator. We validate the submitted data before reasoning. That way an inferred type cannot cover up an omitted type declaration.
+
+```python
+from pyshacl import validate
+
+shapes = Graph().parse("shapes.ttl", format="turtle")
+shapes.add((AA.BlogShape, SH.targetNode, blog))
+for appointment in (EX.appointment1, EX.appointment2):
+    shapes.add((AA.AppointmentShape, SH.targetNode, appointment))
+
+assert validate(accepted, shacl_graph=shapes, inference="none")[0]
+
+broken = accepted + Graph()
+broken.remove((EX.appointment2, AA.startDate, None))
+conforms, report, _ = validate(broken, shacl_graph=shapes, inference="none")
+result = next(report.subjects(RDF.type, SH.ValidationResult))
+assert not conforms
+assert report.value(result, SH.focusNode) == EX.appointment2
+assert report.value(result, SH.resultPath) == AA.startDate
+assert report.value(result, SH.sourceConstraintComponent) == SH.MinCountConstraintComponent
+```
+
+An editor can use the report's focus node and affected property to find the missing value in the submission.
+
+<div className="modeling-guide-table">
+
+| Report field | Value |
+| --- | --- |
+| Conforms | `false` |
+| Focus node | `:appointment2` |
+| Affected property | `aa:startDate` |
+| Failed constraint | `sh:MinCountConstraintComponent` |
+
+</div>
+
+A record can satisfy all those structural conditions and still put the end before its start. After validating the date format, this `ASK` query checks whether *any* appointment has an invalid interval. It returns false for the accepted graph. Setting the end equal to the start, or earlier, makes it return true. [W3C SHACL Core](https://www.w3.org/TR/shacl/#core-components)
+
+```sparql
+PREFIX aa: <http://assaf.website/Personal#>
+
+ASK {
+  ?appointment a aa:AdminAppointment ;
+      aa:startDate ?start ;
+      aa:endDate ?end .
+  FILTER (STR(?end) <= STR(?start))
+}
+```
+
+The diagram shows the original blog record. RDFS lets us include it in a website listing. OWL supplies the inverse ownership link. SHACL checks the name actually present in our submission. The name check passes here, even though the altered appointment in our separate test failed its own shape. [Semantic Web overview](/blog/category/data/introduction-to-semantic-web)
+
+<RdfToolsTogetherDiagram />
+
+## Withdraw an assertion and see which answers survive
+
+The accepted graph asserts ordinary ownership. Suppose the catalog also receives an accepted primary-ownership record for the same blog and Ahmad. The narrower property supplies a second basis for the general ownership conclusion. Removing one supporting assertion should affect only those answers whose remaining support is gone.
+
+First withdraw the ordinary ownership assertion, leaving the primary designation. Rebuilding the view derives the ordinary ownership again through the subproperty axiom, then derives the inverse. Next withdraw the primary designation too. Ahmad's profile loses the inferred link, but the blog still belongs in the website listing.
+
+```python
+current = accepted + Graph()
+current.add((blog, AA.primaryOwner, EX.ahmadassaf))
+current.remove((blog, AA.owner, EX.ahmadassaf))
+
+after_first = view(current, OWLRL_Semantics)
+assert (blog, AA.owner, EX.ahmadassaf) not in current
+assert (blog, AA.owner, EX.ahmadassaf) in after_first
+assert (EX.ahmadassaf, AA.ownsBlog, blog) in after_first
+
+current.remove((blog, AA.primaryOwner, EX.ahmadassaf))
+after_second = view(current, OWLRL_Semantics)
+assert (EX.ahmadassaf, AA.ownsBlog, blog) not in after_second
+assert (blog, RDF.type, AA.Blog) in current
+assert (blog, RDF.type, website) in after_second
+```
+
+The blog's type was explicitly present in `blog.ttl` all along. The subclass axiom still applies to that assertion after both ownership records are gone. The two administration terms are untouched too. The lookup for 1 September 2023 continues to return `:appointment2` and Ahmad. A lack of ownership evidence cannot tell us when an administration term ended.
+
+Running an additive reasoner over yesterday's expanded graph can leave the old inverse link in place. That link can even regenerate the ownership triple we tried to withdraw. Here we recompute from the remaining assertions. A larger catalog might track which inputs support each conclusion so that it can rebuild only the affected part of the view.
+
+## Change the model without losing the history
+
+Suppose the blog starts appointing temporary administrators. Ask whoever manages the blog whether those terms belong in the ordinary date lookup. The same person could serve a temporary term and later take a regular appointment. Record the distinction on the appointment.
+
+For an editor who only needs to filter appointments, the appointment can carry a string value with `aa:role "temporary administrator"`. If several blogs share the role and need a common definition, give it an IRI such as `aa:temporaryAdministrator`. Each appointment can point to it with `aa:role`. Editors can then change its display label in one place.
+
+Suppose every temporary appointment needs a review date. We can declare `aa:TemporaryAppointment rdfs:subClassOf aa:AdminAppointment` in the ontology. With that definition, an RDFS reasoner can infer that a temporary appointment is an ordinary administration term too. At intake we validate the submitted data on its own, before reasoning. For this feed, record both types explicitly so the validator checks the usual appointment fields as well as the review date.
+
+Save this shape as `temporary-shape.ttl`. It targets temporary appointments and requires the general appointment type. The two original appointments can still pass without a review date.
+
+```turtle
+@prefix aa:  <http://assaf.website/Personal#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+aa:TemporaryAppointmentShape a sh:NodeShape ;
+    sh:targetClass aa:TemporaryAppointment ;
+    sh:class aa:AdminAppointment ;
+    sh:property [
+        sh:path aa:reviewDate ;
+        sh:minCount 1 ;
+        sh:datatype xsd:date
+    ] .
+```
+
+Try a hypothetical temporary term for Ahmad in a separate file, `temporary.ttl`.
+
+```turtle
+@prefix :    <http://assaf.website/triples#> .
+@prefix aa:  <http://assaf.website/Personal#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:temporaryAppointment a aa:AdminAppointment, aa:TemporaryAppointment ;
+    aa:forBlog <http://assaf.website/blog> ; aa:administrator :ahmadassaf ;
+    aa:startDate "2026-01-01"^^xsd:date ; aa:reviewDate "2026-06-01"^^xsd:date .
+```
+
+Load the trial record and the extra shape alongside the earlier examples. The record passes. Now remove its start date and leave the review date in place.
+
+```python
+trial = accepted + Graph().parse("temporary.ttl", format="turtle")
+trial_shapes = shapes + Graph().parse("temporary-shape.ttl", format="turtle")
+assert validate(trial, shacl_graph=trial_shapes, inference="none")[0]
+
+trial.remove((EX.temporaryAppointment, AA.startDate, None))
+conforms, report, _ = validate(trial, shacl_graph=trial_shapes, inference="none")
+results = list(report.subjects(RDF.type, SH.ValidationResult))
+assert not conforms and len(results) == 1
+assert report.value(results[0], SH.focusNode) == EX.temporaryAppointment
+assert report.value(results[0], SH.resultPath) == AA.startDate
+```
+
+The ordinary appointment shape catches the missing `aa:startDate`. If we remove only `aa:reviewDate` from the original trial record, the temporary appointment shape reports that missing value instead.
+
+Keep the data, vocabulary, shapes and queries that produced each tested answer identifiable by version. A naming change in an import may need only a new mapping. Requiring an end date for closed appointments changes the rules for acceptance. Adding another subclass can change the website listing even when the records still pass validation. Test the temporary appointment alongside the original two terms. A change to the new role should leave the lookup for 1 September 2023 pointing to Ahmad's second appointment. [OWL ontology versioning](https://www.w3.org/TR/owl2-syntax/#Versioning_of_OWL_2_Ontologies)

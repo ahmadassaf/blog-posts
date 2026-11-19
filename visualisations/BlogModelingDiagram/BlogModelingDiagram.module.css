@@ -1,0 +1,5 @@
+.dateLabel {
+  fill: var(--ds-color-accent-foreground);
+  font-size: 12px;
+  font-weight: 600;
+}

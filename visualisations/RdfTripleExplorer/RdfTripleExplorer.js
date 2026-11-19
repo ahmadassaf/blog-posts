@@ -16,28 +16,28 @@ import styles from './RdfTripleExplorer.module.css';
 
 const tripleParts = {
   'object': {
-    'description': 'The resource reached by following the relationship.',
+    'description': 'Follow aa:owner to :ahmadassaf, the IRI for Ahmad.',
     'kind': 'IRI · object',
-    'label': 'assaf.website/blog',
-    'term': 'ex:Blog'
+    'label': 'Ahmad Assaf',
+    'term': ':ahmadassaf'
   },
   'predicate': {
     'description': 'The directed relationship between two resources.',
     'kind': 'IRI · predicate',
-    'label': 'has blog',
-    'term': 'ex:hasBlog'
+    'label': 'owner',
+    'term': 'aa:owner'
   },
   'subject': {
-    'description': 'The resource being described.',
+    'description': 'The subject IRI, http://assaf.website/blog, names the blog.',
     'kind': 'IRI · subject',
-    'label': 'Ahmad Assaf',
-    'term': 'ex:Ahmad'
+    'label': 'Ahmad Assaf’s Blog',
+    'term': 'http://assaf.website/blog'
   }
 };
 
 const RdfTripleExplorer = ({
   title = 'One statement becomes one directed graph',
-  description = 'Select either node or the connecting edge to inspect the three terms inside an RDF triple.',
+  description = 'Select a node or the arrow to inspect the ownership triple. Here site:blog abbreviates http://assaf.website/blog.',
   className = ''
 }) => {
   const uid = useId();
@@ -65,7 +65,7 @@ const RdfTripleExplorer = ({
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable RDF triple graph' tabIndex='0'>
         <svg className={ styles.graph } viewBox='0 40 1000 390' role='group' aria-labelledby={ `${titleId} ${descriptionId}` }>
           <title id={ titleId }>RDF triple graph</title>
-          <desc id={ descriptionId }>Ahmad Assaf has blog assaf.website/blog. Each part can be selected for an explanation.</desc>
+          <desc id={ descriptionId }>The blog points to its owner, Ahmad Assaf, through aa:owner. Each part can be selected for an explanation.</desc>
 
           <defs>
             <marker id={ arrowId } viewBox='0 0 12 12' refX='10' refY='6' markerWidth='10' markerHeight='10' orient='auto'>
@@ -84,23 +84,23 @@ const RdfTripleExplorer = ({
             <path d='M 286 208 C 402 138, 595 138, 706 208' />
             <rect x='405' y='116' width='190' height='70' rx='35' className={ styles.predicatePlate } />
             <text x='500' y='143' textAnchor='middle' className={ styles.roleText }>PREDICATE</text>
-            <text x='500' y='166' textAnchor='middle' className={ styles.predicateText }>ex:hasBlog</text>
+            <text x='500' y='166' textAnchor='middle' className={ styles.predicateText }>{tripleParts.predicate.term}</text>
           </g>
 
           <g className={ styles.subjectNode } { ...interactionProps('subject') }>
             <circle cx='190' cy='235' r='98' className={ styles.nodeHalo } />
             <circle cx='190' cy='235' r='80' className={ styles.subjectShape } />
             <text x='190' y='216' textAnchor='middle' className={ styles.roleTextInverse }>SUBJECT</text>
-            <text x='190' y='246' textAnchor='middle' className={ styles.nodeTitleInverse }>Ahmad Assaf</text>
-            <text x='190' y='270' textAnchor='middle' className={ styles.nodeCodeInverse }>ex:Ahmad</text>
+            <text x='190' y='246' textAnchor='middle' className={ styles.nodeTitleInverse }>Blog</text>
+            <text x='190' y='270' textAnchor='middle' className={ styles.nodeCodeInverse }>site:blog</text>
           </g>
 
           <g className={ styles.objectNode } { ...interactionProps('object') }>
             <rect x='706' y='171' width='244' height='128' rx='64' className={ styles.nodeHalo } />
             <rect x='720' y='185' width='216' height='100' rx='50' className={ styles.objectShape } />
             <text x='828' y='218' textAnchor='middle' className={ styles.roleText }>OBJECT</text>
-            <text x='828' y='247' textAnchor='middle' className={ styles.nodeTitle }>assaf.website/blog</text>
-            <text x='828' y='270' textAnchor='middle' className={ styles.nodeCode }>ex:Blog</text>
+            <text x='828' y='247' textAnchor='middle' className={ styles.nodeTitle }>{tripleParts.object.label}</text>
+            <text x='828' y='270' textAnchor='middle' className={ styles.nodeCode }>{tripleParts.object.term}</text>
           </g>
 
           <text x='72' y='402' className={ styles.readoutKind }>{activePart.kind}</text>

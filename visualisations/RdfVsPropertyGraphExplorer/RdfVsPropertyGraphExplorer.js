@@ -1,51 +1,45 @@
 'use client';
 
-/**
- * THESIS: A property graph hangs attributes anywhere; RDF must turn every attribute into a triple, even attributes of edges.
- * OWN-WORLD: One tiny dataset drawn twice: two property-rich cards joined by a decorated edge, and a constellation of triples.
- * STORY: Switch models, then select nodes, edges, and the RDF-star annotation to see where since: 2015 lives in each world.
- * FIRST VIEWPORT: The property graph: Ahmad and Alice as rounded cards, the knows edge carrying its own since: 2015 box.
- * FORM: A responsive SVG with semantic tab switching and selectable graph elements.
- */
-
 import { useState } from 'react';
 
 import { graphSelectionProps } from '../graphSelectionProps';
 
 import styles from './RdfVsPropertyGraphExplorer.module.css';
 
+const blogIri = 'http://assaf.website/blog';
+const blogTitle = "Ahmad Assaf's Blog";
+
 const models = {
   'property': {
     'elements': [
-      { 'blurb': 'A node with an identity and its own key-value properties. age: 30 lives inside the node record itself. Property graphs let any node carry an arbitrary bag of attributes without touching the rest of the graph.', 'id': 'ahmad', 'name': 'Ahmad' },
-      { 'blurb': 'A node with an empty property bag, which is perfectly legal. No shared schema forces every node to carry the same attributes; a property simply exists wherever someone set it.', 'id': 'alice', 'name': 'Alice' },
-      { 'blurb': 'Relationships are first-class citizens here: the knows edge has a direction, a type, and its own property, since: 2015. Hanging data directly on an edge is the property graph model at its most ergonomic; no extra nodes, no extra statements.', 'id': 'knows', 'name': 'knows edge' }
+      { 'blurb': 'Person is the label on Ahmad’s node. Its iri property stores http://assaf.website/Administrators#AhmadAssaf so we can match Ahmad to his RDF identifier.', 'id': 'ahmad', 'name': 'Ahmad' },
+      { 'blurb': 'Follow HAS_BLOG from Ahmad to his blog. If Ahmad renames the blog, the relationship still points to the same node.', 'id': 'hasBlog', 'name': 'HAS_BLOG' },
+      { 'blurb': 'Blog is the node label. The iri and name are properties on this node. To rename the blog, update its name property.', 'id': 'blog', 'name': 'Blog node' }
     ],
     'label': 'Property graph',
-    'meaning': 'attributes live anywhere',
-    'meta': 'edge properties are native · no standard model or serialisation · node and edge IDs are internal to one database'
+    'meaning': 'nodes and relationships'
   },
   'rdf': {
     'elements': [
-      { 'blurb': ':Ahmad is an IRI, a global identifier. Any dataset that uses the same IRI is talking about the same resource, which is why independently published RDF graphs can merge automatically. A property graph node ID, by contrast, only means something inside its own database.', 'id': 'ahmad', 'name': ':Ahmad' },
-      { 'blurb': ':Alice is another IRI node. RDF nodes have no internal property bag; anything you want to say about :Alice must become another triple with :Alice as its subject.', 'id': 'alice', 'name': ':Alice' },
-      { 'blurb': 'One triple: :Ahmad :knows :Alice. The predicate :knows is itself an IRI, so even the relationship type has a global identity. But a plain triple has no slot for attributes of its own; since: 2015 cannot live here.', 'id': 'knows', 'name': ':knows triple' },
-      { 'blurb': 'Attributes are triples too. What the property graph stores inside the Ahmad node, RDF states as its own edge to a literal: :Ahmad :age "30"^^xsd:integer. Uniformity is the point: data and its descriptions share one shape.', 'id': 'age', 'name': ':age triple' },
-      { 'blurb': 'The cost of that uniformity, made visible: to say when the knows relationship began, you need a statement about a statement. RDF-star (part of the RDF 1.2 work) quotes the whole triple so it can be annotated: << :Ahmad :knows :Alice >> :since "2015". Classic RDF reification would spend four extra triples to say the same thing.', 'id': 'star', 'name': 'RDF-star annotation' }
+      { 'blurb': 'This is the short form of http://assaf.website/Administrators#AhmadAssaf. The two arrows leaving Ahmad tell us his type and which blog he has.', 'id': 'ahmad', 'name': ':AhmadAssaf' },
+      { 'blurb': 'The triple “:AhmadAssaf a foaf:Person” describes Ahmad as a person. In Turtle, a is shorthand for rdf:type.', 'id': 'personType', 'name': 'foaf:Person' },
+      { 'blurb': 'Read the arrow from subject to object. Ahmad is the subject, aa:hasBlog is the predicate, and the blog’s IRI is the object.', 'id': 'hasBlog', 'name': 'aa:hasBlog' },
+      { 'blurb': 'The same blog IRI is the object of aa:hasBlog and the subject of two more triples. Follow those arrows to find the blog’s type and title.', 'id': 'blog', 'name': 'Blog IRI' },
+      { 'blurb': 'The rdf:type arrow says that the resource identified by http://assaf.website/blog belongs to the class aa:Blog.', 'id': 'blogType', 'name': 'aa:Blog' },
+      { 'blurb': 'The quoted title is a string literal. Renaming the blog changes the object of this triple. The blog’s IRI and Ahmad’s link to it stay the same.', 'id': 'name', 'name': 'aa:hasName' }
     ],
     'label': 'RDF',
-    'meaning': 'everything is a triple',
-    'meta': 'W3C standard · global IRIs let graphs merge automatically · edge attributes need RDF-star or reification'
+    'meaning': 'triples'
   }
 };
 
 const RdfVsPropertyGraphExplorer = ({
   title = 'One dataset, two graph models',
-  description = 'The same three facts, Ahmad knows Alice since 2015 and Ahmad is 30, drawn as a property graph and as RDF triples. Switch models and select any element to read what it costs in each world.',
+  description = 'Ahmad has a blog. Switch models to see where its title lives, and select a node or an arrow to read what it represents.',
   className = ''
 }) => {
   const [ activeModelId, setActiveModelId ] = useState('property');
-  const [ activeElementIds, setActiveElementIds ] = useState({ 'property': 'knows', 'rdf': 'star' });
+  const [ activeElementIds, setActiveElementIds ] = useState({ 'property': 'hasBlog', 'rdf': 'hasBlog' });
   const activeModel = models[activeModelId];
   const activeElement = activeModel.elements.find((element) => element.id === activeElementIds[activeModelId]);
 
@@ -86,86 +80,76 @@ const RdfVsPropertyGraphExplorer = ({
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable graph data model diagram' tabIndex='0'>
         {activeModelId === 'property' ? (
-          <svg className={ styles.graph } viewBox='0 0 1000 420' role='group' aria-label='The dataset as a property graph'>
-            {/* The knows edge with its own property box */}
-            <g className={ styles.edgeGroup } { ...selectElement('knows') }>
-              <path d='M 340 215 L 660 215' className={ styles.edgeHit } />
-              <path d='M 340 215 L 660 215' className={ styles.edgeLine } />
-              <path d='M 526 215 L 514 209 L 514 221 Z' className={ styles.edgeArrow } />
-              <path d='M 500 138 L 500 213' className={ styles.edgeConnector } />
-              <rect x='405' y='48' width='190' height='90' rx='16' className={ styles.edgeCard } />
-              <text x='500' y='72' textAnchor='middle' className={ styles.elementKind }>EDGE</text>
-              <text x='500' y='94' textAnchor='middle' className={ styles.edgeName }>knows</text>
-              <path d='M 429 106 L 571 106' className={ styles.cardDivider } />
-              <text x='500' y='128' textAnchor='middle' className={ styles.propText }>since: 2015</text>
-            </g>
-
-            {/* Two nodes, each owning its properties */}
+          <svg className={ styles.graph } viewBox='0 0 1000 245' role='group' aria-label='Ahmad and his blog as a property graph'>
             <g className={ styles.nodeCard } { ...selectElement('ahmad') }>
-              <rect x='100' y='150' width='240' height='130' rx='18' />
-              <text x='220' y='182' textAnchor='middle' className={ styles.elementKind }>NODE</text>
-              <text x='220' y='208' textAnchor='middle' className={ styles.nodeName }>Ahmad</text>
-              <path d='M 130 224 L 310 224' className={ styles.cardDivider } />
-              <text x='220' y='252' textAnchor='middle' className={ styles.propText }>age: 30</text>
+              <rect x='20' y='45' width='340' height='140' rx='18' />
+              <text x='190' y='73' textAnchor='middle' className={ styles.elementKind }>NODE LABEL · Person</text>
+              <text x='190' y='100' textAnchor='middle' className={ styles.nodeName }>Ahmad</text>
+              <path d='M 46 113 H 334' className={ styles.cardDivider } />
+              <text x='190' y='140' textAnchor='middle' className={ styles.propText }>iri: http://assaf.website/</text>
+              <text x='190' y='160' textAnchor='middle' className={ styles.propText }>Administrators#AhmadAssaf</text>
             </g>
 
-            <g className={ styles.nodeCard } { ...selectElement('alice') }>
-              <rect x='660' y='150' width='240' height='130' rx='18' />
-              <text x='780' y='182' textAnchor='middle' className={ styles.elementKind }>NODE</text>
-              <text x='780' y='208' textAnchor='middle' className={ styles.nodeName }>Alice</text>
-              <path d='M 690 224 L 870 224' className={ styles.cardDivider } />
-              <text x='780' y='252' textAnchor='middle' className={ styles.propEmpty }>(no properties)</text>
+            <g className={ styles.edgeGroup } { ...selectElement('hasBlog') }>
+              <path d='M 360 115 H 638' className={ styles.edgeHit } />
+              <path d='M 360 115 H 638' className={ styles.edgeLine } />
+              <path d='M 638 115 l -12 -6 v 12 Z' className={ styles.edgeArrow } />
+              <rect x='435' y='73' width='130' height='33' rx='8' className={ styles.edgeCard } />
+              <text x='500' y='94' textAnchor='middle' className={ styles.edgeName }>HAS_BLOG</text>
             </g>
 
-            <text x='500' y='366' textAnchor='middle' className={ styles.svgCaption }>since: 2015 hangs directly on the edge · no extra structure needed</text>
+            <g className={ styles.nodeCard } { ...selectElement('blog') }>
+              <rect x='640' y='45' width='340' height='140' rx='18' />
+              <text x='810' y='73' textAnchor='middle' className={ styles.elementKind }>NODE LABEL · Blog</text>
+              <text x='810' y='100' textAnchor='middle' className={ styles.nodeName }>Ahmad’s blog</text>
+              <path d='M 666 113 H 954' className={ styles.cardDivider } />
+              <text x='810' y='140' textAnchor='middle' className={ styles.propText }>iri: {blogIri}</text>
+              <text x='810' y='160' textAnchor='middle' className={ styles.propText }>name: "{blogTitle}"</text>
+            </g>
           </svg>
         ) : (
-          <svg className={ styles.graph } viewBox='0 0 1000 420' role='group' aria-label='The dataset as RDF triples with an RDF-star annotation'>
-            {/* Triple 1: :Ahmad :knows :Alice */}
-            <g className={ styles.tripleGroup } { ...selectElement('knows') }>
-              <path d='M 260 231 L 740 231' className={ styles.edgeHit } />
-              <path d='M 260 231 L 740 231' className={ styles.edgeLine } />
-              <path d='M 616 231 L 604 225 L 604 237 Z' className={ styles.edgeArrow } />
-              <text x='400' y='218' textAnchor='middle' className={ styles.tripleLabel }>:knows</text>
+          <svg className={ styles.graph } viewBox='0 0 1000 335' role='group' aria-label='Four RDF triples describing Ahmad and his blog'>
+            {[
+              { 'id': 'personType', 'type': 'foaf:Person', 'x': 215 },
+              { 'id': 'blogType', 'type': 'aa:Blog', 'x': 755 }
+            ].map(({ id, x, type }) => (
+              <g key={ id } className={ styles.tripleGroup } transform={ `translate(${x}, 0)` } { ...selectElement(id) }>
+                <rect x='-88' y='18' width='176' height='42' rx='21' className={ styles.classNode } />
+                <text x='0' y='44' textAnchor='middle' className={ styles.iriName }>{type}</text>
+                <path d='M 0 132 V 62' className={ styles.edgeHit } />
+                <path d='M 0 132 V 62' className={ styles.edgeLine } />
+                <path d='M 0 62 l -6 12 h 12 Z' className={ styles.edgeArrow } />
+                <text x='13' y='104' className={ styles.tripleLabel }>rdf:type</text>
+              </g>
+            ))}
+
+            <g className={ styles.tripleGroup } { ...selectElement('hasBlog') }>
+              <path d='M 325 160 H 606' className={ styles.edgeHit } />
+              <path d='M 325 160 H 606' className={ styles.edgeLine } />
+              <path d='M 606 160 l -12 -6 v 12 Z' className={ styles.edgeArrow } />
+              <text x='465' y='149' textAnchor='middle' className={ styles.tripleLabel }>aa:hasBlog</text>
             </g>
 
-            {/* Triple 2: :Ahmad :age "30"^^xsd:integer */}
-            <g className={ styles.tripleGroup } { ...selectElement('age') }>
-              <path d='M 175 258 L 175 330' className={ styles.edgeHit } />
-              <path d='M 175 258 L 175 330' className={ styles.edgeLine } />
-              <path d='M 175 308 L 169 296 L 181 296 Z' className={ styles.edgeArrow } />
-              <text x='192' y='300' className={ styles.tripleLabel }>:age</text>
-              <rect x='85' y='330' width='180' height='48' rx='6' className={ styles.literalCard } />
-              <text x='175' y='359' textAnchor='middle' className={ styles.literalText }>{'"30"^^xsd:integer'}</text>
-            </g>
-
-            {/* The RDF-star annotation: a quoted triple carrying :since */}
-            <g className={ styles.starGroup } { ...selectElement('star') }>
-              <text x='430' y='32' textAnchor='middle' className={ styles.elementKind }>RDF-STAR · QUOTED TRIPLE</text>
-              <rect x='280' y='48' width='300' height='56' rx='28' className={ styles.starNode } />
-              <text x='430' y='82' textAnchor='middle' className={ styles.starText }>{'<< :Ahmad :knows :Alice >>'}</text>
-              <path d='M 438 104 C 462 148, 484 192, 498 226' className={ styles.starConnector } />
-              <path d='M 580 76 L 720 76' className={ styles.edgeLine } />
-              <path d='M 692 76 L 680 70 L 680 82 Z' className={ styles.edgeArrow } />
-              <text x='650' y='62' textAnchor='middle' className={ styles.tripleLabel }>:since</text>
-              <rect x='720' y='52' width='130' height='48' rx='6' className={ styles.literalCard } />
-              <text x='785' y='81' textAnchor='middle' className={ styles.literalText }>{'"2015"'}</text>
-            </g>
-
-            {/* The two IRI nodes */}
             <g className={ styles.iriNode } { ...selectElement('ahmad') }>
-              <rect x='90' y='204' width='170' height='54' rx='27' />
-              <text x='175' y='226' textAnchor='middle' className={ styles.elementKind }>IRI</text>
-              <text x='175' y='246' textAnchor='middle' className={ styles.iriName }>:Ahmad</text>
+              <rect x='105' y='132' width='220' height='56' rx='28' />
+              <text x='215' y='154' textAnchor='middle' className={ styles.elementKind }>IRI</text>
+              <text x='215' y='175' textAnchor='middle' className={ styles.iriName }>:AhmadAssaf</text>
             </g>
 
-            <g className={ styles.iriNode } { ...selectElement('alice') }>
-              <rect x='740' y='204' width='170' height='54' rx='27' />
-              <text x='825' y='226' textAnchor='middle' className={ styles.elementKind }>IRI</text>
-              <text x='825' y='246' textAnchor='middle' className={ styles.iriName }>:Alice</text>
+            <g className={ styles.iriNode } { ...selectElement('blog') }>
+              <rect x='608' y='132' width='294' height='56' rx='28' />
+              <text x='755' y='154' textAnchor='middle' className={ styles.elementKind }>IRI</text>
+              <text x='755' y='175' textAnchor='middle' className={ styles.iriName }>{blogIri}</text>
             </g>
 
-            <text x='500' y='404' textAnchor='middle' className={ styles.svgCaption }>the edge attribute costs a statement about a statement · classic reification would cost four extra triples</text>
+            <g className={ styles.tripleGroup } { ...selectElement('name') }>
+              <path d='M 755 188 V 260' className={ styles.edgeHit } />
+              <path d='M 755 188 V 260' className={ styles.edgeLine } />
+              <path d='M 755 260 l -6 -12 h 12 Z' className={ styles.edgeArrow } />
+              <text x='768' y='230' className={ styles.tripleLabel }>aa:hasName</text>
+              <rect x='627' y='262' width='256' height='46' rx='6' className={ styles.literalCard } />
+              <text x='755' y='290' textAnchor='middle' className={ styles.literalText }>"{blogTitle}"</text>
+            </g>
           </svg>
         )}
       </div>
@@ -175,7 +159,6 @@ const RdfVsPropertyGraphExplorer = ({
           <span className={ styles.readoutType }>{activeElement.name}</span>
           <span className={ styles.readoutText }>{activeElement.blurb}</span>
         </div>
-        <span className={ styles.readoutMeta }>{activeModel.meta}</span>
       </div>
 
       <p className={ styles.liveRegion } aria-live='polite'>

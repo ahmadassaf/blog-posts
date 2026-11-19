@@ -1,0 +1,19 @@
+.inferredEdge {
+  stroke-dasharray: 7 5;
+}
+
+.annotation,
+.result {
+  fill: var(--ds-color-text-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.result {
+  fill: var(--ds-color-text);
+  font-weight: 750;
+}
+
+.objectNodes text {
+  fill: var(--ds-color-text);
+}

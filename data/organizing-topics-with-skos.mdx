@@ -1,0 +1,167 @@
+---
+type: 'Post'
+title: 'Organizing Topics with SKOS'
+summary: 'Build a topic index for a blog, find articles through alternative labels and broader subjects, and connect the index to another catalog.'
+tags: ['Knowledge Graphs', 'RDF', 'SKOS', 'Semantic Web']
+date: '2026-11-17'
+updatedAt: '2026-11-18'
+category: 'data'
+featured: false
+tableOfContents: false
+series:
+  order: 5
+  title: "A Semantic Web series"
+---
+
+A subject index helps readers find things written about a topic. Someone might search for an abbreviation, use a term in another language, or browse a general heading before deciding what to read. An index built from text tags alone has to work out which of those words refer to the same topic.
+
+The Simple Knowledge Organization System (SKOS) is a vocabulary for describing concepts, their labels, and the relationships between them. It uses the Resource Description Framework (RDF), which represents each fact as a triple. A triple names a subject, a property, and an object. In a topic index, we can give the topic its own identifier and write separate triples for the names readers use to find it. [W3C SKOS Primer](https://www.w3.org/TR/skos-primer/)
+
+Suppose we're organizing articles on Ahmad Assaf's blog. In this hypothetical index, one post explains how to read RDF. A reader types “Resource Description Framework” into the search box. Another opens the Semantic Web category. Both should be able to find the post, even though an editor assigned it only one topic.
+
+## Give the post and its topic separate identifiers
+
+Give the blog, the post, and the topic separate identifiers. The blog lives at `http://assaf.website/blog`. The post has its own IRI (Internationalized Resource Identifier), abbreviated as `:rdfPost`. Its topic has a different IRI, `topic:rdf`. The prefixes in the following Turtle example are short names for the namespaces that contain those identifiers.
+
+```turtle
+@prefix :        <http://assaf.website/triples#> .
+@prefix topic:   <http://assaf.website/topics/> .
+@prefix aa:      <http://assaf.website/Personal#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix schema:  <https://schema.org/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+
+<http://assaf.website/blog> a aa:Blog ; aa:owner :ahmadassaf .
+
+:rdfPost a schema:BlogPosting ;
+    dcterms:isPartOf <http://assaf.website/blog> ;
+    dcterms:subject topic:rdf .
+
+topic:catalog a skos:ConceptScheme .
+topic:rdf a skos:Concept ;
+    skos:inScheme topic:catalog ;
+    skos:prefLabel "RDF"@en .
+```
+
+The post is a `schema:BlogPosting`. In Turtle, `a` abbreviates `rdf:type`, so this statement tells us what kind of thing the post is. The Dublin Core property `dcterms:subject` says what the post is about. We can now list everything about RDF by finding resources with that subject. A book and a blog post can appear in the same subject listing and keep their different types. [W3C on subject indexing with SKOS](https://www.w3.org/TR/skos-primer/#secindexing)
+
+A **concept scheme** identifies the vocabulary whose concepts we're organizing. Here `topic:catalog` is the scheme for Ahmad's blog topics. The post belongs to the blog through `dcterms:isPartOf`, while the RDF concept belongs to the scheme through `skos:inScheme`. Publishing another post about RDF adds one more subject link. It doesn't require another entry for RDF in the vocabulary. [SKOS concept schemes](https://www.w3.org/TR/skos-reference/#schemes)
+
+## Choose what readers see and what they can search
+
+The preferred English label for `topic:rdf` is the string `"RDF"@en`. The suffix `@en` marks it as English. Suppose the editor wants “Resource Description Framework” to lead readers to that entry, while keeping the short label in the navigation. The catalog can also recognize a spelling error, “Resource Descripton Framework”, without presenting it as an alternative readers should use.
+
+Each Turtle block below can be loaded alongside the first. The next block adds two labels to the same topic IRI.
+
+```turtle
+@prefix topic: <http://assaf.website/topics/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+
+topic:rdf skos:altLabel "Resource Description Framework"@en ;
+    skos:hiddenLabel "Resource Descripton Framework"@en .
+```
+
+An application can display a `skos:prefLabel` as its heading, show `skos:altLabel` values as other names, and match a `skos:hiddenLabel` during search. The hidden label is ordinary published data. “Hidden” describes how a user interface should treat it, so anyone with access to the RDF can still read it.
+
+SPARQL, the RDF query language, lets us try the misspelling against our index. `VALUES` supplies the three label properties to search. The query looks for a matching English term in Ahmad's scheme, reads that concept's preferred English heading, and finds posts on his blog with that subject. Selecting the scheme matters once the database contains several catalogs. Two editors can independently choose the same label for entries with different meanings.
+
+```sparql
+PREFIX skos:    <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX schema:  <https://schema.org/>
+
+SELECT DISTINCT ?post ?topic ?heading WHERE {
+  VALUES ?property { skos:prefLabel skos:altLabel skos:hiddenLabel }
+  ?topic skos:inScheme <http://assaf.website/topics/catalog> ;
+      ?property ?term ; skos:prefLabel ?heading .
+  ?post a schema:BlogPosting ;
+      dcterms:isPartOf <http://assaf.website/blog> ;
+      dcterms:subject ?topic .
+  FILTER (LANG(?term) = "en" && LANG(?heading) = "en")
+  FILTER (LCASE(STR(?term)) = "resource descripton framework")
+}
+```
+
+The result is `:rdfPost`, with its topic `topic:rdf` and the heading `"RDF"@en`. The `dcterms:subject` pattern joins the matching topic to the article. Requiring `schema:BlogPosting` keeps other resources with that subject out of the results. The same query also finds the post when the search string contains the correctly spelled full name in lowercase. This example handles case by converting the label to lowercase. Recognizing the typo depends on the hidden label we supplied.
+
+SKOS allows at most one preferred label per language tag on a resource. A French heading and an English heading can coexist. An editor adding a second preferred English heading has to choose which one readers should see. If the heading changes to “Resource Description Framework”, move the short form to the alternative labels and remove the full form from that role. SKOS also keeps the preferred, alternative, and hidden label properties disjoint. The post still points to `topic:rdf` throughout the rename. [SKOS lexical labels](https://www.w3.org/TR/skos-reference/#labels)
+
+## Browse from a specific topic to a broader one
+
+Where should the RDF topic sit when a reader browses? In this catalog, RDF falls under Semantic Web, and Semantic Web falls under Web technologies. Another useful destination for a reader studying RDF is SPARQL. An editor can record that association without making either subject a subtopic of the other.
+
+```turtle
+@prefix topic: <http://assaf.website/topics/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+
+topic:rdf skos:broader topic:semanticWeb ;
+    skos:related topic:sparql .
+
+topic:semanticWeb a skos:Concept ;
+    skos:inScheme topic:catalog ;
+    skos:prefLabel "Semantic Web"@en, "Web sémantique"@fr ;
+    skos:broader topic:webTechnologies .
+
+topic:webTechnologies a skos:Concept ;
+    skos:inScheme topic:catalog ;
+    skos:prefLabel "Web technologies"@en .
+
+topic:sparql a skos:Concept ;
+    skos:inScheme topic:catalog ;
+    skos:prefLabel "SPARQL"@en .
+```
+
+<SkosTopicsDiagram />
+
+Follow `skos:broader` from `topic:rdf` and the immediate heading is `topic:semanticWeb`. Its English and French labels name the same concept, so switching the menu language keeps the reader at the same place. `skos:narrower` expresses the inverse relationship. Starting at Semantic Web, an application can find RDF by looking for concepts whose `skos:broader` points there, even when the store contains only the direction we entered.
+
+Those two broader links leave us with a choice for the Web technologies page. Should it show posts assigned directly to that heading, or include posts assigned anywhere underneath it? In SKOS, `skos:broader` itself is not transitive. One direct lookup from RDF finds Semantic Web. It takes two steps to reach Web technologies. The separate property `skos:broaderTransitive` can express that ancestry when a reasoner applies the SKOS axioms. [SKOS semantic relationships](https://www.w3.org/TR/skos-reference/#semantic-relations)
+
+We can also follow the recorded steps in SPARQL. A **property path** describes the edges a query may follow. Here, `*` after `skos:broader` admits zero or more steps. With zero steps a post assigned directly to Web technologies would qualify too.
+
+```sparql
+PREFIX topic:   <http://assaf.website/topics/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX schema:  <https://schema.org/>
+PREFIX skos:    <http://www.w3.org/2004/02/skos/core#>
+
+SELECT DISTINCT ?post WHERE {
+  ?post a schema:BlogPosting ;
+      dcterms:isPartOf <http://assaf.website/blog> ;
+      dcterms:subject/skos:broader* topic:webTechnologies .
+}
+```
+
+The query returns `:rdfPost`. Its one assigned topic, RDF, reaches Web technologies through Semantic Web. Using `topic:semanticWeb` as the destination returns the same post through one broader link, so the reader browsing that heading finds it too. Change the destination to `topic:sparql` and there are no results. The link from RDF to SPARQL is `skos:related`, which the path doesn't follow. That still leaves the interface free to offer SPARQL as a “see also” link. [SPARQL property paths](https://www.w3.org/TR/sparql11-query/#propertypaths)
+
+These headings form an index for readers. An RDF post under Web technologies is still a blog post. RDF Schema (RDFS) provides `rdfs:subClassOf` to describe a relationship between classes. Suppose we declare that every blog is a website. Classifying Ahmad's site as a blog would then also classify it as a website. An article indexed under Semantic Web can discuss that subject without being an instance of it.
+
+## Connect the index to another catalog
+
+Suppose a partner catalog indexes technical articles too. It keeps a separate scheme and uses a different IRI for its heading “Resource Description Framework”. Before linking the concepts, an editor checks what each heading covers and which articles it retrieves. Similar labels give us two records to investigate. Their indexing policies tell us whether the articles belong together.
+
+```turtle
+@prefix topic:   <http://assaf.website/topics/> .
+@prefix partner: <http://example.org/catalog/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+
+partner:topics a skos:ConceptScheme .
+partner:rdf a skos:Concept ;
+    skos:inScheme partner:topics ;
+    skos:prefLabel "Resource Description Framework"@en .
+partner:webOfData a skos:Concept ;
+    skos:inScheme partner:topics ;
+    skos:prefLabel "Web of data"@en ;
+    skos:scopeNote "Use for articles on publishing and interlinking datasets."@en .
+
+topic:rdf skos:exactMatch partner:rdf .
+topic:semanticWeb skos:closeMatch partner:webOfData .
+```
+
+In this example the editors judge the two RDF concepts interchangeable across a wide range of indexing uses, so they use `skos:exactMatch`. A reader can find the partner's RDF heading while our catalog keeps its own IRI and preferred English label. Asserting `owl:sameAs` would go further. Under OWL, the Web Ontology Language, it would say that the two identifiers denote one individual. Both preferred English labels would then describe the same resource and conflict with SKOS's one-per-language rule. [SKOS mapping properties](https://www.w3.org/TR/skos-reference/#mapping)
+
+The second mapping is a closer call. The partner's `skos:scopeNote` tells its editors when to assign “Web of data”. An article about publishing links between datasets fits. Our Semantic Web heading also covers articles about defining an ontology, a formal description of concepts and relationships. A post about designing that ontology can belong in our catalog even if it says nothing about publishing data. The editors choose `skos:closeMatch` and present the partner's heading as an optional destination.
+
+An editor reviewing that choice can try it on the post about reading RDF. Does the post actually discuss publishing and interlinking datasets? The topic mapping alone cannot answer that. The partner can inspect the post before assigning one of its own topics, while readers can still use the cross-catalog link to browse.
+
+One last detail matters if the partner adds mappings of its own. `skos:exactMatch` is symmetric and transitive. With SKOS reasoning, two successive exact matches can imply an exact match to a third catalog's concept. `skos:closeMatch` is symmetric but has no such transitivity rule. If the partner later connects its “Web of data” heading to a third catalog, the editor still has to decide whether that third heading is useful to someone browsing Ahmad's Semantic Web articles.

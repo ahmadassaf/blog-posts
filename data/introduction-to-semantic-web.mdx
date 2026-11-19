@@ -6,6 +6,8 @@ summary: 'In the same way that Web 1.0 abstracted away the network and physical 
 subtitle: 'A gentle introduction to the new paradigm in the Web'
 featured: false
 date: '2023-04-21'
+updatedAt: '2026-11-18'
+updateSummary: "Added a five-tool primer and applied the four Linked Data rules to Ahmad’s blog."
 category: 'data'
 series:
   order: 0
@@ -22,46 +24,54 @@ In summary, the great advantage of [Web 1.0](http://en.wikipedia.org/wiki/Web_1.
 
 <Callout type="info">The aim of the Semantic Web is to solve the most problematic issues that come with the growth of the non-semantic (HTML-based or similar) Web that results in a high level of human effort for finding, retrieving and exploiting information</Callout>
 
-The Semantic Web connects **facts** so that rather than linking to a specific document or application, you can instead refer to a specific piece of information contained in that document or application. If that information is ever updated, you can automatically take advantage of the update.
+The Semantic Web connects **facts** so that rather than linking to a specific document or application, you can instead refer to a specific piece of information contained in that document or application. If Ahmad changes his blog's title, the identifier for his blog stays the same. An application that saved the old title still needs to fetch the new one.
 
-The word semantic itself implies meaning or understanding. As such, the fundamental difference between Semantic Web technologies and other technologies related to data (such as [relational databases](https://en.wikipedia.org/wiki/Relational_database) or the World Wide Web itself) is that the <Highlight>Semantic Web is concerned with the meaning and not the structure of data.</Highlight> This fundamental difference engenders an entirely different outlook on how storing, querying, and displaying information might be approached. Some applications, such as those that refer to a large amount of data from many different sources, benefit enormously from this feature. Others, such as storing high volumes of highly structured transactional data, do not.
+The word semantic itself implies meaning or understanding. A table in a [relational database](https://en.wikipedia.org/wiki/Relational_database) can record the owner of a blog. To interpret that table, a reader needs to know what its owner column means. On the <Highlight>Semantic Web, we can publish the meaning of that relationship alongside the data.</Highlight> Shared meanings help when an application combines data from several sources. For a system recording large volumes of transactions under one stable schema, they may matter less than the cost of each write.
 
 <Callout type='info'>What "semantic" means in the Semantic Web is not that computers will understand the meaning of anything but that the logical pieces of meaning can be mechanically manipulated by a machine to valuable ends.</Callout>
 
-So now imagine a new Web where the actual content can be manipulated by computers. For now, picture it as a web of databases. One "semantic" website publishes a database about a product line, with products and descriptions, while another publishes a database of product reviews. A third site for a retailer publishes a database of products in stock. What standards would make writing an application to mesh distributed databases together easier so that a computer could use the three data sources to help an end user make better purchasing decisions?
+So now imagine a new Web where the actual content can be manipulated by computers. For now, picture it as a web of databases. One site publishes Ahmad's profile, another lists his blog, and the blog publishes its articles. How could a reader start from his profile and discover those articles without each site keeping a copy of the others' records?
 
-The Semantic Web not only represents structured data and links but also the meaning of the underlying concepts and relationships. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. <Highlight>But standards facilitate building applications, especially in a decentralized system.</Highlight>
+A publisher can give the links in its data explicit meanings, such as owning a blog or writing a post. Nothing stops anyone from writing a program now to do those sorts of things, just like nothing stopped anyone from exchanging data before we had XML. <Highlight>But standards facilitate building applications, especially in a decentralized system.</Highlight>
 
-The Semantic Web addresses the discoverability challenges through the adoption of distinct identifiers for concepts and their relationships. These identifiers, referred to as Uniform Resource Identifiers (URIs), resemble web page URLs but are not restricted to identifying web documents. Instead, their primary purpose is to provide unique identification for objects and concepts, as well as their interconnections.
+A Uniform Resource Identifier (URI) can name a person or a blog as well as a document. If two publishers use the same identifier for Ahmad, a reader can follow facts about him across their records. If they each use a different identifier, the spelling alone doesn't tell us whether they mean the same person. [W3C guidance on URIs](https://www.w3.org/TR/cooluris/)
 
-Utilizing URIs significantly reduces the ambiguity in information. However, the Semantic Web takes it a step further by enabling concepts to be linked with hierarchical classifications. This enables the inference of new information based on an individual concept's classification and its relationships with other concepts. Achieving this involves the utilization of ontologies, which are structured hierarchies of concepts used to categorize individual concepts.
+## Why do RDF, RDFS, OWL, SPARQL and SHACL have separate names?
 
-**From a technical point of view, the Semantic Web consists of:**
+Suppose we’re building a directory of blogs. Someone submits an entry for Ahmad and his blog. We want to publish that information, include the blog when someone searches for websites, and tell the submitter if they’ve left out the name we need to display. The acronyms start to make sense when we look at each of those jobs.
 
-- **Data Model**: [Resource Description Framework (RDF)](/blog/category/data/everything-you-need-to-know-about-rdf): The data modeling language for the Semantic Web. All Semantic Web information is stored and represented in RDF. It is a flexible and abstract model, meaning that there is more than one representation of RDF.
-- **Query Language**: [SPARQL](/blog/category/data/sparql-a-comprehensive-guide): The query language of the Semantic Web. It is specifically designed to query data across various systems.
-- **Schema and Ontology Languages**: [Web Ontology Language (OWL)](http://en.wikipedia.org/wiki/Web_Ontology_Language 'Web Ontology Language') and [RDF Schema (RDFS)](https://en.wikipedia.org/wiki/RDF_Schema): The schema languages, or knowledge representation (KR) languages, of the Semantic Web. They enable you to define concepts in a composable way so that these concepts can be reused as much and as often as possible. Composability means that each concept is carefully defined to be selected and assembled in various combinations with other concepts as needed for many different applications and purposes.
+**RDF records a fact.** In “the blog has Ahmad as its owner,” the blog is the *subject*, the ownership relationship (`aa:owner`) is the *predicate*, and Ahmad is the *object*. Here `aa:` stands for our local vocabulary. Together they make a triple. RDF, the Resource Description Framework, uses IRIs (*Internationalized Resource Identifiers*) to name things and relationships. Here `http://assaf.website/blog` identifies the blog. A second triple gives it the name `Ahmad Assaf's Blog`. Someone else can use the same identifier to say more about that blog, even if they use a different name for it. [RDF concepts](https://www.w3.org/TR/rdf11-concepts/)
 
-Semantic technologies represent a fairly diverse family of technologies that have existed for a long time and seek to help derive meaning from information. The goal of semantic technologies is separating signal from noise. **Some examples of existing semantic technologies being used today include:**
+**RDFS describes categories.** Our directory has a page listing websites. Ahmad’s submission says that his site is a *Blog*. Should it appear on that page? In RDF Schema we can say that our `aa:Blog` is a subclass of `schema:WebSite`. The `schema:` prefix stands for the Schema.org vocabulary, which supplies the website class. Software applying that rule can infer that Ahmad’s blog is a website. We write the subclass statement once, and it applies to every blog in the directory. [RDF Schema](https://www.w3.org/TR/rdf-schema/)
+
+**OWL lets us define a category through a relationship.** Suppose the directory also has a page for *People with blogs*. In OWL, the Web Ontology Language, we can define `aa:ownsBlog` as the inverse of `aa:owner`. A link from the blog to Ahmad then implies that Ahmad owns the blog. We can define *People with blogs* as people who own at least one blog. Given that Ahmad is a person and the site is a blog, an OWL reasoner can use the ownership link and our definition to classify him. The definition is part of the ontology. The reasoner is the software that draws the conclusion. [OWL primer](https://www.w3.org/TR/owl2-primer/)
+
+**SPARQL asks a question.** What is the name of Ahmad’s blog? In SPARQL (*SPARQL Protocol and RDF Query Language*), we can answer that by matching two patterns. First, find a blog whose `aa:owner` is Ahmad and bind the blog to a variable. Then use that same variable to look up its `aa:hasName` value. The answer in our data is `Ahmad Assaf's Blog`. Asking for everyone classified under *People with blogs* is a different query: it can see that classification if the inferred fact has been stored or the query service supplies it through reasoning. [SPARQL query language](https://www.w3.org/TR/sparql11-query/)
+
+**SHACL checks what someone submitted.** Now remove the blog’s name from the submission. We still know it’s a blog, and the RDFS rule still lets us infer that it’s a website. But what should the directory display? With SHACL, the Shapes Constraint Language, we can write a *shape* for blog entries that requires at least one `aa:hasName` value. A validator can then report which entry is missing its name. That distinction matters in practice: the inference tells us **where to list the blog**; the validation report tells us **what to ask the submitter to fix**. [SHACL](https://www.w3.org/TR/shacl/)
+
+I go into the details of writing triples in my [RDF post](/blog/category/data/everything-you-need-to-know-about-rdf) and matching them in my [SPARQL guide](/blog/category/data/sparql-a-comprehensive-guide).
+
+Other technologies can help us describe and search the information on the Web.
 
 - **Natural-language processing (NLP)**: NLP technologies attempt to process unstructured text content and extract the names, dates, organizations, events, etc., discussed within the text. There are many extensions of NLP, and they include:
 
-  - **Search**: Semantic Search often requires NLP parsing of source documents. The specific technique used is Entity Extraction, which identifies proper nouns (e.g., people, places, companies) and other specific information to search. For example, consider the query, "Find me all documents that mention Barack Obama." Some documents might contain "Barack Obama," others "President Obama," and still others "Senator Obama." Extractors will map all these terms to a single concept when used correctly.
-  - **Auto-categorization**: Imagine you have 100,000 news articles and want to sort them based on specific criteria. That would take humans ages, but a computer can do it quickly.
-  - **[Sentiment Analysis](http://en.wikipedia.org/wiki/Sentiment_analysis 'Sentiment analysis')**: Sentiment Analysis measures the "sentiment" of an article, typically meaning whether the article's tone is positive, negative, or neutral. This application of NLP technology is often used in conjunction with search, but it can also be used in other contexts, such as alerting. For example, a business owner might ask an application to "alert me when someone says something negative regarding my company on Facebook."
+  - **Search**: Entity extraction picks out names in text. On this blog it might find both “Ahmad” and “Ahmad Assaf.” The directory can check the author link before treating those mentions as references to the same person.
+  - **Auto-categorization**: A program can group the blog's articles by topic so readers can browse them.
+  - **[Sentiment Analysis](http://en.wikipedia.org/wiki/Sentiment_analysis 'Sentiment analysis')** measures whether the tone of a piece of text is positive, negative, or neutral. A blog editor might use it to find comments that need a closer read.
   - **Summarization**: Often used in conjunction with research applications, summaries of topics are created automatically so that people do not have to wade through many long-winded articles (perhaps such as this one!).
   - **Question Answering**: At the time, this was the hot topic in NLP, as evidenced by Siri and Watson. However, long before these tools, we had Ask Jeeves (now Ask.com) and later Wolfram Alpha, which specialized in question-answering. The idea here is to ask a computer a question and have it answer you (Star Trek-style! "Computer…").
 
-- **Data mining**: Data mining technologies employ pattern-matching algorithms to tease out trends and correlations within large data sets. Data mining can be used, for example, to identify suspicious and potentially fraudulent trading behavior in large databases of financial transactions.
+- **Data mining**: Data mining technologies employ pattern-matching algorithms to tease out trends and correlations within large data sets.
 - **Artificial intelligence or expert systems**: AI or expert systems technologies automatically use elaborate reasoning models to answer complex questions. These systems often include machine-learning algorithms that can improve the system's decision-making capabilities over time.
 - **Classification**: Classification technologies use heuristics and rules to tag data with categories to help search and analyze information.
-- **Semantic search**: Semantic search technologies allow people to locate information by concept instead of keyword or keyphrase. With semantic search, people can easily distinguish between searching for John F. Kennedy, the airport, and John F. Kennedy, the president.
+- **Semantic search**: A search for articles *by* Ahmad asks a different question from a search for articles that *mention* Ahmad. A search service can use an explicit author link to tell the two apart.
 
 The main goal behind knowing these technologies is that they help us assemble the Semantic Web's building blocks. For example, NLP can extract structured data from unstructured documents (flat files like text documents). This data is then linked via Semantic Web technologies to other published data. This bridges the gap between documents (unstructured data) and structured data.
 
 ## What does that all mean in practice?
 
-<Highlight>The Semantic Web is a vision about an extension of the existing World Wide Web</Highlight>, which provides software programs with machine-interpretable metadata of the published information and data. In other words, we add further data descriptors to otherwise existing content and data on the Web. As a result, computers are able to make meaningful interpretations similar to the way humans process information to achieve their goals.
+<Highlight>The Semantic Web is a vision about an extension of the existing World Wide Web</Highlight>, which provides software programs with machine-interpretable metadata of the published information and data. For a blog post, the metadata can say who wrote it even if the author's name never appears in the article text.
 
 What's behind the original vision of the Semantic Web comes under the umbrella of three things: **Automation of information retrieval**, the **Internet of Things** and **Personal Assistants**. You can read more about all three in the seminal article by Tim Berners-Lee, James Hendler and Ora Lassila, published in Scientific American: [The Semantic Web](https://www-sop.inria.fr/acacia/cours/essi2006/Scientific%20American_%20Feature%20Article_%20The%20Semantic%20Web_%20May%202001.pdf).
 
@@ -69,65 +79,53 @@ The ultimate ambition of the Semantic Web, as its founder Tim Berners-Lee sees i
 
 ## Linked _Open_ Data (LOD)
 
-One of the most important movements in the Semantic Web community is Linked Open Data, which strives to expose and connect all of the world's data in a readily queryable and consumable form. Linked Data aims to publish structured data so that it can be easily consumed and combined with other Linked Data. In a way, Linked Data is the Semantic Web realized via four best practice principles:
+Linked Data gives publishers a way to name things and connect their descriptions across sites. Linked *Open* Data also gives others permission to reuse the data under an open license. Tim Berners-Lee set out four rules for publishing Linked Data. [Linked Data](https://www.w3.org/DesignIssues/LinkedData.html) · [Open Definition](https://opendefinition.org/od/2.1/en/)
 
-- Use URIs as names for things. An example of a URI is any URL. For example, `http://assaf.website` is the URI that refers to Ahmad Assaf.
+- Use URIs as names for things.
 - Use HTTP URIs so that people can look up those names.
 - When someone looks up a URI, provide useful information using the standards such as RDF and SPARQL.
 - Include links to other URIs so that they can discover more things.
 
 ### The Four Rules Applied
 
-To make these rules concrete, imagine two tables living in two separate databases: a customers table in a CRM system and an orders table in a billing system. Each order row points at a customer, but only through an internal key that means nothing outside its own database. Applying the four rules to those two tables looks like this:
+Suppose one table holds Ahmad's profile and another holds the blog's details. The blog row has an internal key for its owner. A reader on another site can't follow that key. Here's how I'd publish the link.
 
-1. Instead of using application-specific identifiers (database keys, UUIDs, incremental numbers, etc.), you map them to a set of URIs. Each identifier must map to one single URI. For example, each row of those two tables is uniquely identifiable using its URI.
-2. Make your URIs dereferenceable. This roughly means making them accessible via HTTP as we do for every human-readable Web page. This is a crucial aspect of Linked Data: every row of our tables is now fetchable and uniquely identifiable anywhere on the Web.
-3. Have our web server reply with some structured data when invoked. This is the Semantic Web "juicy" part. Model your data with RDF. Here is where you must shift from a relational data model to a graph one.
-4. Once all the rows of our tables have been uniquely identified, made dereferenceable through HTTP, and described with RDF, the last step is providing links between different rows across different tables. This is the step where the implicit links become explicit: it is what makes the data Linked Data.
+1. Give Ahmad and his blog distinct names. In our example, `http://assaf.website/triples#ahmadassaf` identifies Ahmad and `http://assaf.website/blog` identifies the blog. I can keep the database keys I already use.
+2. Serve descriptions at those HTTP addresses. Looking up Ahmad's identifier should take a reader to information about him.
+3. Return RDF describing the resource. For the blog, one triple gives its title, “Ahmad Assaf's Blog.”
+4. Link the blog to its owner using Ahmad's identifier. A reader can follow that link to his profile, even if a different site publishes the profile data.
 
-Because of their linking, datasets published this way form a giant web of data or a knowledge graph, which connects a vast amount of descriptions of entities and concepts of general importance. This interconnectedness allows for the discovery of new relationships and insights that would be difficult to uncover otherwise.
+## From keywords to named entities
 
-## From a Web of Keywords to a Web of Things
+A search for the words “Ahmad Assaf” can turn up articles he wrote and articles that mention him. Structured data lets a publisher identify him as the author of a particular page.
 
-Searching websites using keywords has been a long-standing method for finding information online, but relying solely on words to determine the content of a page is limiting: it restricts the potential use of the information on your page, and we're just beginning to fully leverage the vast amount of knowledge available on the global web. New standards for Structured Data help inform search engines about the actual entities a webpage contains, beyond just keywords, transitioning from a web of keywords to a more powerful web of things. This structured data on web pages embodies Tim Berners-Lee's vision of the Semantic Web, allowing machines, not just humans, to understand web knowledge.
-
-<Callout type="warning">
-Don't confuse **'web of things'** with **'internet of things'**. The **'internet of things'** typically refers to connecting electronic devices over the web, not to embedding structured data in web pages.
-</Callout>
-
-Consider a typical web page, such as the one you're reading. A search engine typically analyzes the text to determine the content, identifying phrases like structured data and knowledge graph. While useful, these words alone don't tell the search engine about the real entities the page discusses. Examples of entities might include: People (e.g., names, photos, contact details), Places (e.g., businesses, cities, parks), Events (e.g., event listings with time and location), Articles on various topics, etc.
-
-Search engines can use techniques such as NLP to extract these entities and their associated facts from text. Structured data provides the necessary tools and standards to help search engines identify these entities, creating an index not just of keywords, but of the entities and facts they contain. This approach is powerful and opens new possibilities for how web information can be used.
+Consider the page you're reading. A search engine can analyze the text and find phrases like *structured data* and *knowledge graph*. It can also read the page's metadata. There, a publisher can explicitly identify the article, its author and its publication date. [Google's introduction to structured data](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)
 
 ## Examples of Using Structured Data
 
 ### Rich Snippets
 
-Structured data enables rich snippets, where search engines display key facts about a search query directly in the results. For example, searching for "Mary Poppins" on Google shows not just a list of web pages, but also key information like the movie's IMDb rating, extracted because it was embedded as structured data.
+If Ahmad marks up a post with its headline, author and publication date, a search engine can use those details when it displays the article in results. The markup makes that information available. The search engine decides what to show. [Google's article markup guide](https://developers.google.com/search/docs/appearance/structured-data/article)
 
 ### Global Knowledge Graphs
 
-Search engines like Google and Bing use structured data to build knowledge graphs. These graphs provide a rich set of facts about entities, such as information about William Shakespeare when you search for him. This data is partly sourced from structured data on web pages.
+A knowledge graph can bring descriptions from several pages together. If the blog and its articles use the same identifier for Ahmad, a graph using those descriptions can connect him to the blog he owns and the posts he wrote.
 
 ## Structured Data Standards
 
-To publish information in a way that search engines can understand the entities a page contains, we use structured data standards. While we won't dive into the specifics here, some key terms you should be familiar with include:
+A publisher needs terms for the things a page describes and a syntax for writing those descriptions.
 
 - **[Schema.org](https://schema.org/)**: A standard vocabulary of entities defined by major search engines like Google.
 - **[Microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata)**: Embedding structured data within HTML markup.
-- **[JSON-LD](https://json-ld.org/)**: A syntax for embedding structured data, typically in the page header.
+- **[JSON-LD](https://json-ld.org/)**: A JSON syntax for Linked Data. A publisher can serve a JSON-LD document on its own or embed it in an HTML page.
 - **[RDFa](https://www.w3.org/TR/rdfa-primer/)**: A syntax for embedding RDF in HTML.
 
-The entities published with these standards are what feed a **Knowledge Graph**, a large structured index of entities on the web such as the Google Knowledge Graph; it is a product of the standards above rather than a standard itself.
+Page markup is one source of information for a knowledge graph. When Google introduced its Knowledge Graph in 2012, it named Freebase, Wikipedia and the CIA World Factbook among its sources. [Google's Knowledge Graph announcement](https://blog.google/products/search/introducing-knowledge-graph-things-not/)
 
-## Knowledge Graphs: The Next Frontier of the Semantic Web
+## Knowledge graphs in practice
 
-Knowledge graphs emerged later but quickly became a key factor in the adoption of Semantic Web standards and the technologies that support them. They brought the Semantic Web concept into enterprises by using semantic metadata to enhance data and content management, breaking down silos and facilitating integration with various knowledge management practices.
+An organization can use the same approach with its own records. Suppose a staff directory uses “blog owner” for the person who runs the site, while the catalog uses it for the person who owns the blog. An ontology can give administration and ownership distinct definitions, so a reader can ask about either relationship when the records are combined.
 
-Enterprise knowledge graphs employ ontologies to explicitly define the different conceptual models (such as schemas, taxonomies, and vocabularies) used within various systems. In enterprise data management terms, knowledge graphs are considered a sophisticated form of semantic reference data, comprising interconnected descriptions of entities like objects, events, or concepts.
-
-Thus, knowledge graphs enable organizations to enhance their proprietary information by providing a global context for interpretation and serving as a resource for data enrichment.
-
-I find these ideas more relevant than ever in the era of large language models. LLMs are fluent but they hallucinate, and knowledge graphs give us a way to ground their answers in explicit, verifiable facts. The machine-readable, structured data this post describes is precisely what feeds modern retrieval systems, so the Semantic Web's core bet, that meaning should be machine-readable, still holds up.
+I find these ideas relevant to large language models because a model can give a fluent but incorrect answer. A retrieval system can supply a model with a passage of text. For a question about who owns a blog, it can also retrieve the triple that links the blog to its owner. That gives me a specific record to check if the model names someone else.
 
 You can read more information about Knowledge Graphs in my [post here](/blog/category/data/intro-knowledge-graphs).

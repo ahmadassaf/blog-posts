@@ -39,6 +39,7 @@ const diagram = (load, Fallback = DiagramSkeleton) => {
 
 const AgileCadenceExplorer = diagram(() => import('./AgileCadenceExplorer'));
 const AgileChartsExplorer = diagram(() => import('./AgileChartsExplorer'));
+const BlogModelingDiagram = diagram(() => import('./BlogModelingDiagram'));
 const ChangeGateDashboard = diagram(() => import('./change-gate/ChangeGateDashboard'));
 const ChangeGateFlow = diagram(() => import('./change-gate/ChangeGateFlow'));
 const ChangeGateReport = diagram(() => import('./change-gate'));
@@ -52,20 +53,26 @@ const ImprovementKataExplorer = diagram(() => import('./ImprovementKataExplorer'
 const JsonLdGraphExplorer = diagram(() => import('./JsonLdGraphExplorer'));
 const OlapCubeExplorer = diagram(() => import('./OlapCubeExplorer'));
 const SparqlPatternExplorer = diagram(() => import('./SparqlPatternExplorer'));
+const SparqlPathDiagram = diagram(() => import('./SparqlPathDiagram'));
+const SkosTopicsDiagram = diagram(() => import('./SkosTopicsDiagram'));
 const LinkedDataQualityFramework = diagram(() => import('./LinkedDataQualityFramework'));
 const Mermaid = diagram(() => import('@gaudi/design-system/mdx/Mermaid'));
 const PipelineDiagram = diagram(() => import('./PipelineDiagram'));
+const RdfAppointmentDiagram = diagram(() => import('./RdfAppointmentDiagram'));
 const RdfBlankNodeExplorer = diagram(() => import('./RdfBlankNodeExplorer'));
 const RdfCollectionExplorer = diagram(() => import('./RdfCollectionExplorer'));
 const RdfContainerExplorer = diagram(() => import('./RdfContainerExplorer'));
 const RdfEngineFigure = diagram(() => import('./RdfEngineFigure'));
+const RdfIntegrationDiagram = diagram(() => import('./RdfIntegrationDiagram'));
+const RdfProjectionDiagram = diagram(() => import('./RdfProjectionDiagram'));
+const RdfToolsTogetherDiagram = diagram(() => import('./RdfToolsTogetherDiagram'));
 const RdfTripleExplorer = diagram(() => import('./RdfTripleExplorer'));
-const RdfVsPropertyGraphExplorer = diagram(() => import('./RdfVsPropertyGraphExplorer'));
 const UnifiedProcessorExplorer = diagram(() => import('./UnifiedProcessorExplorer'));
 
 export const VisualisationComponents = {
   AgileCadenceExplorer,
   AgileChartsExplorer,
+  BlogModelingDiagram,
   ChangeGateDashboard,
   ChangeGateFlow,
   ChangeGateReport,
@@ -81,12 +88,17 @@ export const VisualisationComponents = {
   Mermaid,
   OlapCubeExplorer,
   PipelineDiagram,
+  RdfAppointmentDiagram,
   RdfBlankNodeExplorer,
   RdfCollectionExplorer,
   RdfContainerExplorer,
   RdfEngineFigure,
+  RdfIntegrationDiagram,
+  RdfProjectionDiagram,
+  RdfToolsTogetherDiagram,
   RdfTripleExplorer,
-  RdfVsPropertyGraphExplorer,
+  SkosTopicsDiagram,
+  SparqlPathDiagram,
   SparqlPatternExplorer,
   UnifiedProcessorExplorer
 };

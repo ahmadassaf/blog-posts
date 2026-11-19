@@ -105,7 +105,7 @@ const RdfContainerExplorer = ({
           <text x='884' y='142' textAnchor='end' className={ styles.openLabel }>OPEN CONTAINER · {members.length} MEMBERS</text>
 
           <path d='M 500 82 C 500 104, 500 126, 500 147' className={ styles.subjectEdge } />
-          <text x='484' y='100' textAnchor='end' className={ styles.subjectEdgeLabel }>aa:hasAdmins</text>
+          <text x='484' y='100' textAnchor='end' className={ styles.subjectEdgeLabel }>aa:adminRoster</text>
 
           {members.map((member, index) => {
             const [ x, y ] = positions[index];

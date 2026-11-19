@@ -1,0 +1,7 @@
+.outputs text {
+  fill: var(--ds-color-text);
+}
+
+.detail {
+  font-size: 14px;
+}

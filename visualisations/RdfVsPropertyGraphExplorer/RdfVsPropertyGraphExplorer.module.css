@@ -108,7 +108,6 @@
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   scrollbar-color: color-mix(in srgb, var(--ds-color-accent) 52%, var(--ds-color-border)) transparent;
-  scrollbar-gutter: stable;
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
 }
@@ -145,7 +144,7 @@
   font-family: var(--ds-font-sans);
 }
 
-@container (max-width: 53.99rem) {
+@container (width < 48rem) {
   .scrollHint {
     display: block;
   }
@@ -173,19 +172,6 @@
   font-size: 13px;
   font-weight: 700;
   pointer-events: none;
-}
-
-.propEmpty {
-  fill: var(--ds-color-text-muted);
-  font-family: var(--ds-font-mono);
-  font-size: 12px;
-  pointer-events: none;
-}
-
-.svgCaption {
-  fill: var(--ds-color-text-muted);
-  font-family: var(--ds-font-mono);
-  font-size: 12px;
 }
 
 /* Property graph: node cards */
@@ -218,7 +204,7 @@
   pointer-events: none;
 }
 
-/* Property graph: the knows edge and its property box */
+/* Property graph relationship */
 .edgeGroup {
   cursor: pointer;
 }
@@ -244,15 +230,6 @@
 
 .edgeArrow {
   fill: var(--ds-color-accent);
-  pointer-events: none;
-}
-
-.edgeConnector {
-  fill: none;
-  stroke: color-mix(in srgb, var(--ds-color-accent) 55%, var(--ds-color-border));
-  stroke-dasharray: 4 6;
-  stroke-linecap: round;
-  stroke-width: 2;
   pointer-events: none;
 }
 
@@ -286,7 +263,8 @@
   cursor: pointer;
 }
 
-.iriNode > rect {
+.iriNode > rect,
+.classNode {
   fill: var(--ds-color-surface-muted);
   stroke: var(--ds-color-accent);
   stroke-width: 2;
@@ -329,13 +307,11 @@
   transition: fill 120ms ease;
 }
 
-.tripleGroup[data-active='true'] .tripleLabel,
-.starGroup[data-active='true'] .tripleLabel {
+.tripleGroup[data-active='true'] .tripleLabel {
   fill: var(--ds-color-accent-dark);
 }
 
-.tripleGroup[data-active='true'] .edgeLine,
-.starGroup[data-active='true'] .edgeLine {
+.tripleGroup[data-active='true'] .edgeLine {
   stroke: var(--ds-color-accent);
   stroke-width: 3.5;
 }
@@ -348,7 +324,7 @@
 }
 
 .tripleGroup[data-active='true'] .literalCard,
-.starGroup[data-active='true'] .literalCard {
+.tripleGroup[data-active='true'] .classNode {
   stroke-width: 3;
 }
 
@@ -357,45 +333,6 @@
   font-family: var(--ds-font-mono);
   font-size: 12.5px;
   font-weight: 700;
-  pointer-events: none;
-}
-
-/* RDF: the RDF-star quoted triple */
-.starGroup {
-  cursor: pointer;
-}
-
-.starGroup:focus-visible {
-  outline: 2px solid var(--ds-color-accent);
-  outline-offset: 3px;
-}
-
-.starNode {
-  fill: var(--ds-color-warning-muted);
-  stroke: var(--ds-color-warning);
-  stroke-dasharray: 6 5;
-  stroke-width: 2;
-  transition: stroke-width 120ms ease;
-}
-
-.starGroup[data-active='true'] .starNode {
-  stroke-width: 3;
-}
-
-.starText {
-  fill: var(--ds-color-text);
-  font-family: var(--ds-font-mono);
-  font-size: 13px;
-  font-weight: 750;
-  pointer-events: none;
-}
-
-.starConnector {
-  fill: none;
-  stroke: color-mix(in srgb, var(--ds-color-warning) 70%, var(--ds-color-border));
-  stroke-dasharray: 4 6;
-  stroke-linecap: round;
-  stroke-width: 2;
   pointer-events: none;
 }
 
@@ -425,15 +362,10 @@
 }
 
 .readoutText {
+  overflow-wrap: anywhere;
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.55;
-}
-
-.readoutMeta {
-  color: var(--ds-color-text-muted);
-  font-family: var(--ds-font-mono);
-  font-size: 11px;
 }
 
 .liveRegion {
@@ -471,7 +403,7 @@
   .edgeCard,
   .tripleLabel,
   .literalCard,
-  .starNode {
+  .classNode {
     transition: none;
   }
 }

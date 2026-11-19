@@ -17,100 +17,98 @@ import styles from './SparqlPatternExplorer.module.css';
 const triples = [
   {
     'id': 't1',
-    'object': '"Ahmad\'s Blog"',
-    'predicate': 'foaf:name',
-    'reads': 'The resource blog1 has the name "Ahmad\'s Blog". A blog is a thing with a name too, which is why a bare foaf:name pattern picks it up alongside people.',
-    'subject': 'ex:blog1'
+    'object': '"Ahmad Assaf\'s Blog"',
+    'predicate': 'aa:hasName',
+    'reads': 'This triple records the title of Ahmad’s blog. The title pattern matches its aa:hasName predicate.',
+    'subject': 'site:blog'
   },
   {
     'id': 't2',
-    'object': 'ex:Assaf',
+    'object': ':ahmadassaf',
     'predicate': 'aa:owner',
-    'reads': 'The resource blog1 has an owner, and that owner is the resource Assaf. The object here is another resource, not a text value.',
-    'subject': 'ex:blog1'
+    'reads': 'The ownership arrow goes from the blog to Ahmad’s IRI. That IRI connects this triple to his name.',
+    'subject': 'site:blog'
   },
   {
     'id': 't3',
     'object': '"Ahmad Assaf"',
     'predicate': 'foaf:name',
-    'reads': 'The resource Assaf has the name "Ahmad Assaf". This is the triple the chained query reaches after following aa:owner out of blog1.',
-    'subject': 'ex:Assaf'
+    'reads': 'Ahmad’s display name belongs to the person identified by :ahmadassaf.',
+    'subject': ':ahmadassaf'
   },
   {
     'id': 't4',
     'object': 'ex:London',
     'predicate': 'foaf:based_near',
-    'reads': 'The resource Assaf is based near London. None of the three patterns here touches this triple; the post leans on it later to filter owners by location.',
-    'subject': 'ex:Assaf'
+    'reads': 'Ahmad is recorded as being based near London. This location does not match the title or ownership patterns.',
+    'subject': ':ahmadassaf'
   },
   {
     'id': 't5',
     'object': '"Overfit.in"',
-    'predicate': 'foaf:name',
-    'reads': 'The resource blog2 has the name "Overfit.in". Like blog1, it matches any pattern with foaf:name in the predicate position.',
+    'predicate': 'aa:hasName',
+    'reads': 'Overfit.in is the title of the second blog. Both blog titles use aa:hasName.',
     'subject': 'ex:blog2'
   },
   {
     'id': 't6',
-    'object': 'ex:Ahmad',
+    'object': 'ex:otherOwner',
     'predicate': 'aa:owner',
-    'reads': 'The resource blog2 has an owner, the resource Ahmad. Together with the other aa:owner triple, it is the only place ownership lives in this dataset.',
+    'reads': 'The second blog’s ownership triple leads to a different person in this example.',
     'subject': 'ex:blog2'
   },
   {
     'id': 't7',
-    'object': '"Ahmad"',
+    'object': '"Other owner"',
     'predicate': 'foaf:name',
-    'reads': 'The resource Ahmad has the name "Ahmad". The chained query reaches it by following aa:owner out of blog2.',
-    'subject': 'ex:Ahmad'
+    'reads': 'The chained query reaches this display name after finding the owner of the second blog.',
+    'subject': 'ex:otherOwner'
   },
   {
     'id': 't8',
     'object': 'ex:Manchester',
     'predicate': 'foaf:based_near',
-    'reads': 'The resource Ahmad is based near Manchester. No pattern here matches it, but the post\'s FILTER example uses it to find owners who are not near London.',
-    'subject': 'ex:Ahmad'
+    'reads': 'The other owner has a recorded location near Manchester. A query for an explicit London location does not match this triple.',
+    'subject': 'ex:otherOwner'
   }
 ];
 
 const patterns = {
   'chain': {
-    'blurb': 'Two query triples share the variable ?x, and that shared variable joins them. The first triple finds each owner; the second follows the same ?x to its foaf:name. Each highlighted pair of rows collapses into one solution.',
-    'label': '?blog aa:owner ?x . ?x foaf:name ?name',
+    'blurb': 'The first pattern binds ?owner to a person. The second uses the same IRI as its subject to find that person’s foaf:name. Each highlighted pair of triples yields one solution.',
+    'label': '?blog aa:owner ?owner . ?owner foaf:name ?ownerName',
     'matches': [ 't2', 't3', 't6', 't7' ],
     'meaning': 'owner, then name',
-    'meta': '4 of 8 triples match · 2 solutions · rows join on ?x',
+    'meta': '4 of 8 triples match · 2 solutions · joined on ?owner',
     'solutions': [
-      '{?blog = http://example.org/blog1, ?x = http://example.org/Assaf, ?name = "Ahmad Assaf"}',
-      '{?blog = http://example.org/blog2, ?x = http://example.org/Ahmad, ?name = "Ahmad"}'
+      '{?blog = site:blog, ?owner = :ahmadassaf, ?ownerName = "Ahmad Assaf"}',
+      '{?blog = ex:blog2, ?owner = ex:otherOwner, ?ownerName = "Other owner"}'
     ],
     'tab': 'chained pair'
   },
   'name': {
-    'blurb': 'One query triple where the subject and the object are variables and the predicate is the constant foaf:name. Four of the eight database triples carry foaf:name in the predicate position, so all four match: ?x soaks up each subject and ?name each object. Nothing restricts ?x to blogs, so people match too.',
-    'label': '?x foaf:name ?name',
-    'matches': [ 't1', 't3', 't5', 't7' ],
-    'meaning': 'every name',
-    'meta': '4 of 8 triples match · 4 solutions',
+    'blurb': 'The predicate is fixed at aa:hasName. Two directory triples use it, so the query binds ?blog and ?name twice. The people’s names use a different predicate.',
+    'label': '?blog aa:hasName ?name',
+    'matches': [ 't1', 't5' ],
+    'meaning': 'blog titles',
+    'meta': '2 of 8 triples match · 2 solutions',
     'solutions': [
-      '{?x = http://example.org/blog1, ?name = "Ahmad\'s Blog"}',
-      '{?x = http://example.org/Assaf, ?name = "Ahmad Assaf"}',
-      '{?x = http://example.org/blog2, ?name = "Overfit.in"}',
-      '{?x = http://example.org/Ahmad, ?name = "Ahmad"}'
+      '{?blog = site:blog, ?name = "Ahmad Assaf\'s Blog"}',
+      '{?blog = ex:blog2, ?name = "Overfit.in"}'
     ],
-    'tab': '?x foaf:name ?name'
+    'tab': '?blog aa:hasName ?name'
   },
   'owner': {
-    'blurb': 'Here the constant is aa:owner, and only the two ownership triples carry it. ?blog binds to each blog resource and ?x to its owner. The objects are resources rather than text, which is exactly what makes the next hop possible.',
-    'label': '?blog aa:owner ?x',
+    'blurb': 'Only the two ownership triples carry aa:owner. Each match binds ?blog to the blog IRI and ?owner to the related person.',
+    'label': '?blog aa:owner ?owner',
     'matches': [ 't2', 't6' ],
     'meaning': 'the owners',
     'meta': '2 of 8 triples match · 2 solutions',
     'solutions': [
-      '{?blog = http://example.org/blog1, ?x = http://example.org/Assaf}',
-      '{?blog = http://example.org/blog2, ?x = http://example.org/Ahmad}'
+      '{?blog = site:blog, ?owner = :ahmadassaf}',
+      '{?blog = ex:blog2, ?owner = ex:otherOwner}'
     ],
-    'tab': '?blog aa:owner ?x'
+    'tab': '?blog aa:owner ?owner'
   }
 };
 
@@ -173,7 +171,7 @@ const SparqlPatternExplorer = ({
       <p className={ styles.scrollHint }>Scroll horizontally to explore the diagram</p>
 
       <div className={ styles.scrollFrame } role='region' aria-label='Scrollable triple pattern matching diagram' tabIndex='0'>
-        <svg className={ styles.graph } viewBox='0 0 1000 472' role='group' aria-label='The eight sample triples as rows'>
+        <svg className={ styles.graph } viewBox='0 0 1000 492' role='group' aria-label='The eight sample triples as rows'>
           <text x='56' y='40' className={ styles.columnHead }>SUBJECT</text>
           <text x='396' y='40' className={ styles.columnHead }>PREDICATE</text>
           <text x='620' y='40' className={ styles.columnHead }>OBJECT</text>
@@ -192,8 +190,11 @@ const SparqlPatternExplorer = ({
             );
           })}
 
-          <text x='32' y='452' className={ styles.legend }>
-            {'prefixes shortened for display: ex: <http://example.org/> · foaf: <http://xmlns.com/foaf/0.1/> · aa: <http://example.org/Personal#>'}
+          <text x='32' y='449' className={ styles.legend }>
+            {'site: <http://assaf.website/> · : <http://assaf.website/triples#> · aa: <http://assaf.website/Personal#>'}
+          </text>
+          <text x='32' y='473' className={ styles.legend }>
+            {'ex: <http://example.org/> · foaf: <http://xmlns.com/foaf/0.1/>'}
           </text>
         </svg>
       </div>

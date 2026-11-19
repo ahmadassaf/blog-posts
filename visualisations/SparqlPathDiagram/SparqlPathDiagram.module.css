@@ -1,0 +1,14 @@
+.bracket {
+  fill: none;
+  stroke: var(--ds-color-text-muted);
+  stroke-width: 1.5;
+}
+
+.annotation {
+  fill: var(--ds-color-text-muted);
+  font-size: 14px;
+}
+
+.objectNodes text {
+  fill: var(--ds-color-text);
+}

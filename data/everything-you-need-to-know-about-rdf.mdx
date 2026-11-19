@@ -7,6 +7,7 @@ summary: 'Humans share, consume and produce knowledge using natural language; ho
 featured: true
 date: '2014-11-22'
 updated: '2021-09-22'
+updatedAt: '2026-11-18'
 category: 'data'
 bibliography: ['meta/bibliography/references.bib']
 series:
@@ -14,11 +15,11 @@ series:
   title: "A Semantic Web series"
 ---
 
-The [Resource Description Framework (RDF)](https://www.w3.org/TR/rdf11-primer) is a tool for representing complex information. [RDF](https://www.w3.org/RDF/) is a framework for describing and interchanging metadata and knowledge on the web. It enables the structured representation of information, facilitating better data interoperability and integration across diverse systems.
+The [Resource Description Framework (RDF)](https://www.w3.org/TR/rdf11-primer) lets us describe people, documents, and other resources in a form different applications can exchange. Its [data model](https://www.w3.org/RDF/) describes which facts the graph contains. Several text formats can encode those same facts.
 
 ## Natural Language vs. Machine-Readable Data
 
-In our daily lives, we effortlessly communicate complex ideas through natural language. For instance, consider the simple fact:
+Consider a fact I can state in a sentence:
 
 ```text
 I (Ahmad) own a blog (http://assaf.website/blog)
@@ -43,61 +44,55 @@ This statement is straightforward for humans to understand and express. Represen
 ```
 
 ```turtle
-@prefix ex: <http://example.org#>.
-ex:Ahmad ex:owns ex:Blog.
+@prefix aa: <http://assaf.website/Personal#> .
+@prefix : <http://assaf.website/triples#> .
+
+<http://assaf.website/blog> aa:owner :ahmadassaf .
 ```
 
 ```json
 {
-  "@context": {
-    "ex": "http://example.org#"
-  },
-  "@id": "http://example.org#Ahmad",
-  "ex:owns": {
-    "@id": "http://example.org#Blog"
-  }
+  "@context": { "aa": "http://assaf.website/Personal#" },
+  "@id": "http://assaf.website/blog",
+  "aa:owner": { "@id": "http://assaf.website/triples#ahmadassaf" }
 }
 ```
 
 :::
 
-All three XML variants are valid, yet nothing in XML says which of them means "Ahmad owns a blog": the syntax carries structure, not shared meaning, so every producer and consumer has to agree on an interpretation out of band. The Turtle and JSON-LD versions, by contrast, state the fact the way humans intuitively structure information, as `Subject - Verb/Predicate/Action - Object`, with each part identified unambiguously. It was this lack of shared meaning, not XML itself, that motivated RDF, which adopts a three-part structure to represent knowledge:
-
-- **Resource**: Refers to anything that can be uniquely identified with a URI, such as web pages, locations, individuals, or products.
-- **Description**: Encompasses the attributes, characteristics, and relationships of resources.
-- **Framework**: Provides the models, languages, and syntaxes for describing resources.
-
-The Framework is a combination of web-based protocols (URI, HTTP, XML, etc.) that are based on formal models and defines all the allowed relationships among resources.
-
-RDF is an intuitive knowledge representation using directed graphs, where the subjects and objects are the **nodes** and the predicates are the **edges** of that graph. This statement, which comprises these three parts, is called an **RDF triple**, where the subject is a URI or a blank (empty) node, the predicate is a URI and the object can be a URI, a literal or a [Blank Node](#blank-nodes). If we wish to transform this knowledge into the traditional relational model (tables) it will look like:
-
-| **Subject** | **Predicate** |        **Object**         |
-| :---------: | :-----------: | :-----------------------: |
-|    Ahmad    |  has a blog   | assaf.website/blog |
-
-In plain English, an RDF statement states facts, relationships and data by linking resources of different kinds. With the help of an RDF statement, just about anything can be expressed by a uniform structure, consisting of three linked data pieces.
+The XML variants put the owner's name in different places. A reader needs the producer's conventions to interpret those fields. The Turtle and JSON-LD snippets both identify the blog, Ahmad, and the ownership relationship by their full IRIs (Internationalized Resource Identifiers). In Turtle, the prefix declarations let us abbreviate those identifiers.
 
 ## Constituents of an RDF Triple
 
-RDF uses a graph-based model to represent knowledge. The main components are:
+A triple describes one fact. Its **subject** is the resource we're describing. Its **predicate** names the relationship or attribute. Its **object** gives the related resource or value.
 
-1. **Subject:** The resource being described (e.g., a person, a webpage).
-2. **Predicate:** The property or relationship (e.g., "has a blog").
-3. **Object:** The value or resource linked to the subject (e.g., a URL, a name).
+| Subject | Predicate | Object |
+| --- | --- | --- |
+| `http://assaf.website/blog` | `aa:owner` | `:ahmadassaf` |
 
-Together, these components form a directed graph where:
-- **Nodes** represent subjects and objects.
-- **Edges** represent predicates.
+In the graph, the arrow starts at the blog and points to Ahmad. Subjects can be IRIs or blank nodes, predicates must be IRIs, and objects can be IRIs, literals, or blank nodes. A literal holds a value directly, such as the title of the blog. A blank node lets us describe a resource without giving it a global name.
 
-An RDF graph is a collection of triples. A node in an RDF graph can be one of the following kinds:
+Ahmad also administers his blog. That gives us a second relationship to record.
+
+An RDF graph is a **set of triples**. Here are two copies of the administrator statement:
+
+```turtle
+@prefix aa: <http://assaf.website/Personal#> .
+@prefix : <http://assaf.website/triples#> .
+
+<http://assaf.website/blog> aa:hasAdmins :ahmadassaf .
+<http://assaf.website/blog> aa:hasAdmins :ahmadassaf .
+```
+
+The two lines produce one triple because their subjects, predicates, and objects are identical. Recording two reports or two appointments requires representing each one separately, as we'll see in the [reification](#rdf-reification) and [appointment](#when-did-ahmad-start-administering-the-blog) examples.
+
+RDF uses three kinds of terms for nodes.
 
 ### URIs
 
-A unique [Uniform Resource Identifier (URI)](http://en.wikipedia.org/wiki/Uniform_resource_identifier "Uniform resource identifier") is assigned to any resource or thing that needs to be described. A URI can be a URL or some other kind of unique identifier. Unlike URLs, URIs do not necessarily enable access to the resource they describe, i.e., in most cases they do not represent actual web pages.
+A [Uniform Resource Identifier (URI)](http://en.wikipedia.org/wiki/Uniform_resource_identifier "Uniform resource identifier") can name a resource so that other statements can refer to it. A URI can identify a person, a web page, a book, or a place. Using an HTTP identifier does not guarantee that requesting it will return a representation of the resource.
 
-URI schemes are versatile and not limited to web addresses; they can also serve as identifiers for a wide range of entities, including telephone numbers, ISBN numbers, and geographic coordinates. In essence, we consider a URI as a way to uniquely identify a resource, and it can be utilized as either the focal point or the object in a statement. Once a URI is associated with a subject, it can be regarded as a resource, allowing us to make additional statements about it.
-
-This concept of employing URIs to label 'entities' and their interconnections is hugely significant: it establishes a global, distinctive naming system. The adoption of such a system effectively mitigates the problem of homonyms that has historically hindered the representation of distributed data.
+Two people can share a display name. Separate identifiers let us say which person a statement concerns.
 
 Strictly speaking, RDF 1.1 calls these identifiers [IRIs (Internationalized Resource Identifiers, RFC 3987)](https://www.rfc-editor.org/rfc/rfc3987), the generalization of URIs to the full Unicode repertoire. An IRI is a Unicode string that does not contain any control characters and that produces a valid absolute URI, with an optional [fragment identifier](http://en.wikipedia.org/wiki/Fragment_identifier "Fragment identifier"), when subjected to the encoding that consists of:
 
@@ -108,42 +103,45 @@ Throughout this post I keep the informal, familiar word "URI" for these identifi
 
 ### Literals
 
-Strings that describe data values that do not have a separate existence. In RDF 1.1 every literal has a datatype, and there are three ways to write one: a bare string such as `"Semantics"` is an `xsd:string`; a string with a language tag such as `"Semantics"@en` has the datatype `rdf:langString`; and any other value is written with an explicit datatype URI, in which case it carries no language tag. Datatypes are mostly taken from XML Schema. Whenever we are using URIs to describe things in RDF we try as much as we can to reuse existing namespaces and for literals we use the XML Schema datatypes defined in [the XML Schema datatype namespace](http://www.w3.org/2001/XMLSchema#). So for example if I want to spell out that a literal is a [String](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") I use the following syntax:
+A literal gives us a value directly. In RDF 1.1 every literal has a datatype. In Turtle, `"Semantics"` is a [string](http://en.wikipedia.org/wiki/String_%28computer_science%29 "String (computer science)") with the datatype `xsd:string`. Adding a language tag, as in `"Semantics"@en`, gives it the datatype `rdf:langString`. We can also write a datatype explicitly. For a string, I use the full IRI from [the XML Schema datatype namespace](http://www.w3.org/2001/XMLSchema#) like this:
 
 ```turtle
 "Semantics"^^<http://www.w3.org/2001/XMLSchema#string>
 ```
 
-We should note that literals are wrapped with quotation marks. The hash after the `XMLSchema` URI denotes the fragment identifier that points to the `string` datatype. Instead of a datatype I can specify a language tag that describes the "natural" language of the text. For example, `"Semantic"@en` means that this literal is an English word; its datatype is then `rdf:langString`.
+Here the fragment `#string` identifies the datatype. The quotation marks matter. In Turtle, `"30"` is a string of two characters. Written without quotes, `30` is an `xsd:integer`. Turtle also has shorthand for decimals, doubles, and the Boolean values `true` and `false`. [Turtle literals](https://www.w3.org/TR/turtle/#literals)
 
-Literals are written either using double-quotes when they do not contain linebreaks like `"simple literal"` or triple double-quotes like `"""long literal"""` when they may contain linebreaks. Datatypes are a bit tricky. Let's think of the datatype for [floating-point numbers](http://en.wikipedia.org/wiki/Floating_point "Floating point"). At an abstract level, the floating-point numbers themselves are different from the text we use to represent them on paper. For instance, the text "5.1" represents the number 5.1, but so does "5.1000" and "05.10". Here there are multiple textual representations (what are called lexical representations) for the same value.
+For text, Turtle accepts single or double quotes, as in `"simple literal"`. Triple quotes, as in `"""long literal"""`, let a string span several lines. Numbers have a different wrinkle. Let's think of the datatype for [floating-point numbers](http://en.wikipedia.org/wiki/Floating_point "Floating point"). The text "5.1" represents the number 5.1, but so do "5.1000" and "05.10". These different spellings of the same value are called *lexical representations*.
 
-A datatype tells us how to map lexical representations to values, and vice versa. RDF reuses the XML Schema (W3C) datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date`. RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. If you omit the datatype, the literal is simply an `xsd:string`: `"Ahmad Assaf"` and `"Ahmad Assaf"^^xsd:string` are the same literal. (Under the original RDF specification an untyped "plain literal" was a distinct thing from a typed string; RDF 1.1, published in 2014, removed that distinction, and tools have supported this for years.)
+A datatype tells us how a lexical representation maps to a value. RDF reuses the XML Schema (W3C) datatypes, including `xsd:string, xsd:float, xsd:double, xsd:integer, and xsd:date`. RDF can also contain custom datatypes that (you guessed it!) are simply named with a URI. A quoted string without a language tag or explicit datatype is an `xsd:string`: `"Ahmad Assaf"` and `"Ahmad Assaf"^^xsd:string` are the same literal. (Under the original RDF specification an untyped "plain literal" was a distinct thing from a typed string; RDF 1.1, published in 2014, removed that distinction, and tools have supported this for years.)
 
 The semantics of RDF takes language tags and datatypes into account. This means two things. First, a literal with a language tag (an `rdf:langString`) is different from the same text without one (an `xsd:string`), and literals with different language tags are different from each other. These three statements say three different things and none can be inferred from the others:
 
 ```turtle
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
-# ahmad's name is an xsd:string (no language tag)
-<#ahmad> foaf:name "ahmad assaf" .
-# ahmad's name, in English, is ahmad assaf (an rdf:langString)
-<#ahmad> foaf:name "ahmad assaf"@en .
-# ahmad's name, in French, is ahmed assef
-<#ahmad> foaf:name "ahmed assef"@fr .
+@prefix : <http://assaf.website/triples#> .
+
+# The directory name is an xsd:string (no language tag).
+:ahmadassaf foaf:name "Ahmad Assaf" .
+# A language-tagged version has datatype rdf:langString.
+:ahmadassaf foaf:name "Ahmad Assaf"@en .
+# The same spelling with a French language tag is another RDF term.
+:ahmadassaf foaf:name "Ahmad Assaf"@fr .
 ```
 
-So, a literal with a language tag is never the same as a literal without one. The second part of the semantics of literals is that two typed literals that appear different may be the same if their datatype maps their **lexical representations** to the same value. The following statements are equivalent (at least for an RDF application that has been given the semantics of the XSD datatypes):
+So, a literal with a language tag is never the same as a literal without one. The second part of the semantics of literals is that two typed literals with different **lexical representations** can denote the same value. For the two literals below, `xsd:float` maps both lexical forms to the same number.
 
 ```turtle
-@prefix ex: <http://example.org/> .
+@prefix : <http://assaf.website/triples#> .
+@prefix aa: <http://assaf.website/Personal#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<#ahmad> ex:age "20"^^xsd:float .
-<#ahmad> ex:age "20.000"^^xsd:float .
+:ahmadassaf aa:age "20"^^xsd:float .
+:ahmadassaf aa:age "20.000"^^xsd:float .
 ```
 
-Both mean that Ahmad's age is 20. That is, the textual representation of the number is beside the point and is not part of the meaning encoded by the triples. Note that if the float datatype were not specified, both literals would be `xsd:string`s, the triples would not be equivalent, and the textual representation of the 20 would be maintained as part of the information content.
+In this hypothetical example, both literals give Ahmad an age of 20. Their lexical forms differ, so `"20"^^xsd:float` and `"20.000"^^xsd:float` are distinct RDF terms, and the graph contains two distinct triples expressing that age. Note that if the float datatype were not specified, both literals would be `xsd:string`s, the triples would not be equivalent, and the textual representation of the 20 would be maintained as part of the information content. [RDF literal equality](https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal)
 
 Sometimes the value of a property needs to be a fragment of XML, or text that might contain XML markup. RDF/XML provides a special notation to make it easy to write literals of this kind. This is done using the `rdf:parseType` attribute (we will meet its other values, `Resource` and `Collection`, further on). Giving an element the attribute `rdf:parseType="Literal"` indicates that the contents of the element are to be interpreted as an XML fragment:
 
@@ -163,7 +161,7 @@ Subjects or objects can be modeled as blank nodes: anonymous resources that deno
 
 ## RDF Representation
 
-RDF Resources can be in principle anything that must be uniquely identified and referenced by a URI. The Description of resources is done via representing properties and relationships among resources; this representation can be done in several ways:
+We can draw an RDF fact or serialize it as text that a parser can read. The ownership triple gives us a way to check that we're describing the same graph in each notation.
 
 ### Labeled Directed Graph
 
@@ -175,36 +173,39 @@ This is a visual way of modeling RDF as a Node-Edge-Node Triple. It's directed, 
 
 ### RDF/XML Notation
 
-Using XML syntax to represent RDF triples. We should point out that we do use namespaces in order to minimize the writing that we have to do. So, if we are using many URIs repeatedly throughout our representation then it's better to define some global namespace and start referring to these namespaces with a shorthand.
+RDF/XML uses XML elements and attributes to encode triples. A namespace declaration lets us write a short name for a predicate whose full IRI occurs throughout the document.
 
 <Callout type='info'>
 
-RDF/XML uses the namespace mechanism of XML, but in an expanded way. In XML, namespaces are only used for disambiguation purposes. In RDF/XML, external namespaces are expected to be RDF documents defining resources, which are then used in the importing RDF document. This mechanism allows the reuse of resources by other people who may decide to insert additional features into these resources. The result is the emergence of large, distributed collections of knowledge.
+The namespace declaration for `aa:` supplies the beginning of each IRI in our example vocabulary. When a parser sees `aa:owner` it can recover the full predicate IRI without fetching a vocabulary document.
 
 </Callout>
 
 ```xml
 <?xml version="1.0"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns:aa="http://assaf.website/Personal#">
-    <rdf:Description rdf:about="http://assaf.website">
-        <aa:hasBlog>
-        <rdf:Description rdf:about="http://assaf.website/blog"></rdf:Description>
-        </aa:hasBlog>
-    </rdf:Description>
+         xmlns:aa="http://assaf.website/Personal#">
+  <rdf:Description rdf:about="http://assaf.website/blog">
+    <aa:owner rdf:resource="http://assaf.website/triples#ahmadassaf" />
+  </rdf:Description>
 </rdf:RDF>
 ```
 
-We notice that every RDF triple is wrapped between the `rdf:RDF` tags. Defining namespaces is done using the `xmlns` (XML namespace) attribute followed by `:`, the name of the namespace, and then the URI. URIs are represented with the `<rdf:Description>` tag, and the URI for that RDF resource should be identified in the `rdf:about` attribute. In addition to that, custom properties are wrapped in tags named after the namespace defined on top followed by the path to the specific property, e.g., `<aa:hasBlog>`. We can also define more than one property for each resource:
+This encodes the same ownership triple as the opening Turtle and JSON-LD. The subject is the resource named in `rdf:about`. The property element names the predicate, and `rdf:resource` supplies the object IRI. A literal value goes inside the property element instead. We can describe both the blog and Ahmad in the same document:
 
 ```xml
 <?xml version="1.0"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns:aa="http://assaf.website/Personal#">
-    <rdf:Description rdf:about="http://assaf.website" aa:hasEmail="me@assaf.website" >
-        <aa:hasBlog rdf:resource="http://assaf.website/blog" />
-        <aa:Name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ahmad Assaf</aa:Name>
-    </rdf:Description>
+         xmlns:aa="http://assaf.website/Personal#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  <rdf:Description rdf:about="http://assaf.website/blog">
+    <aa:owner rdf:resource="http://assaf.website/triples#ahmadassaf" />
+    <aa:hasName>Ahmad Assaf's Blog</aa:hasName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://assaf.website/triples#ahmadassaf"
+                   aa:hasEmail="me@assaf.website">
+    <foaf:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ahmad Assaf</foaf:name>
+  </rdf:Description>
 </rdf:RDF>
 ```
 
@@ -213,23 +214,23 @@ In an **RDF/XML** document there are two types of XML nodes:
 1. **resource XML nodes**: the subjects and objects of statements. They usually are `rdf:Description` tags that have an `rdf:about` attribute on them giving the URI of the resource they represent, and they contain within them property XML nodes (and nothing else). In this example, the `rdf:Description` nodes are the resource nodes.
 2. **property XML nodes**: the nodes nested inside resource XML nodes, each describing a property of the enclosing resource.
 
-Each property XML node represents a single statement. The subject of the statement is the outer resource XML node that contains the property. We should also notice that we have used the `rdf:datatype` in order to specify the usage of certain types like Strings or Integers ... etc. The URL can be shortcut by using namespaces as well. We have the `xml:base` attribute that defines a base URI that will be used globally in the XML representation. So for example, if I have identified an `xml:base` attribute as follows:
+In the example above, the `foaf:name` element gives Ahmad's name. The `foaf:` prefix expands to the namespace declared at the top of the document. The value of the `rdf:datatype` attribute follows a different rule. It takes an IRI, so I write the full XML Schema IRI for `string` there. Writing `rdf:datatype="xsd:string"` would name a different datatype whose IRI starts with `xsd:`, even if I declared that prefix. For relative references, I can set a base IRI with `xml:base`:
 
 ```xml
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns:aa="http://assaf.website/Personal#" xml:base="http://assaf.website/Administrators">
+  xmlns:aa="http://assaf.website/Personal#" xml:base="http://assaf.website/triples">
 ```
 
-and I have changed my URI from `http://assaf.website` to `http://assaf.website/Administrators#AhmadAssaf` then in RDF/XML I point out to that as:
+the relative reference `#ahmadassaf` resolves to `http://assaf.website/triples#ahmadassaf`:
 
 ```xml
-<rdf:Description rdf:about="#AhmadAssaf" aa:hasEmail="......"></rdf:Description>
+<rdf:Description rdf:about="#ahmadassaf" aa:hasEmail="......"></rdf:Description>
 ```
 
 Instead of using `rdf:about` and then putting the hash `#` in front of the fragment URI, I can use `rdf:ID`, which has the hash built in, so that I can write:
 
 ```xml
-<rdf:Description rdf:ID="AhmadAssaf" aa:hasEmail="......"></rdf:Description>
+<rdf:Description rdf:ID="ahmadassaf" aa:hasEmail="......"></rdf:Description>
 ```
 
 **RDF/XML** is difficult to read, verbose, and not particularly flexible. It was the original standard serialization for RDF, and it benefited from the ubiquity of XML tooling in browsers and parsers; today, however, Turtle and JSON-LD dominate in practice.
@@ -239,19 +240,20 @@ Instead of using `rdf:about` and then putting the hash `#` in front of the fragm
 **N-Triples** is the simplest listing of triples: one complete triple per line, full URIs and no abbreviations. It is a non-XML serialization that is more compact than RDF/XML but for complex and large models it can become very expensive.
 
 ```turtle
-<http://assaf.website> <http://assaf.website/Personal#hasBlog> <http://assaf.website/blog>.
+<http://assaf.website/blog> <http://assaf.website/Personal#owner> <http://assaf.website/triples#ahmadassaf> .
 ```
 
-**N3** (Notation3) is a superset of this syntax designed with human readability in mind. It has some syntactic sugar that allows further abbreviations. If many statements repeat the same subject and predicate, just separate the objects with commas:
+**N3** (Notation3) is a superset of this syntax designed with human readability in mind. It has some syntactic sugar that allows further abbreviations. If two statements repeat the same subject and predicate, we can separate their objects with a comma. Suppose a blog had a second owner:
 
 ```turtle
-<http://assaf.website> <http://assaf.website/Personal#hasBlog> <http://assaf.website/blog>, <http://example.org/> .
+<http://assaf.website/blog> <http://assaf.website/Personal#owner> <http://assaf.website/triples#ahmadassaf>, <http://example.org/otherOwner> .
 ```
 
 And if the same subject is repeated, but with different predicates, one may use semicolons as in the example:
 
 ```turtle
-<http://assaf.website> <http://assaf.website/Personal#hasBlog> <http://assaf.website/blog>; <http://xmlns.com/foaf/0.1/name> "Ahmad Assaf" .
+<http://assaf.website/blog> <http://assaf.website/Personal#owner> <http://assaf.website/triples#ahmadassaf> ;
+    <http://assaf.website/Personal#hasName> "Ahmad Assaf's Blog" .
 ```
 
 ### Turtle (Terse RDF Triple Language)
@@ -259,30 +261,23 @@ And if the same subject is repeated, but with different predicates, one may use 
 A simplified form of the N3 notation. URIs are wrapped in angle brackets and literals in quotation marks. Every triple ends with a period, and whitespace or indentation will be ignored.
 
 ```turtle
-<http://assaf.website>
-<http://assaf.website/Personal#hasBlog>
-<http://assaf.website/blog> .
+<http://assaf.website/blog>
+<http://assaf.website/Personal#owner>
+<http://assaf.website/triples#ahmadassaf> .
 ```
 
-We have talked about namespaces and base URIs in XML. The same concepts are transferred into the Turtle notation:
+We can also write the ownership fact and blog title with Turtle prefixes. `aa:` supplies the vocabulary namespace, while the empty prefix `:` abbreviates our directory identifiers.
 
 ```turtle
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix aa: <http://assaf.website/Personal#>.
-@prefix ex: <http://example.org/stuff/1.0/>.
-@prefix : <http://assaf.website/Administrators#>.
-@base <http://assaf.website/Administrators> .
+@prefix aa: <http://assaf.website/Personal#> .
+@prefix : <http://assaf.website/triples#> .
+@base <http://assaf.website/triples> .
+
+<http://assaf.website/blog> aa:owner :ahmadassaf ;
+    aa:hasName "Ahmad Assaf's Blog" .
 ```
 
-so in my example I will have:
-
-```turtle
-:AhmadAssaf
-aa:hasBlog <http://assaf.website/blog> ;
-ex:fullname "Ahmad Assaf"^^xsd:string .
-```
-
-Note that we have used a semicolon to express that we want to keep stating facts about the same subject, which is `:AhmadAssaf`. We will go into more detail about this notation further on. `:AhmadAssaf` is a prefixed name using the empty prefix: `:` is declared with `@prefix :` like any other prefix and is unrelated to `@base`, so here it expands to `http://assaf.website/Administrators#AhmadAssaf`. `@base` instead sets the base URI against which relative URIs in angle brackets are resolved, in a way similar to `xml:base` and `rdf:about="#AhmadAssaf"` in RDF/XML: with the base above, `<#AhmadAssaf>` names the same resource. The current base URI may be altered in a Turtle document using the `@base` directive. It allows further abbreviation of URIs but is usually for simplifying the URIs in the data, where the prefix directives are for vocabularies that describe the data. For example:
+The semicolon carries the subject forward to the title triple. The declaration for `:` expands `:ahmadassaf` to `http://assaf.website/triples#ahmadassaf`. A base IRI serves a different purpose. With this `@base`, the relative IRI `<#ahmadassaf>` names the same person. The current base can change within a document:
 
 ```turtle
 # Here the scope base URI is the document URI
@@ -318,13 +313,13 @@ Note that we have used a semicolon to express that we want to keep stating facts
 
 ## Blank Nodes (B Nodes)
 
-We have talked earlier about Blank Nodes or B Nodes. They are basically nodes that might not have names and are potentially un-referenceable. They denote the existence of an individual with specific attributes without providing any information about its identity or reference, and a **Ground RDF Graph** is a graph that contains no blank nodes. RDF only allows binary relations, so it's necessary to express many-way relations using intermediate nodes, and these nodes are often anonymous. They are usually used to express collections. For example, if I want to say that my blog is influenced by other resources, in natural language I can say that my blog at `http://assaf.website/blog` is influenced by Blog A at `http://www.BlogA.com` and Blog B at `http://www.BlogB.com`. If I want to represent this as a directed graph, it will be difficult to distinguish which URL corresponds to which resource name, so we have to think of a workaround to ensure unique representation and selection of resources. We can make this happen (representing a multi-valued relation) by introducing additional nodes in the graph:
+A blank node lets us describe something without giving it an IRI. A **ground RDF graph** contains no blank nodes. Suppose I want to record two influences on my blog at `http://assaf.website/blog`. I have a name and a URL for each one. Blog A is at `http://www.blogA.com` and Blog B is at `http://www.blogB.com`. If I attach both names and both links directly to my blog, which link goes with “Blog A”? Here I give each influence its own blank node so the name and link stay together:
 
 <RdfBlankNodeExplorer />
 
 The dashed circular markers are blank nodes: they do not have a public name and act as connection points for the related facts.
 
-Now how can we represent Blank Nodes in **RDF/XML** and **Turtle** notation?
+Here is the Blog A branch of that diagram, first in **RDF/XML** and then in **Turtle**. Blog B follows the same pattern.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -333,7 +328,7 @@ Now how can we represent Blank Nodes in **RDF/XML** and **Turtle** notation?
 <rdf:Description rdf:about="http://assaf.website/blog" aa:hasName="Ahmad Assaf's Blog" >
     <aa:isInfluencedBy rdf:parseType="Resource">
         <aa:name>Blog A</aa:name>
-        <aa:link>http://www.blogA.com</aa:link>
+        <aa:link rdf:resource="http://www.blogA.com"/>
     </aa:isInfluencedBy>
 </rdf:Description>
 </rdf:RDF>
@@ -348,10 +343,10 @@ In **RDF/XML** the blank nodes are denoted by the `rdf:parseType="Resource"` att
 <http://assaf.website/blog> aa:hasName "Ahmad Assaf's Blog" ;
     aa:isInfluencedBy [
         aa:name "Blog A" ;
-        aa:link "http://www.blogA.com" ] .
+        aa:link <http://www.blogA.com> ] .
 ```
 
-We simply introduce blank nodes in Turtle by using the brackets `[ ]`. So far we have assumed that Blank Nodes do not have names. This is not always the case, as sometimes I need to give a label or a name to a blank node in order to be able to reference it locally. The value of `rdf:nodeID` is a label that is local to the document: it is never resolved against the base URI and cannot be referenced from outside it.
+We simply introduce blank nodes in Turtle by using the brackets `[ ]`. So far we have assumed that Blank Nodes do not have names. This is not always the case, as sometimes I need to give a label or a name to a blank node to be able to reference it locally. The value of `rdf:nodeID` is a label that is local to the document: it is never resolved against the base URI and cannot be referenced from outside it.
 
 ```xml
 <rdf:Description rdf:about="http://assaf.website/blog" aa:hasName="Ahmad Assaf's Blog">
@@ -360,7 +355,7 @@ We simply introduce blank nodes in Turtle by using the brackets `[ ]`. So far we
 
 <rdf:Description rdf:nodeID="Resource1">
     <aa:name>Blog A</aa:name>
-    <aa:link>http://www.blogA.com</aa:link>
+    <aa:link rdf:resource="http://www.blogA.com"/>
 </rdf:Description>
 ```
 
@@ -374,14 +369,14 @@ In Turtle we use `_:`, the reserved blank-node prefix, followed by the Blank Nod
     aa:isInfluencedBy _:Resource1 .
 
 _:Resource1 aa:name "Blog A" ;
-    aa:link "http://www.blogA.com" .
+    aa:link <http://www.blogA.com> .
 ```
 
 So Blank Nodes do **NOT** need to be dereferenceable and accessed from the outside world; however, they can have IDs or names that allow them to be referenced in an RDF document or model.
 
 ## Data Structures in RDF
 
-In RDF there exist some kinds of collections (in computer science terms) that will allow us to aggregate nodes or facts together. They are general data structures to enumerate any resource or literal. They are basically syntactic sugar that will ease the process of writing code with no semantic expressiveness whatsoever. We have in RDF two different aggregators:
+Suppose we want to group the members of a blog administrator roster. We use `aa:adminRoster` to connect the blog to the group. Earlier, `aa:hasAdmins` connected the blog directly to an individual. To find the people in a roster, we follow the group's membership links. RDF offers two ways to represent such a group.
 
 ### Containers
 
@@ -397,7 +392,7 @@ We notice that the container node has an `rdf:type` of `rdf:Seq`, which means th
 @prefix : <http://assaf.website/> .
 @base <http://assaf.website/> .
 
-:blog aa:hasAdmins [
+:blog aa:adminRoster [
     a rdf:Seq ;
     rdf:_1 <A> ;
     rdf:_2 <B> ;
@@ -405,7 +400,7 @@ We notice that the container node has an `rdf:type` of `rdf:Seq`, which means th
 ] .
 ```
 
-**Or it can be written as:**
+The brackets above give the roster a blank node. If I want another document to refer to this roster, I can give it an IRI, `:administrators`. Its members and their order stay the same:
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -413,14 +408,14 @@ We notice that the container node has an `rdf:type` of `rdf:Seq`, which means th
 @prefix : <http://assaf.website/> .
 @base <http://assaf.website/> .
 
-:blog aa:hasAdmins :administrators .
+:blog aa:adminRoster :administrators .
 :administrators rdf:type rdf:Seq .
 :administrators rdf:_1 <A> .
 :administrators rdf:_2 <B> .
 :administrators rdf:_3 <C> .
 ```
 
-**Or written as:**
+With that same named roster, we can shorten the Turtle by carrying its subject forward:
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -428,14 +423,14 @@ We notice that the container node has an `rdf:type` of `rdf:Seq`, which means th
 @prefix : <http://assaf.website/> .
 @base <http://assaf.website/> .
 
-:blog aa:hasAdmins :administrators .
+:blog aa:adminRoster :administrators .
 :administrators rdf:type rdf:Seq ;
     rdf:_1 <A> ;
     rdf:_2 <B> ;
     rdf:_3 <C> .
 ```
 
-In **RDF/XML**:
+The RDF/XML below uses the anonymous roster from the first Turtle example:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -443,13 +438,13 @@ In **RDF/XML**:
         xmlns:aa="http://assaf.website/Personal#">
 
 <rdf:Description rdf:about="http://assaf.website/blog">
-    <aa:hasAdmins>
+    <aa:adminRoster>
         <rdf:Seq>
             <rdf:li rdf:resource="http://assaf.website/A"/>
             <rdf:li rdf:resource="http://assaf.website/B"/>
             <rdf:li rdf:resource="http://assaf.website/C"/>
         </rdf:Seq>
-    </aa:hasAdmins>
+    </aa:adminRoster>
 </rdf:Description>
 </rdf:RDF>
 ```
@@ -461,11 +456,11 @@ In **RDF/XML**:
 
 ### Collections
 
-These are closed lists where there is no extension possible. Elements of the list are already predefined. It really resembles the traditional list data structure with the fact that it is closed to insert operations. It is split recursively into a **Head** (first) and a **Tail** (rest); we end the list by linking to `rdf:nil`.
+A collection records its members in order. Each cell has a **head** (`rdf:first`) and a **tail** (`rdf:rest`), and the last tail points to `rdf:nil`. Following these links gives us the members of this particular list. To append a member we would have to change the tail that currently points to `rdf:nil`.
 
 <RdfCollectionExplorer />
 
-Each of the blank nodes forming this list structure is implicitly of type `rdf:List`; that is, each of these nodes implicitly has an `rdf:type` property whose value is the predefined type `rdf:List` although this is not explicitly shown in the graph.
+Turtle’s list shorthand expands into triples using `rdf:first` and `rdf:rest`. It adds no explicit `rdf:type rdf:List` triple for each cell. An RDFS reasoner can classify the cells as `rdf:List` using the vocabulary definitions for those predicates. [RDF Schema collections](https://www.w3.org/TR/rdf-schema/#ch_collectionvocab)
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -473,7 +468,7 @@ Each of the blank nodes forming this list structure is implicitly of type `rdf:L
 @prefix : <http://assaf.website/> .
 @base <http://assaf.website/> .
 
-:blog aa:hasAdmins [
+:blog aa:adminRoster [
     rdf:first <A> ;
     rdf:rest [
         rdf:first <B> ;
@@ -493,7 +488,7 @@ However, in Turtle there are shortcuts to simplify the syntax. We do that by usi
 @prefix : <http://assaf.website/> .
 @base <http://assaf.website/> .
 
-:blog aa:hasAdmins (<A> <B> <C>) .
+:blog aa:adminRoster (<A> <B> <C>) .
 ```
 
 **RDF/XML** provides a special notation to make it easy to describe collections using graphs of this form. In **RDF/XML**, a collection can be described by a property element that has the attribute `rdf:parseType="Collection"`, and that contains a group of nested elements representing the members of the collection. **RDF/XML** provides the `rdf:parseType` attribute to indicate that the contents of an element are to be interpreted in a special way. In this case, the `rdf:parseType="Collection"` attribute indicates that the enclosed elements are to be used to create the corresponding list structure in the RDF graph:
@@ -504,11 +499,11 @@ However, in Turtle there are shortcuts to simplify the syntax. We do that by usi
         xmlns:aa="http://assaf.website/Personal#">
 
 <rdf:Description rdf:about="http://assaf.website/blog">
-    <aa:hasAdmins rdf:parseType="Collection">
+    <aa:adminRoster rdf:parseType="Collection">
         <rdf:Description rdf:about="http://assaf.website/A" />
         <rdf:Description rdf:about="http://assaf.website/B" />
         <rdf:Description rdf:about="http://assaf.website/C" />
-    </aa:hasAdmins>
+    </aa:adminRoster>
 </rdf:Description>
 </rdf:RDF>
 ```
@@ -521,7 +516,7 @@ Semantic Web practitioners found it very difficult to deal with large amounts of
 
 ## Named Graphs
 
-At first the community tried using reification to solve this data segmentation problem, but today everyone has converged on using named graphs. A Named Graph is a collection of RDF statements that are given an identifier (URI). When referring to a triple in a named graph we often use a 4-tuple notation (often referred to as quad) instead of the standard 3-tuple one:
+An **RDF dataset** contains one default graph, which has no name, and zero or more named graphs. Each named graph pairs a graph name with an RDF graph. When referring to a triple in a named graph we often use a 4-tuple notation (often referred to as quad) instead of the standard 3-tuple one:
 
 ```text
 <Named Graph>, <Subject>, <Predicate>, <Object>
@@ -535,47 +530,22 @@ When using named graphs, `TriG` is the standard serialization (a W3C Recommendat
 @prefix : <http://assaf.website/> .
 @base <http://assaf.website/> .
 
+:blog aa:hasName "Ahmad Assaf's Blog" .
+
 :blogGraph {
-    :blog aa:hasAdmins (<A> <B> <C>) .
+    :blog aa:adminRoster (<A> <B> <C>) .
 }
 ```
 
-This trivial example puts all the statements in the document into a single named graph, egotistically called `:blogGraph`. Again, like all things in RDF `:blogGraph` is a URI. Looking at the 4-tuples, it's pretty obvious that the same statement can exist in multiple named graphs. This is by design and is a very important feature. By organizing the statement into named graphs, a Semantic Web application can implement access control, trust, data lineage, and other functionality very cleanly.
+The blog's title sits outside the braces, in the default graph. Inside `:blogGraph` are the administrator statement and the triples that describe its list of administrators. Both graphs refer to the same blog, `http://assaf.website/blog`. If we removed the title triple, this example would have an empty default graph and one named graph.
+
+The same triple can appear in several named graphs, with its membership recorded in each. The name `:blogGraph` identifies a graph within this dataset. Tracking authorship requires explicit source metadata, and the application decides which sources to trust and who can read or change each graph. [RDF datasets](https://www.w3.org/TR/rdf11-concepts/#section-dataset)
 
 ## RDF Reification
 
-RDF applications sometimes need to describe other RDF statements using RDF, for instance, to record information about when statements were made, who made them, or other similar information (this is sometimes referred to as "provenance" information). Moreover, sometimes we will come across use cases where we deduce facts in our model, and the deduced facts also need to be used and modeled (become the subject of new RDF statements). For example, if a detective (Sherlock Holmes) deduced that the gardener is the one who has killed the butler, then I might want to use this newly discovered fact in a new RDF statement. This is another use case of **reification.**
+Suppose a source reports that Ahmad administers his blog. We want to record who made that statement. RDF's **reification** vocabulary lets us describe a triple with a resource of type `rdf:Statement`. Three predicates identify the described triple's parts: `rdf:subject`, `rdf:predicate`, and `rdf:object`.
 
-> **Reification** allows interleaving of RDF statements and making statements about other statements
-
-RDF provides a built-in vocabulary intended for describing RDF statements. A description of a statement using this vocabulary is called a reification of the statement. The RDF reification vocabulary consists of:
-
- - `rdf:Statement`: describes an RDF statement, consisting of the following properties:
-     - `rdf:subject`: the described resource
-     - `rdf:predicate`: the original property
-     - `rdf:object`: the value of the property
-
-```turtle
-@prefix ex: <http://example.org/> .
-
-ex:Gardener ex:hasKilled ex:Butler .
-# ex:Sherlock ex:deduces ... but what should the object be?
-```
-
-The use of reification makes it fairly simple to represent this information:
-
-```turtle
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ex: <http://example.org/> .
-
-ex:Sherlock ex:deduces ex:StatementOnGardener .
-ex:StatementOnGardener a rdf:Statement ;
-    rdf:subject ex:Gardener ;
-    rdf:predicate ex:hasKilled ;
-    rdf:object ex:Butler .
-```
-
-However, while RDF provides this reification vocabulary, care is needed in using it, because it is easy to imagine that the vocabulary defines some things that are not actually defined. For example, let's take the statement:
+Here is the administrator statement on its own:
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -585,7 +555,7 @@ However, while RDF provides this reification vocabulary, care is needed in using
 <http://assaf.website/blog> aa:hasAdmins :ahmadassaf .
 ```
 
-Using the reification vocabulary, a reification of the statement about the blog's administrator would be given by assigning the statement a URIref such as `:triple12345` (so statements can be written describing it), and then describing the statement, including who made it via `dc:creator`, using the statements:
+Give the statement description its own IRI, `:triple12345`. The `dc:creator` triple attributes it to `http://assaf.website/85740`. We have an identifier for that source, but no name.
 
 ```turtle
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -600,7 +570,7 @@ Using the reification vocabulary, a reification of the statement about the blog'
 :triple12345 dc:creator <http://assaf.website/85740> .
 ```
 
-The same reification written in RDF/XML, with `xml:base` set to `http://assaf.website/triples` so that the fragment identifiers resolve to the same URIs as the Turtle above:
+Those five Turtle triples describe and attribute the statement. Loading them alone does not assert that Ahmad administers the blog. The RDF/XML below includes those five **and** the underlying administrator statement, for a total of six triples. Its first `rdf:Description` makes the assertion. The `rdf:Statement` element describes it.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -647,51 +617,39 @@ The subject of these reification triples is a URI ref formed by resolving the fr
 </rdf:RDF>
 ```
 
-In this case, specifying the attribute `rdf:ID="triple12345"` in the `aa:hasAdmins` element results in the original triple describing the blog administrator:
+This shorter XML still produces all six triples. To compare two serializations, count which facts they assert as well as which statements they describe. [RDF/XML reification syntax](https://www.w3.org/TR/rdf-syntax-grammar/#section-Syntax-reifying)
+
+### When did Ahmad start administering the blog?
+
+Who administers the blog? Follow `aa:hasAdmins` from `<http://assaf.website/blog>` and we get `:ahmadassaf`. Who reported that Ahmad is the administrator? For that, we start at `:triple12345`, the statement we described above. Its `dc:creator` points to `<http://assaf.website/85740>`. The example gives us an identifier for the source, but no name.
+
+We still don’t know when Ahmad took on the role. Even if we knew exactly when the source made that statement, Ahmad could have been running the blog for years by then.
+
+Suppose we later find an appointment record that gives **1 September 2020** as his first day. We can give that appointment its own IRI and use a few terms from our `aa:` vocabulary to record who took on the role, for which blog, and when.
 
 ```turtle
-@prefix aa: <http://assaf.website/Personal#> .
+@prefix :    <http://assaf.website/triples#> .
+@prefix aa:  <http://assaf.website/Personal#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://assaf.website/blog> aa:hasAdmins <http://assaf.website/triples#ahmadassaf> .
+:appointment1 a aa:AdminAppointment ;
+    aa:forBlog       <http://assaf.website/blog> ;
+    aa:administrator :ahmadassaf ;
+    aa:startDate     "2020-09-01"^^xsd:date .
 ```
 
-plus the reification triples:
+<RdfAppointmentDiagram />
 
-```turtle
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix aa: <http://assaf.website/Personal#> .
-@prefix dc: <http://purl.org/dc/elements/1.1/> .
+If Ahmad steps down and later returns, where does the second start date go? On a second appointment. Both appointments point to the same Ahmad and the same blog, and we can look up when each term began.
 
-<http://assaf.website/triples#triple12345> rdf:type rdf:Statement .
-<http://assaf.website/triples#triple12345> rdf:subject <http://assaf.website/blog> .
-<http://assaf.website/triples#triple12345> rdf:predicate aa:hasAdmins .
-<http://assaf.website/triples#triple12345> rdf:object <http://assaf.website/triples#ahmadassaf> .
-<http://assaf.website/triples#triple12345> dc:creator <http://assaf.website/85740> .
-```
+### N-ary relations
 
-### Reification Advantages
+The appointment is an example of an **n-ary relation**. A binary relation connects two things, as `aa:hasAdmins` connects the blog to Ahmad. Here we also need the start date to belong to that particular appointment. We introduce `aa:AdminAppointment` as a class and create `:appointment1` as one instance, with properties linking it to the blog, Ahmad, and the date. Each property still forms an ordinary RDF triple. This follows the first pattern in the W3C Working Group Note on n-ary relations. [Defining N-ary Relations on the Semantic Web](https://www.w3.org/TR/swbp-n-aryRelations/#pattern1)
 
-*   Modeling data provenance
-*   Formalizing statements about Reliability and Trust
-*   Definition of metadata about statements (Assertions and Statements)
+`:triple12345` describes the statement that Ahmad administers the blog, so its creator tells us who made that statement. `:appointment1` represents one term as administrator, so its start date tells us when that term began. Attributing the start date to the same source would require additional source information. [N-ary relations and reification in RDF](https://www.w3.org/TR/swbp-n-aryRelations/#RDFReification)
 
 ## Wrap Up
 
-*   An RDF Model is a set of RDF statements
-*   An RDF statement consists of subject, predicate, object
-*   Subjects are resources, while an object can be either a literal or a resource
+Another directory can describe my blog using its own prefixes. To combine its description with mine, I look at the full identifiers. If its owner IRI expands to `http://assaf.website/triples#ahmadassaf`, the ownership statement and my `foaf:name` statement meet at the same person. Joshua Tauberer explains this use of shared identifiers in [What is RDF and what is it good for?](https://github.com/JoshData/rdfabout/blob/gh-pages/intro-to-rdf.md).
 
-So far we have talked about several RDF representations (a serialization format is a way to encode information so that when it's passed between machines it can be parsed; XML is a serialization format, RDF is a data model); however one more deserves a mention, and two we have already met deserve a recap:
-
-*   **TriG**: TriG is Turtle but with support for named graphs. It has been the W3C Recommendation for serializing RDF with named graphs since 2014.
-*   **RDFa (RDF embedded in HTML)**: You can embed RDF data within normal web pages by using RDFa.
-*   **N-Triples**: is a very basic RDF serialization. Its key feature is that only one triple exists per line so that it's very quick to parse and so that Unix command-line tools can easily manipulate it. It's also highly compressible, so large, public RDF sources like [DBpedia](http://dbpedia.org) often publish data in N-Triples form.
-
-What sets RDF apart from XML is that RDF is designed to represent knowledge in a distributed world. That RDF is designed for knowledge, and not data, means RDF is particularly concerned with meaning. Everything at all mentioned in RDF means something. It may be a reference to something in the world, like a person or movie, or it may be an abstract concept, like the state of being friends with someone else. And by putting three such entities together, the RDF standard says how to arrive at a fact. The second key aspect of RDF is that it works well for distributed information. That is, RDF applications can put together RDF files posted by different people around the Internet and easily learn from them new things that no single document asserted. It does this in two ways, first by linking documents together by the common vocabularies they use, and second by allowing any document to use any vocabulary. This allows enormous flexibility in expressing facts about a wide range of things, drawing on information from a wide range of sources.
-
-> **To distinguish between URIs, namespaced names (abbreviated URIs), anonymous nodes, and literal values,** **I used the following common convention**
-
-*   Full URIs are enclosed in angle brackets.
-*   Namespaced names are written plainly, but their colons give them away.
-*   Anonymous nodes are written like namespaced names, but in the reserved "_" namespace with an arbitrary local name after the colon.
-*   Literal values are enclosed in quotation marks.
+How I share those statements depends on what the reader needs. RDFa lets me put the ownership triple in the HTML of my blog. N-Triples puts one triple on each line, which is handy when inspecting a graph from [DBpedia](http://dbpedia.org) with command-line tools. If I send the blog's title in the default graph and its administrator roster in `:blogGraph`, I can use TriG to keep those graph boundaries in the file.

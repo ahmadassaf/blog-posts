@@ -1,0 +1,261 @@
+---
+type: 'Post'
+title: 'Integrating Data with RDF'
+summary: 'How to turn source records into RDF, keep conflicting reports traceable, and check that an export preserves the facts a reader can query.'
+tags: ['Knowledge Graphs', 'RDF', 'Data Integration', 'Provenance']
+date: '2026-11-18'
+updatedAt: '2026-11-18'
+category: 'data'
+featured: false
+tableOfContents: false
+series:
+  order: 6
+  title: "A Semantic Web series"
+---
+
+Data integration brings records from different sources into a shared model. RDF, the Resource Description Framework, represents a fact as a triple. The subject is the thing we're describing, the predicate names a relationship or attribute, and the object gives the related thing or its value. Two sources can use different field names for the same relationship. They can also use the same field name for two different dates. An RDF mapping has to settle what each field means before it can assign a predicate to it.
+
+Consider a blog directory that accepts reports from outside its editorial team. Ahmad owns a blog and has served two terms as its administrator. The directory keeps the dates it has accepted for each term. It also wants to answer who supplied a date, and what that source originally said if the directory later publishes a correction. The appointments, reports, and review decisions here are hypothetical.
+
+## Read a record before assigning identifiers
+
+Two sources send the directory a report about Ahmad's first term. In the incoming JSON, `termRef` refers to an appointment already in the directory. `sourceId` identifies the reporting agent, and `reportId` identifies a record within that source's system.
+
+```json
+[
+  {
+    "sourceId": "85740",
+    "reportId": "A17",
+    "termRef": "T1",
+    "reportedStart": "2020-09-01",
+    "createdAt": "2020-09-03T10:00:00Z"
+  },
+  {
+    "sourceId": "85741",
+    "reportId": "B04",
+    "termRef": "T1",
+    "reportedStart": "2020-09-04",
+    "createdAt": "2020-09-08T09:00:00Z"
+  }
+]
+```
+
+Neither source supplies Ahmad's name or the blog title. We already know the person and blog from the directory's appointment record. That link saves us from matching on display names, and it tells us which of Ahmad's two terms the report concerns. If a source knows only that Ahmad administered this blog, a date that roughly fits the first term might help someone investigate. It isn't enough for the importer to assign the report to that term.
+
+The directory uses IRIs (Internationalized Resource Identifiers) to name the resources it wants other records to reference. For this example, the prefix `:` expands to `http://assaf.website/triples#`. A small lookup table maps the source keys to stable IRIs.
+
+<div className="modeling-guide-table">
+
+| Source key | Directory identity |
+| --- | --- |
+| Directory term `T1` | `:appointment1` |
+| Source `85740`, report `A17` | `:claim1` |
+| Source `85741`, report `B04` | `:claim2` |
+| Reporting agent `85740` | `http://assaf.website/85740` |
+| Reporting agent `85741` | `http://assaf.website/85741` |
+
+</div>
+
+Keep the source ID as part of the report key. If the second source later creates its own `A17`, that record gets a different claim IRI. If the first source sends `A17` again, we can find `:claim1` even after a change to the directory's display names. An unknown term reference goes to review with its original source record. Minting an appointment on receipt would turn a missing match into a new term in Ahmad's history.
+
+## Map fields according to what the source says
+
+The field `reportedStart` contains a calendar date. We'll map it to `aa:reportedStartDate` on the claim. The directory's accepted start date belongs to `aa:startDate` on the appointment. If an importer writes each reported date onto the accepted appointment, a history query will find two starts for the same term.
+
+We can document the distinction on the property itself. A mapping tool could show the label next to the field and the comment when someone inspects it. These two annotations belong with the vocabulary. [RDF Schema labels and comments](https://www.w3.org/TR/rdf-schema/#ch_comment)
+
+```turtle
+@prefix aa:   <http://assaf.website/Personal#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+aa:reportedStartDate
+    rdfs:label "Reported start date"@en ;
+    rdfs:comment "The day the source says the appointment began."@en .
+```
+
+Both sources describe `createdAt` as the time the report was created. That supports using `prov:generatedAtTime`, a predicate from the W3C provenance vocabulary, PROV-O. If another supplier defines `createdAt` as the time a row entered its feed, that field needs a different mapping. Likewise, `prov:wasAttributedTo` connects the claim to the reporting agent. The source identifier alone gives us no personal name for that agent. [W3C PROV-O](https://www.w3.org/TR/prov-o/#cross-reference-starting-point-terms)
+
+A JSON string gives us characters. The mapping decides whether a string identifies a resource or supplies an RDF literal, a value written directly in a triple. We resolve `"T1"` to an appointment IRI. We parse `"2020-09-01"` as a valid day and write a literal with datatype `xsd:date`. The contract accepts timezone-free dates in `YYYY-MM-DD` form. The report timestamps carry UTC offsets, which we preserve along with their `xsd:dateTime` datatype.
+
+Here is the field mapping in pseudocode. The importer also types each report as an `aa:AppointmentStartClaim` and a `prov:Entity`, and each reporting agent as a `prov:Agent`. For row `A17`, the lookups give us `:claim1` and `:appointment1`. Each `add` writes a triple to the source's report graph. The last two calls turn the source strings into typed literals after checking their formats.
+
+```text
+claim = claims[(row.sourceId, row.reportId)]
+term = appointments[row.termRef]
+reports = reportGraphs[row.sourceId]
+reports.add(claim, aa:aboutAppointment, term)
+reports.add(claim, prov:wasAttributedTo, agents[row.sourceId])
+reports.add(claim, aa:reportedStartDate, dateLiteral(row.reportedStart))
+reports.add(claim, prov:generatedAtTime, dateTimeLiteral(row.createdAt))
+```
+
+The blog's display name, `"Ahmad Assaf's Blog"`, is plain text. If a source supplies labels in several languages, preserve each label's language along with its text. `"Blog"@en` and `"Blog"@fr` are different RDF literals even though their printed words look identical. If the source gives no language, leave it unspecified. [RDF literals](https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal)
+
+## Keep reports alongside the accepted history
+
+An RDF dataset has a default graph and can contain named graphs. We'll keep the directory's accepted facts in the default graph. Each source gets a named graph for its reports, so we can inspect or replace that source's submission without losing the other account. Here is the resulting dataset in TriG, an RDF notation that uses braces to group triples under a graph name. [W3C TriG](https://www.w3.org/TR/trig/)
+
+```trig
+@prefix :     <http://assaf.website/triples#> .
+@prefix aa:   <http://assaf.website/Personal#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<http://assaf.website/blog> a aa:Blog ;
+    aa:hasName "Ahmad Assaf's Blog" ; aa:owner :ahmadassaf .
+:ahmadassaf a foaf:Person ; foaf:name "Ahmad Assaf" .
+
+:appointment1 a aa:AdminAppointment ;
+    aa:forBlog <http://assaf.website/blog> ; aa:administrator :ahmadassaf ;
+    aa:startDate "2020-09-01"^^xsd:date ; aa:endDate "2022-03-01"^^xsd:date .
+:appointment2 a aa:AdminAppointment ;
+    aa:forBlog <http://assaf.website/blog> ; aa:administrator :ahmadassaf ;
+    aa:startDate "2023-06-01"^^xsd:date ; aa:endDate "2025-01-01"^^xsd:date .
+
+:reports85740 {
+    <http://assaf.website/85740> a prov:Agent .
+    :claim1 a aa:AppointmentStartClaim, prov:Entity ;
+        aa:aboutAppointment :appointment1 ;
+        aa:reportedStartDate "2020-09-01"^^xsd:date ;
+        prov:wasAttributedTo <http://assaf.website/85740> ;
+        prov:generatedAtTime "2020-09-03T10:00:00Z"^^xsd:dateTime .
+}
+
+:reports85741 {
+    <http://assaf.website/85741> a prov:Agent .
+    :claim2 a aa:AppointmentStartClaim, prov:Entity ;
+        aa:aboutAppointment :appointment1 ;
+        aa:reportedStartDate "2020-09-04"^^xsd:date ;
+        prov:wasAttributedTo <http://assaf.website/85741> ;
+        prov:generatedAtTime "2020-09-08T09:00:00Z"^^xsd:dateTime .
+}
+```
+
+The graph name identifies where a set of triples appears in this dataset. We chose one graph per reporting agent. A distributor could forward reports from several agents in one file. The attribution on each claim would still tell us which agent supplied its date.
+
+Both claims now refer to `:appointment1`. In this example, a reviewer checks the appointment record and keeps 1 September as the accepted start. The directory can still show that source `85741` reported 4 September. Receiving its file later gives the editor a second account to consider. The order in which the files arrived has no bearing on which account the editor accepts.
+
+<RdfIntegrationDiagram />
+
+The dashed arrow shows the reviewer's decision. If readers also need to know who approved the date and when, give the review its own record with links to the appointment and the evidence considered. The two claim timestamps in our current dataset answer when the sources created their reports. Neither gives us the time of the review.
+
+## Validate the dates and references
+
+Before mapping, check that the source key is present, that the referenced appointment exists, and that the dates parse. The string `2020-02-30` matches the shape of a calendar date, but February had no thirtieth day. Keep an invalid row and its source key available for correction. A blank date field supplies no date triple. It should fail the intake rule for a start-date report, which requires the source to have actually supplied a start.
+
+After mapping, we can use SHACL, the Shapes Constraint Language, to check the RDF records. A shape gives the validator a set of requirements. Our claim shape requires one appointment IRI, one reporting agent, and exactly one `xsd:date` reported start. Specify the graph the validator sees. The source graphs contain the claim-to-appointment links, while the directory graph contains the appointments' types. To check that a referenced resource is an `aa:AdminAppointment`, the validator needs access to its type, or the importer must verify the reference against the directory separately. [SHACL data graphs](https://www.w3.org/TR/shacl/#data-graph)
+
+Suppose a revised importer keeps all the mapped fields from `A17` but also writes `aa:startDate` on `:claim1`. A shape that checks only the required fields will pass that record. If the reporting feed agrees to a fixed set of fields, we can close the shape for its claims.
+
+```turtle
+@prefix aa:   <http://assaf.website/Personal#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+aa:ReportShape a sh:NodeShape ;
+    sh:targetClass aa:AppointmentStartClaim ;
+    sh:closed true ; sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:path aa:aboutAppointment ; sh:nodeKind sh:IRI ;
+                  sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path prov:wasAttributedTo ; sh:nodeKind sh:IRI ;
+                  sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path aa:reportedStartDate ; sh:datatype xsd:date ;
+                  sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path prov:generatedAtTime ; sh:datatype xsd:dateTime ] .
+```
+
+Try it on the original `:reports85740` graph. It passes. In a copy, add `:claim1 aa:startDate "2020-09-01"^^xsd:date`. With `sh:closed false`, it still passes. With `true`, the validator identifies `:claim1` as the focus node and `aa:startDate` as the unexpected path. The exception for `rdf:type` allows the claim's two type assertions. The shape applies to the feed's claims. Appointments in the directory can still use `aa:startDate`. [SHACL closed shapes](https://www.w3.org/TR/shacl/#ClosedConstraintComponent)
+
+SPARQL is a query language for RDF. To show an editor where a report disagrees with the directory, this query reads the accepted date from the default graph and looks inside named graphs for report values. Run it against the dataset as shown, with the directory as the default graph.
+
+```sparql
+PREFIX aa:   <http://assaf.website/Personal#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?term ?claim ?source ?reported ?accepted WHERE {
+  ?term a aa:AdminAppointment ; aa:startDate ?accepted .
+  GRAPH ?reportGraph {
+    ?claim a aa:AppointmentStartClaim ; aa:aboutAppointment ?term ;
+        aa:reportedStartDate ?reported ; prov:wasAttributedTo ?source .
+  }
+  FILTER (!sameTerm(?reported, ?accepted))
+}
+```
+
+The result has one row. For `:appointment1`, `:claim2` from `http://assaf.website/85741` reports `2020-09-04`, and the accepted date is `2020-09-01`. Both claims have the required fields and valid dates. A validator can accept both while the editor investigates why they disagree.
+
+The query uses `sameTerm` to compare RDF terms. Since the importer requires the same datatype and one fixed date format, differing terms here mean differing days. If we later accept more spellings or timezone suffixes, we'll have to decide how to compare the dates for editorial purposes. [SPARQL term comparison](https://www.w3.org/TR/sparql11-query/#func-sameTerm)
+
+## Replay an import and handle corrections
+
+Load the two source records a second time. Resolving the same source and report keys to the same IRIs should leave two claims and two appointments. An RDF graph contains a set of triples, so inserting the very same triple twice into the same graph doesn't add a second copy. Generating a fresh claim IRI on each run would change the triples and defeat that property. [RDF graphs](https://www.w3.org/TR/rdf11-concepts/#section-rdf-graph)
+
+A supplier may use an RDF blank node for a record with no global identifier. Two independent files can both use the spelling `_:report` for unrelated records. Preserve links to the same blank node within one input dataset, including links across its named graphs. Give separately supplied datasets separate blank-node scopes. For this directory, a report that needs to survive independent revisions also needs a stable source key or an agreed matching process. The local blank-node spelling cannot do that job. [RDF blank nodes](https://www.w3.org/TR/rdf11-concepts/#section-blank-nodes)
+
+Now suppose source `85741` corrects `B04` to 1 September. For a feed that publishes its current records, replace the old `aa:reportedStartDate` on `:claim2` when accepting the new revision. Once the new value is in place, the disagreement query returns no rows. The directory still has two appointments and two reports. To explain yesterday's disagreement, keep the earlier source revision or an immutable snapshot. Overwriting the current value alone loses that history.
+
+Stage a revision and its validation results before making it visible. Publish the accepted source changes together and record which revision was applied so a restart can recognize a delivery it has already processed.
+
+Before replacing `B04`, the importer also needs to know whether the incoming revision is newer. A supplier could provide an increasing revision number for each source-and-report key, or identify the revision that a correction replaces. Compare that information with the last accepted revision before applying the change. Our JSON examples contain neither: `createdAt` records when the report was created, not the order of its corrections. Without a reliable ordering signal, keep conflicting copies for review. Arrival order alone cannot tell us whether a delayed file would undo a correction.
+
+An omitted record can mean a deletion in a complete replacement feed. In a partial update, require a withdrawal or another explicit removal signal before deleting a claim. Removing a source report leaves the accepted appointment available for review.
+
+What if the editor changes the directory's date instead? Start again with the two original reports. Suppose the editor accepts 4 September for `:appointment1`. Ahmad's first term would no longer cover 2 September. The dates of his second term would stay the same.
+
+For that decision, record the appointment, the old and new accepted dates, who approved the change, and when. Link the review to the exact report the editor read. For example, `:claim2rev1` can identify an archived copy of source `85741`'s first revision of `B04`, which says 4 September. Keep that copy outside the current report dataset. A link to `:claim2` alone would lead to whichever revision the feed currently serves. If `B04` later changes to 1 September, the review still points to the copy that supported 4 September. Changing the accepted date again takes another editorial decision.
+
+## Export the dataset and ask the questions again
+
+Suppose another directory wants a copy of the accepted history and the two original source reports. Send a dataset format such as TriG that includes the graph names. If we merge the three graphs and deliver one set of triples, the recipient can still see a claim's attribution, but can no longer recover its original graph membership.
+
+Build the export from one saved snapshot. Record the directory revision and the two source revisions in a manifest alongside the file. Otherwise a correction arriving halfway through the export could leave the recipient with a combination of dates the editor never saw together. The manifest also tells the recipient which version to request when reproducing a disagreement.
+
+After parsing the export in a fresh dataset, compare the RDF terms and their graph memberships. A different prefix or a different order of triples is harmless. Losing a language tag, turning an IRI into a quoted string, or moving a claim into the default graph changes what the recipient can ask. With blank nodes, compare their connections consistently across the dataset. Their local labels can change during serialization.
+
+For the original two reports, count two appointment IRIs in the default graph and one claim in each source graph. Then run the disagreement query and check the full row, including the source IRI. As a final test, reconnect `:claim2` to `:appointment2` in a scratch copy. All three graph sizes stay the same. The query now puts the disputed report against Ahmad's second term, whose accepted start is 1 June 2023. Comparing the actual answer catches the mistake that a count of records would miss.
+
+### Send a smaller graph to the blog listing
+
+A page listing blogs needs the blog's title and its owner's IRI. It has no use for appointment dates or source reports. We can build its RDF graph with SPARQL `CONSTRUCT`. Run the query on the same immutable snapshot as the full export. The `WHERE` clause reads its accepted default graph. The template above it selects the triples to send. [SPARQL CONSTRUCT](https://www.w3.org/TR/sparql11-query/#construct)
+
+```sparql
+PREFIX aa: <http://assaf.website/Personal#>
+
+CONSTRUCT {
+  ?blog a aa:Blog ; aa:hasName ?title ; aa:owner ?owner .
+}
+WHERE {
+  VALUES ?blog { <http://assaf.website/blog> }
+  ?blog a aa:Blog ; aa:hasName ?title ; aa:owner ?owner .
+}
+```
+
+For the original records, the result has three triples, all about Ahmad's blog. They give its type, its title `Ahmad Assaf's Blog`, and its owner `:ahmadassaf`. Someone who needs to investigate the disputed date can use the full TriG export.
+
+<RdfProjectionDiagram />
+
+The listing expects one string title and at least one owner IRI. Give this version of its contract a name, `aa:BlogListingV1`, so a recipient can identify the shape used to check a delivery.
+
+```turtle
+@prefix aa:  <http://assaf.website/Personal#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+aa:BlogListingV1 a sh:NodeShape ;
+    sh:targetNode <http://assaf.website/blog> ;
+    sh:closed true ;
+    sh:property [ sh:path rdf:type ; sh:hasValue aa:Blog ; sh:maxCount 1 ] ;
+    sh:property [ sh:path aa:hasName ; sh:datatype xsd:string ;
+                  sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path aa:owner ; sh:nodeKind sh:IRI ; sh:minCount 1 ] .
+```
+
+Validate the constructed graph before sending it. Here `sh:targetNode` names the blog the recipient expects. If the title is missing from the snapshot, the query produces an empty graph. The validator still checks the named blog and reports the missing fields. Targeting only resources typed as blogs would let that empty delivery pass.
+
+If the snapshot names two owners and the delivery omits one, the remaining owner still satisfies the shape. Compare the delivered graph with the query result from that snapshot to check that every owner arrived.
+
+Record the snapshot, query version and shape IRI in the export manifest. That gives the recipient a way to reproduce the three triples. Here the export job runs the query and then validates its result. If we later add SHACL rules to derive other triples, we'll need a processor that supports those rules and a step that runs them. [SHACL rules](https://www.w3.org/TR/shacl-af/#rules)
